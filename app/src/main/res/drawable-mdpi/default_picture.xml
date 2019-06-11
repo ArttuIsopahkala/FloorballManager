@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval"> <!-- this shape is used as shadow -->
+            <solid android:color="@color/color_background_second"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/default_profile_icon" />
+</layer-list>

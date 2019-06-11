@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/teamContainer"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="@color/color_background_third"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="10dp"
+    android:weightSum="1">
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/default_logo"/>
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/logoImage"
+        android:layout_toRightOf="@id/logoImage"
+        android:layout_centerVertical="true"
+        android:text="O2 Miehet 2"
+        android:textColor="@color/color_text_light"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
+    <com.ardeapps.floorballcoach.views.IconView
+        android:id="@+id/editIcon"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_toStartOf="@+id/selectIcon"
+        android:layout_toLeftOf="@+id/selectIcon"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:text="@string/icon_edit"
+        app:iconFont="@string/icon_solid"
+        app:iconSize="30sp" />
+    <com.ardeapps.floorballcoach.views.IconView
+        android:id="@+id/selectIcon"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:text="@string/icon_arrow_right"
+        app:iconFont="@string/icon_solid"
+        app:iconSize="30sp" />
+</RelativeLayout>

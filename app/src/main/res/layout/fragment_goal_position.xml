@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp">
+    <ImageView
+        android:id="@+id/shootmapImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/floorball_field"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
+    <ImageView
+        android:id="@+id/shootPointImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/circle"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"/>
+</RelativeLayout>

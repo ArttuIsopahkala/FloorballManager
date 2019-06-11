@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="color_background" type="color">#2F2F2F</item>
+    <item name="color_background_second" type="color">#3E3E3E</item>
+    <item name="color_background_third" type="color">#282828</item>
+    <item name="color_background_fourth" type="color">#333333</item>
+
+    <item name="color_menu" type="color">#242425</item>
+
+    <item name="color_text_light" type="color">#C4C3B6</item>
+    <item name="color_text_light_secondary" type="color">#A09E8C</item>
+    <item name="color_text_hint" type="color">#7C7A64</item>
+
+    <item name="color_text_black" type="color">#0d0d0d</item>
+
+    <item name="color_blue_light" type="color">#69C8FF</item>
+    <item name="color_blue" type="color">#4BB3D3</item>
+    <item name="color_blue_dark" type="color">#0a4568</item>
+
+    <item name="color_red_light" type="color">#DB4D4C</item>
+    <item name="color_red_dark" type="color">#583534</item>
+
+    <item name="color_orange_light" type="color">#EDA637</item>
+    <item name="color_orange_dark" type="color">#785319</item>
+
+    <item name="color_yellow_light" type="color">#F5CF4A</item>
+    <item name="color_yellow_dark" type="color">#6b591a</item>
+
+    <item name="color_green_light" type="color">#86AA65</item>
+    <item name="color_green_dark" type="color">#444E3D</item>
+
+    <item name="color_text_link" type="color">#386adf</item>
+    <item name="color_url_link" type="color">#05C5CF</item>
+
+    <item name="color_shoot_goal" type="color">#57DF54</item>
+    <item name="color_shoot_miss" type="color">#ffffff</item>
+    <item name="color_shoot_saved" type="color">#DEDF54</item>
+    <item name="color_shoot_blocked" type="color">#DF5454</item>
+
+    <item name="color_player_selected" type="color">#70c225</item>
+
+    <item name="color_item_pressed" type="color">#242424</item>
+</resources>

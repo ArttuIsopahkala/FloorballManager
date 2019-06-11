@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@color/color_background_third">
+    <ImageView
+        android:id="@+id/pictureImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        android:background="@drawable/default_picture"
+        android:visibility="gone"/>
+    <com.ardeapps.floorballcoach.views.IconView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/addIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="@string/icon_plus"
+        app:iconFont="@string/icon_solid"
+        app:iconSize="50sp" />
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Arttu Isopahkala"
+        android:textColor="@color/color_text_light"
+        android:textSize="20sp"/>
+</LinearLayout>

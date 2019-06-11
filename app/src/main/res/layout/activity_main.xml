@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_menu"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/menuTop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_menu"
+        android:orientation="horizontal">
+
+        <com.ardeapps.floorballcoach.views.IconView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/backIcon"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="@string/icon_back"
+            android:onClick="goBack"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="18sp" />
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/backIcon"
+            android:layout_toRightOf="@+id/backIcon"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_text_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <com.ardeapps.floorballcoach.views.IconView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/settingsIcon"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:text="@string/icon_user"
+            android:onClick="goToSettings"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="18sp" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_below="@+id/menuTop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+        <ImageView
+            android:id="@+id/loaderSpinner"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/loader_loader" />
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/logo" />
+    </RelativeLayout>
+</RelativeLayout>

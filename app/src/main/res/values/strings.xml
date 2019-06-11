@@ -1,0 +1,145 @@
+<resources>
+    <string name="app_name">Floorball Coach</string>
+
+    <string name="dd">pp</string>
+    <string name="mm">kk</string>
+    <string name="yyyy">vvvv</string>
+    <string name="ok">OK</string>
+    <string name="no">Ei</string>
+    <string name="yes">Kyllä</string>
+    <string name="next">Seuraava</string>
+    <string name="previous">Edellinen</string>
+    <string name="cancel">Peruuta</string>
+    <string name="save">Tallenna</string>
+    <string name="select_picture">Vaihda kuva</string>
+    <string name="left">Vasen</string>
+    <string name="right">Oikea</string>
+    <string name="position_lw">Vasen laitahyökkääjä</string>
+    <string name="position_c">Keskushyökkääjä</string>
+    <string name="position_rw">Oikea laitahyökkääjä</string>
+    <string name="position_ld">Vasen puolustaja</string>
+    <string name="position_rd">Oikea puolustaja</string>
+    <string name="position_lw_short">VL</string>
+    <string name="position_c_short">KH</string>
+    <string name="position_rw_short">OL</string>
+    <string name="position_ld_short">VP</string>
+    <string name="position_rd_short">OP</string>
+    <string name="clear">Tyhjennä</string>
+    <string name="period">erä</string>
+    <string name="line">kenttä</string>
+    <string name="goal">maali</string>
+    <string name="home">Koti</string>
+    <string name="away">Vieras</string>
+    <string name="opponent">Vastustaja</string>
+    <string name="period_duration">Erän pituus</string>
+    <string name="date">Päivämäärä</string>
+    <string name="removed_player">Poistettu pelaaja</string>
+    <string name="select">Valitse</string>
+    <string name="stats">TILASTOT</string>
+
+    <string name="add_event_goal">Maali</string>
+    <string name="add_event_save">Torjuttu</string>
+    <string name="add_event_miss">Ohi maalin</string>
+    <string name="add_event_block">Blokattu</string>
+    <string name="add_event_type">Laukaus</string>
+    <string name="add_event_details">Tiedot</string>
+    <string name="add_event_scorer">Tekijä</string>
+    <string name="add_event_assistant">Syöttäjä</string>
+    <string name="add_event_position">Laukauksen lähtöpaikka</string>
+    <string name="add_event_line">Kentällä olleet pelaajat</string>
+    <string name="add_event_full">Tasakentät</string>
+    <string name="add_event_yv">YV</string>
+    <string name="add_event_av">AV</string>
+    <string name="add_event_rl">RL</string>
+    <string name="add_event_mode">Pelimuoto</string>
+    <string name="add_event_time">Aika</string>
+
+    <string name="title_add_monitored">Lisää seurattava</string>
+    <string name="title_add_team">Lisää joukkue</string>
+    <string name="title_add_player">Lisää pelaaja</string>
+    <string name="title_edit_team">Muokkaa joukkuetta</string>
+    <string name="title_edit_player">Muokkaa pelaajaa</string>
+    <string name="title_manage_players">Hallitse joukkueen pelaajia</string>
+    <string name="title_settings">Asetukset</string>
+    <string name="title_lines">Kentälliset</string>
+    <string name="title_lines_default">Oletus kentälliset</string>
+    <string name="title_game">Ottelu</string>
+    <string name="title_games">Pelatut ottelut</string>
+    <string name="title_new_game">Uusi ottelu</string>
+
+    <string name="login_email">Sähköposti</string>
+    <string name="login_password">Salasana</string>
+    <string name="login_login">Kirjaudu</string>
+    <string name="login_continue">Jatka</string>
+    <string name="login_login_info">Kirjaudu</string>
+    <string name="login_register_info">Rekisteröidy palveluun tallentaaksesi tietosi seuraavaa kertaa varten.</string>
+    <string name="login_register">Rekisteröidy</string>
+    <string name="login_back">Takaisin</string>
+    <string name="login_new_user">Uusi käyttäjä? Luo tili</string>
+    <string name="login_old_user">Oletko jo rekisteröitynyt? Kirjaudu</string>
+    <string name="login_error_email">Sähköposti on virheellinen.</string>
+    <string name="login_error_password">Salasanan on oltava vähintään 6 merkkiä.</string>
+    <string name="login_error_email_in_use">Tämä sähköposti on jo käytössä.</string>
+    <string name="login_error_invalid_credentials">Virheellinen salasana.</string>
+    <string name="login_error_user_not_found">Sähköpostia ei löytynyt.</string>
+    <string name="login_forgot_password">Unohditko salasanasi?</string>
+    <string name="login_forgot_password_info">Lähetämme sähköpostiisi linkin salasanan vaihtamiseen.</string>
+    <string name="login_forgot_password_sent">Tarkista sähköpostisi. Lähetimme ohjeet salasanan vaihtoon.</string>
+
+    <string name="main_selection_desc">Lisää joukkue tai pelaaja, jota haluat seurata.</string>
+    <string name="main_selection_add_team">Lisää joukkue</string>
+    <string name="main_selection_add_player">Lisää pelaaja</string>
+
+    <string name="add_team_name_hint">Joukkueen nimi</string>
+
+    <string name="add_player_name">Nimi</string>
+    <string name="add_player_number">Pelinumero</string>
+    <string name="add_player_shoots">Kätisyys</string>
+    <string name="add_player_position">Pelipaikka</string>
+
+    <string name="select_picture_load_url">Lataa</string>
+    <string name="select_picture_from_gallery">Valitse galleriasta</string>
+    <string name="select_picture_from_camera">Ota kuva kameralla</string>
+    <string name="select_picture_from_url">Kuvan url</string>
+    <string name="select_picture_error">Kuvaa ei voitu ladata</string>
+    <string name="select_picture_use_default">Käytä oletuskuvaa</string>
+
+    <string name="team_dashboard_new_game">Uusi ottelu</string>
+    <string name="team_dashboard_games">Ottelut</string>
+    <string name="team_dashboard_players">Pelaajat</string>
+    <string name="team_dashboard_lines">Kentälliset</string>
+
+    <string name="players_add">Lisää uusi</string>
+    <string name="players_shoots_left">Laukoo vasemmalta</string>
+    <string name="players_shoots_right">Laukoo oikealta</string>
+
+    <string name="settings_invite">Kutsu kavereita</string>
+    <string name="settings_link_more">Lisää sovelluksia</string>
+    <string name="settings_link_rate">Arvostele sovellus</string>
+    <string name="settings_change_password">Vaihda salasana</string>
+    <string name="settings_log_out">Kirjaudu ulos</string>
+    <string name="settings_version">Versio: %1$s</string>
+    <string name="settings_copyright">Copyright &#169; Arde Apps</string>
+    <string name="settings_change_password_confirm">Haluatko lähettää sähköpostiisi tiedot salasanan vaihtamiseen?</string>
+    <string name="settings_link_privacy">Tietosuojakäytäntö</string>
+    <string name="settings_link_privacy_url">www.google.com</string>
+    <string name="settings_link_rate_url">http://play.google.com/store/apps/details?id=com.ardeapps.floorballcoach</string>
+    <string name="settings_link_more_url">http://play.google.com/store/apps/developer?id=Arde+Apps</string>
+    <string name="settings_invite_message">Tämä sovellus näyttää paikat joista saa opiskelijalounasta. Kannattaa ladata! https://play.google.com/store/apps/details?id=com.ardeapps.opiskelijalounas</string>
+    <string name="settings_invite_email_subject">Lataappa tämä sovellus!</string>
+    <string name="settings_invite_title">Kuinka haluat kutsua kavereita?</string>
+
+    <string name="error_invalid_value">Virheellinen arvo.</string>
+    <string name="error_empty">Täytä kaikki kentät.</string>
+    <string name="error_permission_not_granted">Olet estänyt toiminnon käytön.</string>
+    <string name="error_network">Ei internet-yhteyttä!</string>
+    <string name="error_network_waiting">Odotetaan internet-yhteyttä!</string>
+    <string name="error_database">Ei yhteyttä tietokantaan!</string>
+    <string name="error_data_not_found">Dataa ei löytynyt!</string>
+    <string name="error_profile">Profiilia ei löydetty!</string>
+    <string name="error_authentication">Virhe tunnistautumisessa!</string>
+    <string name="error_service_action">Tapahtui virhe! Toimintaa ei suoritettu!</string>
+
+    <string name="icon_light">fa-regular.ttf</string>
+    <string name="icon_solid">fa-solid.ttf</string>
+</resources>

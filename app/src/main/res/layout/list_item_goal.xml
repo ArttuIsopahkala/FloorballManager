@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/goalContainer"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:focusable="true"
+    android:weightSum="1">
+    <LinearLayout
+        android:id="@+id/homeContainer"
+        android:layout_toLeftOf="@+id/timeContainer"
+        android:layout_toStartOf="@+id/timeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@color/color_background_third"
+        android:gravity="end">
+        <TextView
+            android:id="@+id/homeScoreText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="#11 Arttu Isopahkala"
+            android:textColor="@color/color_text_light"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/homeAssistText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="#88 Jussi Kemppi"
+            android:textColor="@color/color_text_light_secondary"
+            android:textSize="16sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/timeContainer"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:gravity="center"
+        android:background="@color/color_background_second">
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="33:12"
+            android:textColor="@color/color_text_light"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/scoreText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="4 - 5"
+            android:textColor="@color/color_text_light_secondary"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/awayContainer"
+        android:layout_toEndOf="@+id/timeContainer"
+        android:layout_toRightOf="@+id/timeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/color_background_third"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/awayScoreText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="#11 Arttu Isopahkala"
+            android:textColor="@color/color_text_light"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/awayAssistText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="#88 Jussi Kemppi"
+            android:textColor="@color/color_text_light_secondary"
+            android:textSize="16sp" />
+    </LinearLayout>
+</RelativeLayout>

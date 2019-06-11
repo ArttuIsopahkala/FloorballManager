@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "565051645937",
+    "firebase_url": "https://floorball-coach.firebaseio.com",
+    "project_id": "floorball-coach",
+    "storage_bucket": "floorball-coach.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565051645937:android:3979abc71fe1b642",
+        "android_client_info": {
+          "package_name": "com.ardeapps.floorballcoach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "565051645937-qkvhsili25mr7b5eu093h1oi7jt6js0k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ardeapps.floorballcoach",
+            "certificate_hash": "5c89d33f75f9e7e2abe509f0d142091bc35aed39"
+          }
+        },
+        {
+          "client_id": "565051645937-3fhulnmuc2j8qv7hkcnim0vpgj9feqe6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz-YiTDLmsNkfFl5w6jnngKVRbn9b_GbA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "565051645937-3fhulnmuc2j8qv7hkcnim0vpgj9feqe6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

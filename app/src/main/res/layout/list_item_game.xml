@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/gameContainer"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@color/color_background_third"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="10dp"
+    android:weightSum="1">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/dateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20.1.2019"
+            android:textColor="@color/color_text_light"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="O2 Miehet 2 - SB Pommac"
+            android:textColor="@color/color_text_light"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/resultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/selectIcon"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="20dp"
+        android:text="3 - 4"
+        android:textColor="@color/color_text_light"
+        android:textSize="22sp"/>
+    <com.ardeapps.floorballcoach.views.IconView
+        android:id="@+id/selectIcon"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:text="@string/icon_arrow_right"
+        app:iconFont="@string/icon_solid"
+        app:iconSize="30sp" />
+</RelativeLayout>

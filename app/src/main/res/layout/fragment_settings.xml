@@ -1,0 +1,112 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+            <Button
+                android:id="@+id/inviteButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/color_background_second"
+                android:text="@string/settings_invite"
+                android:textColor="@color/color_text_light"
+                android:layout_marginBottom="20dp"/>
+            <Button
+                android:id="@+id/changePasswordButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/color_background_second"
+                android:text="@string/settings_change_password"
+                android:textColor="@color/color_text_light"
+                android:layout_marginBottom="20dp" />
+            <Button
+                android:id="@+id/logOutButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/color_background_second"
+                android:text="@string/settings_log_out"
+                android:textColor="@color/color_text_light"
+                android:layout_marginBottom="20dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/color_menu"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/google_play_icon" />
+
+                <TextView
+                    android:id="@+id/rateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/settings_link_rate"
+                    android:textColor="@color/color_url_link"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/moreText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/settings_link_more"
+                    android:textColor="@color/color_url_link"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <TextView
+                    android:id="@+id/versionText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/settings_version"
+                    android:textColor="@color/color_text_light" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/settings_copyright"
+                    android:textColor="@color/color_text_light" />
+                <TextView
+                    android:id="@+id/privacyPolicyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/settings_link_privacy"
+                    android:textColor="@color/color_url_link"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
