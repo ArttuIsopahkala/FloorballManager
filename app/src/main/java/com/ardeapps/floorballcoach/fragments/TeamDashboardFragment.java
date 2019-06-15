@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
+import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 
 
 public class TeamDashboardFragment extends Fragment {
@@ -34,7 +35,7 @@ public class TeamDashboardFragment extends Fragment {
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(null, null);
+                FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(new GameSettingsFragmentData());
             }
         });
         gamesButton.setOnClickListener(new View.OnClickListener() {

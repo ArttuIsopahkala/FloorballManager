@@ -191,12 +191,18 @@
                     android:textSize="20sp"
                     android:layout_marginStart="15dp"/>
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/linesList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp"/>
+            <include
+                android:id="@+id/lineStats1"
+                layout="@layout/container_line_stats"/>
+            <include
+                android:id="@+id/lineStats2"
+                layout="@layout/container_line_stats"/>
+            <include
+                android:id="@+id/lineStats3"
+                layout="@layout/container_line_stats"/>
+            <include
+                android:id="@+id/lineStats4"
+                layout="@layout/container_line_stats"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

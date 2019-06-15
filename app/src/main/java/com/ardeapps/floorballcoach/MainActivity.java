@@ -46,6 +46,8 @@ import com.ardeapps.floorballcoach.resources.UsersResource;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
+import com.ardeapps.floorballcoach.viewObjects.GameFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballcoach.views.IconView;
 import com.ardeapps.floorballcoach.views.Loader;
 import com.google.firebase.auth.FirebaseAuth;
@@ -187,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onGamesLoaded(Map<String, Game> games) {
                                         AppRes.getInstance().setGames(games);
-
                                         // This or LoginFragment is added at first
                                         if(teamDashboardFragment.isAdded()) {
                                             switchToFragment(teamDashboardFragment);
@@ -213,13 +214,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void goToEditTeamFragment(Team team) {
-                editTeamFragment.setTeam(team);
+                editTeamFragment.setData(team);
                 switchToFragment(editTeamFragment);
             }
 
             @Override
             public void goToEditPlayerFragment(Player player) {
-                editPlayerFragment.setPlayer(player);
+                editPlayerFragment.setData(player);
                 switchToFragment(editPlayerFragment);
             }
 
@@ -246,15 +247,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void goToGameFragment(final Game game) {
-                gameFragment.setGame(game);
+                final GameFragmentData fragmentData = new GameFragmentData();
+                fragmentData.setGame(game);
                 LinesTeamGameResource.getInstance().getLines(game.getGameId(), new GetLinesHandler() {
                     @Override
                     public void onLinesLoaded(Map<Integer, Line> lines) {
-                        gameFragment.setLines(lines);
+                        fragmentData.setLines(lines);
                         GoalsByTeamResource.getInstance().getGoals(game.getGameId(), new GetGoalsHandler() {
                             @Override
                             public void onGoalsLoaded(Map<String, Goal> goals) {
-                                AppRes.getInstance().setGoals(goals);
+                                fragmentData.setGoals(goals);
+                                gameFragment.setData(fragmentData);
                                 switchToFragment(gameFragment);
                             }
                         });
@@ -273,9 +276,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void goToGameSettingsFragment(Game game, Map<Integer, Line> lines) {
-                gameSettingsFragment.setGame(game);
-                gameSettingsFragment.setLines(lines);
+            public void goToGameSettingsFragment(GameSettingsFragmentData gameSettingsFragmentData) {
+                gameSettingsFragment.setData(gameSettingsFragmentData);
                 switchToFragment(gameSettingsFragment);
             }
 
@@ -306,8 +308,10 @@ public class MainActivity extends AppCompatActivity {
         gameSettingsFragment.setListener(new GameSettingsFragment.Listener() {
             @Override
             public void onGameEdited(Game game, Map<Integer, Line> lines) {
-                gameFragment.setGame(game);
-                gameFragment.setLines(lines);
+                GameFragmentData gameFragmentData = (GameFragmentData) gameFragment.getData();
+                gameFragmentData.setGame(game);
+                gameFragmentData.setLines(lines);
+                gameFragment.setData(gameFragmentData);
                 gameFragment.update();
                 // Back pressed to pop back stack
                 onBackPressed();

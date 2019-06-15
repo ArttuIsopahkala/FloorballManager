@@ -78,6 +78,23 @@ public class TimePicker extends LinearLayout {
             public void afterTextChanged(Editable s) {
             }
         });
+        secondsText.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String seconds = s.toString();
+                if (!StringUtils.isEmptyString(seconds)) {
+                    int value = Integer.parseInt(seconds);
+                    if (value > 59) {
+                        secondsText.setText(String.valueOf(59));
+                    }
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        });
         // IME
         minutesText.setKeyImeChangeListener(new TimeEditText.KeyImeChange() {
             @Override

@@ -24,12 +24,13 @@ import com.ardeapps.floorballcoach.services.FirebaseStorageService;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.views.IconView;
 
 import static com.ardeapps.floorballcoach.utils.Helper.setEditTextValue;
 
 
-public class EditTeamFragment extends Fragment {
+public class EditTeamFragment extends Fragment implements DataView {
 
     IconView selectLogoIcon;
     Button saveButton;
@@ -44,6 +45,16 @@ public class EditTeamFragment extends Fragment {
         mListener = l;
     }
 
+    @Override
+    public void setData(Object viewData) {
+        team = (Team) viewData;
+    }
+
+    @Override
+    public Object getData() {
+        return team;
+    }
+
     public interface Listener {
         void onTeamEdited(Team team);
     }
@@ -56,10 +67,6 @@ public class EditTeamFragment extends Fragment {
             logoImage.setImageResource(R.drawable.default_logo);
         }
         ImageUtil.fadeImageIn(logoImage);
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
     }
 
     private void resetFields() {

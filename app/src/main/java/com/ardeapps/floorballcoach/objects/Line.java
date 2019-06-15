@@ -53,18 +53,18 @@ public class Line {
         TreeMap<String, String> sorted = new TreeMap<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                Player.Position position1 = Player.Position.valueOf(o1);
-                Player.Position position2 = Player.Position.valueOf(o2);
-                if(position1 == Player.Position.LW) {
+                Player.Position pos1 = Player.Position.valueOf(o1);
+                Player.Position pos2 = Player.Position.valueOf(o2);
+                if(pos1 == Player.Position.LW) {
                     return -1;
-                } else if (position1 == Player.Position.C && position2 != Player.Position.LW) {
+                } else if (pos1 == Player.Position.C && pos2 != Player.Position.LW) {
                     return -1;
-                } else if (position1 == Player.Position.RW && (position2 != Player.Position.C && position2 != Player.Position.LW)) {
+                } else if (pos1 == Player.Position.RW && (pos2 != Player.Position.C && pos2 != Player.Position.LW)) {
                     return -1;
-                } else if (position1 == Player.Position.LD && (position2 != Player.Position.C && position2 != Player.Position.LW && position2 == Player.Position.RW)) {
+                } else if (pos1 == Player.Position.LD && (pos2 != Player.Position.C && pos2 != Player.Position.LW && pos2 == Player.Position.RW)) {
                     return -1;
                 } else {
-                    return -1;
+                    return 1;
                 }
             }
         });

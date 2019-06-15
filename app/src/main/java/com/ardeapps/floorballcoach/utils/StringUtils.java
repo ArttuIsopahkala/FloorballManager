@@ -50,6 +50,10 @@ public class StringUtils {
         return simpleDateFormat.format(new Date(milliseconds));
     }
 
+    /**
+     * @param playerId not null
+     * @return player name or 'Poistettu pelaaja'
+     */
     public static String getPlayerName(String playerId) {
         Player player = AppRes.getInstance().getPlayers().get(playerId);
         if (player != null) {

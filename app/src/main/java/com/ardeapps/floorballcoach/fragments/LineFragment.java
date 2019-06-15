@@ -15,7 +15,6 @@ import com.ardeapps.floorballcoach.dialogFragments.SelectPlayerDialogFragment;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
-import com.ardeapps.floorballcoach.utils.StringUtils;
 import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.Iterator;
@@ -90,22 +89,27 @@ public class LineFragment extends Fragment {
         TextView nameText = card.findViewById(R.id.nameText);
 
         // Default view
+        addIcon.setClickable(false);
+        addIcon.setFocusable(false);
         addIcon.setVisibility(View.VISIBLE);
         pictureImage.setVisibility(View.GONE);
         nameText.setText(getString(R.string.select));
 
         if(line != null) {
             String playerId = line.getPlayerIdMap().get(pos);
-            Player player = AppRes.getInstance().getPlayers().get(playerId);
-            nameText.setText(StringUtils.getPlayerName(playerId));
-
-            if (player != null) {
-                addIcon.setVisibility(View.GONE);
-                pictureImage.setVisibility(View.VISIBLE);
-                if (player.getPicture() != null) {
-                    pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
+            if (playerId != null) {
+                Player player = AppRes.getInstance().getPlayers().get(playerId);
+                if (player != null) {
+                    nameText.setText(player.getName());
+                    addIcon.setVisibility(View.GONE);
+                    pictureImage.setVisibility(View.VISIBLE);
+                    if (player.getPicture() != null) {
+                        pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
+                    } else {
+                        pictureImage.setImageResource(R.drawable.default_picture);
+                    }
                 } else {
-                    pictureImage.setImageResource(R.drawable.default_picture);
+                    nameText.setText(getString(R.string.removed_player));
                 }
             }
         }

@@ -6,9 +6,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.ardeapps.floorballcoach.objects.Goal;
+import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Arttu on 24.9.2016.
@@ -23,19 +26,26 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
     private boolean opponentGoal;
 
     private ArrayList<Fragment> fragments = new ArrayList<>();
+    private Map<Integer, Line> lines = new HashMap<>();
     private Goal goal;
-    private ArrayList<String> disabledPlayers = new ArrayList<>();
     private String scorerPlayerId;
     private String assistantPlayerId;
+    private Integer scorerLineNumber;
+    private Integer assistantLineNumber;
 
-    public GoalPagerAdapter(FragmentManager supportFragmentManager, boolean opponentGoal) {
+    public GoalPagerAdapter(FragmentManager supportFragmentManager, Map<Integer, Line> lines, boolean opponentGoal) {
         super(supportFragmentManager);
         this.opponentGoal = opponentGoal;
+        this.lines = lines;
+
         detailsFragment = new GoalDetailsFragment();
         selectScorerFragment = new GoalSelectScorerFragment();
         selectAssistantFragment = new GoalSelectAssistantFragment();
         positionFragment = new GoalPositionFragment();
         selectLineFragment = new GoalSelectLineFragment();
+        selectScorerFragment.setData(lines);
+        selectAssistantFragment.setData(lines);
+        selectLineFragment.setData(lines);
 
         if(opponentGoal) {
             fragments.add(detailsFragment);
@@ -50,7 +60,8 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
 
             selectScorerFragment.setListener(new PlayerSelector.Listener() {
                 @Override
-                public void onPlayerSelected(String playerId) {
+                public void onPlayerSelected(int lineNumber, String playerId) {
+                    scorerLineNumber = lineNumber;
                     scorerPlayerId = playerId;
                     selectAssistantFragment.setDisabledPlayerId(playerId);
                     selectAssistantFragment.updateSelection();
@@ -59,7 +70,8 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
                 }
 
                 @Override
-                public void onPlayerUnSelected(String playerId) {
+                public void onPlayerUnSelected(int lineNumber, String playerId) {
+                    scorerLineNumber = null;
                     scorerPlayerId = null;
                     selectAssistantFragment.setDisabledPlayerId(null);
                     selectAssistantFragment.updateSelection();
@@ -69,7 +81,8 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             });
             selectAssistantFragment.setListener(new PlayerSelector.Listener() {
                 @Override
-                public void onPlayerSelected(String playerId) {
+                public void onPlayerSelected(int lineNumber, String playerId) {
+                    assistantLineNumber = lineNumber;
                     assistantPlayerId = playerId;
                     selectScorerFragment.setDisabledPlayerId(playerId);
                     selectScorerFragment.updateSelection();
@@ -78,7 +91,8 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
                 }
 
                 @Override
-                public void onPlayerUnSelected(String playerId) {
+                public void onPlayerUnSelected(int lineNumber, String playerId) {
+                    assistantLineNumber = null;
                     assistantPlayerId = null;
                     selectScorerFragment.setDisabledPlayerId(null);
                     selectScorerFragment.updateSelection();
@@ -91,10 +105,27 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
 
     private void setSelectLineFragment() {
         ArrayList<String> disabledPlayers = new ArrayList<>();
-        disabledPlayers.add(scorerPlayerId);
-        disabledPlayers.add(assistantPlayerId);
-        selectLineFragment.setSelectedPlayerIds(disabledPlayers);
+        if(scorerPlayerId != null) {
+            disabledPlayers.add(scorerPlayerId);
+        }
+        if(assistantPlayerId != null) {
+            disabledPlayers.add(assistantPlayerId);
+        }
         selectLineFragment.setDisabledPlayerIds(disabledPlayers);
+        selectLineFragment.setSelectedPlayerIds(disabledPlayers);
+
+
+        // Scorer and assistan in same line -> select all players in line
+        if(scorerLineNumber != null) {
+            if(assistantLineNumber == null || scorerLineNumber.equals(assistantLineNumber)) {
+                Line scorerLine = lines.get(scorerLineNumber);
+                if(scorerLine != null && scorerLine.getPlayerIdMap() != null) {
+                    ArrayList<String> selectedPlayers = new ArrayList<>(scorerLine.getPlayerIdMap().values());
+                    selectLineFragment.setSelectedPlayerIds(selectedPlayers);
+                }
+            }
+        }
+
         selectLineFragment.updateSelection();
     }
 

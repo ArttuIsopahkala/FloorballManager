@@ -6,17 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.utils.Logger;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GoalSelectScorerFragment extends Fragment {
+public class GoalSelectScorerFragment extends Fragment implements DataView {
 
     public PlayerSelector.Listener mListener = null;
 
@@ -27,13 +28,25 @@ public class GoalSelectScorerFragment extends Fragment {
     PlayerSelector scorerSelector;
     List<String> selectedPlayerIds = new ArrayList<>();
     List<String> disabledPlayerIds = new ArrayList<>();
+    Map<Integer, Line> lines = new HashMap<>();
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void setData(Object viewData) {
+        lines = (Map<Integer, Line>) viewData;
+    }
+
+    @Override
+    public Object getData() {
+        return lines;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_goal_select_scorer, container, false);
         scorerSelector = v.findViewById(R.id.scorerSelector);
-        Map<Integer, Line> lines = AppRes.getInstance().getLines();
+
         scorerSelector.createSingleSelectView(lines, mListener);
         scorerSelector.setSelectedPlayerIds(selectedPlayerIds);
         scorerSelector.setDisabledPlayerIds(disabledPlayerIds);

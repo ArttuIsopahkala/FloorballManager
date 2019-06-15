@@ -17,7 +17,9 @@ import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.handlers.SaveLinesHandler;
 import com.ardeapps.floorballcoach.objects.Game;
+import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.resources.GamesResource;
 import com.ardeapps.floorballcoach.resources.LinesTeamGameResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
@@ -31,13 +33,12 @@ import com.ardeapps.floorballcoach.views.LineUpSelector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.ardeapps.floorballcoach.utils.Helper.setSpinnerSelection;
 
 
-public class GameSettingsFragment extends Fragment {
+public class GameSettingsFragment extends Fragment implements DataView {
 
     TextView nameText;
     DatePicker datePicker;
@@ -47,8 +48,8 @@ public class GameSettingsFragment extends Fragment {
     LineUpSelector lineUpSelector;
     Button saveButton;
 
-    Game game;
-    Map<Integer, Line> lines = new HashMap<>();
+    private GameSettingsFragmentData data;
+
     ArrayAdapter<String> spinnerArrayAdapter;
     final ArrayList<Integer> durations = new ArrayList<>(Arrays.asList(20, 15, 10, 5));
     boolean isHomeGame = true;
@@ -59,21 +60,19 @@ public class GameSettingsFragment extends Fragment {
         mListener = l;
     }
 
+    @Override
+    public void setData(Object viewData) {
+        data = (GameSettingsFragmentData) viewData;
+    }
+
+    @Override
+    public Object getData() {
+        return data;
+    }
+
     public interface Listener {
         void onGameEdited(Game game, Map<Integer, Line> lines);
         void onGameCreated(Game game, Map<Integer, Line> lines);
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public void setLines(Map<Integer, Line> lines) {
-        if(lines == null) {
-            this.lines = new HashMap<>();
-        } else {
-            this.lines = lines;
-        }
     }
 
     private void resetField() {
@@ -129,15 +128,15 @@ public class GameSettingsFragment extends Fragment {
 
         resetField();
 
-        if(game != null) {
-            isHomeGame = game.isHomeGame();
+        if(data.getGame() != null) {
+            isHomeGame = data.getGame().isHomeGame();
             setTeamSides(isHomeGame);
-            Helper.setEditTextValue(opponentEditText, game.getOpponentName());
+            Helper.setEditTextValue(opponentEditText, data.getGame().getOpponentName());
             Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(game.getDate());
+            cal.setTimeInMillis(data.getGame().getDate());
             Helper.setDatePickerValue(datePicker, cal);
-            setSpinnerSelection(periodSpinner, durations.indexOf(game.getPeriodInMinutes()));
-            lineUpSelector.setLines(lines);
+            setSpinnerSelection(periodSpinner, durations.indexOf(data.getGame().getPeriodInMinutes()));
+            lineUpSelector.setLines(data.getLines());
         }
 
         lineUpSelector.setListener(new LineUpSelector.Listener() {
@@ -190,7 +189,7 @@ public class GameSettingsFragment extends Fragment {
         }
         Helper.hideKeyBoard(opponentEditText);
 
-        final Game gameToSave = game != null ? game.clone() : new Game();
+        final Game gameToSave = data.getGame() != null ? data.getGame().clone() : new Game();
         gameToSave.setDate(datePicker.getDate().getTimeInMillis());
         gameToSave.setHomeGame(isHomeGame);
         gameToSave.setPeriodInMinutes(durations.get(periodSpinner.getSelectedItemPosition()));
@@ -203,7 +202,7 @@ public class GameSettingsFragment extends Fragment {
             return;
         }
 
-        if(game != null) {
+        if(data.getGame() != null) {
             GamesResource.getInstance().editGame(gameToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                 @Override
                 public void onEditDataSuccess() {

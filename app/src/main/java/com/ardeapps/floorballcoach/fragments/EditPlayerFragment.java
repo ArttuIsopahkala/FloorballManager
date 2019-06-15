@@ -24,6 +24,7 @@ import com.ardeapps.floorballcoach.services.FirebaseStorageService;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import static com.ardeapps.floorballcoach.utils.Helper.setRadioButtonChecked;
 import static com.ardeapps.floorballcoach.utils.Helper.setSpinnerSelection;
 
 
-public class EditPlayerFragment extends Fragment {
+public class EditPlayerFragment extends Fragment implements DataView {
 
     IconView selectPictureIcon;
     Button saveButton;
@@ -57,11 +58,21 @@ public class EditPlayerFragment extends Fragment {
         mListener = l;
     }
 
+    @Override
+    public void setData(Object viewData) {
+        player = (Player) viewData;
+    }
+
+    @Override
+    public Object getData() {
+        return player;
+    }
+
     public interface Listener {
         void onPlayerEdited(Player player);
     }
 
-    public void refreshPicture(Bitmap selectedPicture) {
+    private void refreshPicture(Bitmap selectedPicture) {
         this.selectedPicture = selectedPicture;
         if (selectedPicture != null) {
             pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(selectedPicture));
@@ -78,10 +89,6 @@ public class EditPlayerFragment extends Fragment {
         setEditTextValue(numberText, "");
         setRadioButtonChecked(leftRadioButton, true);
         setSpinnerSelection(positionSpinner, 0);
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
     }
 
     @Override

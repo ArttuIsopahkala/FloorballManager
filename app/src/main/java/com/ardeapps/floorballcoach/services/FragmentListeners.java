@@ -1,11 +1,9 @@
 package com.ardeapps.floorballcoach.services;
 
 import com.ardeapps.floorballcoach.objects.Game;
-import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Team;
-
-import java.util.Map;
 
 /**
  * Created by Arttu on 18.6.2017.
@@ -71,7 +69,7 @@ public class FragmentListeners {
         void goToPlayersFragment();
         void goToSettingsFragment();
         void goToGameFragment(Game game);
-        void goToGameSettingsFragment(Game game, Map<Integer, Line> lines);
+        void goToGameSettingsFragment(GameSettingsFragmentData gameSettingsFragmentData);
         void goToPlayerMonitorFragment();
         void goToGamesFragment();
         void goToBluetoothFragment();

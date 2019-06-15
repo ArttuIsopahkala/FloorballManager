@@ -31,8 +31,8 @@ public class PlayerSelector extends LinearLayout {
     public Listener mListener = null;
 
     public interface Listener {
-        void onPlayerSelected(String playerId);
-        void onPlayerUnSelected(String playerId);
+        void onPlayerSelected(int lineNumber, String playerId);
+        void onPlayerUnSelected(int lineNumber, String playerId);
     }
 
     RelativeLayout lineContainer1;
@@ -149,16 +149,15 @@ public class PlayerSelector extends LinearLayout {
                                 } else {
                                     selectedPlayerIds.add(playerId);
                                 }
-                                setRadioButtons();
                             } else {
                                 if(holder.isSelected()) {
                                     selectedPlayerIds.remove(playerId);
-                                    mListener.onPlayerUnSelected(playerId);
+                                    mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
                                 } else {
                                     // Clear other and add new selection
                                     selectedPlayerIds.clear();
                                     selectedPlayerIds.add(playerId);
-                                    mListener.onPlayerSelected(playerId);
+                                    mListener.onPlayerSelected(line.getLineNumber(), playerId);
                                 }
                             }
                             setSelections();
@@ -218,6 +217,7 @@ public class PlayerSelector extends LinearLayout {
                 holder.setDisabled(false);
             }
         }
+        setRadioButtons();
     }
 
     public void setDisabledPlayerIds(List<String> playerIds) {

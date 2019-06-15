@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.ardeapps.floorballcoach.objects.Game;
-import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Team;
@@ -18,16 +17,15 @@ import java.util.Map;
  */
 public class AppRes extends MultiDexApplication {
 
-    public static String PRIVACY_POLICY_LINK;
     private static Context mContext;
-    private Map<String, Team> teams = new HashMap<>();
-    private Map<String, Player> players = new HashMap<>();
-    private Map<String, Game> games = new HashMap<>();
-    private Map<String, Goal> goals = new HashMap<>();
-    private Map<Integer, Line> lines = new HashMap<>();
-    private Team selectedTeam;
     private String currentAppVersion;
     private User user;
+    private Map<String, Team> teams = new HashMap<>();
+    // Selected team's info
+    private Team selectedTeam;
+    private Map<String, Player> players = new HashMap<>();
+    private Map<String, Game> games = new HashMap<>();
+    private Map<Integer, Line> lines = new HashMap<>();
 
     private static AppRes instance;
 
@@ -126,25 +124,6 @@ public class AppRes extends MultiDexApplication {
             games.put(gameId, game);
         } else {
             games.remove(gameId);
-        }
-    }
-
-    /**
-     * GOALS
-     */
-    public void setGoals(Map<String, Goal> goals) {
-        this.goals = goals;
-    }
-
-    public Map<String, Goal> getGoals() {
-        return goals;
-    }
-
-    public void setGoal(String goalId, Goal goal) {
-        if(goal != null) {
-            goals.put(goalId, goal);
-        } else {
-            goals.remove(goalId);
         }
     }
 

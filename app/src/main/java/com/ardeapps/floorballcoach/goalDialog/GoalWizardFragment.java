@@ -16,11 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.utils.Logger;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
+import com.ardeapps.floorballcoach.viewObjects.GoalWizardFragmentData;
 
-public class GoalWizardFragment extends DialogFragment {
+public class GoalWizardFragment extends DialogFragment implements DataView {
 
     GoalWizardListener mListener = null;
 
@@ -38,22 +39,19 @@ public class GoalWizardFragment extends DialogFragment {
     TabLayout tabLayout;
     ViewPager eventPager;
     GoalPagerAdapter goalAdapter;
-    Goal goal;
-    Game game;
-    boolean opponentGoal;
+
+    GoalWizardFragmentData data;
 
     int position = 0;
 
-    public void setGoal(Goal goal) {
-        this.goal = goal;
+    @Override
+    public void setData(Object viewData) {
+        data = (GoalWizardFragmentData) viewData;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public void setOpponentGoal(boolean opponentGoal) {
-        this.opponentGoal = opponentGoal;
+    @Override
+    public Object getData() {
+        return null;
     }
 
     @Override
@@ -69,8 +67,8 @@ public class GoalWizardFragment extends DialogFragment {
         eventPager = v.findViewById(R.id.eventPager);
         tabLayout = v.findViewById(R.id.tabLayout);
 
-        goalAdapter = new GoalPagerAdapter(getChildFragmentManager(), opponentGoal);
-        goalAdapter.setGoal(goal);
+        goalAdapter = new GoalPagerAdapter(getChildFragmentManager(), data.getLines(), data.isOpponentGoal());
+        goalAdapter.setGoal(data.getGoal());
 
         eventPager.setOffscreenPageLimit(goalAdapter.getCount());
         eventPager.setAdapter(goalAdapter);
@@ -117,8 +115,8 @@ public class GoalWizardFragment extends DialogFragment {
             if(position == max) {
                 // TODO tallenna goal
                 Goal goalToSave = goalAdapter.getGoal();
-                goalToSave.setGameId(game.getGameId());
-                goalToSave.setOpponentGoal(opponentGoal);
+                goalToSave.setGameId(data.getGame().getGameId());
+                goalToSave.setOpponentGoal(data.isOpponentGoal());
 
                 Logger.log("goal getGoalId: " + goalToSave.getGoalId());
                 Logger.log("goal getGameId: " + goalToSave.getGameId());
