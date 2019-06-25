@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/goalContainer"
     android:layout_width="match_parent"
     android:layout_height="80dp"
@@ -7,7 +8,15 @@
     android:orientation="horizontal"
     android:clickable="true"
     android:focusable="true"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@color/color_background_third">
+    <com.ardeapps.floorballcoach.views.IconView
+        android:id="@+id/editHomeGoalIcon"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:text="@string/icon_bars"
+        app:iconFont="@string/icon_solid"
+        app:iconSize="16sp" />
     <LinearLayout
         android:id="@+id/homeContainer"
         android:layout_toLeftOf="@+id/timeContainer"
@@ -16,13 +25,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="@color/color_background_third"
-        android:gravity="end">
+        android:gravity="end|center_vertical">
         <TextView
             android:id="@+id/homeScoreText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
             android:text="#11 Arttu Isopahkala"
             android:textColor="@color/color_text_light"
             android:textSize="20sp"
@@ -31,7 +38,6 @@
             android:id="@+id/homeAssistText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
             android:text="#88 Jussi Kemppi"
             android:textColor="@color/color_text_light_secondary"
             android:textSize="16sp" />
@@ -70,8 +76,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/color_background_third"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:gravity="start|center_vertical">
         <TextView
             android:id="@+id/awayScoreText"
             android:layout_width="wrap_content"
@@ -90,4 +96,12 @@
             android:textColor="@color/color_text_light_secondary"
             android:textSize="16sp" />
     </LinearLayout>
+    <com.ardeapps.floorballcoach.views.IconView
+        android:id="@+id/editAwayGoalIcon"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:text="@string/icon_bars"
+        app:iconFont="@string/icon_solid"
+        app:iconSize="16sp" />
 </RelativeLayout>

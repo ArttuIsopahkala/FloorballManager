@@ -13,19 +13,17 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
+import com.ardeapps.floorballcoach.dialogFragments.GoalMenuDialogFragment;
 import com.ardeapps.floorballcoach.goalDialog.GoalWizardFragment;
-import com.ardeapps.floorballcoach.viewObjects.DataView;
-import com.ardeapps.floorballcoach.viewObjects.GameFragmentData;
-import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
-import com.ardeapps.floorballcoach.resources.GamesResource;
-import com.ardeapps.floorballcoach.resources.GoalsByTeamResource;
-import com.ardeapps.floorballcoach.resources.StatsByPlayerResource;
-import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
+import com.ardeapps.floorballcoach.resources.GoalResourcesWrapper;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.StringUtils;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
+import com.ardeapps.floorballcoach.viewObjects.GameFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballcoach.viewObjects.GoalWizardFragmentData;
 import com.ardeapps.floorballcoach.views.IconView;
 
@@ -118,25 +116,6 @@ public class GameFragment extends Fragment implements DataView {
         setLineStatsView(lineStats4, data.getLines().get(4));
     }
 
-    public class GoalHolder {
-        TextView homeScoreText;
-        TextView homeAssistText;
-        TextView awayScoreText;
-        TextView awayAssistText;
-        TextView timeText;
-        TextView scoreText;
-        RelativeLayout goalContainer;
-        LinearLayout homeContainer;
-        LinearLayout awayContainer;
-    }
-
-    public class PlayerStatsHolder {
-        TextView statsText;
-        TextView plusMinusText;
-        TextView positionText;
-        TextView nameText;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -187,146 +166,19 @@ public class GameFragment extends Fragment implements DataView {
         return v;
     }
 
-    private void openGoalWizardDialog(Goal goal, boolean homeGoal) {
-        final GoalWizardFragment dialog = new GoalWizardFragment();
-        dialog.show(getActivity().getSupportFragmentManager(), "Muokkaa maalia");
-        final boolean opponentGoal = (data.getGame().isHomeGame() && !homeGoal) || (!data.getGame().isHomeGame() && homeGoal);
-
-        GoalWizardFragmentData dialogData = new GoalWizardFragmentData();
-        dialogData.setGoal(goal);
-        dialogData.setGame(data.getGame());
-        dialogData.setLines(data.getLines());
-        dialogData.setOpponentGoal(opponentGoal);
-        dialog.setData(dialogData);
-
-        dialog.setListener(new GoalWizardFragment.GoalWizardListener() {
-            @Override
-            public void onGoalSaved(final Goal goal) {
-                dialog.dismiss();
-                GoalsByTeamResource.getInstance().addGoal(goal, new FirebaseDatabaseService.AddDataSuccessListener() {
-                    @Override
-                    public void onAddDataSuccess(String id) {
-                        goal.setGoalId(id);
-
-                        data.getGoals().put(goal.getGoalId(), goal);
-
-                        if(!opponentGoal) {
-                            // Add goal to player stats
-                            StatsByPlayerResource.getInstance().editStat(goal.getScorerId(), goal, new FirebaseDatabaseService.EditDataSuccessListener() {
-                                @Override
-                                public void onEditDataSuccess() {
-                                    // Add assist to player stats
-                                    if(!StringUtils.isEmptyString(goal.getAssistantId())) {
-                                        StatsByPlayerResource.getInstance().editStat(goal.getAssistantId(), goal, new FirebaseDatabaseService.EditDataSuccessListener() {
-                                            @Override
-                                            public void onEditDataSuccess() {
-                                                addGoalToGame(goal);
-                                            }
-                                        });
-                                    } else {
-                                        addGoalToGame(goal);
-                                    }
-                                }
-                            });
-                        } else {
-                            addGoalToGame(goal);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    private void addGoalToGame(final Goal goal) {
-        // Add goal to game
-        Integer homeGoals = data.getGame().getHomeGoals();
-        Integer awayGoals = data.getGame().getAwayGoals();
-        if(homeGoals == null) {
-            homeGoals = 0;
-        }
-        if(awayGoals == null) {
-            awayGoals = 0;
-        }
-
-        boolean isHomeGoal = (!goal.isOpponentGoal() && data.getGame().isHomeGame()) || (goal.isOpponentGoal() && !data.getGame().isHomeGame());
-        if(isHomeGoal) {
-            homeGoals++;
-        } else {
-            awayGoals++;
-        }
-        data.getGame().setHomeGoals(homeGoals);
-        data.getGame().setAwayGoals(awayGoals);
-        GamesResource.getInstance().editGame(data.getGame(), new FirebaseDatabaseService.EditDataSuccessListener() {
-            @Override
-            public void onEditDataSuccess() {
-                update();
-            }
-        });
-    }
-
-    private void setLineStatsView(LinearLayout view, Line line) {
-        PlayerStatsHolder holder = new PlayerStatsHolder();
-        LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
-
-        if(line == null || line.getSortedPlayers().isEmpty()) {
-            view.setVisibility(View.GONE);
-        } else {
-            TextView lineText = view.findViewById(R.id.lineText);
-            LinearLayout playersList = view.findViewById(R.id.playersList);
-            lineText.setText(line.getLineNumber() + ". " + getString(R.string.line));
-
-            Map<String, String> players = line.getSortedPlayers();
-            for (Map.Entry<String, String> entry : players.entrySet()) {
-                View cv = inf.inflate(R.layout.list_item_player_stats, playersList, false);
-                String position = entry.getKey();
-                String playerId = entry.getValue();
-                holder.statsText = cv.findViewById(R.id.statsText);
-                holder.plusMinusText = cv.findViewById(R.id.plusMinusText);
-                holder.positionText = cv.findViewById(R.id.positionText);
-                holder.nameText = cv.findViewById(R.id.nameText);
-
-                holder.statsText.setText(getStatsText(playerId));
-                holder.plusMinusText.setText(getPlusMinusText(playerId));
-                holder.positionText.setText(StringUtils.getPositionText(position, true));
-                holder.nameText.setText(StringUtils.getPlayerName(playerId));
-
-                playersList.addView(cv);
-            }
-        }
-    }
-
-    private String getStatsText(String playerId) {
-        int scores = 0;
-        int assists = 0;
-        for(Goal goal : data.getGoals().values()) {
-            if(goal.getScorerId() != null && goal.getScorerId().equals(playerId)) {
-                scores++;
-            }
-            if(goal.getAssistantId() != null && goal.getAssistantId().equals(playerId)) {
-                assists++;
-            }
-        }
-        return scores + " + " + assists;
-    }
-
-    private String getPlusMinusText(String playerId) {
-        int stats = 0;
-        for(Goal goal : data.getGoals().values()) {
-            Goal.Mode mode = Goal.Mode.valueOf(goal.getGameMode());
-            if(goal.getPlayerIds().contains(playerId)) {
-                // Plus
-                if(!goal.isOpponentGoal() && !(Goal.Mode.YV == mode || Goal.Mode.RL == mode)) {
-                    stats++;
-                }
-
-                // Minus
-                if(goal.isOpponentGoal() && !(Goal.Mode.AV == mode || Goal.Mode.RL == mode)) {
-                    stats--;
-                }
-            }
-        }
-
-        return stats > 0 ? "+" + String.valueOf(stats) : String.valueOf(stats);
+    // PERIODS
+    public class GoalHolder {
+        IconView homeGoalMenuIcon;
+        IconView awayGoalMenuIcon;
+        TextView homeScoreText;
+        TextView homeAssistText;
+        TextView awayScoreText;
+        TextView awayAssistText;
+        TextView timeText;
+        TextView scoreText;
+        RelativeLayout goalContainer;
+        LinearLayout homeContainer;
+        LinearLayout awayContainer;
     }
 
     private void setPeriodView(LinearLayout view, int period, List<Goal> goals) {
@@ -345,8 +197,10 @@ public class GameFragment extends Fragment implements DataView {
                 return Long.valueOf(o1.getTime()).compareTo(o2.getTime());
             }
         });
-        for(Goal goal : goals) {
+        for(final Goal goal : goals) {
             View cv = inf.inflate(R.layout.list_item_goal, goalList, false);
+            holder.homeGoalMenuIcon = cv.findViewById(R.id.editHomeGoalIcon);
+            holder.awayGoalMenuIcon = cv.findViewById(R.id.editAwayGoalIcon);
             holder.homeScoreText = cv.findViewById(R.id.homeScoreText);
             holder.homeAssistText = cv.findViewById(R.id.homeAssistText);
             holder.awayScoreText = cv.findViewById(R.id.awayScoreText);
@@ -412,8 +266,153 @@ public class GameFragment extends Fragment implements DataView {
             holder.timeText.setText(StringUtils.getMinSecTimeText(goal.getTime()));
             holder.scoreText.setText(homeGoals + " - " + awayGoals);
 
+            if(isHomeGoal) {
+                holder.awayGoalMenuIcon.setVisibility(View.GONE);
+                holder.homeGoalMenuIcon.setVisibility(View.VISIBLE);
+                setGoalMenuIconListener(holder.homeGoalMenuIcon, goal, true);
+            } else {
+                holder.homeGoalMenuIcon.setVisibility(View.GONE);
+                holder.awayGoalMenuIcon.setVisibility(View.VISIBLE);
+                setGoalMenuIconListener(holder.awayGoalMenuIcon, goal, false);
+            }
+
             goalList.addView(cv);
         }
+    }
+
+    private void setGoalMenuIconListener(IconView icon, final Goal goal, final boolean isHomeGoal) {
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final GoalMenuDialogFragment dialog = new GoalMenuDialogFragment();
+                dialog.show(getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
+                dialog.setListener(new GoalMenuDialogFragment.GoalMenuDialogCloseListener() {
+                    @Override
+                    public void onEditGoal() {
+                        dialog.dismiss();
+                        openGoalWizardDialog(goal, isHomeGoal);
+                    }
+
+                    @Override
+                    public void onRemoveGoal() {
+                        dialog.dismiss();
+                        GoalResourcesWrapper.getInstance(data).removeGoal(goal, isHomeGoal, new GoalResourcesWrapper.RemoveGoalListener() {
+                            @Override
+                            public void onGoalRemoved(GameFragmentData data) {
+                                GameFragment.this.data = data;
+                                update();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    private void openGoalWizardDialog(final Goal goal, boolean homeGoal) {
+        final GoalWizardFragment dialog = new GoalWizardFragment();
+        dialog.show(getActivity().getSupportFragmentManager(), "Muokkaa maalia");
+        final boolean opponentGoal = (data.getGame().isHomeGame() && !homeGoal) || (!data.getGame().isHomeGame() && homeGoal);
+
+        GoalWizardFragmentData dialogData = new GoalWizardFragmentData();
+        dialogData.setGoal(goal);
+        dialogData.setGame(data.getGame());
+        dialogData.setLines(data.getLines());
+        dialogData.setOpponentGoal(opponentGoal);
+        dialog.setData(dialogData);
+
+        dialog.setListener(new GoalWizardFragment.GoalWizardListener() {
+            @Override
+            public void onGoalSaved(final Goal goalToSave) {
+                dialog.dismiss();
+                GoalResourcesWrapper.getInstance(data).editGoal(goal, goalToSave, opponentGoal, new GoalResourcesWrapper.EditGoalListener() {
+                    @Override
+                    public void onGoalEdited(GameFragmentData data) {
+                        GameFragment.this.data = data;
+                        update();
+                    }
+                });
+            }
+        });
+    }
+
+    // PLAYER STATS
+    public class PlayerStatsHolder {
+        TextView statsText;
+        TextView plusMinusText;
+        TextView positionText;
+        TextView nameText;
+    }
+
+    private void setLineStatsView(LinearLayout view, Line line) {
+        PlayerStatsHolder holder = new PlayerStatsHolder();
+        LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
+
+        if(line == null || line.getSortedPlayers().isEmpty()) {
+            view.setVisibility(View.GONE);
+        } else {
+            TextView lineText = view.findViewById(R.id.lineText);
+            LinearLayout playersList = view.findViewById(R.id.playersList);
+            lineText.setText(line.getLineNumber() + ". " + getString(R.string.line));
+            playersList.removeAllViewsInLayout();
+
+            Map<String, String> players = line.getSortedPlayers();
+            for (Map.Entry<String, String> entry : players.entrySet()) {
+                View cv = inf.inflate(R.layout.list_item_player_stats, playersList, false);
+                String position = entry.getKey();
+                String playerId = entry.getValue();
+                holder.statsText = cv.findViewById(R.id.statsText);
+                holder.plusMinusText = cv.findViewById(R.id.plusMinusText);
+                holder.positionText = cv.findViewById(R.id.positionText);
+                holder.nameText = cv.findViewById(R.id.nameText);
+
+                holder.statsText.setText(getStatsText(playerId));
+                holder.plusMinusText.setText(getPlusMinusText(playerId));
+                holder.positionText.setText(StringUtils.getPositionText(position, true));
+                holder.nameText.setText(StringUtils.getPlayerName(playerId));
+
+                playersList.addView(cv);
+            }
+        }
+    }
+
+    private String getStatsText(String playerId) {
+        int scores = 0;
+        int assists = 0;
+        for(Goal goal : data.getGoals().values()) {
+            if(goal.getScorerId() != null && goal.getScorerId().equals(playerId)) {
+                scores++;
+            }
+            if(goal.getAssistantId() != null && goal.getAssistantId().equals(playerId)) {
+                assists++;
+            }
+        }
+        return scores + " + " + assists;
+    }
+
+    private String getPlusMinusText(String playerId) {
+        int stats = 0;
+        for(Goal goal : data.getGoals().values()) {
+            Goal.Mode mode = Goal.Mode.valueOf(goal.getGameMode());
+            if(goal.getPlayerIds().contains(playerId)) {
+                // Plus
+                if(!goal.isOpponentGoal() && !(Goal.Mode.YV == mode || Goal.Mode.RL == mode)) {
+                    stats++;
+                }
+
+                // Minus
+                if(goal.isOpponentGoal() && !(Goal.Mode.AV == mode || Goal.Mode.RL == mode)) {
+                    stats--;
+                }
+            }
+        }
+
+        return stats > 0 ? "+" + String.valueOf(stats) : String.valueOf(stats);
     }
 
 }

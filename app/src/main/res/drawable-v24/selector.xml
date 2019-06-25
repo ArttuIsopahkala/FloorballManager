@@ -2,5 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true" android:state_pressed="true" android:drawable="@color/color_item_pressed" /> <!-- focused and pressed-->
     <item android:state_pressed="true" android:drawable="@color/color_item_pressed" /> <!-- pressed -->
-    <item android:drawable="@color/color_background_second" /> <!-- default -->
+    <item android:drawable="@color/color_background_third" /> <!-- default -->
 </selector>

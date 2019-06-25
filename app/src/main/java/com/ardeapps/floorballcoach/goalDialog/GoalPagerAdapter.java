@@ -11,6 +11,7 @@ import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -114,43 +115,32 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         selectLineFragment.setDisabledPlayerIds(disabledPlayers);
         selectLineFragment.setSelectedPlayerIds(disabledPlayers);
 
-
-        // Scorer and assistan in same line -> select all players in line
-        if(scorerLineNumber != null) {
-            if(assistantLineNumber == null || scorerLineNumber.equals(assistantLineNumber)) {
-                Line scorerLine = lines.get(scorerLineNumber);
-                if(scorerLine != null && scorerLine.getPlayerIdMap() != null) {
-                    ArrayList<String> selectedPlayers = new ArrayList<>(scorerLine.getPlayerIdMap().values());
-                    selectLineFragment.setSelectedPlayerIds(selectedPlayers);
+        if(goal == null) {
+            // Scorer and assistan in same line -> select all players in line
+            if (scorerLineNumber != null) {
+                if (assistantLineNumber == null || scorerLineNumber.equals(assistantLineNumber)) {
+                    Line scorerLine = lines.get(scorerLineNumber);
+                    if (scorerLine != null && scorerLine.getPlayerIdMap() != null) {
+                        ArrayList<String> selectedPlayers = new ArrayList<>(scorerLine.getPlayerIdMap().values());
+                        selectLineFragment.setSelectedPlayerIds(selectedPlayers);
+                    }
                 }
             }
-        }
-
-        selectLineFragment.updateSelection();
-    }
-
-    @Override
-    public int getItemPosition(Object object) {
-        if (fragments.contains(object)) {
-            return fragments.indexOf(object);
         } else {
-            return POSITION_NONE;
+            // 1. Remove changed scorer/assistant from current playerIds
+            // 2. Add new selected to selected playerIds
+            ArrayList<String> selectedPlayers = new ArrayList<>(goal.getPlayerIds());
+            Iterator<String> itr = selectedPlayers.iterator();
+            while(itr.hasNext()) {
+                String selectedPlayerId = itr.next();
+                if(disabledPlayers.contains(selectedPlayerId)) {
+                    itr.remove();
+                }
+            }
+            selectedPlayers.addAll(disabledPlayers);
+            selectLineFragment.setSelectedPlayerIds(selectedPlayers);
         }
-    }
-
-    @Override
-    public Parcelable saveState() {
-        return null;
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        return fragments.get(position);
-    }
-
-    @Override
-    public int getCount() {
-        return fragments.size();
+        selectLineFragment.updateSelection();
     }
 
     public void setGoal(Goal goal) {
@@ -165,12 +155,31 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         positionFragment.setPositionPercents(0, 0);
 
         if(goal != null) {
+            // Details
             detailsFragment.setTime(goal.getTime());
             detailsFragment.setGameMode(Goal.Mode.fromDatabaseName(goal.getGameMode()));
+            // Scorer
             selectScorerFragment.setScorerPlayerId(goal.getScorerId());
+            selectScorerFragment.setDisabledPlayerId(goal.getAssistantId());
+            // Assistant
             selectAssistantFragment.setAssistantPlayerId(goal.getAssistantId());
+            selectAssistantFragment.setDisabledPlayerId(goal.getScorerId());
+            // Select line
+            scorerPlayerId = goal.getScorerId();
+            assistantPlayerId = goal.getAssistantId();
             selectLineFragment.setSelectedPlayerIds(goal.getPlayerIds());
-            positionFragment.setPositionPercents(goal.getPositionPercentX(), goal.getPositionPercentY());
+            ArrayList<String> disabledPlayers = new ArrayList<>();
+            if(scorerPlayerId != null) {
+                disabledPlayers.add(scorerPlayerId);
+            }
+            if(assistantPlayerId != null) {
+                disabledPlayers.add(assistantPlayerId);
+            }
+            selectLineFragment.setDisabledPlayerIds(disabledPlayers);
+            // Position
+            double positionX = goal.getPositionPercentX() != null ? goal.getPositionPercentX() : 0;
+            double positionY = goal.getPositionPercentY() != null ? goal.getPositionPercentY() : 0;
+            positionFragment.setPositionPercents(positionX, positionY);
         }
     }
 
@@ -209,6 +218,30 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             return ((GoalSelectLineFragment) fragment).validate();
         }
         return true;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        if (fragments.contains(object)) {
+            return fragments.indexOf(object);
+        } else {
+            return POSITION_NONE;
+        }
+    }
+
+    @Override
+    public Parcelable saveState() {
+        return null;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        return fragments.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return fragments.size();
     }
 
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="300dp"
+    android:background="@color/color_background"
+    android:padding="20dp">
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/edit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/color_text_light"
+        android:background="@color/color_background_second" />
+    <Button
+        android:id="@+id/removeButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editButton"
+        android:text="@string/remove"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/color_text_light"
+        android:background="@color/color_background_second"/>
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:layout_below="@+id/removeButton"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/color_text_light"
+        android:background="@color/color_background_second"/>
+</RelativeLayout>

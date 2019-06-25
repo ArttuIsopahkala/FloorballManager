@@ -36,6 +36,8 @@
     <string name="removed_player">Poistettu pelaaja</string>
     <string name="select">Valitse</string>
     <string name="stats">TILASTOT</string>
+    <string name="edit">Muokkaa</string>
+    <string name="remove">Poista</string>
 
     <string name="add_event_goal">Maali</string>
     <string name="add_event_save">Torjuttu</string>

@@ -21,6 +21,10 @@ import com.ardeapps.floorballcoach.R;
  */
 public class ConfirmDialogFragment extends DialogFragment {
 
+    public interface ConfirmationDialogCloseListener {
+        void onDialogYesButtonClick();
+    }
+
     ConfirmationDialogCloseListener mListener = null;
     TextView desc_text;
     Button no_button;
@@ -88,7 +92,4 @@ public class ConfirmDialogFragment extends DialogFragment {
         }
     }
 
-    public interface ConfirmationDialogCloseListener {
-        void onDialogYesButtonClick();
-    }
 }
