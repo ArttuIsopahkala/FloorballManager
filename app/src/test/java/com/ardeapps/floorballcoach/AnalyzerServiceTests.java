@@ -3,6 +3,7 @@ package com.ardeapps.floorballcoach;
 import android.util.Log;
 
 import com.ardeapps.floorballcoach.objects.Goal;
+import com.ardeapps.floorballcoach.services.AnalyzerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
@@ -20,9 +21,17 @@ import java.util.Iterator;
 public class AnalyzerServiceTests {
     @Test
     public void isChemistryPointsCorrect() {
+        /*
         for(Goal goal : getGoals()) {
             System.out.println(goal.getGoalId());
         }
+        */
+
+        int result = AnalyzerService.getChemistryPoints("-LYDueLQnDlNS3iny3r2", "-LZf3phcktGRlKYCJYNo", getGoals());
+        System.out.println(result);
+
+        String name = AnalyzerService.getBestAssistantForScorer("asd", getGoals());
+        System.out.println(name);
     }
 
     public ArrayList<Goal> getGoals() {

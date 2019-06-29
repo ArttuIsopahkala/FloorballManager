@@ -15,17 +15,17 @@ public class AnalyzerService {
 
         int chemistryPoints = 0;
 
-        // +1 = jos compareId on ollut kentällä samaan aikaan
-        // +2 = jos playerId on syöttänyt ja comparId on tehnyt maalin
-        // +3 = jos compareId on syöttänyt ja playerId tehnyt maalin
+        // +1 = if compareId and playerId has been on the field when goal happened
+        // +2 = if playerId has assisted and compareId scored
+        // +3 = if playerId has scored and compareId assisted
         for(Goal goal : goals) {
-            if(goal.isOpponentGoal() == true && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
+            if(goal.isOpponentGoal() == true && goal.getPlayerIds() != null && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
                 chemistryPoints--;
             } else if(goal.isOpponentGoal() == false && goal.getScorerId() == playerId && goal.getAssistantId() == compareId) {
                 chemistryPoints += 3;
             } else if(goal.isOpponentGoal() == false && goal.getScorerId() == compareId && goal.getAssistantId() == playerId) {
                 chemistryPoints += 2;
-            } else if(goal.isOpponentGoal() == false && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
+            } else if(goal.isOpponentGoal() == false && goal.getPlayerIds() != null && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
                 chemistryPoints++;
             }
         }
@@ -40,7 +40,7 @@ public class AnalyzerService {
         HashMap<String, Integer> assistPlayers = new HashMap<String, Integer>();
 
         for(Goal goal : goals) {
-            if(goal.getScorerId() == playerId) {
+            if(playerId.equals(goal.getScorerId())) {
                 String assistantId = goal.getAssistantId();
                 if(assistPlayers.containsKey(assistantId)) {
                     int playerAssists = assistPlayers.get(assistantId);
@@ -63,9 +63,10 @@ public class AnalyzerService {
             }
         }
 
+        if(highestEntry == null) {
+            return null;
+        }
+
         return highestEntry.getKey();
     }
-
-    // Analytic methods
-    //
 }
