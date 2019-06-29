@@ -64,7 +64,6 @@ public class AnalyzerServiceTests {
     public static JSONObject convertToJSONObject(String json) {
         JSONObject obj;
         try {
-            System.out.print(json);
             return new JSONObject(json);
         } catch (JSONException e) {
             obj = new JSONObject();
