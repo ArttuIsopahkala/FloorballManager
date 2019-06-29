@@ -1,99 +1,92 @@
-package com.ardeapps.floorballcoach.services;
+package com.ardeapps.floorballcoach;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.ardeapps.floorballcoach.objects.Goal;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Test;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class MockService {
 
-    private static String PATH_TO_DB = System.getProperty("user.dir") + "/app/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_28_6.json";
-
-    public static void main(String[] args){
-
-        System.out.println("Hello World");
-        getGoals();
+public class AnalyzerServiceTests {
+    @Test
+    public void isChemistryPointsCorrect() {
+        for(Goal goal : getGoals()) {
+            System.out.println(goal.getGoalId());
+        }
     }
 
-    public static void getGoals() {
+    public ArrayList<Goal> getGoals() {
+        ArrayList<Goal> goalsList = new ArrayList<>();
+        String result = readFileContent();
+        if(result != null) {
+            JSONObject json = convertToJSONObject(result);
+            JSONObject root = getJSONObject(json, "DEBUG");
+            JSONObject goalsTeamGame = getJSONObject(root, "goalsTeamGame");
 
-        JSONObject json = readFileContent();
-        System.out.println(json);
+            Iterator<String> teams = goalsTeamGame.keys();
+            while (teams.hasNext()) {
+                String teamId = teams.next();
+                JSONObject teamObj = getJSONObject(goalsTeamGame, teamId);
 
-        Gson gson = new Gson();
-        JsonParser parser = new JsonParser();
-        try {
-            JsonObject object = (JsonObject) parser.parse(new FileReader(PATH_TO_DB));// response will be the json String
-            JsonObject root = object.getAsJsonObject("DEBUG");
-            System.out.println(root);
-            /*JsonArray goalsTeamGame = root.getAsJsonObject("goalsTeamGame");
+                Iterator<String> games = teamObj.keys();
+                while (games.hasNext()) {
+                    String gameId = games.next();
+                    JSONObject gameObj = getJSONObject(teamObj, gameId);
 
-            final ArrayList<?> jsonArray = new Gson().fromJson(goalsTeamGame.toString(), ArrayList.class);
+                    Iterator<String> goals = gameObj.keys();
+                    while (goals.hasNext()) {
+                        String goalId = goals.next();
+                        JSONObject value = getJSONObject(gameObj, goalId);
 
-            System.out.println(jsonArray);*/
-
-            //getJSONArray(object, "DEBUG");
-
-        } catch (FileNotFoundException e) {
-            System.out.println("not found");
-        }
-        /*try {
-            JSONArray a = (JSONArray) parser.parse(new FileReader("c:\\exer4-courses.json"));
-
-            for (Object o : a) {
-                JSONObject person = (JSONObject) o;
-
-                String name = (String) person.get("name");
-                System.out.println(name);
-
-                String city = (String) person.get("city");
-                System.out.println(city);
-
-                String job = (String) person.get("job");
-                System.out.println(job);
-
-                JSONArray cars = (JSONArray) person.get("cars");
-
-                for (Object c : cars) {
-                    System.out.println(c + "");
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        try {
+                            Goal goal = objectMapper.readValue(value.toString(), Goal.class);
+                            goalsList.add(goal);
+                        } catch (IOException e) {
+                        }
+                    }
                 }
             }
-        } catch (FileNotFoundException e) {
-
-        }*/
+        }
+        return goalsList;
     }
 
-    private static JSONObject readFileContent() {
-        BufferedReader reader = null;
-
+    public static JSONObject convertToJSONObject(String json) {
+        JSONObject obj;
         try {
+            System.out.print(json);
+            return new JSONObject(json);
+        } catch (JSONException e) {
+            obj = new JSONObject();
+            Log.e("", "convertToJSONObject " + json);
+        }
+        return obj;
+    }
 
+    private static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_28_6.json";
+
+    public static String readFileContent() {
+        BufferedReader reader = null;
+        try {
             reader = new BufferedReader(new FileReader(PATH_TO_DB));
-
             StringBuffer buffer = new StringBuffer();
             String line = "";
-
             while ((line = reader.readLine()) != null) {
                 if(line != null) {
                     buffer.append(line+"\n");
-                    System.out.println(line);
                 }
             }
-
-            JSONObject json = convertToJSONObject(buffer.toString());
-            return json;
-
+            return buffer.toString();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -101,7 +94,7 @@ public class MockService {
 
     }
 
-    private static String TAG = "LunchService";
+    private static String TAG = "AnalyzerServiceTest";
 
     private String getNode(JSONObject object, String node) {
         String value = "";
@@ -130,18 +123,6 @@ public class MockService {
             Log.e(TAG, "getNodeError - " + node + " not found from " + object.toString());
         }
         return objects;
-    }
-
-    private static JSONObject convertToJSONObject(String json) {
-        JSONObject obj;
-        try {
-            System.out.print(json);
-            return new JSONObject(json);
-        } catch (JSONException e) {
-            obj = new JSONObject();
-            Log.e(TAG, "convertToJSONObject " + json);
-        }
-        return obj;
     }
 
     private static JSONObject getJSONObject(JSONArray objects, int index) {
@@ -180,3 +161,4 @@ public class MockService {
         return value.replace("&amp;", "&");
     }
 }
+
