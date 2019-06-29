@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 public class MockService {
 
+    private static String PATH_TO_DB = System.getProperty("user.dir");
+
     public static void main(String[] args){
 
         System.out.println("Hello World");
@@ -32,7 +34,7 @@ public class MockService {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
         try {
-            JsonObject object = (JsonObject) parser.parse(new FileReader("C:\\Users\\arttu\\Desktop\\Androidharkat\\FloorballCoach\\app\\src\\main\\java\\com\\ardeapps\\floorballcoach\\database_dumbs\\floorball-coach-export_28_6.json"));// response will be the json String
+            JsonObject object = (JsonObject) parser.parse(new FileReader(PATH_TO_DB + "/app/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_28_6.json"));// response will be the json String
             JsonObject root = object.getAsJsonObject("DEBUG");
             System.out.println(root);
             /*JsonArray goalsTeamGame = root.getAsJsonObject("goalsTeamGame");
@@ -77,7 +79,7 @@ public class MockService {
 
         try {
 
-            reader = new BufferedReader(new FileReader("C:\\Users\\arttu\\Desktop\\Androidharkat\\FloorballCoach\\app\\src\\main\\java\\com\\ardeapps\\floorballcoach\\database_dumbs\\floorball-coach-export_28_6.json"));
+            reader = new BufferedReader(new FileReader(PATH_TO_DB + "/app/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_28_6.json"));
 
             StringBuffer buffer = new StringBuffer();
             String line = "";
