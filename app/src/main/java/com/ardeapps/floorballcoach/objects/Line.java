@@ -1,5 +1,7 @@
 package com.ardeapps.floorballcoach.objects;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +51,7 @@ public class Line {
         this.playerIdMap = playerIdMap;
     }
 
+    @Exclude
     public Map<String, String> getSortedPlayers() {
         TreeMap<String, String> sorted = new TreeMap<>(new Comparator<String>() {
             @Override
