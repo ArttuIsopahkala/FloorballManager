@@ -36,8 +36,8 @@ public class FirebaseDatabaseService {
     protected static final String GOALS_TEAM_GAME = "goalsTeamGame";
     protected static final String STATS_PLAYER_GAME = "statsPlayerGame";
 
-    private static final String DEBUG = "DEBUG";
-    private static final String RELEASE = "RELEASE";
+    protected static final String DEBUG = "DEBUG";
+    protected static final String RELEASE = "RELEASE";
 
     protected static DatabaseReference getDatabase() {
         if (BuildConfig.DEBUG) {

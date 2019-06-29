@@ -3,7 +3,6 @@ package com.ardeapps.floorballcoach.services;
 import com.ardeapps.floorballcoach.objects.Goal;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,5 +69,10 @@ public class AnalyzerService {
         }
 
         return highestEntry.getKey();
+    }
+
+    // statsPlayerGame
+    public static String getBestScorerForAssitant(String playerId, ArrayList<Goal> goals) {
+        return null;
     }
 }

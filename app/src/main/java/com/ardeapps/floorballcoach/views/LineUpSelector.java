@@ -76,7 +76,7 @@ public class LineUpSelector extends LinearLayout {
             LineFragmentData data = lineFragment.getData();
             Line line = lines.get(data.getLineNumber());
             data.setLine(line);
-            lineFragment.setData(line);
+            lineFragment.setData(data);
         }
     }
 
