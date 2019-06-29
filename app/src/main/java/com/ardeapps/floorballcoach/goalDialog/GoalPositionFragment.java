@@ -21,7 +21,6 @@ public class GoalPositionFragment extends Fragment {
 
     private double positionPercentX;
     private double positionPercentY;
-    private String shootType;
     private double imageWidth;
     private double imageHeight;
     private Double positionX;
@@ -91,14 +90,6 @@ public class GoalPositionFragment extends Fragment {
         shootPointImage.setLayoutParams(params);
     }
 
-    public String getShootType() {
-        return shootType;
-    }
-
-    public void setShootType(String shootType) {
-        this.shootType = shootType;
-    }
-
     private double getPositionX(double positionPercentX) {
         return imageWidth * positionPercentX;
     }
@@ -127,16 +118,4 @@ public class GoalPositionFragment extends Fragment {
             return null;
         }
     }
-
-   /* public boolean validate() {
-        if(positionX == null || positionY == null) {
-            // TODO show error
-            Logger.toast("ei sijaintia");
-            return false;
-        }
-        Logger.toast(getPositionPercentX() + ", " + getPositionPercentY());
-        Logger.log("KOKO validate positionX: " + getPositionPercentX());
-        Logger.log("KOKO validate positionY: " + getPositionPercentY());
-        return true;
-    }*/
 }

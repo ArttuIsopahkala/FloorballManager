@@ -39,7 +39,7 @@ public class StatsByPlayerResource extends FirebaseDatabaseService {
     }
 
     /**
-     * Get all goals by team indexed by goalId
+     * Get all goals by player indexed by goalId
      */
     public void getGoals(String playerId, final GetGoalsHandler handler) {
         getData(database.child(playerId), new GetDataSuccessListener() {

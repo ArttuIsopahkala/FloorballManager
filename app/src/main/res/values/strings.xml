@@ -45,7 +45,7 @@
     <string name="add_event_block">Blokattu</string>
     <string name="add_event_type">Laukaus</string>
     <string name="add_event_details">Tiedot</string>
-    <string name="add_event_scorer">Tekijä</string>
+    <string name="add_event_scorer">Maalintekijä</string>
     <string name="add_event_assistant">Syöttäjä</string>
     <string name="add_event_position">Laukauksen lähtöpaikka</string>
     <string name="add_event_line">Kentällä olleet pelaajat</string>
@@ -55,6 +55,10 @@
     <string name="add_event_rl">RL</string>
     <string name="add_event_mode">Pelimuoto</string>
     <string name="add_event_time">Aika</string>
+    <string name="add_event_error_time">Aseta aika.</string>
+    <string name="add_event_error_mode">Aseta pelimuoto.</string>
+    <string name="add_event_error_scorer">Valitse maalintekijä.</string>
+    <string name="add_event_error_line">Valitse vähemmän pelaajia.</string>
 
     <string name="title_add_monitored">Lisää seurattava</string>
     <string name="title_add_team">Lisää joukkue</string>

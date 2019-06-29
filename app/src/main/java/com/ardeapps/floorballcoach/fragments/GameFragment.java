@@ -64,7 +64,7 @@ public class GameFragment extends Fragment implements DataView {
     }
 
     @Override
-    public Object getData() {
+    public GameFragmentData getData() {
         return data;
     }
 

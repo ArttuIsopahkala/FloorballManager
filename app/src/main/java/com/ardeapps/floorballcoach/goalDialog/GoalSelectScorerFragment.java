@@ -25,7 +25,7 @@ public class GoalSelectScorerFragment extends Fragment implements DataView {
         mListener = l;
     }
 
-    PlayerSelector scorerSelector;
+    PlayerSelector playerSelector;
     List<String> selectedPlayerIds = new ArrayList<>();
     List<String> disabledPlayerIds = new ArrayList<>();
     Map<Integer, Line> lines = new HashMap<>();
@@ -37,25 +37,25 @@ public class GoalSelectScorerFragment extends Fragment implements DataView {
     }
 
     @Override
-    public Object getData() {
+    public Map<Integer, Line> getData() {
         return lines;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_goal_select_scorer, container, false);
-        scorerSelector = v.findViewById(R.id.scorerSelector);
+        View v = inflater.inflate(R.layout.container_player_selector, container, false);
+        playerSelector = v.findViewById(R.id.playerSelector);
 
-        scorerSelector.createSingleSelectView(lines, mListener);
-        scorerSelector.setSelectedPlayerIds(selectedPlayerIds);
-        scorerSelector.setDisabledPlayerIds(disabledPlayerIds);
+        playerSelector.createSingleSelectView(lines, mListener);
+        playerSelector.setSelectedPlayerIds(selectedPlayerIds);
+        playerSelector.setDisabledPlayerIds(disabledPlayerIds);
         return v;
     }
 
     public void updateSelection() {
-        scorerSelector.setSelectedPlayerIds(selectedPlayerIds);
-        scorerSelector.setDisabledPlayerIds(disabledPlayerIds);
+        playerSelector.setSelectedPlayerIds(selectedPlayerIds);
+        playerSelector.setDisabledPlayerIds(disabledPlayerIds);
     }
 
     public void setDisabledPlayerId(String playerId) {
@@ -73,19 +73,18 @@ public class GoalSelectScorerFragment extends Fragment implements DataView {
     }
 
     public String getScorerPlayerId() {
-        if(scorerSelector.getSelectedPlayerIds() == null) {
+        if(playerSelector.getSelectedPlayerIds() == null) {
             return null;
         }
-        return scorerSelector.getSelectedPlayerIds().get(0);
+        return playerSelector.getSelectedPlayerIds().get(0);
     }
 
     public boolean validate() {
-        if(scorerSelector.getSelectedPlayerIds() == null || scorerSelector.getSelectedPlayerIds().isEmpty()) {
-            // TODO show error
-            Logger.toast("Ei valittuja pelaajia");
+        if(playerSelector.getSelectedPlayerIds().isEmpty()) {
+            Logger.toast(R.string.add_event_error_scorer);
             return false;
         }
-        Logger.toast("ids: " + scorerSelector.getSelectedPlayerIds());
+
         return true;
     }
 }

@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.viewObjects.GoalSelectLineFragmentData;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
     private Integer scorerLineNumber;
     private Integer assistantLineNumber;
 
-    public GoalPagerAdapter(FragmentManager supportFragmentManager, Map<Integer, Line> lines, boolean opponentGoal) {
+    public GoalPagerAdapter(FragmentManager supportFragmentManager, Map<Integer, Line> lines, final boolean opponentGoal) {
         super(supportFragmentManager);
         this.opponentGoal = opponentGoal;
         this.lines = lines;
@@ -46,7 +47,10 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         selectLineFragment = new GoalSelectLineFragment();
         selectScorerFragment.setData(lines);
         selectAssistantFragment.setData(lines);
-        selectLineFragment.setData(lines);
+        GoalSelectLineFragmentData data = new GoalSelectLineFragmentData();
+        data.setLines(lines);
+        data.setMaxSelectPlayers(6);
+        selectLineFragment.setData(data);
 
         if(opponentGoal) {
             fragments.add(detailsFragment);
@@ -58,6 +62,36 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             fragments.add(selectAssistantFragment);
             fragments.add(selectLineFragment);
             fragments.add(positionFragment);
+
+            detailsFragment.setListener(new GoalDetailsFragment.Listener() {
+                @Override
+                public void onFullRadioButtonChecked() {
+                    GoalSelectLineFragmentData data = selectLineFragment.getData();
+                    data.setMaxSelectPlayers(6);
+                    selectLineFragment.setData(data);
+                }
+
+                @Override
+                public void onAvRadioButtonChecked() {
+                    GoalSelectLineFragmentData data = selectLineFragment.getData();
+                    data.setMaxSelectPlayers(opponentGoal ? 6 : 4);
+                    selectLineFragment.setData(data);
+                }
+
+                @Override
+                public void onYvRadioButtonChecked() {
+                    GoalSelectLineFragmentData data = selectLineFragment.getData();
+                    data.setMaxSelectPlayers(opponentGoal ? 4 : 6);
+                    selectLineFragment.setData(data);
+                }
+
+                @Override
+                public void onRlRadioButtonChecked() {
+                    GoalSelectLineFragmentData data = selectLineFragment.getData();
+                    data.setMaxSelectPlayers(1);
+                    selectLineFragment.setData(data);
+                }
+            });
 
             selectScorerFragment.setListener(new PlayerSelector.Listener() {
                 @Override

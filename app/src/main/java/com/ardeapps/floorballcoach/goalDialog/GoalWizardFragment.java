@@ -50,8 +50,8 @@ public class GoalWizardFragment extends DialogFragment implements DataView {
     }
 
     @Override
-    public Object getData() {
-        return null;
+    public GoalWizardFragmentData getData() {
+        return data;
     }
 
     @Override

@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
         gameSettingsFragment.setListener(new GameSettingsFragment.Listener() {
             @Override
             public void onGameEdited(Game game, Map<Integer, Line> lines) {
-                GameFragmentData gameFragmentData = (GameFragmentData) gameFragment.getData();
+                GameFragmentData gameFragmentData = gameFragment.getData();
                 gameFragmentData.setGame(game);
                 gameFragmentData.setLines(lines);
                 gameFragment.setData(gameFragmentData);

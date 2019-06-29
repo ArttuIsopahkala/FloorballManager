@@ -9,6 +9,7 @@ import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.fragments.LineFragment;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.viewObjects.LineFragmentData;
 
 import java.util.List;
 
@@ -55,8 +56,10 @@ public class LinesPagerAdapter extends FragmentStatePagerAdapter {
 
     public void updateLineFragment(Line line) {
         LineFragment lineFragment = lineFragments.get(line.getLineNumber() - 1);
-        lineFragment.setLine(line);
-        lineFragment.setLineNumber(line.getLineNumber());
+        LineFragmentData data = new LineFragmentData();
+        data.setLine(line);
+        data.setLineNumber(line.getLineNumber());
+        lineFragment.setData(data);
         lineFragment.update();
     }
 

@@ -69,7 +69,7 @@ public class PlayerSelector extends LinearLayout {
         this.multiSelect = multiSelect;
         this.mListener = listener;
         LayoutInflater inflater = LayoutInflater.from(AppRes.getContext());
-        inflater.inflate(R.layout.container_lines, this);
+        inflater.inflate(R.layout.player_selector, this);
         lineContainer1 = findViewById(R.id.lineContainer1);
         lineContainer2 = findViewById(R.id.lineContainer2);
         lineContainer3 = findViewById(R.id.lineContainer3);

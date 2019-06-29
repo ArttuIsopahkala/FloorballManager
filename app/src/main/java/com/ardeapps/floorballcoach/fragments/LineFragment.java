@@ -15,13 +15,15 @@ import com.ardeapps.floorballcoach.dialogFragments.SelectPlayerDialogFragment;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
+import com.ardeapps.floorballcoach.viewObjects.LineFragmentData;
 import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.Iterator;
 import java.util.Map;
 
 
-public class LineFragment extends Fragment {
+public class LineFragment extends Fragment implements DataView {
 
     public interface Listener {
         void onLineChanged(Line line, String playerId);
@@ -46,23 +48,17 @@ public class LineFragment extends Fragment {
     LinearLayout card_rw;
     LinearLayout card_ld;
     LinearLayout card_rd;
-    Line line;
-    int lineNumber;
 
-    public void setLine(Line line) {
-        this.line = line;
+    private LineFragmentData data;
+
+    @Override
+    public void setData(Object viewData) {
+        data = (LineFragmentData) viewData;
     }
 
-    public Line getLine() {
-        return line;
-    }
-
-    public void setLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
-    }
-
-    public int getLineNumber() {
-        return lineNumber;
+    @Override
+    public LineFragmentData getData() {
+        return data;
     }
 
     @Override
@@ -95,6 +91,7 @@ public class LineFragment extends Fragment {
         pictureImage.setVisibility(View.GONE);
         nameText.setText(getString(R.string.select));
 
+        Line line = data.getLine();
         if(line != null) {
             String playerId = line.getPlayerIdMap().get(pos);
             if (playerId != null) {
@@ -122,11 +119,13 @@ public class LineFragment extends Fragment {
                 dialog.setListener(new SelectPlayerDialogFragment.SelectPlayerDialogListener() {
                     @Override
                     public void onPlayerSelected(Player player) {
-                        String playerId = player.getPlayerId();
+                        Line line = data.getLine();
                         if(line == null) {
                             line = new Line();
-                            line.setLineNumber(lineNumber);
+                            line.setLineNumber(data.getLineNumber());
                         }
+
+                        String playerId = player.getPlayerId();
                         // Remove existing player if he is in same line in different position
                         Iterator<Map.Entry<String, String>> it = line.getPlayerIdMap().entrySet().iterator();
                         while (it.hasNext()) {
@@ -146,6 +145,7 @@ public class LineFragment extends Fragment {
                     @Override
                     public void onPlayerRemoved() {
                         // No line created or player not selected and empty clicked
+                        Line line = data.getLine();
                         if(line == null) {
                             dialog.dismiss();
                             return;

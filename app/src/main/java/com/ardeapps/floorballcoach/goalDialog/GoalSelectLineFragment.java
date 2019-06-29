@@ -7,50 +7,49 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
+import com.ardeapps.floorballcoach.viewObjects.GoalSelectLineFragmentData;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GoalSelectLineFragment extends Fragment implements DataView {
 
-    PlayerSelector lineSelector;
+    PlayerSelector playerSelector;
     List<String> selectedPlayerIds = new ArrayList<>();
     List<String> disabledPlayerIds = new ArrayList<>();
-    Map<Integer, Line> lines = new HashMap<>();
+
+    private GoalSelectLineFragmentData data;
 
     @Override
-    @SuppressWarnings("unchecked")
     public void setData(Object viewData) {
-        lines = (Map<Integer, Line>) viewData;
+        data = (GoalSelectLineFragmentData) viewData;
     }
 
     @Override
-    public Object getData() {
-        return lines;
+    public GoalSelectLineFragmentData getData() {
+        return data;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_goal_select_line, container, false);
+        View v = inflater.inflate(R.layout.container_player_selector, container, false);
 
-        lineSelector = v.findViewById(R.id.lineSelector);
+        playerSelector = v.findViewById(R.id.playerSelector);
 
-        lineSelector.createMultiSelectView(lines);
-        lineSelector.setSelectedPlayerIds(selectedPlayerIds);
-        lineSelector.setDisabledPlayerIds(disabledPlayerIds);
+        playerSelector.createMultiSelectView(data.getLines());
+        playerSelector.setSelectedPlayerIds(selectedPlayerIds);
+        playerSelector.setDisabledPlayerIds(disabledPlayerIds);
 
         return v;
     }
+
     public void updateSelection() {
-        lineSelector.setSelectedPlayerIds(selectedPlayerIds);
-        lineSelector.setDisabledPlayerIds(disabledPlayerIds);
+        playerSelector.setSelectedPlayerIds(selectedPlayerIds);
+        playerSelector.setDisabledPlayerIds(disabledPlayerIds);
     }
 
     public void setDisabledPlayerIds(List<String> playerIds) {
@@ -68,16 +67,15 @@ public class GoalSelectLineFragment extends Fragment implements DataView {
     }
 
     public List<String> getSelectedPlayerIds() {
-        return lineSelector.getSelectedPlayerIds();
+        return playerSelector.getSelectedPlayerIds();
     }
 
     public boolean validate() {
-        if(lineSelector.getSelectedPlayerIds().isEmpty()) {
-            // TODO show error
-            Logger.toast("Ei valittuja pelaajia");
+        if(playerSelector.getSelectedPlayerIds().size() > data.getMaxSelectPlayers()) {
+            Logger.toast(R.string.add_event_error_line);
             return false;
         }
-        Logger.toast("ids: " + lineSelector.getSelectedPlayerIds());
+
         return true;
     }
 

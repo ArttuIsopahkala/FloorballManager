@@ -51,7 +51,7 @@ public class EditTeamFragment extends Fragment implements DataView {
     }
 
     @Override
-    public Object getData() {
+    public Team getData() {
         return team;
     }
 

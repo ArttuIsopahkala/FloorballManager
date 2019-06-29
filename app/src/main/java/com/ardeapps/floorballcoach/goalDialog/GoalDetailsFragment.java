@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import com.ardeapps.floorballcoach.R;
@@ -14,6 +15,19 @@ import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.views.TimePicker;
 
 public class GoalDetailsFragment extends Fragment {
+
+    public Listener mListener = null;
+
+    public interface Listener {
+        void onFullRadioButtonChecked();
+        void onAvRadioButtonChecked();
+        void onYvRadioButtonChecked();
+        void onRlRadioButtonChecked();
+    }
+
+    public void setListener(Listener l) {
+        mListener = l;
+    }
 
     RadioButton fullRadioButton;
     RadioButton yvRadioButton;
@@ -38,12 +52,44 @@ public class GoalDetailsFragment extends Fragment {
 
         if(mode == Goal.Mode.FULL) {
             Helper.setRadioButtonChecked(fullRadioButton, true);
+            fullRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked) {
+                        mListener.onFullRadioButtonChecked();
+                    }
+                }
+            });
         } else if(mode == Goal.Mode.YV) {
             Helper.setRadioButtonChecked(yvRadioButton, true);
+            yvRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked) {
+                        mListener.onYvRadioButtonChecked();
+                    }
+                }
+            });
         } else if(mode == Goal.Mode.AV) {
             Helper.setRadioButtonChecked(avRadioButton, true);
+            avRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked) {
+                        mListener.onAvRadioButtonChecked();
+                    }
+                }
+            });
         } else if(mode == Goal.Mode.RL) {
             Helper.setRadioButtonChecked(rlRadioButton, true);
+            rlRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked) {
+                        mListener.onRlRadioButtonChecked();
+                    }
+                }
+            });
         }
         return v;
     }
@@ -74,15 +120,13 @@ public class GoalDetailsFragment extends Fragment {
     }
 
     public boolean validate() {
-        Logger.log("time " + timePicker.getTimeInMillis());
-
         if(timePicker.getTimeInMillis() == 0) {
-            // TODO show error
+            Logger.toast(R.string.add_event_error_time);
             return false;
         }
 
         if(!fullRadioButton.isChecked() && !yvRadioButton.isChecked() && !avRadioButton.isChecked() && !rlRadioButton.isChecked()) {
-            // TODO show error
+            Logger.toast(R.string.add_event_error_mode);
             return false;
         }
 

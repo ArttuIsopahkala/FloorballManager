@@ -12,6 +12,7 @@ import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.adapters.LinesPagerAdapter;
 import com.ardeapps.floorballcoach.fragments.LineFragment;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.viewObjects.LineFragmentData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,16 +73,19 @@ public class LineUpSelector extends LinearLayout {
     public void setLines(Map<Integer, Line> lines) {
         this.lines = lines;
         for(LineFragment lineFragment : lineFragments) {
-            Line line = lines.get(lineFragment.getLineNumber());
-            lineFragment.setLine(line);
+            LineFragmentData data = lineFragment.getData();
+            Line line = lines.get(data.getLineNumber());
+            data.setLine(line);
+            lineFragment.setData(line);
         }
     }
 
     public Map<Integer, Line> getLines() {
         Map<Integer, Line> lines = new HashMap<>();
         for(LineFragment lineFragment : lineFragments) {
-            if(lineFragment.getLine() != null) {
-                lines.put(lineFragment.getLineNumber(), lineFragment.getLine());
+            LineFragmentData data = lineFragment.getData();
+            if(data.getLine() != null) {
+                lines.put(data.getLineNumber(), data.getLine());
             }
         }
         return lines;
@@ -89,7 +93,9 @@ public class LineUpSelector extends LinearLayout {
 
     private LineFragment createLineFragment(final int lineNumber) {
         LineFragment lineFragment = new LineFragment();
-        lineFragment.setLineNumber(lineNumber);
+        LineFragmentData data = new LineFragmentData();
+        data.setLineNumber(lineNumber);
+        lineFragment.setData(data);
         lineFragment.setListener(new LineFragment.Listener() {
 
             @Override
