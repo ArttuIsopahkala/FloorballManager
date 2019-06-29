@@ -3,7 +3,7 @@ package com.ardeapps.floorballcoach;
 import android.util.Log;
 
 import com.ardeapps.floorballcoach.objects.Goal;
-import com.ardeapps.floorballcoach.services.AnalyzerService;
+import com.ardeapps.floorballcoach.objects.Line;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
@@ -21,17 +21,42 @@ import java.util.Iterator;
 public class AnalyzerServiceTests {
     @Test
     public void isChemistryPointsCorrect() {
-        /*
         for(Goal goal : getGoals()) {
             System.out.println(goal.getGoalId());
         }
-        */
+    }
 
-        int result = AnalyzerService.getChemistryPoints("-LYDueLQnDlNS3iny3r2", "-LZf3phcktGRlKYCJYNo", getGoals());
-        System.out.println(result);
+    // getPlayersOfLine("-LYDuaJHLYXZBTjVtWjK")
+    public ArrayList<String> getPlayersOfLine(String lineId) {
+        String result = readFileContent();
+        if(result != null) {
+            JSONObject json = convertToJSONObject(result);
+            JSONObject root = getJSONObject(json, "DEBUG");
+            JSONObject linesObj = getJSONObject(root, "lines");
 
-        String name = AnalyzerService.getBestAssistantForScorer("asd", getGoals());
-        System.out.println(name);
+            Iterator<String> teams = linesObj.keys();
+            while (teams.hasNext()) {
+                String teamId = teams.next();
+                JSONObject teamObj = getJSONObject(linesObj, teamId);
+
+                Iterator<String> lines = teamObj.keys();
+                while (lines.hasNext()) {
+                    String id = lines.next();
+                    if(lineId.equals(id)) {
+                        JSONObject lineObj = getJSONObject(teamObj, id);
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        try {
+                            Line line = objectMapper.readValue(lineObj.toString(), Line.class);
+                            if(line.getPlayerIdMap() != null) {
+                                return new ArrayList<>(line.getPlayerIdMap().values());
+                            }
+                        } catch (IOException e) {
+                        }
+                    }
+                }
+            }
+        }
+        return new ArrayList<>();
     }
 
     public ArrayList<Goal> getGoals() {
