@@ -19,13 +19,13 @@ public class AnalyzerService {
         // +2 = if playerId has assisted and compareId scored
         // +3 = if playerId has scored and compareId assisted
         for(Goal goal : goals) {
-            if(goal.isOpponentGoal() == true && goal.getPlayerIds() != null && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
+            if(goal.isOpponentGoal() && goal.getPlayerIds() != null && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
                 chemistryPoints--;
-            } else if(goal.isOpponentGoal() == false && goal.getScorerId() == playerId && goal.getAssistantId() == compareId) {
+            } else if(!goal.isOpponentGoal() && playerId.equals(goal.getScorerId()) && compareId.equals(goal.getAssistantId())) {
                 chemistryPoints += 3;
-            } else if(goal.isOpponentGoal() == false && goal.getScorerId() == compareId && goal.getAssistantId() == playerId) {
+            } else if(!goal.isOpponentGoal() && compareId.equals(goal.getScorerId()) && playerId.equals(goal.getAssistantId())) {
                 chemistryPoints += 2;
-            } else if(goal.isOpponentGoal() == false && goal.getPlayerIds() != null && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
+            } else if(!goal.isOpponentGoal() && goal.getPlayerIds() != null && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
                 chemistryPoints++;
             }
         }
@@ -42,12 +42,14 @@ public class AnalyzerService {
         for(Goal goal : goals) {
             if(playerId.equals(goal.getScorerId())) {
                 String assistantId = goal.getAssistantId();
-                if(assistPlayers.containsKey(assistantId)) {
-                    int playerAssists = assistPlayers.get(assistantId);
-                    playerAssists++;
-                    assistPlayers.put(assistantId, playerAssists);
-                } else {
-                    assistPlayers.put(assistantId, 1);
+                if(assistantId != null) {
+                    Integer playerAssists = assistPlayers.get(assistantId);
+                    if(playerAssists != null) {
+                        playerAssists++;
+                        assistPlayers.put(assistantId, playerAssists);
+                    } else {
+                        assistPlayers.put(assistantId, 1);
+                    }
                 }
             }
         }

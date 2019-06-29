@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.services.AnalyzerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
@@ -21,9 +22,18 @@ import java.util.Iterator;
 public class AnalyzerServiceTests {
     @Test
     public void isChemistryPointsCorrect() {
+        /*
         for(Goal goal : getGoals()) {
             System.out.println(goal.getGoalId());
         }
+        */
+
+        int testChemistry = AnalyzerService.getChemistryPoints("-LYDueLQnDlNS3iny3r2", "-LZf423Q01lgFW8yD5Dl", getGoals());
+        System.out.println(testChemistry);
+
+        String bestAssister = AnalyzerService.getBestAssistantForScorer("-LYDueLQnDlNS3iny3r2", getGoals());
+        System.out.println(bestAssister);
+
     }
 
     // getPlayersOfLine("-LYDuaJHLYXZBTjVtWjK")
