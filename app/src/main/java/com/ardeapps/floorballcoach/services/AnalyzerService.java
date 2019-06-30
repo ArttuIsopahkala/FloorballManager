@@ -1,6 +1,7 @@
 package com.ardeapps.floorballcoach.services;
 
 import com.ardeapps.floorballcoach.objects.Goal;
+import com.ardeapps.floorballcoach.objects.PlayerChemistry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +9,13 @@ import java.util.Map;
 
 public class AnalyzerService {
 
-    // TEAM STATS
-    // goalsTeamGame
+    /**
+     * Database path: goalsTeamGame
+     * @param playerId player to compare against
+     * @param compareId player to compare
+     * @param goals goals saved for team
+     * @return count of chemistry points
+     */
     public static int getChemistryPoints(String playerId, String compareId, ArrayList<Goal> goals) {
 
         int chemistryPoints = 0;
@@ -32,8 +38,12 @@ public class AnalyzerService {
         return chemistryPoints;
     }
 
-    // PLAYER STATS
-    // statsPlayerGame
+    /**
+     * Database path: statsPlayerGame
+     * @param playerId scorer playerId
+     * @param goals goals saved for player
+     * @return playerId of the best assistant
+     */
     public static String getBestAssistantForScorer(String playerId, ArrayList<Goal> goals) {
 
         HashMap<String, Integer> assistPlayers = new HashMap<String, Integer>();
@@ -71,8 +81,32 @@ public class AnalyzerService {
         return highestEntry.getKey();
     }
 
-    // statsPlayerGame
+    /**
+     * Database path: statsPlayerGame
+     * @param playerId assistant playerId
+     * @param goals goals saved for player
+     * @return playerId of the best scorer
+     */
     public static String getBestScorerForAssitant(String playerId, ArrayList<Goal> goals) {
+        return null;
+    }
+
+    /**
+     * Database path: statsPlayerGame
+     * @param playerIds player which chemistries is calculated
+     * @param goals team goals where chemistry is calculated
+     * @return list of player chemistries
+     */
+    public static ArrayList<PlayerChemistry> getPlayerChemistries(ArrayList<String> playerIds, ArrayList<Goal> goals) {
+        // TODO tee loppuun ja testaa
+        for(String playerId : playerIds) {
+            PlayerChemistry playerChemistry = new PlayerChemistry();
+            playerChemistry.setPlayerId(playerId);
+            for(String comparePlayerId : playerIds) {
+                int testChemistry = AnalyzerService.getChemistryPoints(playerId, comparePlayerId, goals);
+                playerChemistry.getComparePlayers().put(comparePlayerId, testChemistry);
+            }
+        }
         return null;
     }
 }

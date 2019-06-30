@@ -30,14 +30,8 @@ public class AnalyzerServiceTests extends JSONService {
         }
 
         ArrayList<String> playerIds = getPlayersOfLine(teamId, lineId);
-        for(String playerId : playerIds) {
-            PlayerChemistry playerChemistry = new PlayerChemistry();
-            playerChemistry.setPlayerId(playerId);
-            for(String comparePlayerId : playerIds) {
-                int testChemistry = AnalyzerService.getChemistryPoints(playerId, comparePlayerId, getTeamGoals(teamId));
-                playerChemistry.getComparePlayers().put(comparePlayerId, testChemistry);
-            }
-        }
+        // TODO testaa
+        ArrayList<PlayerChemistry> playerChemistries =  AnalyzerService.getPlayerChemistries(playerIds, getTeamGoals(teamId));
 
         String bestAssister = AnalyzerService.getBestAssistantForScorer("-LYDueLQnDlNS3iny3r2", getTeamGoals(teamId));
         System.out.println(bestAssister);
