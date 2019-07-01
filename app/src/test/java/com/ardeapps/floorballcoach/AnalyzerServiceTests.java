@@ -8,6 +8,7 @@ import com.ardeapps.floorballcoach.services.JSONService;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class AnalyzerServiceTests extends JSONService {
     @Test
@@ -29,9 +30,9 @@ public class AnalyzerServiceTests extends JSONService {
             System.out.println(goal.getGoalId());
         }
 
-        ArrayList<String> playerIds = getPlayersOfLine(teamId, lineId);
+        Map<String, String> playerIdMap = getPlayersOfLine(teamId, lineId);
         // TODO testaa
-        ArrayList<PlayerChemistry> playerChemistries =  AnalyzerService.getPlayerChemistries(playerIds, getTeamGoals(teamId));
+        ArrayList<PlayerChemistry> playerChemistries =  AnalyzerService.getPlayerChemistries(playerIdMap, getTeamGoals(teamId));
 
         String bestAssister = AnalyzerService.getBestAssistantForScorer("-LYDueLQnDlNS3iny3r2", getTeamGoals(teamId));
         System.out.println(bestAssister);

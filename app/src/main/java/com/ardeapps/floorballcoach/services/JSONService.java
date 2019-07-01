@@ -14,15 +14,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class JSONService extends FirebaseDatabaseService {
 
     private final static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_28_6.json";
 
     // getPlayersOfLine("-LYDuaJHLYXZBTjVtWjK")
-    protected ArrayList<String> getPlayersOfLine(String teamId, String lineId) {
-        ArrayList<String> playerIds = new ArrayList<>();
+    protected Map<String, String> getPlayersOfLine(String teamId, String lineId) {
+        Map<String, String> playerIdMap = new HashMap<>();
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
@@ -42,7 +44,7 @@ public class JSONService extends FirebaseDatabaseService {
                             try {
                                 Line line = new ObjectMapper().readValue(lineObj.toString(), Line.class);
                                 if (line.getPlayerIdMap() != null) {
-                                    playerIds.addAll(line.getPlayerIdMap().values());
+                                    playerIdMap = line.getPlayerIdMap();
                                 }
                             } catch (IOException e) {}
                         }
@@ -50,7 +52,7 @@ public class JSONService extends FirebaseDatabaseService {
                 }
             }
         }
-        return playerIds;
+        return playerIdMap;
     }
 
     protected ArrayList<Goal> getPlayerGoals(String playerId) {
