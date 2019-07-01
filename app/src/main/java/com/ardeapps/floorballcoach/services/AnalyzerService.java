@@ -46,7 +46,7 @@ public class AnalyzerService {
      */
     public static String getBestAssistantForScorer(String playerId, ArrayList<Goal> goals) {
 
-        HashMap<String, Integer> assistPlayers = new HashMap<String, Integer>();
+        HashMap<String, Integer> assistPlayers = new HashMap<>();
 
         for(Goal goal : goals) {
             if(playerId.equals(goal.getScorerId())) {
@@ -93,12 +93,15 @@ public class AnalyzerService {
 
     /**
      * Database path: statsPlayerGame
-     * @param playerIds player which chemistries is calculated
+     * @param playerIdMap players which chemistries are calculated
      * @param goals team goals where chemistry is calculated
      * @return list of player chemistries
      */
-    public static ArrayList<PlayerChemistry> getPlayerChemistries(ArrayList<String> playerIds, ArrayList<Goal> goals) {
+    public static ArrayList<PlayerChemistry> getPlayerChemistries(Map<String, String> playerIdMap, ArrayList<Goal> goals) {
         // TODO tee loppuun ja testaa
+        // playerIdMap:
+        // key = position(Player.Position), value = playerId
+        ArrayList<String> playerIds = new ArrayList<>(playerIdMap.values());
         for(String playerId : playerIds) {
             PlayerChemistry playerChemistry = new PlayerChemistry();
             playerChemistry.setPlayerId(playerId);
