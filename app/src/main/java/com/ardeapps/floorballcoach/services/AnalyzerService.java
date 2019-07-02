@@ -40,7 +40,7 @@ public class AnalyzerService {
 
     /**
      * Database path: statsPlayerGame
-     * @param playerId scorer playerId
+     * @param playerId scorer
      * @param goals goals saved for player
      * @return playerId of the best assistant
      */
@@ -66,7 +66,6 @@ public class AnalyzerService {
         Map.Entry<String, Integer> highestEntry = null;
 
         for (Map.Entry<String, Integer> entry : assistPlayers.entrySet()) {
-            String key = entry.getKey();
             Integer value = entry.getValue();
 
             if(highestEntry == null || highestEntry.getValue() < value) {
@@ -87,9 +86,87 @@ public class AnalyzerService {
      * @param goals goals saved for player
      * @return playerId of the best scorer
      */
-    public static String getBestScorerForAssitant(String playerId, ArrayList<Goal> goals) {
-        return null;
+    public static String getBestScorerForAssistant(String playerId, ArrayList<Goal> goals) {
+
+        HashMap<String, Integer> scorerPlayers = new HashMap<>();
+
+        for (Goal goal : goals) {
+            if(playerId.equals(goal.getAssistantId())) {
+                String scorerId = goal.getScorerId();
+                if(scorerId != null) {
+                    Integer playerScores = scorerPlayers.get(scorerId);
+                    if(playerScores != null) {
+                        playerScores++;
+                        scorerPlayers.put(scorerId, playerScores);
+                    } else {
+                        scorerPlayers.put(scorerId, 1);
+                    }
+                }
+            }
+        }
+
+        Map.Entry<String, Integer> highestEntry = null;
+
+        for (Map.Entry<String, Integer> entry : scorerPlayers.entrySet()) {
+            Integer value = entry.getValue();
+
+            if(highestEntry == null || highestEntry.getValue() < value) {
+                highestEntry = entry;
+            }
+        }
+
+        if(highestEntry == null) {
+            return null;
+        }
+
+        return highestEntry.getKey();
     }
+
+    // lookingBestScorer == true if looking best scorer that playerId has assisted
+    // else looking best assistant for playerId scores
+    // TODO Check this idea Arttu!
+    public static String getBestScorerOrAssistant(boolean lookingBestScorer, String playerId, ArrayList<Goal> goals) {
+
+        HashMap<String, Integer> scorerPlayers = new HashMap<>();
+        String newPlayerId;
+
+        for (Goal goal : goals) {
+            if(playerId.equals(goal.getAssistantId())) {
+                if(lookingBestScorer == true) {
+                    newPlayerId = goal.getScorerId();
+                } else {
+                    newPlayerId = goal.getAssistantId();
+                }
+
+                if(newPlayerId != null) {
+                    Integer playerScores = scorerPlayers.get(newPlayerId);
+                    if(playerScores != null) {
+                        playerScores++;
+                        scorerPlayers.put(playerId, playerScores);
+                    } else {
+                        scorerPlayers.put(playerId, 1);
+                    }
+                }
+            }
+        }
+
+        Map.Entry<String, Integer> highestEntry = null;
+
+        for (Map.Entry<String, Integer> entry : scorerPlayers.entrySet()) {
+            Integer value = entry.getValue();
+
+            if(highestEntry == null || highestEntry.getValue() < value) {
+                highestEntry = entry;
+            }
+        }
+
+        if(highestEntry == null) {
+            return null;
+        }
+
+        return highestEntry.getKey();
+    }
+
 
     /**
      * Database path: statsPlayerGame
