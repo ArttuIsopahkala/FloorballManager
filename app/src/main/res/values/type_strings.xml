@@ -1,0 +1,67 @@
+<resources>
+
+    <string name="types_info_desc">Pelaajan tyypin avulla lasketaan pelaajien välisiä kemioita. Asettamalla tyypin pelaajien välinen kemia on tarkemmin laskettu.</string>
+    <string name="types_info_types">Tyypit:</string>
+    <string name="type_not_set">Ei määritelty</string>
+    <string name="strengths">Vahvuudet</string>
+    <string name="weaknesses">Heikkoudet</string>
+
+    <string name="grinder_forward">Pikakiituri</string>
+    <string name="grinder_forward_plus1">Nopea ja kestävä juoksija</string>
+    <string name="grinder_forward_plus2">Tykkää kulmaväännöistä</string>
+    <string name="grinder_forward_minus1">Puolustuksessa kehitettävää</string>
+    <string name="grinder_forward_minus2">Laukaisutarkkuus alle keskitason</string>
+
+    <string name="play_maker_forward">Pelintekijä</string>
+    <string name="play_maker_forward_plus1">Loistava syötelijä</string>
+    <string name="play_maker_forward_plus2">Hyvät pallonkäsittelytaidot</string>
+    <string name="play_maker_forward_minus1">Fyysistä voimaa puuttuu</string>
+    <string name="play_maker_forward_minus2">Keskitason puolustustaidot</string>
+    <string name="play_maker_forward_minus3">Keskitason laukaisutarkkuus</string>
+
+    <string name="power_forward">Voimahyökkääjä</string>
+    <string name="power_forward_plus1">Loistava tasapaino, hyvä suojaamaan palloa</string>
+    <string name="power_forward_plus2">Kova laukaus</string>
+    <string name="power_forward_minus1">Keskitason laukaisutarkkuus</string>
+    <string name="power_forward_minus2">Keskitason pallonkäsittelytaidot</string>
+
+    <string name="sniper_forward">Tarkka-ampuja</string>
+    <string name="sniper_forward_plus1">Loistava laukomaan</string>
+    <string name="sniper_forward_minus1">Fyysistä voimaa puuttuu</string>
+    <string name="sniper_forward_minus2">Luottaa, että joukkuetoverit luovat maalintekopaikat</string>
+
+    <string name="two_way_forward">Kahden suunnan hyökkääjä</string>
+    <string name="two_way_forward_plus1">Loistava katkomaan syöttöjä</string>
+    <string name="two_way_forward_plus2">Sopii parhaiten tasapainoiseen hyökkäykseen</string>
+    <string name="two_way_forward_plus3">Hyvä aiheuttamaan vastahyökkäyksiä</string>
+    <string name="two_way_forward_minus1">Hyökkäystaidot ovat keskitasoa</string>
+    <string name="two_way_forward_minus2">Fyysistä voimaa puuttuu</string>
+    <string name="two_way_forward_minus3">Yksinkertaisia ratkaisuja hyökkäyksessä</string>
+
+    <string name="defensive_defender">Puolustava puolustaja</string>
+    <string name="defensive_defender_plus1">Loistava peittämään ja katkomaan syöttöjä</string>
+    <string name="defensive_defender_plus2">Pysäyttää hyökkäykset fyysisellä pelillään</string>
+    <string name="defensive_defender_minus1">Keskitason syöttäjä</string>
+    <string name="defensive_defender_minus2">Heikot hyökkäystaidot</string>
+    <string name="defensive_defender_minus3">Heikko laukaustarkkuus</string>
+
+    <string name="power_defender">Voimapuolustaja</string>
+    <string name="power_defender_plus1">Fyysinen peli</string>
+    <string name="power_defender_plus2">Kova kulmaväännöissä ja maalin edessä</string>
+    <string name="power_defender_minus1">Keskitason peittopeli</string>
+    <string name="power_defender_minus2">Heikko laukaustarkkuus</string>
+    <string name="power_defender_minus3">Keskitason hyökkäystaidot</string>
+
+    <string name="offensive_defender">Hyökkäävä puolustaja</string>
+    <string name="offensive_defender_plus1">Antaa hyviä avaavia syöttöjä</string>
+    <string name="offensive_defender_plus2">Hyvä laukaustarkkuus</string>
+    <string name="offensive_defender_minus1">Fyysistä voimaa puuttuu</string>
+    <string name="offensive_defender_minus2">Keskitason peittopeli ja katkot</string>
+    <string name="offensive_defender_minus3">Heikko laukaustarkkuus</string>
+
+    <string name="two_way_defender">Kahden suunnan puolustaja</string>
+    <string name="two_way_defender_plus1">Katkoo syöttöjä ja peittää hyvin</string>
+    <string name="two_way_defender_plus2">Hyvä aiheuttamaan vastahyökkäyksiä</string>
+    <string name="two_way_defender_minus1">Keskitason hyökkäystaidot</string>
+    <string name="two_way_defender_minus2">Keskitason pallonkäsittelytaidot</string>
+</resources>

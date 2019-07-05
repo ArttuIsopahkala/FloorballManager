@@ -14,11 +14,10 @@ public class PlayerHolder {
     public RelativeLayout playerContainer;
     public RelativeLayout disableOverlay;
     public ImageView pictureImage;
-    public TextView nameNumberText;
+    public TextView nameNumberShootsText;
     public TextView positionText;
-    public TextView shootsText;
+    public TextView typeText;
     public IconView statisticsIcon;
-    public IconView editIcon;
     public IconView arrowIcon;
 
     public enum ViewType {
@@ -35,11 +34,10 @@ public class PlayerHolder {
         playerContainer = v.findViewById(R.id.playerContainer);
         disableOverlay = v.findViewById(R.id.disableOverlay);
         pictureImage = v.findViewById(R.id.pictureImage);
-        nameNumberText = v.findViewById(R.id.nameNumberText);
+        nameNumberShootsText = v.findViewById(R.id.nameNumberShootsText);
         positionText = v.findViewById(R.id.positionText);
-        shootsText = v.findViewById(R.id.shootsText);
+        typeText = v.findViewById(R.id.typeText);
         statisticsIcon = v.findViewById(R.id.statisticsIcon);
-        editIcon = v.findViewById(R.id.editIcon);
         arrowIcon = v.findViewById(R.id.arrowIcon);
 
         selectColor = ContextCompat.getColor(AppRes.getContext(), R.color.color_player_selected);
@@ -51,20 +49,18 @@ public class PlayerHolder {
         switch (type) {
             case MANAGE:
                 pictureImage.setVisibility(View.VISIBLE);
-                nameNumberText.setVisibility(View.VISIBLE);
+                nameNumberShootsText.setVisibility(View.VISIBLE);
                 positionText.setVisibility(View.VISIBLE);
-                shootsText.setVisibility(View.VISIBLE);
+                typeText.setVisibility(View.VISIBLE);
                 statisticsIcon.setVisibility(View.VISIBLE);
-                editIcon.setVisibility(View.VISIBLE);
                 arrowIcon.setVisibility(View.GONE);
                 break;
             case SELECT:
                 pictureImage.setVisibility(View.VISIBLE);
-                nameNumberText.setVisibility(View.VISIBLE);
+                nameNumberShootsText.setVisibility(View.VISIBLE);
                 positionText.setVisibility(View.VISIBLE);
-                shootsText.setVisibility(View.GONE);
+                typeText.setVisibility(View.GONE);
                 statisticsIcon.setVisibility(View.GONE);
-                editIcon.setVisibility(View.GONE);
                 arrowIcon.setVisibility(View.VISIBLE);
                 break;
         }

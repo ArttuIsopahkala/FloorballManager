@@ -125,6 +125,9 @@ public class Goal {
     }
 
     public List<String> getPlayerIds() {
+        if(playerIds == null) {
+            playerIds = new ArrayList<>();
+        }
         return playerIds;
     }
 

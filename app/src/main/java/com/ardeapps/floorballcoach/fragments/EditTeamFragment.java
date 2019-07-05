@@ -71,7 +71,7 @@ public class EditTeamFragment extends Fragment implements DataView {
 
     private void resetFields() {
         selectedLogo = null;
-        logoImage.setImageResource(R.drawable.default_picture);
+        logoImage.setImageResource(R.drawable.default_logo);
         setEditTextValue(nameText, "");
     }
 
@@ -82,7 +82,7 @@ public class EditTeamFragment extends Fragment implements DataView {
 
         selectLogoIcon = v.findViewById(R.id.selectLogoIcon);
         saveButton = v.findViewById(R.id.saveButton);
-        logoImage = v.findViewById(R.id.pictureImage);
+        logoImage = v.findViewById(R.id.logoImage);
         nameText = v.findViewById(R.id.nameText);
 
         resetFields();

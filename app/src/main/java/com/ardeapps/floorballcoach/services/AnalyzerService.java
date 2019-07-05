@@ -1,6 +1,7 @@
 package com.ardeapps.floorballcoach.services;
 
 import com.ardeapps.floorballcoach.objects.Goal;
+import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.PlayerChemistry;
 
 import java.util.ArrayList;
@@ -107,6 +108,21 @@ public class AnalyzerService {
                 playerChemistry.getComparePlayers().put(comparePlayerId, testChemistry);
             }
         }
+        return null;
+    }
+
+    /**
+     * Database path: goalsTeamGame
+     * @param playerIdMap players which chemistries are calculated
+     * @param goals team goals where chemistry is calculated
+     * @return list of lines playerIdMap is separated
+     */
+    public static Map<Integer, Line> getBestPlayerChemistries(Map<String, String> playerIdMap, ArrayList<Goal> goals) {
+        // TODO tee loppuun ja testaa
+        // playerIdMap:
+        // key = position(Player.Position), value = playerId
+        Map<Integer, Line> lines = new HashMap<>();
+
         return null;
     }
 }

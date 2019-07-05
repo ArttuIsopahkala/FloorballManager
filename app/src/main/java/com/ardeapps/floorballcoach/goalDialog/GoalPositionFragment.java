@@ -80,8 +80,8 @@ public class GoalPositionFragment extends Fragment {
 
         int shootPointWidth = 40;
         int shootPointHeight = 40;
-        double pictureX = positionX - (shootPointWidth / 2);
-        double pictureY = positionY - (shootPointHeight / 2);
+        double pictureX = positionX - (shootPointWidth / 2.0);
+        double pictureY = positionY - (shootPointHeight / 2.0);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) shootPointImage.getLayoutParams();
         params.width = shootPointWidth;
         params.height = shootPointHeight;

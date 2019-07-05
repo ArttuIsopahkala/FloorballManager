@@ -52,45 +52,46 @@ public class GoalDetailsFragment extends Fragment {
 
         if(mode == Goal.Mode.FULL) {
             Helper.setRadioButtonChecked(fullRadioButton, true);
-            fullRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked) {
-                        mListener.onFullRadioButtonChecked();
-                    }
-                }
-            });
         } else if(mode == Goal.Mode.YV) {
             Helper.setRadioButtonChecked(yvRadioButton, true);
-            yvRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked) {
-                        mListener.onYvRadioButtonChecked();
-                    }
-                }
-            });
         } else if(mode == Goal.Mode.AV) {
             Helper.setRadioButtonChecked(avRadioButton, true);
-            avRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked) {
-                        mListener.onAvRadioButtonChecked();
-                    }
-                }
-            });
         } else if(mode == Goal.Mode.RL) {
             Helper.setRadioButtonChecked(rlRadioButton, true);
-            rlRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked) {
-                        mListener.onRlRadioButtonChecked();
-                    }
-                }
-            });
         }
+
+        fullRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mListener.onFullRadioButtonChecked();
+                }
+            }
+        });
+        yvRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mListener.onYvRadioButtonChecked();
+                }
+            }
+        });
+        avRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mListener.onAvRadioButtonChecked();
+                }
+            }
+        });
+        rlRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mListener.onRlRadioButtonChecked();
+                }
+            }
+        });
         return v;
     }
 

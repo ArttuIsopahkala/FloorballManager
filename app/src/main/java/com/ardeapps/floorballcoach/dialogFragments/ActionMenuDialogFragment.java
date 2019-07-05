@@ -12,12 +12,12 @@ import android.widget.Button;
 
 import com.ardeapps.floorballcoach.R;
 
-public class GoalMenuDialogFragment extends DialogFragment {
+public class ActionMenuDialogFragment extends DialogFragment {
 
     public interface GoalMenuDialogCloseListener
     {
-        void onEditGoal();
-        void onRemoveGoal();
+        void onEditItem();
+        void onRemoveItem();
         void onCancel();
     }
 
@@ -33,7 +33,7 @@ public class GoalMenuDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.dialog_goal_menu, container);
+        View v = inflater.inflate(R.layout.dialog_action_menu, container);
 
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -45,14 +45,14 @@ public class GoalMenuDialogFragment extends DialogFragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               mListener.onEditGoal();
+               mListener.onEditItem();
             }
         });
 
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onRemoveGoal();
+                mListener.onRemoveItem();
             }
         });
 

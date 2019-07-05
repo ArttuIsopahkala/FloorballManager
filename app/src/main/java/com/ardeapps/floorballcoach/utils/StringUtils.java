@@ -3,10 +3,6 @@ package com.ardeapps.floorballcoach.utils;
 import android.text.Html;
 import android.text.Spanned;
 
-import com.ardeapps.floorballcoach.AppRes;
-import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.objects.Player;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,35 +44,6 @@ public class StringUtils {
 
     public static String getDateText(long milliseconds) {
         return simpleDateFormat.format(new Date(milliseconds));
-    }
-
-    /**
-     * @param playerId not null
-     * @return player name or 'Poistettu pelaaja'
-     */
-    public static String getPlayerName(String playerId) {
-        Player player = AppRes.getInstance().getPlayers().get(playerId);
-        if (player != null) {
-            return player.getName();
-        } else {
-            return AppRes.getContext().getString(R.string.removed_player);
-        }
-    }
-
-    public static String getPositionText(String position, boolean shorten) {
-        if(Player.Position.LW.toDatabaseName().equals(position)) {
-            return AppRes.getContext().getString(shorten ? R.string.position_lw_short : R.string.position_lw);
-        } else if(Player.Position.C.toDatabaseName().equals(position)) {
-            return AppRes.getContext().getString(shorten ? R.string.position_c_short : R.string.position_c);
-        } else if(Player.Position.RW.toDatabaseName().equals(position)) {
-            return AppRes.getContext().getString(shorten ? R.string.position_rw_short : R.string.position_rw);
-        } else if(Player.Position.LD.toDatabaseName().equals(position)) {
-            return AppRes.getContext().getString(shorten ? R.string.position_ld_short : R.string.position_ld);
-        } else if(Player.Position.RD.toDatabaseName().equals(position)) {
-            return AppRes.getContext().getString(shorten ? R.string.position_rd_short : R.string.position_rd);
-        } else {
-            return "";
-        }
     }
 
     @SuppressWarnings("deprecation")

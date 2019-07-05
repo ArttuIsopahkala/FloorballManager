@@ -146,7 +146,7 @@ public class GoalResourcesWrapper extends FirebaseDatabaseService {
     }
 
     private void editAssistantStatsGoal(Goal oldGoal, final Goal goalToSave, final EditGoalStatsListener listener) {
-        if(oldGoal != null && !StringUtils.isEmptyString(oldGoal.getAssistantId()) && oldGoal.getAssistantId().equals(goalToSave.getAssistantId())) {
+        if(oldGoal != null && !StringUtils.isEmptyString(oldGoal.getAssistantId()) && !oldGoal.getAssistantId().equals(goalToSave.getAssistantId())) {
             StatsByPlayerResource.getInstance().removeStat(oldGoal.getAssistantId(), oldGoal.getGameId(), oldGoal.getGoalId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
                 @Override
                 public void onDeleteDataSuccess() {

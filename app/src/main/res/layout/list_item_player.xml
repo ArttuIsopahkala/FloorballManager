@@ -33,28 +33,28 @@
         android:padding="10dp"
         android:orientation="vertical">
         <TextView
-            android:id="@+id/nameNumberText"
+            android:id="@+id/nameNumberShootsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="Arttu Isopahkala | #11"
+            android:text="Arttu Isopahkala | #11 | R"
             android:textColor="@color/color_text_light"
             android:textSize="25sp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/positionText"
-            android:layout_below="@+id/nameNumberText"
+            android:layout_below="@+id/nameNumberShootsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Keskushyökkääjä"
             android:textColor="@color/color_text_light_secondary"
             android:textSize="20sp"/>
         <TextView
-            android:id="@+id/shootsText"
+            android:id="@+id/typeText"
             android:layout_below="@+id/positionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Laukoo vasemalta"
+            android:text="Voimapuolustaja"
             android:textColor="@color/color_text_light_secondary"
             android:textSize="20sp"/>
     </RelativeLayout>
@@ -69,14 +69,6 @@
             android:layout_height="match_parent"
             android:padding="10dp"
             android:text="@string/icon_stats"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="16sp" />
-        <com.ardeapps.floorballcoach.views.IconView
-            android:id="@+id/editIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:text="@string/icon_edit"
             app:iconFont="@string/icon_solid"
             app:iconSize="16sp" />
     </LinearLayout>

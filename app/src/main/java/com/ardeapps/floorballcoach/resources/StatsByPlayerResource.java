@@ -38,6 +38,10 @@ public class StatsByPlayerResource extends FirebaseDatabaseService {
         deleteData(database.child(playerId).child(gameId).child(goalId), handler);
     }
 
+    public void removeAllStats(String playerId, final DeleteDataSuccessListener handler) {
+        deleteData(database.child(playerId), handler);
+    }
+
     /**
      * Get all goals by player indexed by goalId
      */

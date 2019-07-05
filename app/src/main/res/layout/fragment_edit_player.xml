@@ -121,7 +121,37 @@
                 <Spinner
                     android:id="@+id/positionSpinner"
                     android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:textColor="@color/color_text_light"
+                    android:layout_marginBottom="20dp" />
+                <RelativeLayout
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/add_player_type"
+                        android:textColor="@color/color_text_light"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <com.ardeapps.floorballcoach.views.IconView
+                        android:id="@+id/typeInfoIcon"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@color/color_background_third"
+                        android:text="@string/icon_info"
+                        app:iconFont="@string/icon_solid"
+                        app:iconSize="22dp" />
+                </RelativeLayout>
+                <Spinner
+                    android:id="@+id/typeSpinner"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
                     android:textColor="@color/color_text_light" />
                 <Button
                     android:id="@+id/saveButton"

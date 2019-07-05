@@ -11,7 +11,6 @@ import com.ardeapps.floorballcoach.viewObjects.GoalSelectLineFragmentData;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -28,12 +27,13 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
     private boolean opponentGoal;
 
     private ArrayList<Fragment> fragments = new ArrayList<>();
-    private Map<Integer, Line> lines = new HashMap<>();
+    private Map<Integer, Line> lines;
     private Goal goal;
     private String scorerPlayerId;
     private String assistantPlayerId;
     private Integer scorerLineNumber;
     private Integer assistantLineNumber;
+    private boolean isPenaltyShot;
 
     public GoalPagerAdapter(FragmentManager supportFragmentManager, Map<Integer, Line> lines, final boolean opponentGoal) {
         super(supportFragmentManager);
@@ -45,12 +45,6 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         selectAssistantFragment = new GoalSelectAssistantFragment();
         positionFragment = new GoalPositionFragment();
         selectLineFragment = new GoalSelectLineFragment();
-        selectScorerFragment.setData(lines);
-        selectAssistantFragment.setData(lines);
-        GoalSelectLineFragmentData data = new GoalSelectLineFragmentData();
-        data.setLines(lines);
-        data.setMaxSelectPlayers(6);
-        selectLineFragment.setData(data);
 
         if(opponentGoal) {
             fragments.add(detailsFragment);
@@ -62,80 +56,88 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             fragments.add(selectAssistantFragment);
             fragments.add(selectLineFragment);
             fragments.add(positionFragment);
-
-            detailsFragment.setListener(new GoalDetailsFragment.Listener() {
-                @Override
-                public void onFullRadioButtonChecked() {
-                    GoalSelectLineFragmentData data = selectLineFragment.getData();
-                    data.setMaxSelectPlayers(6);
-                    selectLineFragment.setData(data);
-                }
-
-                @Override
-                public void onAvRadioButtonChecked() {
-                    GoalSelectLineFragmentData data = selectLineFragment.getData();
-                    data.setMaxSelectPlayers(opponentGoal ? 6 : 4);
-                    selectLineFragment.setData(data);
-                }
-
-                @Override
-                public void onYvRadioButtonChecked() {
-                    GoalSelectLineFragmentData data = selectLineFragment.getData();
-                    data.setMaxSelectPlayers(opponentGoal ? 4 : 6);
-                    selectLineFragment.setData(data);
-                }
-
-                @Override
-                public void onRlRadioButtonChecked() {
-                    GoalSelectLineFragmentData data = selectLineFragment.getData();
-                    data.setMaxSelectPlayers(1);
-                    selectLineFragment.setData(data);
-                }
-            });
-
-            selectScorerFragment.setListener(new PlayerSelector.Listener() {
-                @Override
-                public void onPlayerSelected(int lineNumber, String playerId) {
-                    scorerLineNumber = lineNumber;
-                    scorerPlayerId = playerId;
-                    selectAssistantFragment.setDisabledPlayerId(playerId);
-                    selectAssistantFragment.updateSelection();
-
-                    setSelectLineFragment();
-                }
-
-                @Override
-                public void onPlayerUnSelected(int lineNumber, String playerId) {
-                    scorerLineNumber = null;
-                    scorerPlayerId = null;
-                    selectAssistantFragment.setDisabledPlayerId(null);
-                    selectAssistantFragment.updateSelection();
-
-                    setSelectLineFragment();
-                }
-            });
-            selectAssistantFragment.setListener(new PlayerSelector.Listener() {
-                @Override
-                public void onPlayerSelected(int lineNumber, String playerId) {
-                    assistantLineNumber = lineNumber;
-                    assistantPlayerId = playerId;
-                    selectScorerFragment.setDisabledPlayerId(playerId);
-                    selectScorerFragment.updateSelection();
-
-                    setSelectLineFragment();
-                }
-
-                @Override
-                public void onPlayerUnSelected(int lineNumber, String playerId) {
-                    assistantLineNumber = null;
-                    assistantPlayerId = null;
-                    selectScorerFragment.setDisabledPlayerId(null);
-                    selectScorerFragment.updateSelection();
-
-                    setSelectLineFragment();
-                }
-            });
         }
+
+        setGoalFragmentListeners();
+    }
+
+    private void setGoalFragmentListeners() {
+        detailsFragment.setListener(new GoalDetailsFragment.Listener() {
+            @Override
+            public void onFullRadioButtonChecked() {
+                GoalSelectLineFragmentData data = selectLineFragment.getData();
+                data.setMaxSelectPlayers(6);
+                isPenaltyShot = false;
+                selectLineFragment.setData(data);
+            }
+
+            @Override
+            public void onAvRadioButtonChecked() {
+                GoalSelectLineFragmentData data = selectLineFragment.getData();
+                data.setMaxSelectPlayers(opponentGoal ? 6 : 4);
+                isPenaltyShot = false;
+                selectLineFragment.setData(data);
+            }
+
+            @Override
+            public void onYvRadioButtonChecked() {
+                GoalSelectLineFragmentData data = selectLineFragment.getData();
+                data.setMaxSelectPlayers(opponentGoal ? 4 : 6);
+                isPenaltyShot = false;
+                selectLineFragment.setData(data);
+            }
+
+            @Override
+            public void onRlRadioButtonChecked() {
+                GoalSelectLineFragmentData data = selectLineFragment.getData();
+                data.setMaxSelectPlayers(1);
+                isPenaltyShot = true;
+                selectLineFragment.setData(data);
+            }
+        });
+
+        selectScorerFragment.setListener(new PlayerSelector.Listener() {
+            @Override
+            public void onPlayerSelected(int lineNumber, String playerId) {
+                scorerLineNumber = lineNumber;
+                scorerPlayerId = playerId;
+                selectAssistantFragment.setDisabledPlayerId(playerId);
+                selectAssistantFragment.updateSelection();
+
+                setSelectLineFragment();
+            }
+
+            @Override
+            public void onPlayerUnSelected(int lineNumber, String playerId) {
+                scorerLineNumber = null;
+                scorerPlayerId = null;
+                selectAssistantFragment.setDisabledPlayerId(null);
+                selectAssistantFragment.updateSelection();
+
+                setSelectLineFragment();
+            }
+        });
+        selectAssistantFragment.setListener(new PlayerSelector.Listener() {
+            @Override
+            public void onPlayerSelected(int lineNumber, String playerId) {
+                assistantLineNumber = lineNumber;
+                assistantPlayerId = playerId;
+                selectScorerFragment.setDisabledPlayerId(playerId);
+                selectScorerFragment.updateSelection();
+
+                setSelectLineFragment();
+            }
+
+            @Override
+            public void onPlayerUnSelected(int lineNumber, String playerId) {
+                assistantLineNumber = null;
+                assistantPlayerId = null;
+                selectScorerFragment.setDisabledPlayerId(null);
+                selectScorerFragment.updateSelection();
+
+                setSelectLineFragment();
+            }
+        });
     }
 
     private void setSelectLineFragment() {
@@ -181,11 +183,22 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         this.goal = goal;
 
         // Initialize dialog
+        isPenaltyShot = false;
         detailsFragment.setTime(0);
         detailsFragment.setGameMode(Goal.Mode.FULL);
+
         selectScorerFragment.setScorerPlayerId(null);
+        selectScorerFragment.setData(lines);
+
         selectAssistantFragment.setAssistantPlayerId(null);
+        selectAssistantFragment.setData(lines);
+
+        GoalSelectLineFragmentData data = new GoalSelectLineFragmentData();
+        data.setLines(lines);
+        data.setMaxSelectPlayers(6);
+        selectLineFragment.setData(data);
         selectLineFragment.setSelectedPlayerIds(null);
+
         positionFragment.setPositionPercents(0, 0);
 
         if(goal != null) {
@@ -223,21 +236,29 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             goalToSave = goal.clone();
         }
         if(opponentGoal) {
+            if(isPenaltyShot) {
+                goalToSave.setPlayerIds(null);
+            } else {
+                goalToSave.setPlayerIds(selectLineFragment.getSelectedPlayerIds());
+            }
             goalToSave.setTime(detailsFragment.getTime());
             goalToSave.setGameMode(detailsFragment.getGameMode().toDatabaseName());
-            goalToSave.setPlayerIds(selectLineFragment.getSelectedPlayerIds());
             goalToSave.setPositionPercentX(positionFragment.getPositionPercentX());
             goalToSave.setPositionPercentY(positionFragment.getPositionPercentY());
         } else {
+            if(isPenaltyShot) {
+                goalToSave.setAssistantId(null);
+                goalToSave.setPlayerIds(null);
+            } else {
+                goalToSave.setAssistantId(selectAssistantFragment.getAssistantPlayerId());
+                goalToSave.setPlayerIds(selectLineFragment.getSelectedPlayerIds());
+            }
             goalToSave.setTime(detailsFragment.getTime());
             goalToSave.setGameMode(detailsFragment.getGameMode().toDatabaseName());
             goalToSave.setScorerId(selectScorerFragment.getScorerPlayerId());
-            goalToSave.setAssistantId(selectAssistantFragment.getAssistantPlayerId());
-            goalToSave.setPlayerIds(selectLineFragment.getSelectedPlayerIds());
             goalToSave.setPositionPercentX(positionFragment.getPositionPercentX());
             goalToSave.setPositionPercentY(positionFragment.getPositionPercentY());
         }
-
 
         return goalToSave;
     }
@@ -252,6 +273,10 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             return ((GoalSelectLineFragment) fragment).validate();
         }
         return true;
+    }
+
+    public boolean isPenaltyShot() {
+        return isPenaltyShot;
     }
 
     @Override

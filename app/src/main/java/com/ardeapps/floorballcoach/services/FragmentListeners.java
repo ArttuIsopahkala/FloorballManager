@@ -73,6 +73,7 @@ public class FragmentListeners {
         void goToPlayerMonitorFragment();
         void goToGamesFragment();
         void goToBluetoothFragment();
+        void goToTypesInfoFragment();
     }
 
     public interface PermissionHandledListener {

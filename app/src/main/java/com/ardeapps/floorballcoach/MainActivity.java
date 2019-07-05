@@ -24,6 +24,7 @@ import com.ardeapps.floorballcoach.fragments.MainSelectionFragment;
 import com.ardeapps.floorballcoach.fragments.PlayersFragment;
 import com.ardeapps.floorballcoach.fragments.SettingsFragment;
 import com.ardeapps.floorballcoach.fragments.TeamDashboardFragment;
+import com.ardeapps.floorballcoach.fragments.TypesInfoFragment;
 import com.ardeapps.floorballcoach.handlers.GetGamesHandler;
 import com.ardeapps.floorballcoach.handlers.GetGoalsHandler;
 import com.ardeapps.floorballcoach.handlers.GetLinesHandler;
@@ -43,6 +44,7 @@ import com.ardeapps.floorballcoach.resources.LinesTeamGameResource;
 import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.resources.TeamsResource;
 import com.ardeapps.floorballcoach.resources.UsersResource;
+import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     GamesFragment gamesFragment;
     GameSettingsFragment gameSettingsFragment;
     BluetoothFragment bluetoothFragment;
+    TypesInfoFragment typesInfoFragment;
 
     RelativeLayout loader;
     ImageView loaderSpinner;
@@ -107,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         gamesFragment = new GamesFragment();
         gameSettingsFragment = new GameSettingsFragment();
         bluetoothFragment = new BluetoothFragment();
+        typesInfoFragment = new TypesInfoFragment();
 
         Loader.create(loader, loaderSpinner);
 
@@ -131,19 +135,15 @@ public class MainActivity extends AppCompatActivity {
                 UsersResource.getInstance().editUser(user);
                 AppRes.getInstance().setUser(user);
 
-                // TODO of first time -> go main selection -> otherwise go dashboard
                 if(!user.getTeamIds().isEmpty()) {
                     TeamsResource.getInstance().getTeams(user.getTeamIds(), new GetTeamsHandler() {
                         @Override
                         public void onTeamsLoaded(final Map<String, Team> teams) {
                             AppRes.getInstance().setTeams(teams);
-
                             FragmentListeners.getInstance().getFragmentChangeListener().goToMainSelectionFragment();
                         }
                     });
                 } else {
-                    Logger.log("EI TIIMEJÄ");
-                    Logger.toast("EI TIIMEJÄ");
                     FragmentListeners.getInstance().getFragmentChangeListener().goToMainSelectionFragment();
                 }
             }
@@ -286,6 +286,11 @@ public class MainActivity extends AppCompatActivity {
                 switchToFragment(bluetoothFragment);
             }
 
+            @Override
+            public void goToTypesInfoFragment() {
+                switchToFragment(typesInfoFragment);
+            }
+
         });
         editPlayerFragment.setListener(new EditPlayerFragment.Listener() {
             @Override
@@ -424,6 +429,9 @@ public class MainActivity extends AppCompatActivity {
             titleText.setText(R.string.title_games);
         } else if(f instanceof GameSettingsFragment) {
             titleText.setText(R.string.title_settings);
+        } else if(f instanceof TypesInfoFragment) {
+            settingsIcon.setVisibility(View.GONE);
+            titleText.setText(R.string.title_type);
         }
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -441,16 +449,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!Loader.isVisible()) {
-            int backStack = getSupportFragmentManager().getBackStackEntryCount();
+        // Set values for database call
+        FirebaseDatabaseService.isDatabaseCallInterrupted(true);
+        if (Loader.isVisible()) {
+            Loader.hide();
+        }
 
-            // Do not allow user go back to login screen
-            if (backStack == 1 && isLoginUsed) {
-                finishAffinity();
-            } else {
-                Helper.hideKeyBoard(getWindow().getDecorView());
-                super.onBackPressed();
-            }
+        int backStack = getSupportFragmentManager().getBackStackEntryCount();
+
+        // Do not allow user go back to login screen
+        if (backStack == 1 && isLoginUsed) {
+            finishAffinity();
+        } else {
+            Helper.hideKeyBoard(getWindow().getDecorView());
+            super.onBackPressed();
         }
     }
 

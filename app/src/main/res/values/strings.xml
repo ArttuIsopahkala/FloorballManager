@@ -59,6 +59,7 @@
     <string name="add_event_error_mode">Aseta pelimuoto.</string>
     <string name="add_event_error_scorer">Valitse maalintekijä.</string>
     <string name="add_event_error_line">Valitse vähemmän pelaajia.</string>
+    <string name="add_event_remove_confirmation">Haluatko varmasti poistaa tämän maalin?</string>
 
     <string name="title_add_monitored">Lisää seurattava</string>
     <string name="title_add_team">Lisää joukkue</string>
@@ -72,6 +73,7 @@
     <string name="title_game">Ottelu</string>
     <string name="title_games">Pelatut ottelut</string>
     <string name="title_new_game">Uusi ottelu</string>
+    <string name="title_type">Pelaajan tyyppi</string>
 
     <string name="login_email">Sähköposti</string>
     <string name="login_password">Salasana</string>
@@ -102,6 +104,10 @@
     <string name="add_player_number">Pelinumero</string>
     <string name="add_player_shoots">Kätisyys</string>
     <string name="add_player_position">Pelipaikka</string>
+    <string name="add_player_type">Tyyppi</string>
+    <string name="add_player_shoots_left">LEFT</string>
+    <string name="add_player_shoots_right">RIGHT</string>
+    <string name="add_player_remove_confirmation">Haluatko varmasti poistaa tämän pelaajan? Myös kaikki pelaajaan liitetyt tilastot poistetaan.</string>
 
     <string name="select_picture_load_url">Lataa</string>
     <string name="select_picture_from_gallery">Valitse galleriasta</string>
@@ -114,10 +120,6 @@
     <string name="team_dashboard_games">Ottelut</string>
     <string name="team_dashboard_players">Pelaajat</string>
     <string name="team_dashboard_lines">Kentälliset</string>
-
-    <string name="players_add">Lisää uusi</string>
-    <string name="players_shoots_left">Laukoo vasemmalta</string>
-    <string name="players_shoots_right">Laukoo oikealta</string>
 
     <string name="settings_invite">Kutsu kavereita</string>
     <string name="settings_link_more">Lisää sovelluksia</string>

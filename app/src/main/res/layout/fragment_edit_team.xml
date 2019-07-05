@@ -21,7 +21,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_margin="10dp">
                 <ImageView
-                    android:id="@+id/pictureImage"
+                    android:id="@+id/logoImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/default_logo"/>

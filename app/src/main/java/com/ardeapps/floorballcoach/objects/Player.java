@@ -25,6 +25,26 @@ public class Player {
         }
     }
 
+    public enum Type {
+        GRINDER_FORWARD,
+        PLAY_MAKER_FORWARD,
+        POWER_FORWARD,
+        SNIPER_FORWARD,
+        TWO_WAY_FORWARD,
+        DEFENSIVE_DEFENDER,
+        POWER_DEFENDER,
+        OFFENSIVE_DEFENDER,
+        TWO_WAY_DEFENDER;
+
+        public String toDatabaseName() {
+            return this.name();
+        }
+
+        public static Type fromDatabaseName(String value) {
+            return Enum.valueOf(Type.class, value);
+        }
+    }
+
     public enum Shoots {
         LEFT,
         RIGHT;
@@ -44,6 +64,7 @@ public class Player {
     private Long number;
     private String shoots;
     private String position;
+    private String type;
     private boolean pictureUploaded;
     @Exclude
     private transient Bitmap picture;
@@ -63,19 +84,63 @@ public class Player {
         return clone;
     }
 
-    public static String getPositionText(String value) {
+    /**
+     * @param playerId not null
+     * @return player name or 'Poistettu pelaaja'
+     */
+    public static String getPlayerName(String playerId) {
+        Player player = AppRes.getInstance().getPlayers().get(playerId);
+        if (player != null) {
+            return player.getName();
+        } else {
+            return AppRes.getContext().getString(R.string.removed_player);
+        }
+    }
+
+    public static String getPositionText(String value, boolean shorten) {
+        if(value == null) {
+            return "";
+        }
         Position position = Position.fromDatabaseName(value);
-        Context ctx = AppRes.getContext();
         if(position == Position.LW) {
-            return ctx.getString(R.string.position_lw);
+            return AppRes.getContext().getString(shorten ? R.string.position_lw_short : R.string.position_lw);
         } else if(position == Position.C) {
-            return ctx.getString(R.string.position_c);
+            return AppRes.getContext().getString(shorten ? R.string.position_c_short : R.string.position_c);
         } else if(position == Position.RW) {
-            return ctx.getString(R.string.position_rw);
+            return AppRes.getContext().getString(shorten ? R.string.position_rw_short : R.string.position_rw);
         } else if(position == Position.LD) {
-            return ctx.getString(R.string.position_ld);
+            return AppRes.getContext().getString(shorten ? R.string.position_ld_short : R.string.position_ld);
         } else if(position == Position.RD) {
-            return ctx.getString(R.string.position_rd);
+            return AppRes.getContext().getString(shorten ? R.string.position_rd_short : R.string.position_rd);
+        } else {
+            return "";
+        }
+    }
+
+    public static String getTypeText(String value) {
+        if(value == null) {
+            return "";
+        }
+        Type type = Type.fromDatabaseName(value);
+        Context ctx = AppRes.getContext();
+        if(type == Type.GRINDER_FORWARD) {
+            return ctx.getString(R.string.grinder_forward);
+        } else if(type == Type.PLAY_MAKER_FORWARD) {
+            return ctx.getString(R.string.play_maker_forward);
+        } else if(type == Type.POWER_FORWARD) {
+            return ctx.getString(R.string.power_forward);
+        } else if(type == Type.SNIPER_FORWARD) {
+            return ctx.getString(R.string.sniper_forward);
+        } else if(type == Type.TWO_WAY_FORWARD) {
+            return ctx.getString(R.string.two_way_forward);
+        } else if(type == Type.DEFENSIVE_DEFENDER) {
+            return ctx.getString(R.string.defensive_defender);
+        } else if(type == Type.POWER_DEFENDER) {
+            return ctx.getString(R.string.power_defender);
+        } else if(type == Type.OFFENSIVE_DEFENDER) {
+            return ctx.getString(R.string.offensive_defender);
+        } else if(type == Type.TWO_WAY_DEFENDER) {
+            return ctx.getString(R.string.two_way_defender);
         } else {
             return "";
         }
@@ -143,6 +208,14 @@ public class Player {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public boolean isPictureUploaded() {

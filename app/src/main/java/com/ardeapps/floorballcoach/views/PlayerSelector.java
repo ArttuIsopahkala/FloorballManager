@@ -137,8 +137,8 @@ public class PlayerSelector extends LinearLayout {
                         holder.pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
                     }
 
-                    holder.nameNumberText.setText(player.getNameWithNumber(false));
-                    holder.positionText.setText(Player.getPositionText(player.getPosition()));
+                    holder.nameNumberShootsText.setText(player.getNameWithNumber(false));
+                    holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
 
                     holder.playerContainer.setOnClickListener(new OnClickListener() {
                         @Override

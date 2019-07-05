@@ -39,6 +39,12 @@ public class FirebaseDatabaseService {
     protected static final String DEBUG = "DEBUG";
     protected static final String RELEASE = "RELEASE";
 
+    private static boolean databaseCallInterrupted = false;
+
+    public static void isDatabaseCallInterrupted(boolean value) {
+        databaseCallInterrupted = value;
+    }
+
     protected static DatabaseReference getDatabase() {
         if (BuildConfig.DEBUG) {
             return FirebaseDatabase.getInstance().getReference().child(DEBUG);
@@ -86,10 +92,13 @@ public class FirebaseDatabaseService {
     protected static void addData(final DatabaseReference database, Object object) {
         logAction();
         if (isNetworkAvailable()) {
+            isDatabaseCallInterrupted(false);
             database.setValue(object).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Logger.log(e.getMessage() + AppRes.getContext().getString(R.string.error_service_action));
+                    if(!databaseCallInterrupted) {
+                        Logger.log(e.getMessage() + AppRes.getContext().getString(R.string.error_service_action));
+                    }
                 }
             });
         } else onNetworkError();
@@ -98,15 +107,18 @@ public class FirebaseDatabaseService {
     protected static void addData(final DatabaseReference database, Object object, final AddDataSuccessListener handler) {
         logAction();
         if (isNetworkAvailable()) {
+            isDatabaseCallInterrupted(false);
             Loader.show();
             database.setValue(object).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Loader.hide();
-                    if (task.isSuccessful()) {
-                        handler.onAddDataSuccess(database.getKey());
-                    } else {
-                        Logger.toast(R.string.error_service_action);
+                    if(!databaseCallInterrupted) {
+                        Loader.hide();
+                        if (task.isSuccessful()) {
+                            handler.onAddDataSuccess(database.getKey());
+                        } else {
+                            Logger.toast(R.string.error_service_action);
+                        }
                     }
                 }
             });
@@ -122,10 +134,13 @@ public class FirebaseDatabaseService {
     protected static void editData(DatabaseReference database, Object object) {
         logAction();
         if (isNetworkAvailable()) {
+            isDatabaseCallInterrupted(false);
             database.setValue(object).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Logger.log(e.getMessage() + AppRes.getContext().getString(R.string.error_service_action));
+                    if(!databaseCallInterrupted) {
+                        Logger.log(e.getMessage() + AppRes.getContext().getString(R.string.error_service_action));
+                    }
                 }
             });
         } else onNetworkError();
@@ -134,16 +149,21 @@ public class FirebaseDatabaseService {
     protected static void editData(DatabaseReference database, Object object, final EditDataSuccessListener handler) {
         logAction();
         if (isNetworkAvailable()) {
+            isDatabaseCallInterrupted(false);
             Loader.show();
             database.setValue(object).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Loader.hide();
-                    if (task.isSuccessful()) {
-                        handler.onEditDataSuccess();
-                    } else {
-                        Logger.log(task.getException().getMessage());
-                        Logger.toast(R.string.error_service_action);
+                    if(!databaseCallInterrupted) {
+                        Loader.hide();
+                        if (task.isSuccessful()) {
+                            handler.onEditDataSuccess();
+                        } else {
+                            if(task.getException() != null) {
+                                Logger.log(task.getException().getMessage());
+                            }
+                            Logger.toast(R.string.error_service_action);
+                        }
                     }
                 }
             });
@@ -153,15 +173,18 @@ public class FirebaseDatabaseService {
     protected static void deleteData(DatabaseReference database, final DeleteDataSuccessListener handler) {
         logAction();
         if (isNetworkAvailable()) {
+            isDatabaseCallInterrupted(false);
             Loader.show();
             database.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Loader.hide();
-                    if (task.isSuccessful()) {
-                        handler.onDeleteDataSuccess();
-                    } else {
-                        Logger.toast(R.string.error_service_action);
+                    if(!databaseCallInterrupted) {
+                        Loader.hide();
+                        if (task.isSuccessful()) {
+                            handler.onDeleteDataSuccess();
+                        } else {
+                            Logger.toast(R.string.error_service_action);
+                        }
                     }
                 }
             });
@@ -172,14 +195,17 @@ public class FirebaseDatabaseService {
      * Käytetään update metodeissa. Ei näytetä loaderia tai virheviestejä.
      */
     protected static void getDataAnonymously(DatabaseReference database, final GetDataSuccessListener handler) {
+        isDatabaseCallInterrupted(false);
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                handler.onGetDataSuccess(dataSnapshot);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!databaseCallInterrupted) {
+                    handler.onGetDataSuccess(dataSnapshot);
+                }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }
@@ -187,17 +213,22 @@ public class FirebaseDatabaseService {
     protected static void getData(DatabaseReference database, final GetDataSuccessListener handler) {
         logAction();
         if (isNetworkAvailable()) {
+            isDatabaseCallInterrupted(false);
             Loader.show();
             database.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Loader.hide();
-                    handler.onGetDataSuccess(dataSnapshot);
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(!databaseCallInterrupted) {
+                        Loader.hide();
+                        handler.onGetDataSuccess(dataSnapshot);
+                    }
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    onDatabaseError();
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    if(!databaseCallInterrupted) {
+                        onDatabaseError();
+                    }
                 }
             });
         } else onNetworkError();
@@ -206,17 +237,22 @@ public class FirebaseDatabaseService {
     protected static void getData(Query query, final GetDataSuccessListener handler) {
         logAction();
         if (isNetworkAvailable()) {
+            isDatabaseCallInterrupted(false);
             Loader.show();
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Loader.hide();
-                    handler.onGetDataSuccess(dataSnapshot);
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(!databaseCallInterrupted) {
+                        Loader.hide();
+                        handler.onGetDataSuccess(dataSnapshot);
+                    }
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    onDatabaseError();
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    if(!databaseCallInterrupted) {
+                        onDatabaseError();
+                    }
                 }
             });
         } else onNetworkError();

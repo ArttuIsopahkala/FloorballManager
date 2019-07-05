@@ -40,6 +40,10 @@ public class PlayerListAdapter extends BaseAdapter {
         players = new ArrayList<>(AppRes.getInstance().getPlayers().values());
     }
 
+    public void update() {
+
+    }
+
     @Override
     public int getCount() {
         return players.size();
@@ -68,10 +72,11 @@ public class PlayerListAdapter extends BaseAdapter {
             holder.pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
         }
 
-        holder.nameNumberText.setText(player.getNameWithNumber(false));
-        holder.positionText.setText(Player.getPositionText(player.getPosition()));
         Player.Shoots shoots = Player.Shoots.fromDatabaseName(player.getShoots());
-        holder.shootsText.setText(shoots == Player.Shoots.LEFT ? R.string.players_shoots_left : R.string.players_shoots_right);
+        String shootsText = AppRes.getContext().getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
+        holder.nameNumberShootsText.setText(player.getNameWithNumber(false) + " | " + shootsText);
+        holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
+        holder.typeText.setText(Player.getTypeText(player.getType()));
 
         if(type == PlayerHolder.ViewType.MANAGE) {
             holder.statisticsIcon.setOnClickListener(new View.OnClickListener() {
@@ -81,13 +86,12 @@ public class PlayerListAdapter extends BaseAdapter {
                 }
             });
 
-            holder.editIcon.setOnClickListener(new View.OnClickListener() {
+            holder.playerContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    manageListener.onEditClick(player);
+                    manageListener.onContainerClick(player);
                 }
             });
-
         } else {
             holder.playerContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -102,7 +106,7 @@ public class PlayerListAdapter extends BaseAdapter {
 
     public interface PlayerListManageListener {
         void onStatisticsClick(Player player);
-        void onEditClick(Player player);
+        void onContainerClick(Player player);
     }
 
     public interface PlayerListSelectListener {

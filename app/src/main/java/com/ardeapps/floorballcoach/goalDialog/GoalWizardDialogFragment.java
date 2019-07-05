@@ -17,11 +17,10 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.objects.Goal;
-import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.viewObjects.GoalWizardFragmentData;
 
-public class GoalWizardFragment extends DialogFragment implements DataView {
+public class GoalWizardDialogFragment extends DialogFragment implements DataView {
 
     GoalWizardListener mListener = null;
 
@@ -103,7 +102,11 @@ public class GoalWizardFragment extends DialogFragment implements DataView {
         if(position == 0) {
             dismiss();
         } else {
-            position--;
+            if(goalAdapter.isPenaltyShot() && goalAdapter.getItem(position) instanceof GoalPositionFragment) {
+                position = data.isOpponentGoal() ? 0 : 1;
+            } else {
+                position--;
+            }
             changePage(position);
         }
     }
@@ -113,24 +116,16 @@ public class GoalWizardFragment extends DialogFragment implements DataView {
         boolean isValid = goalAdapter.validate(position);
         if(isValid) {
             if(position == max) {
-                // TODO tallenna goal
                 Goal goalToSave = goalAdapter.getGoal();
                 goalToSave.setGameId(data.getGame().getGameId());
                 goalToSave.setOpponentGoal(data.isOpponentGoal());
-
-                Logger.log("goal getGoalId: " + goalToSave.getGoalId());
-                Logger.log("goal getGameId: " + goalToSave.getGameId());
-                Logger.log("goal getTime: " + goalToSave.getTime());
-                Logger.log("goal getScorerId: " + goalToSave.getScorerId());
-                Logger.log("goal getAssistantId: " + goalToSave.getAssistantId());
-                Logger.log("goal getGameMode: " + goalToSave.getGameMode());
-                Logger.log("goal getPositionPercentX: " + goalToSave.getPositionPercentX());
-                Logger.log("goal getPositionPercentY: " + goalToSave.getPositionPercentY());
-                Logger.log("goal getPlayerIds: " + goalToSave.getPlayerIds());
-                Logger.log("goal isOpponentGoal: " + goalToSave.isOpponentGoal());
                 mListener.onGoalSaved(goalToSave);
             } else {
-                position++;
+                if(goalAdapter.isPenaltyShot() && goalAdapter.getItem(position) instanceof GoalSelectScorerFragment) {
+                    position = max;
+                } else {
+                    position++;
+                }
                 changePage(position);
             }
         }

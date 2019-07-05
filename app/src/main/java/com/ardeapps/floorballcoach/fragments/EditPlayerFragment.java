@@ -21,6 +21,7 @@ import com.ardeapps.floorballcoach.resources.PictureResource;
 import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FirebaseStorageService;
+import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
@@ -39,6 +40,7 @@ import static com.ardeapps.floorballcoach.utils.Helper.setSpinnerSelection;
 public class EditPlayerFragment extends Fragment implements DataView {
 
     IconView selectPictureIcon;
+    IconView typeInfoIcon;
     Button saveButton;
     ImageView pictureImage;
     EditText nameText;
@@ -46,10 +48,14 @@ public class EditPlayerFragment extends Fragment implements DataView {
     RadioButton leftRadioButton;
     RadioButton rightRadioButton;
     Spinner positionSpinner;
+    Spinner typeSpinner;
 
-    ArrayAdapter<String> spinnerArrayAdapter;
+    ArrayAdapter<String> positionSpinnerAdapter;
+    ArrayAdapter<String> typeSpinnerAdapter;
     public Listener mListener = null;
     Player player;
+    Map<Player.Type, String> typeMap;
+    ArrayList<Player.Type> types;
     Map<Player.Position, String> positionMap;
     ArrayList<Player.Position> positionTypes;
     Bitmap selectedPicture;
@@ -89,6 +95,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
         setEditTextValue(numberText, "");
         setRadioButtonChecked(leftRadioButton, true);
         setSpinnerSelection(positionSpinner, 0);
+        setSpinnerSelection(typeSpinner, 0);
     }
 
     @Override
@@ -103,9 +110,28 @@ public class EditPlayerFragment extends Fragment implements DataView {
         ArrayList<String> positions = new ArrayList<>(positionMap.values());
         positionTypes = new ArrayList<>(positionMap.keySet());
 
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, positions);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerArrayAdapter.notifyDataSetChanged();
+        positionSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, positions);
+        positionSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        positionSpinnerAdapter.notifyDataSetChanged();
+
+        typeMap = new TreeMap<>();
+        typeMap.put(Player.Type.GRINDER_FORWARD, getString(R.string.grinder_forward));
+        typeMap.put(Player.Type.PLAY_MAKER_FORWARD, getString(R.string.play_maker_forward));
+        typeMap.put(Player.Type.POWER_FORWARD, getString(R.string.power_forward));
+        typeMap.put(Player.Type.SNIPER_FORWARD, getString(R.string.sniper_forward));
+        typeMap.put(Player.Type.TWO_WAY_FORWARD, getString(R.string.two_way_forward));
+        typeMap.put(Player.Type.DEFENSIVE_DEFENDER, getString(R.string.defensive_defender));
+        typeMap.put(Player.Type.POWER_DEFENDER, getString(R.string.power_defender));
+        typeMap.put(Player.Type.OFFENSIVE_DEFENDER, getString(R.string.offensive_defender));
+        typeMap.put(Player.Type.TWO_WAY_DEFENDER, getString(R.string.two_way_defender));
+        ArrayList<String> typeTexts = new ArrayList<>();
+        typeTexts.add(getString(R.string.type_not_set));
+        typeTexts.addAll(typeMap.values());
+        types = new ArrayList<>(typeMap.keySet());
+
+        typeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, typeTexts);
+        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinnerAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -114,6 +140,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
         View v = inflater.inflate(R.layout.fragment_edit_player, container, false);
 
         selectPictureIcon = v.findViewById(R.id.selectPictureIcon);
+        typeInfoIcon = v.findViewById(R.id.typeInfoIcon);
         saveButton = v.findViewById(R.id.saveButton);
         pictureImage = v.findViewById(R.id.pictureImage);
         nameText = v.findViewById(R.id.nameText);
@@ -121,8 +148,10 @@ public class EditPlayerFragment extends Fragment implements DataView {
         leftRadioButton = v.findViewById(R.id.leftRadioButton);
         rightRadioButton = v.findViewById(R.id.rightRadioButton);
         positionSpinner = v.findViewById(R.id.positionSpinner);
+        typeSpinner = v.findViewById(R.id.typeSpinner);
 
-        positionSpinner.setAdapter(spinnerArrayAdapter);
+        positionSpinner.setAdapter(positionSpinnerAdapter);
+        typeSpinner.setAdapter(typeSpinnerAdapter);
 
         resetFields();
         if (player != null) {
@@ -150,8 +179,20 @@ public class EditPlayerFragment extends Fragment implements DataView {
             // Position
             Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
             setSpinnerSelection(positionSpinner, positionTypes.indexOf(position));
+
+            // Type
+            if(player.getType() != null) {
+                Player.Type type = Player.Type.fromDatabaseName(player.getType());
+                setSpinnerSelection(typeSpinner, types.indexOf(type) + 1); // +1 because first is empty
+            }
         }
 
+        typeInfoIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentListeners.getInstance().getFragmentChangeListener().goToTypesInfoFragment();
+            }
+        });
         selectPictureIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,8 +241,13 @@ public class EditPlayerFragment extends Fragment implements DataView {
                         return;
                     }
                 }
-                int spinnerPosition = positionSpinner.getSelectedItemPosition();
-                String position = positionTypes.get(spinnerPosition).toDatabaseName();
+                int positionSpinnerPosition = positionSpinner.getSelectedItemPosition();
+                String position = positionTypes.get(positionSpinnerPosition).toDatabaseName();
+                int typeSpinnerPosition = typeSpinner.getSelectedItemPosition();
+                String type = null;
+                if(typeSpinnerPosition > 0) {
+                    type = types.get(typeSpinnerPosition - 1).toDatabaseName(); // -1 because first is empty
+                }
                 String shoots = leftRadioButton.isChecked() ? Player.Shoots.LEFT.toDatabaseName() : Player.Shoots.RIGHT.toDatabaseName();
 
                 final Player playerToSave = player != null ? player.clone() : new Player();
@@ -212,6 +258,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     playerToSave.setNumber(number);
                 }
                 playerToSave.setPosition(position);
+                playerToSave.setType(type);
 
                 if (player != null) {
                     PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
