@@ -2,36 +2,48 @@ package com.ardeapps.floorballcoach.services;
 
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.PlayerChemistry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AnalyzerService {
 
     /**
      * Database path: goalsTeamGame
-     * @param playerId player to compare against
-     * @param compareId player to compare
+     * @param player Player object to compare against
+     * @param comparedPlayer Player object to compare
      * @param goals goals saved for team
      * @return count of chemistry points
      */
-    public static int getChemistryPoints(String playerId, String compareId, ArrayList<Goal> goals) {
+    public static int getChemistryPoints(Player player, Player comparedPlayer, ArrayList<Goal> goals) {
 
         int chemistryPoints = 0;
 
-        // +1 = if compareId and playerId has been on the field when goal happened
-        // +2 = if playerId has assisted and compareId scored
         // +3 = if playerId has scored and compareId assisted
+        // +2 = if playerId has assisted and compareId scored
+        // +1 = if compareId and playerId has been on the field when goal happened
         for(Goal goal : goals) {
-            if(goal.isOpponentGoal() && goal.getPlayerIds() != null && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
+
+            List<String> goalPlayerIds = goal.getPlayerIds();
+
+            String playerId = player.getPlayerId();
+            String comparedPlayerId = comparedPlayer.getPlayerId();
+            String scorerId = goal.getScorerId();
+            String assistantId = goal.getAssistantId();
+
+            boolean playersInSameLine = goalPlayerIds != null && goalPlayerIds.contains(playerId) && goalPlayerIds.contains(comparedPlayerId);
+
+            if(goal.isOpponentGoal() && playersInSameLine) {
                 chemistryPoints--;
-            } else if(!goal.isOpponentGoal() && playerId.equals(goal.getScorerId()) && compareId.equals(goal.getAssistantId())) {
+            } else if(!goal.isOpponentGoal() && playerId.equals(scorerId) && comparedPlayerId.equals(assistantId)) {
                 chemistryPoints += 3;
-            } else if(!goal.isOpponentGoal() && compareId.equals(goal.getScorerId()) && playerId.equals(goal.getAssistantId())) {
+            } else if(!goal.isOpponentGoal() && comparedPlayerId.equals(scorerId) && playerId.equals(assistantId)) {
                 chemistryPoints += 2;
-            } else if(!goal.isOpponentGoal() && goal.getPlayerIds() != null && goal.getPlayerIds().contains(playerId) && goal.getPlayerIds().contains(compareId)) {
+            } else if(!goal.isOpponentGoal() && playersInSameLine) {
                 chemistryPoints++;
             }
         }
@@ -104,8 +116,9 @@ public class AnalyzerService {
             PlayerChemistry playerChemistry = new PlayerChemistry();
             playerChemistry.setPlayerId(playerId);
             for(String comparePlayerId : playerIds) {
-                int testChemistry = AnalyzerService.getChemistryPoints(playerId, comparePlayerId, goals);
-                playerChemistry.getComparePlayers().put(comparePlayerId, testChemistry);
+                // TODO Change these to use new getChemistryPoints with Player as a variables
+                // int testChemistry = AnalyzerService.getChemistryPoints(playerId, comparePlayerId, goals);
+                // playerChemistry.getComparePlayers().put(comparePlayerId, testChemistry);
             }
         }
         return null;

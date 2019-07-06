@@ -57,6 +57,8 @@ public class AnalyzerServiceTests extends JSONService {
         String teamId = "-LYDu_zW16xskSIhIlOm"; // "O2 jyväskylä"
         String lineId = "-LYDuaJHLYXZBTjVtWjK"; // "1. kenttä"
         String testPlayerId = "-LYDueLQnDlNS3iny3r2";
+        Player testPlayer = getPlayer(testPlayerId);
+        Player comparePlayer = getPlayer("-LZf423Q01lgFW8yD5Dl");
 
         System.out.println("player1 = -LZf423Q01lgFW8yD5Dl");
 
@@ -68,6 +70,8 @@ public class AnalyzerServiceTests extends JSONService {
         String player2Compare = AnalyzerService.getBestScorerOrAssistant(true, testPlayerId, getTeamGoals(teamId));
         System.out.println("player2Compare= " + player2Compare);
 
+        int newChemistry = AnalyzerService.getChemistryPoints(testPlayer, comparePlayer, getTeamGoals(teamId));
+        System.out.println(newChemistry);
     }
 
 }
