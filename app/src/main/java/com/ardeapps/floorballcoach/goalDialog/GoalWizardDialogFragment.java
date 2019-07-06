@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
-import com.ardeapps.floorballcoach.viewObjects.GoalWizardFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.GoalWizardDialogFragmentData;
 
 public class GoalWizardDialogFragment extends DialogFragment implements DataView {
 
@@ -39,17 +39,17 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
     ViewPager eventPager;
     GoalPagerAdapter goalAdapter;
 
-    GoalWizardFragmentData data;
+    GoalWizardDialogFragmentData data;
 
     int position = 0;
 
     @Override
     public void setData(Object viewData) {
-        data = (GoalWizardFragmentData) viewData;
+        data = (GoalWizardDialogFragmentData) viewData;
     }
 
     @Override
-    public GoalWizardFragmentData getData() {
+    public GoalWizardDialogFragmentData getData() {
         return data;
     }
 
@@ -66,7 +66,13 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         eventPager = v.findViewById(R.id.eventPager);
         tabLayout = v.findViewById(R.id.tabLayout);
 
-        goalAdapter = new GoalPagerAdapter(getChildFragmentManager(), data.getLines(), data.isOpponentGoal());
+        /*GoalPagerAdapterData adapterData = new GoalPagerAdapterData();
+        adapterData.setLines(data.getLines());
+        adapterData.setOpponentGoal(data.isOpponentGoal());
+        adapterData.setOpponentName(data.getGame().getOpponentName());
+        adapterData.setGoal(data.getGoal());*/
+
+        goalAdapter = new GoalPagerAdapter(getChildFragmentManager(), data.getLines(), data.isOpponentGoal(), data.getGame().getOpponentName());
         goalAdapter.setGoal(data.getGoal());
 
         eventPager.setOffscreenPageLimit(goalAdapter.getCount());

@@ -3,21 +3,49 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_background"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp">
-    <ImageView
-        android:id="@+id/shootmapImage"
+    android:background="@color/color_background">
+    <RelativeLayout
+        android:id="@+id/shootmapContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/floorball_field"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"/>
-    <ImageView
-        android:id="@+id/shootPointImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/circle"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"/>
+        android:layout_centerInParent="true">
+        <ImageView
+            android:id="@+id/shootmapImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/floorball_field"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+        <ImageView
+            android:id="@+id/shootPointImage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/circle"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/awayNameText"
+        android:layout_above="@+id/shootmapContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kukkelikuu"
+        android:textColor="@color/color_text_light"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textAllCaps="true"/>
+
+    <TextView
+        android:id="@+id/homeNameText"
+        android:layout_below="@+id/shootmapContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="O2  Miehet 2"
+        android:textAllCaps="true"
+        android:textColor="@color/color_text_light"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
+
 </RelativeLayout>

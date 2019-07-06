@@ -12,9 +12,11 @@ import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
+import com.ardeapps.floorballcoach.viewObjects.GoalDetailsFragmentData;
 import com.ardeapps.floorballcoach.views.TimePicker;
 
-public class GoalDetailsFragment extends Fragment {
+public class GoalDetailsFragment extends Fragment implements DataView {
 
     public Listener mListener = null;
 
@@ -35,8 +37,17 @@ public class GoalDetailsFragment extends Fragment {
     RadioButton rlRadioButton;
     TimePicker timePicker;
 
-    Goal.Mode mode;
-    long time;
+    private GoalDetailsFragmentData data;
+
+    @Override
+    public void setData(Object viewData) {
+        data = (GoalDetailsFragmentData) viewData;
+    }
+
+    @Override
+    public GoalDetailsFragmentData getData() {
+        return data;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,15 +59,15 @@ public class GoalDetailsFragment extends Fragment {
         rlRadioButton = v.findViewById(R.id.rlRadioButton);
         timePicker = v.findViewById(R.id.timePicker);
 
-        timePicker.setTimeInMillis(time);
+        timePicker.setTimeInMillis(data.getTime());
 
-        if(mode == Goal.Mode.FULL) {
+        if(data.getGameMode() == Goal.Mode.FULL) {
             Helper.setRadioButtonChecked(fullRadioButton, true);
-        } else if(mode == Goal.Mode.YV) {
+        } else if(data.getGameMode() == Goal.Mode.YV) {
             Helper.setRadioButtonChecked(yvRadioButton, true);
-        } else if(mode == Goal.Mode.AV) {
+        } else if(data.getGameMode() == Goal.Mode.AV) {
             Helper.setRadioButtonChecked(avRadioButton, true);
-        } else if(mode == Goal.Mode.RL) {
+        } else if(data.getGameMode() == Goal.Mode.RL) {
             Helper.setRadioButtonChecked(rlRadioButton, true);
         }
 
@@ -64,6 +75,7 @@ public class GoalDetailsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
+                    data.setGameMode(Goal.Mode.FULL);
                     mListener.onFullRadioButtonChecked();
                 }
             }
@@ -72,6 +84,7 @@ public class GoalDetailsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
+                    data.setGameMode(Goal.Mode.YV);
                     mListener.onYvRadioButtonChecked();
                 }
             }
@@ -80,6 +93,7 @@ public class GoalDetailsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
+                    data.setGameMode(Goal.Mode.AV);
                     mListener.onAvRadioButtonChecked();
                 }
             }
@@ -88,36 +102,12 @@ public class GoalDetailsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
+                    data.setGameMode(Goal.Mode.RL);
                     mListener.onRlRadioButtonChecked();
                 }
             }
         });
         return v;
-    }
-
-    public Goal.Mode getGameMode() {
-        if (fullRadioButton.isChecked()) {
-            return Goal.Mode.FULL;
-        } else if (yvRadioButton.isChecked()) {
-            return Goal.Mode.YV;
-        } else if (avRadioButton.isChecked()) {
-            return Goal.Mode.AV;
-        } else if (rlRadioButton.isChecked()) {
-            return Goal.Mode.RL;
-        }
-        return null;
-    }
-
-    public void setGameMode(Goal.Mode mode) {
-        this.mode = mode;
-    }
-
-    public long getTime() {
-        return timePicker.getTimeInMillis();
-    }
-
-    public void setTime(long time) {
-        this.time = time;
     }
 
     public boolean validate() {

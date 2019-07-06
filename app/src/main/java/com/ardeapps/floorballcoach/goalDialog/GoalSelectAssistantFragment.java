@@ -7,14 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
+import com.ardeapps.floorballcoach.viewObjects.GoalSelectAssistantFragmentData;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GoalSelectAssistantFragment extends Fragment implements DataView {
 
@@ -27,17 +25,32 @@ public class GoalSelectAssistantFragment extends Fragment implements DataView {
     PlayerSelector playerSelector;
     List<String> selectedPlayerIds = new ArrayList<>();
     List<String> disabledPlayerIds = new ArrayList<>();
-    Map<Integer, Line> lines = new HashMap<>();
+
+    private GoalSelectAssistantFragmentData data;
 
     @Override
-    @SuppressWarnings("unchecked")
     public void setData(Object viewData) {
-        lines = (Map<Integer, Line>) viewData;
+        data = (GoalSelectAssistantFragmentData) viewData;
+
+        disabledPlayerIds = new ArrayList<>();
+        if(data.getDisabledPlayerId() != null) {
+            disabledPlayerIds.add(data.getDisabledPlayerId());
+        }
+
+        selectedPlayerIds = new ArrayList<>();
+        if(data.getAssistantPlayerId() != null) {
+            selectedPlayerIds.add(data.getAssistantPlayerId());
+        }
     }
 
     @Override
-    public Map<Integer, Line> getData() {
-        return lines;
+    public GoalSelectAssistantFragmentData getData() {
+        if(playerSelector.getSelectedPlayerIds() != null) {
+            data.setAssistantPlayerId(playerSelector.getSelectedPlayerIds().get(0));
+        } else {
+            data.setAssistantPlayerId(null);
+        }
+        return data;
     }
 
     @Override
@@ -46,7 +59,7 @@ public class GoalSelectAssistantFragment extends Fragment implements DataView {
         View v = inflater.inflate(R.layout.container_player_selector, container, false);
         playerSelector = v.findViewById(R.id.playerSelector);
 
-        playerSelector.createSingleSelectView(lines, mListener);
+        playerSelector.createSingleSelectView(data.getLines(), mListener);
         playerSelector.setSelectedPlayerIds(selectedPlayerIds);
         playerSelector.setDisabledPlayerIds(disabledPlayerIds);
         return v;
@@ -57,24 +70,4 @@ public class GoalSelectAssistantFragment extends Fragment implements DataView {
         playerSelector.setDisabledPlayerIds(disabledPlayerIds);
     }
 
-    public void setDisabledPlayerId(String playerId) {
-        disabledPlayerIds = new ArrayList<>();
-        if(playerId != null) {
-            disabledPlayerIds.add(playerId);
-        }
-    }
-
-    public void setAssistantPlayerId(String playerId) {
-        selectedPlayerIds = new ArrayList<>();
-        if(playerId != null) {
-            selectedPlayerIds.add(playerId);
-        }
-    }
-
-    public String getAssistantPlayerId() {
-        if(playerSelector.getSelectedPlayerIds().isEmpty()) {
-            return null;
-        }
-        return playerSelector.getSelectedPlayerIds().get(0);
-    }
 }

@@ -12,15 +12,9 @@ import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.viewObjects.GoalSelectLineFragmentData;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GoalSelectLineFragment extends Fragment implements DataView {
 
     PlayerSelector playerSelector;
-    List<String> selectedPlayerIds = new ArrayList<>();
-    List<String> disabledPlayerIds = new ArrayList<>();
-
     private GoalSelectLineFragmentData data;
 
     @Override
@@ -30,6 +24,7 @@ public class GoalSelectLineFragment extends Fragment implements DataView {
 
     @Override
     public GoalSelectLineFragmentData getData() {
+        data.setSelectedPlayerIds(playerSelector.getSelectedPlayerIds());
         return data;
     }
 
@@ -41,33 +36,15 @@ public class GoalSelectLineFragment extends Fragment implements DataView {
         playerSelector = v.findViewById(R.id.playerSelector);
 
         playerSelector.createMultiSelectView(data.getLines());
-        playerSelector.setSelectedPlayerIds(selectedPlayerIds);
-        playerSelector.setDisabledPlayerIds(disabledPlayerIds);
+        playerSelector.setSelectedPlayerIds(data.getSelectedPlayerIds());
+        playerSelector.setDisabledPlayerIds(data.getDisabledPlayerIds());
 
         return v;
     }
 
     public void updateSelection() {
-        playerSelector.setSelectedPlayerIds(selectedPlayerIds);
-        playerSelector.setDisabledPlayerIds(disabledPlayerIds);
-    }
-
-    public void setDisabledPlayerIds(List<String> playerIds) {
-        disabledPlayerIds = new ArrayList<>();
-        if(playerIds != null) {
-            disabledPlayerIds.addAll(playerIds);
-        }
-    }
-
-    public void setSelectedPlayerIds(List<String> playerIds) {
-        selectedPlayerIds = new ArrayList<>();
-        if(playerIds != null) {
-            selectedPlayerIds.addAll(playerIds);
-        }
-    }
-
-    public List<String> getSelectedPlayerIds() {
-        return playerSelector.getSelectedPlayerIds();
+        playerSelector.setSelectedPlayerIds(data.getSelectedPlayerIds());
+        playerSelector.setDisabledPlayerIds(data.getDisabledPlayerIds());
     }
 
     public boolean validate() {

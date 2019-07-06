@@ -25,7 +25,7 @@ import com.ardeapps.floorballcoach.utils.StringUtils;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.viewObjects.GameFragmentData;
 import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
-import com.ardeapps.floorballcoach.viewObjects.GoalWizardFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.GoalWizardDialogFragmentData;
 import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.ArrayList;
@@ -343,7 +343,7 @@ public class GameFragment extends Fragment implements DataView {
         dialog.show(getActivity().getSupportFragmentManager(), "Muokkaa maalia");
         final boolean opponentGoal = (data.getGame().isHomeGame() && !homeGoal) || (!data.getGame().isHomeGame() && homeGoal);
 
-        GoalWizardFragmentData dialogData = new GoalWizardFragmentData();
+        GoalWizardDialogFragmentData dialogData = new GoalWizardDialogFragmentData();
         dialogData.setGoal(goal);
         dialogData.setGame(data.getGame());
         dialogData.setLines(data.getLines());

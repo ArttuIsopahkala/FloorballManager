@@ -11,20 +11,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
+import com.ardeapps.floorballcoach.viewObjects.DataView;
+import com.ardeapps.floorballcoach.viewObjects.GoalPositionFragmentData;
 
-public class GoalPositionFragment extends Fragment {
+public class GoalPositionFragment extends Fragment implements DataView {
 
     ImageView shootmapImage;
     ImageView shootPointImage;
+    TextView awayNameText;
+    TextView homeNameText;
 
     private double positionPercentX;
     private double positionPercentY;
+
     private double imageWidth;
     private double imageHeight;
     private Double positionX;
     private Double positionY;
+    private String opponentName;
+
+    GoalPositionFragmentData data;
+
+    @Override
+    public void setData(Object viewData) {
+        data = (GoalPositionFragmentData) viewData;
+    }
+
+    @Override
+    public GoalPositionFragmentData getData() {
+        return data;
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -34,8 +54,13 @@ public class GoalPositionFragment extends Fragment {
 
         shootmapImage = v.findViewById(R.id.shootmapImage);
         shootPointImage = v.findViewById(R.id.shootPointImage);
+        awayNameText = v.findViewById(R.id.awayNameText);
+        homeNameText = v.findViewById(R.id.homeNameText);
 
         shootPointImage.setVisibility(View.GONE);
+        homeNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
+        awayNameText.setText(data.getOpponentName());
+
         ViewTreeObserver vto = shootmapImage.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
@@ -43,12 +68,14 @@ public class GoalPositionFragment extends Fragment {
                 imageHeight = shootmapImage.getMeasuredHeight();
                 imageWidth = shootmapImage.getMeasuredWidth();
 
-                if(positionPercentX > 0 && positionPercentY > 0) {
+                if(data.getPositionPercentX() != null && data.getPositionPercentY() != null) {
                     shootPointImage.setVisibility(View.VISIBLE);
-                    positionX = getPositionX(positionPercentX);
-                    positionY = getPositionY(positionPercentY);
+                    positionX = getPositionX(data.getPositionPercentX());
+                    positionY = getPositionY(data.getPositionPercentY());
+
                     drawShootPoint(positionX, positionY);
                 }
+
                 return true;
             }
         });
@@ -59,6 +86,9 @@ public class GoalPositionFragment extends Fragment {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     positionX = (double) event.getX();
                     positionY = (double) event.getY();
+                    data.setPositionPercentX(getPositionPercentX());
+                    data.setPositionPercentY(getPositionPercentY());
+
                     drawShootPoint(positionX, positionY);
                 }
                 return true;
@@ -98,24 +128,13 @@ public class GoalPositionFragment extends Fragment {
         return imageHeight * positionPercentY;
     }
 
-    public void setPositionPercents(double positionPercentX, double positionPercentY) {
-        this.positionPercentX = positionPercentX;
-        this.positionPercentY = positionPercentY;
+
+    private double getPositionPercentX() {
+        return positionX / imageWidth;
     }
 
-    public Double getPositionPercentX() {
-        if(positionX != null) {
-            return positionX / imageWidth;
-        } else {
-            return null;
-        }
+    private double getPositionPercentY() {
+        return positionY / imageHeight;
     }
 
-    public Double getPositionPercentY() {
-        if(positionY != null) {
-            return positionY / imageHeight;
-        } else {
-            return null;
-        }
-    }
 }

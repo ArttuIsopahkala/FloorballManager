@@ -128,44 +128,50 @@ public class PlayerSelector extends LinearLayout {
 
             for(final String playerId : line.getPlayerIdMap().values()) {
                 final Player player = AppRes.getInstance().getPlayers().get(playerId);
-                if(player != null) {
-                    View v = inf.inflate(R.layout.list_item_player, playersList, false);
-                    final PlayerHolder holder = new PlayerHolder(v, PlayerHolder.ViewType.SELECT);
-                    holders.put(player.getPlayerId(), holder);
 
+                View v = inf.inflate(R.layout.list_item_player, playersList, false);
+                final PlayerHolder holder = new PlayerHolder(v, PlayerHolder.ViewType.SELECT);
+                holders.put(playerId, holder);
+
+                if(player == null) {
+                    // Poistettu pelaaja
+                    holder.nameNumberShootsText.setText("");
+                    holder.pictureImage.setImageResource(R.drawable.default_picture);
+                    holder.positionText.setText(AppRes.getContext().getString(R.string.removed_player));
+                } else {
                     if (player.getPicture() != null) {
                         holder.pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
                     }
 
                     holder.nameNumberShootsText.setText(player.getNameWithNumber(false));
                     holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
-
-                    holder.playerContainer.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(multiSelect) {
-                                if(holder.isSelected()) {
-                                    selectedPlayerIds.remove(playerId);
-                                } else {
-                                    selectedPlayerIds.add(playerId);
-                                }
-                            } else {
-                                if(holder.isSelected()) {
-                                    selectedPlayerIds.remove(playerId);
-                                    mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
-                                } else {
-                                    // Clear other and add new selection
-                                    selectedPlayerIds.clear();
-                                    selectedPlayerIds.add(playerId);
-                                    mListener.onPlayerSelected(line.getLineNumber(), playerId);
-                                }
-                            }
-                            setSelections();
-                        }
-                    });
-
-                    playersList.addView(v);
                 }
+
+                holder.playerContainer.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(multiSelect) {
+                            if(holder.isSelected()) {
+                                selectedPlayerIds.remove(playerId);
+                            } else {
+                                selectedPlayerIds.add(playerId);
+                            }
+                        } else {
+                            if(holder.isSelected()) {
+                                selectedPlayerIds.remove(playerId);
+                                mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
+                            } else {
+                                // Clear other and add new selection
+                                selectedPlayerIds.clear();
+                                selectedPlayerIds.add(playerId);
+                                mListener.onPlayerSelected(line.getLineNumber(), playerId);
+                            }
+                        }
+                        setSelections();
+                    }
+                });
+
+                playersList.addView(v);
             }
         } else {
             layout.setVisibility(View.GONE);
