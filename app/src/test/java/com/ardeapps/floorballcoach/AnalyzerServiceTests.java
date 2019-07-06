@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class AnalyzerServiceTests extends JSONService {
@@ -72,6 +73,13 @@ public class AnalyzerServiceTests extends JSONService {
 
         int newChemistry = AnalyzerService.getChemistryPoints(testPlayer, comparePlayer, getTeamGoals(teamId));
         System.out.println(newChemistry);
+
+        ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));
+
+        ArrayList<PlayerChemistry> chemistryList = new ArrayList<PlayerChemistry>();
+        chemistryList = AnalyzerService.getPlayerChemists(players, getTeamGoals(teamId));
+        boolean isEmpty = chemistryList.isEmpty();
+        System.out.println(isEmpty);
     }
 
 }

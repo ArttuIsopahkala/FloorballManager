@@ -100,28 +100,28 @@ public class AnalyzerService {
         return highestEntry.getKey();
     }
 
-
     /**
      * Database path: statsPlayerGame
-     * @param playerIdMap players which chemistries are calculated
-     * @param goals team goals where chemistry is calculated
-     * @return list of player chemistries
+     * @param players List of Players which chemistries are calculated
+     * @param goals Team goals where chemistry is calculated
+     * @return List of player chemistries
      */
-    public static ArrayList<PlayerChemistry> getPlayerChemistries(Map<String, String> playerIdMap, ArrayList<Goal> goals) {
-        // TODO tee loppuun ja testaa
-        // playerIdMap:
-        // key = position(Player.Position), value = playerId
-        ArrayList<String> playerIds = new ArrayList<>(playerIdMap.values());
-        for(String playerId : playerIds) {
+    public static ArrayList<PlayerChemistry> getPlayerChemistries(ArrayList<Player> players, ArrayList<Goal> goals) {
+
+        ArrayList<PlayerChemistry> playerChemistryList = new ArrayList<PlayerChemistry>();
+
+        for(Player player : players) {
             PlayerChemistry playerChemistry = new PlayerChemistry();
-            playerChemistry.setPlayerId(playerId);
-            for(String comparePlayerId : playerIds) {
-                // TODO Change these to use new getChemistryPoints with Player as a variables
-                // int testChemistry = AnalyzerService.getChemistryPoints(playerId, comparePlayerId, goals);
-                // playerChemistry.getComparePlayers().put(comparePlayerId, testChemistry);
+            playerChemistry.setPlayerId(player.getPlayerId());
+            for(Player comparePlayer : players) {
+                int chemistryPoints = AnalyzerService.getChemistryPoints(player, comparePlayer, goals);
+                playerChemistry.getComparePlayers().put(comparePlayer.getPlayerId(), chemistryPoints);
             }
+
+            playerChemistryList.add(playerChemistry);
         }
-        return null;
+
+        return playerChemistryList;
     }
 
     /**
