@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,9 +17,17 @@
         app:tabSelectedTextColor="@color/color_text_light"
         app:tabGravity="fill"
         app:tabMode="fixed" />
+    <ImageView
+        android:layout_below="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/floorball_field_half"
+        android:rotation="180"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
     <android.support.v4.view.ViewPager
         android:id="@+id/linesPager"
+        android:layout_below="@+id/tabLayout"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@color/color_background_third"/>
-</LinearLayout>
+        android:layout_height="match_parent"/>
+</RelativeLayout>

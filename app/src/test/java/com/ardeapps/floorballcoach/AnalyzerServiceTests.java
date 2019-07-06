@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class AnalyzerServiceTests extends JSONService {
@@ -24,11 +23,6 @@ public class AnalyzerServiceTests extends JSONService {
         Player player = getPlayer(testPlayerId);
         if(player != null) {
             System.out.println("player: " + player.getName());
-        }
-
-        ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));
-        for(Player player1 : players) {
-            System.out.println("players: " + player1.getName());
         }
 
         System.out.println("All goals by team:");
@@ -45,7 +39,8 @@ public class AnalyzerServiceTests extends JSONService {
 
         Map<String, String> playerIdMap = getPlayersOfLine(teamId, lineId);
         // TODO testaa
-        ArrayList<PlayerChemistry> playerChemistries =  AnalyzerService.getPlayerChemistries(playerIdMap, getTeamGoals(teamId));
+        ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));
+        ArrayList<PlayerChemistry> playerChemistries =  AnalyzerService.getPlayerChemistries(players, getTeamGoals(teamId));
 
         String bestAssister = AnalyzerService.getBestScorerOrAssistant(false, "-LYDueLQnDlNS3iny3r2", getTeamGoals(teamId));
         System.out.println(bestAssister);
@@ -76,8 +71,7 @@ public class AnalyzerServiceTests extends JSONService {
 
         ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));
 
-        ArrayList<PlayerChemistry> chemistryList = new ArrayList<PlayerChemistry>();
-        chemistryList = AnalyzerService.getPlayerChemists(players, getTeamGoals(teamId));
+        ArrayList<PlayerChemistry> chemistryList = AnalyzerService.getPlayerChemistries(players, getTeamGoals(teamId));
         boolean isEmpty = chemistryList.isEmpty();
         System.out.println(isEmpty);
     }

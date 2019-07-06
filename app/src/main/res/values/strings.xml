@@ -69,7 +69,7 @@
     <string name="title_manage_players">Hallitse joukkueen pelaajia</string>
     <string name="title_settings">Asetukset</string>
     <string name="title_lines">Kentälliset</string>
-    <string name="title_lines_default">Oletus kentälliset</string>
+    <string name="title_lines_default">Oletuskentälliset</string>
     <string name="title_game">Ottelu</string>
     <string name="title_games">Pelatut ottelut</string>
     <string name="title_new_game">Uusi ottelu</string>

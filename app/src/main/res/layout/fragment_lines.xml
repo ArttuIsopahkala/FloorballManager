@@ -16,7 +16,6 @@
         android:text="@string/main_selection_desc"
         android:textColor="@color/color_text_light"
         android:textSize="15sp" />
-
     <com.ardeapps.floorballcoach.views.LineUpSelector
         android:id="@+id/lineUpSelector"
         android:layout_below="@+id/infoText"
