@@ -108,14 +108,16 @@ public class AnalyzerService {
      */
     public static ArrayList<PlayerChemistry> getPlayerChemistries(ArrayList<Player> players, ArrayList<Goal> goals) {
 
-        ArrayList<PlayerChemistry> playerChemistryList = new ArrayList<PlayerChemistry>();
+        ArrayList<PlayerChemistry> playerChemistryList = new ArrayList<>();
 
         for(Player player : players) {
             PlayerChemistry playerChemistry = new PlayerChemistry();
             playerChemistry.setPlayerId(player.getPlayerId());
             for(Player comparePlayer : players) {
-                int chemistryPoints = AnalyzerService.getChemistryPoints(player, comparePlayer, goals);
-                playerChemistry.getComparePlayers().put(comparePlayer.getPlayerId(), chemistryPoints);
+                if(!comparePlayer.getPlayerId().equals(player.getPlayerId())) {
+                    int chemistryPoints = getChemistryPoints(player, comparePlayer, goals);
+                    playerChemistry.getComparePlayers().put(comparePlayer.getPlayerId(), chemistryPoints);
+                }
             }
 
             playerChemistryList.add(playerChemistry);
@@ -128,7 +130,11 @@ public class AnalyzerService {
      * Database path: goalsTeamGame
      * @param playerIdMap players which chemistries are calculated
      * @param goals team goals where chemistry is calculated
-     * @return list of lines playerIdMap is separated
+     * @return List on Lines of Players with best chemistries (Integer = Line number)
+     *
+     * This method should get List of Players and return Lines where are separated players in the way that
+     * best chemistries are taken in notice between players and their positions
+     *
      */
     public static Map<Integer, Line> getBestPlayerChemistries(Map<String, String> playerIdMap, ArrayList<Goal> goals) {
         // TODO tee loppuun ja testaa
