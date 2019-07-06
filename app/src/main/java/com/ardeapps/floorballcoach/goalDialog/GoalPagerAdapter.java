@@ -9,14 +9,13 @@ import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.viewObjects.GoalDetailsFragmentData;
 import com.ardeapps.floorballcoach.viewObjects.GoalPositionFragmentData;
-import com.ardeapps.floorballcoach.viewObjects.GoalSelectAssistantFragmentData;
 import com.ardeapps.floorballcoach.viewObjects.GoalSelectLineFragmentData;
-import com.ardeapps.floorballcoach.viewObjects.GoalSelectScorerFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.GoalSelectPlayerFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.GoalWizardDialogData;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by Arttu on 24.9.2016.
@@ -24,35 +23,32 @@ import java.util.Map;
 public class GoalPagerAdapter extends FragmentStatePagerAdapter {
 
     private GoalDetailsFragment detailsFragment;
-    private GoalSelectScorerFragment selectScorerFragment;
-    private GoalSelectAssistantFragment selectAssistantFragment;
+    private GoalSelectPlayerFragment selectScorerFragment;
+    private GoalSelectPlayerFragment selectAssistantFragment;
+
     private GoalSelectLineFragment selectLineFragment;
     private GoalPositionFragment positionFragment;
-    private boolean opponentGoal;
     private boolean isPenaltyShot;
-    private String opponentName;
 
+    private GoalWizardDialogData commonData;
     private ArrayList<Fragment> fragments = new ArrayList<>();
-    private Map<Integer, Line> lines;
     private Goal goal;
     private String scorerPlayerId;
     private String assistantPlayerId;
     private Integer scorerLineNumber;
     private Integer assistantLineNumber;
 
-    public GoalPagerAdapter(FragmentManager supportFragmentManager, Map<Integer, Line> lines, final boolean opponentGoal, String opponentName) {
+    public GoalPagerAdapter(FragmentManager supportFragmentManager, GoalWizardDialogData commonData) {
         super(supportFragmentManager);
-        this.opponentGoal = opponentGoal;
-        this.lines = lines;
-        this.opponentName = opponentName;
+        this.commonData = commonData;
 
         detailsFragment = new GoalDetailsFragment();
-        selectScorerFragment = new GoalSelectScorerFragment();
-        selectAssistantFragment = new GoalSelectAssistantFragment();
+        selectScorerFragment = new GoalSelectPlayerFragment();
+        selectAssistantFragment = new GoalSelectPlayerFragment();
         positionFragment = new GoalPositionFragment();
         selectLineFragment = new GoalSelectLineFragment();
 
-        if(opponentGoal) {
+        if(commonData.isOpponentGoal()) {
             fragments.add(detailsFragment);
             fragments.add(selectLineFragment);
             fragments.add(positionFragment);
@@ -80,7 +76,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             @Override
             public void onAvRadioButtonChecked() {
                 GoalSelectLineFragmentData data = selectLineFragment.getData();
-                data.setMaxSelectPlayers(opponentGoal ? 6 : 4);
+                data.setMaxSelectPlayers(commonData.isOpponentGoal() ? 6 : 4);
                 isPenaltyShot = false;
                 selectLineFragment.setData(data);
             }
@@ -88,7 +84,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             @Override
             public void onYvRadioButtonChecked() {
                 GoalSelectLineFragmentData data = selectLineFragment.getData();
-                data.setMaxSelectPlayers(opponentGoal ? 4 : 6);
+                data.setMaxSelectPlayers(commonData.isOpponentGoal() ? 4 : 6);
                 isPenaltyShot = false;
                 selectLineFragment.setData(data);
             }
@@ -107,7 +103,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             public void onPlayerSelected(int lineNumber, String playerId) {
                 scorerLineNumber = lineNumber;
                 scorerPlayerId = playerId;
-                GoalSelectAssistantFragmentData data = selectAssistantFragment.getData();
+                GoalSelectPlayerFragmentData data = selectAssistantFragment.getData();
                 data.setDisabledPlayerId(playerId);
                 selectAssistantFragment.setData(data);
                 selectAssistantFragment.updateSelection();
@@ -119,7 +115,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             public void onPlayerUnSelected(int lineNumber, String playerId) {
                 scorerLineNumber = null;
                 scorerPlayerId = null;
-                GoalSelectAssistantFragmentData data = selectAssistantFragment.getData();
+                GoalSelectPlayerFragmentData data = selectAssistantFragment.getData();
                 data.setDisabledPlayerId(null);
                 selectAssistantFragment.setData(data);
                 selectAssistantFragment.updateSelection();
@@ -132,7 +128,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             public void onPlayerSelected(int lineNumber, String playerId) {
                 assistantLineNumber = lineNumber;
                 assistantPlayerId = playerId;
-                GoalSelectScorerFragmentData data = selectScorerFragment.getData();
+                GoalSelectPlayerFragmentData data = selectScorerFragment.getData();
                 data.setDisabledPlayerId(playerId);
                 selectScorerFragment.setData(data);
                 selectScorerFragment.updateSelection();
@@ -144,7 +140,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             public void onPlayerUnSelected(int lineNumber, String playerId) {
                 assistantLineNumber = null;
                 assistantPlayerId = null;
-                GoalSelectScorerFragmentData data = selectScorerFragment.getData();
+                GoalSelectPlayerFragmentData data = selectScorerFragment.getData();
                 data.setDisabledPlayerId(null);
                 selectScorerFragment.setData(data);
                 selectScorerFragment.updateSelection();
@@ -170,7 +166,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             // Scorer and assistan in same line -> select all players in line
             if (scorerLineNumber != null) {
                 if (assistantLineNumber == null || scorerLineNumber.equals(assistantLineNumber)) {
-                    Line scorerLine = lines.get(scorerLineNumber);
+                    Line scorerLine = commonData.getLines().get(scorerLineNumber);
                     if (scorerLine != null && scorerLine.getPlayerIdMap() != null) {
                         ArrayList<String> selectedPlayers = new ArrayList<>(scorerLine.getPlayerIdMap().values());
                         selectLineFragmentData.setSelectedPlayerIds(selectedPlayers);
@@ -201,29 +197,30 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
 
         // Initialize dialog
         isPenaltyShot = false;
+
         // Details
         GoalDetailsFragmentData detailsFragmentData = new GoalDetailsFragmentData();
         detailsFragmentData.setTime(0);
         detailsFragmentData.setGameMode(Goal.Mode.FULL);
         // Scorer
-        GoalSelectScorerFragmentData scorerFragmentData = new GoalSelectScorerFragmentData();
-        scorerFragmentData.setLines(lines);
-        scorerFragmentData.setScorerPlayerId(null);
+        GoalSelectPlayerFragmentData scorerFragmentData = new GoalSelectPlayerFragmentData();
+        scorerFragmentData.setLines(commonData.getLines());
+        scorerFragmentData.setPlayerId(null);
         scorerFragmentData.setDisabledPlayerId(null);
         // Assistant
-        GoalSelectAssistantFragmentData selectAssistantFragmentData = new GoalSelectAssistantFragmentData();
-        selectAssistantFragmentData.setLines(lines);
-        selectAssistantFragmentData.setAssistantPlayerId(null);
-        selectAssistantFragmentData.setDisabledPlayerId(null);
+        GoalSelectPlayerFragmentData assistantFragmentData = new GoalSelectPlayerFragmentData();
+        assistantFragmentData.setLines(commonData.getLines());
+        assistantFragmentData.setPlayerId(null);
+        assistantFragmentData.setDisabledPlayerId(null);
         // Select line
         GoalSelectLineFragmentData selectLineFragmentData = new GoalSelectLineFragmentData();
-        selectLineFragmentData.setLines(lines);
+        selectLineFragmentData.setLines(commonData.getLines());
         selectLineFragmentData.setMaxSelectPlayers(6);
         selectLineFragmentData.setSelectedPlayerIds(null);
         selectLineFragmentData.setDisabledPlayerIds(null);
         // Position
         GoalPositionFragmentData positionFragmentData = new GoalPositionFragmentData();
-        positionFragmentData.setOpponentName(opponentName);
+        positionFragmentData.setOpponentName(commonData.getGame().getOpponentName());
         positionFragmentData.setPositionPercentX(null);
         positionFragmentData.setPositionPercentY(null);
 
@@ -232,11 +229,11 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             detailsFragmentData.setTime(goal.getTime());
             detailsFragmentData.setGameMode(Goal.Mode.fromDatabaseName(goal.getGameMode()));
             // Scorer
-            scorerFragmentData.setScorerPlayerId(goal.getScorerId());
+            scorerFragmentData.setPlayerId(goal.getScorerId());
             scorerFragmentData.setDisabledPlayerId(goal.getAssistantId());
             // Assistant
-            selectAssistantFragmentData.setAssistantPlayerId(goal.getAssistantId());
-            selectAssistantFragmentData.setDisabledPlayerId(goal.getScorerId());
+            assistantFragmentData.setPlayerId(goal.getAssistantId());
+            assistantFragmentData.setDisabledPlayerId(goal.getScorerId());
             // Select line
             scorerPlayerId = goal.getScorerId();
             assistantPlayerId = goal.getAssistantId();
@@ -258,52 +255,59 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         // Set data to fragments
         detailsFragment.setData(detailsFragmentData);
         selectScorerFragment.setData(scorerFragmentData);
-        selectAssistantFragment.setData(selectAssistantFragmentData);
+        selectAssistantFragment.setData(assistantFragmentData);
         selectLineFragment.setData(selectLineFragmentData);
         positionFragment.setData(positionFragmentData);
     }
 
     public Goal getGoal() {
+        GoalDetailsFragmentData detailsFragmentData = detailsFragment.getData();
+        GoalSelectLineFragmentData selectLineFragmentData = selectLineFragment.getData();
+        GoalPositionFragmentData positionFragmentData = positionFragment.getData();
+
         Goal goalToSave = new Goal();
         if(goal != null) {
             goalToSave = goal.clone();
         }
-        if(opponentGoal) {
+        if(commonData.isOpponentGoal()) {
             if(isPenaltyShot) {
                 goalToSave.setPlayerIds(null);
             } else {
-                goalToSave.setPlayerIds(selectLineFragment.getData().getSelectedPlayerIds());
+                goalToSave.setPlayerIds(selectLineFragmentData.getSelectedPlayerIds());
             }
-            goalToSave.setTime(detailsFragment.getData().getTime());
-            goalToSave.setGameMode(detailsFragment.getData().getGameMode().toDatabaseName());
-            goalToSave.setPositionPercentX(positionFragment.getData().getPositionPercentX());
-            goalToSave.setPositionPercentY(positionFragment.getData().getPositionPercentY());
+            goalToSave.setTime(detailsFragmentData.getTime());
+            goalToSave.setGameMode(detailsFragmentData.getGameMode().toDatabaseName());
+            goalToSave.setPositionPercentX(positionFragmentData.getPositionPercentX());
+            goalToSave.setPositionPercentY(positionFragmentData.getPositionPercentY());
         } else {
+            GoalSelectPlayerFragmentData scorerFragmentData = selectScorerFragment.getData();
+            GoalSelectPlayerFragmentData assistantFragmentData = selectAssistantFragment.getData();
             if(isPenaltyShot) {
                 goalToSave.setAssistantId(null);
                 goalToSave.setPlayerIds(null);
             } else {
-                goalToSave.setAssistantId(selectAssistantFragment.getData().getAssistantPlayerId());
-                goalToSave.setPlayerIds(selectLineFragment.getData().getSelectedPlayerIds());
+                goalToSave.setAssistantId(assistantFragmentData.getPlayerId());
+                goalToSave.setPlayerIds(selectLineFragmentData.getSelectedPlayerIds());
             }
-            goalToSave.setTime(detailsFragment.getData().getTime());
-            goalToSave.setGameMode(detailsFragment.getData().getGameMode().toDatabaseName());
-            goalToSave.setScorerId(selectScorerFragment.getData().getScorerPlayerId());
-            goalToSave.setPositionPercentX(positionFragment.getData().getPositionPercentX());
-            goalToSave.setPositionPercentY(positionFragment.getData().getPositionPercentY());
+            goalToSave.setTime(detailsFragmentData.getTime());
+            goalToSave.setGameMode(detailsFragmentData.getGameMode().toDatabaseName());
+            goalToSave.setScorerId(scorerFragmentData.getPlayerId());
+            goalToSave.setPositionPercentX(positionFragmentData.getPositionPercentX());
+            goalToSave.setPositionPercentY(positionFragmentData.getPositionPercentY());
         }
 
         return goalToSave;
     }
 
     public boolean validate(int position) {
+        int scorerFragmentPosition = 1;
         Fragment fragment = fragments.get(position);
         if (fragment instanceof GoalDetailsFragment) {
             return ((GoalDetailsFragment) fragment).validate();
-        } else if (fragment instanceof GoalSelectScorerFragment) {
-            return ((GoalSelectScorerFragment) fragment).validate();
         } else if (fragment instanceof GoalSelectLineFragment) {
             return ((GoalSelectLineFragment) fragment).validate();
+        } else if (!commonData.isOpponentGoal() && position == scorerFragmentPosition) {
+            return ((GoalSelectPlayerFragment) fragment).validate();
         }
         return true;
     }

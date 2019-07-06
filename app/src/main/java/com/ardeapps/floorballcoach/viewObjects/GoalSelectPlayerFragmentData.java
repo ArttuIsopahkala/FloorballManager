@@ -5,13 +5,13 @@ import com.ardeapps.floorballcoach.objects.Line;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GoalSelectScorerFragmentData {
+public class GoalSelectPlayerFragmentData {
 
     private Map<Integer, Line> lines;
-    private String scorerPlayerId;
+    private String playerId;
     private String disabledPlayerId;
 
-    public GoalSelectScorerFragmentData() {
+    public GoalSelectPlayerFragmentData() {
     }
 
     public Map<Integer, Line> getLines() {
@@ -25,12 +25,12 @@ public class GoalSelectScorerFragmentData {
         this.lines = lines;
     }
 
-    public String getScorerPlayerId() {
-        return scorerPlayerId;
+    public String getPlayerId() {
+        return playerId;
     }
 
-    public void setScorerPlayerId(String scorerPlayerId) {
-        this.scorerPlayerId = scorerPlayerId;
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
     }
 
     public String getDisabledPlayerId() {

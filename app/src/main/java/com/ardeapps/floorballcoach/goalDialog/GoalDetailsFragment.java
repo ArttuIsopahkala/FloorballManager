@@ -46,6 +46,16 @@ public class GoalDetailsFragment extends Fragment implements DataView {
 
     @Override
     public GoalDetailsFragmentData getData() {
+        data.setTime(timePicker.getTimeInMillis());
+        Goal.Mode gameMode = Goal.Mode.FULL;
+        if (yvRadioButton.isChecked()) {
+            gameMode = Goal.Mode.YV;
+        } else if (avRadioButton.isChecked()) {
+            gameMode = Goal.Mode.AV;
+        } else if (rlRadioButton.isChecked()) {
+            gameMode = Goal.Mode.RL;
+        }
+        data.setGameMode(gameMode);
         return data;
     }
 
@@ -75,7 +85,6 @@ public class GoalDetailsFragment extends Fragment implements DataView {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    data.setGameMode(Goal.Mode.FULL);
                     mListener.onFullRadioButtonChecked();
                 }
             }
@@ -84,7 +93,6 @@ public class GoalDetailsFragment extends Fragment implements DataView {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    data.setGameMode(Goal.Mode.YV);
                     mListener.onYvRadioButtonChecked();
                 }
             }
@@ -93,7 +101,6 @@ public class GoalDetailsFragment extends Fragment implements DataView {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    data.setGameMode(Goal.Mode.AV);
                     mListener.onAvRadioButtonChecked();
                 }
             }
@@ -102,7 +109,6 @@ public class GoalDetailsFragment extends Fragment implements DataView {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    data.setGameMode(Goal.Mode.RL);
                     mListener.onRlRadioButtonChecked();
                 }
             }

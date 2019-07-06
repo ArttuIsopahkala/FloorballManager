@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
-import com.ardeapps.floorballcoach.viewObjects.GoalWizardDialogFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.GoalWizardDialogData;
 
 public class GoalWizardDialogFragment extends DialogFragment implements DataView {
 
@@ -39,17 +39,18 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
     ViewPager eventPager;
     GoalPagerAdapter goalAdapter;
 
-    GoalWizardDialogFragmentData data;
+    GoalWizardDialogData data;
 
+    int scorerFragmentPosition = 1;
     int position = 0;
 
     @Override
     public void setData(Object viewData) {
-        data = (GoalWizardDialogFragmentData) viewData;
+        data = (GoalWizardDialogData) viewData;
     }
 
     @Override
-    public GoalWizardDialogFragmentData getData() {
+    public GoalWizardDialogData getData() {
         return data;
     }
 
@@ -66,13 +67,7 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         eventPager = v.findViewById(R.id.eventPager);
         tabLayout = v.findViewById(R.id.tabLayout);
 
-        /*GoalPagerAdapterData adapterData = new GoalPagerAdapterData();
-        adapterData.setLines(data.getLines());
-        adapterData.setOpponentGoal(data.isOpponentGoal());
-        adapterData.setOpponentName(data.getGame().getOpponentName());
-        adapterData.setGoal(data.getGoal());*/
-
-        goalAdapter = new GoalPagerAdapter(getChildFragmentManager(), data.getLines(), data.isOpponentGoal(), data.getGame().getOpponentName());
+        goalAdapter = new GoalPagerAdapter(getChildFragmentManager(), data);
         goalAdapter.setGoal(data.getGoal());
 
         eventPager.setOffscreenPageLimit(goalAdapter.getCount());
@@ -108,7 +103,7 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         if(position == 0) {
             dismiss();
         } else {
-            if(goalAdapter.isPenaltyShot() && goalAdapter.getItem(position) instanceof GoalPositionFragment) {
+            if(goalAdapter.isPenaltyShot() && position == goalAdapter.getCount()) {
                 position = data.isOpponentGoal() ? 0 : 1;
             } else {
                 position--;
@@ -127,7 +122,7 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
                 goalToSave.setOpponentGoal(data.isOpponentGoal());
                 mListener.onGoalSaved(goalToSave);
             } else {
-                if(goalAdapter.isPenaltyShot() && goalAdapter.getItem(position) instanceof GoalSelectScorerFragment) {
+                if(goalAdapter.isPenaltyShot() && !data.isOpponentGoal() && position == scorerFragmentPosition) {
                     position = max;
                 } else {
                     position++;
@@ -144,14 +139,14 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         // Header text
         if(fragment instanceof GoalDetailsFragment) {
             infoText.setText(R.string.add_event_details);
-        } else if(fragment instanceof GoalSelectScorerFragment) {
-            infoText.setText(R.string.add_event_scorer);
-        } else if(fragment instanceof GoalSelectAssistantFragment) {
-            infoText.setText(R.string.add_event_assistant);
-        } else if(fragment instanceof GoalSelectLineFragment) {
+        }else if(fragment instanceof GoalSelectLineFragment) {
             infoText.setText(R.string.add_event_line);
         } else if(fragment instanceof GoalPositionFragment) {
             infoText.setText(R.string.add_event_position);
+        } else if (!data.isOpponentGoal() && position == scorerFragmentPosition) {
+            infoText.setText(R.string.add_event_scorer);
+        } else if (!data.isOpponentGoal() && position == scorerFragmentPosition + 1) {
+            infoText.setText(R.string.add_event_assistant);
         }
 
         // Buttons

@@ -7,14 +7,14 @@ import com.ardeapps.floorballcoach.objects.Line;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GoalWizardDialogFragmentData {
+public class GoalWizardDialogData {
 
     private Goal goal;
     private Game game;
     private Map<Integer, Line> lines;
     private boolean opponentGoal;
 
-    public GoalWizardDialogFragmentData() {
+    public GoalWizardDialogData() {
     }
 
     public Game getGame() {

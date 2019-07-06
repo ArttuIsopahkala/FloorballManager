@@ -25,14 +25,10 @@ public class GoalPositionFragment extends Fragment implements DataView {
     TextView awayNameText;
     TextView homeNameText;
 
-    private double positionPercentX;
-    private double positionPercentY;
-
     private double imageWidth;
     private double imageHeight;
     private Double positionX;
     private Double positionY;
-    private String opponentName;
 
     GoalPositionFragmentData data;
 
@@ -43,6 +39,8 @@ public class GoalPositionFragment extends Fragment implements DataView {
 
     @Override
     public GoalPositionFragmentData getData() {
+        data.setPositionPercentX(getPositionPercentX());
+        data.setPositionPercentY(getPositionPercentY());
         return data;
     }
 
@@ -72,7 +70,6 @@ public class GoalPositionFragment extends Fragment implements DataView {
                     shootPointImage.setVisibility(View.VISIBLE);
                     positionX = getPositionX(data.getPositionPercentX());
                     positionY = getPositionY(data.getPositionPercentY());
-
                     drawShootPoint(positionX, positionY);
                 }
 
@@ -86,9 +83,6 @@ public class GoalPositionFragment extends Fragment implements DataView {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     positionX = (double) event.getX();
                     positionY = (double) event.getY();
-                    data.setPositionPercentX(getPositionPercentX());
-                    data.setPositionPercentY(getPositionPercentY());
-
                     drawShootPoint(positionX, positionY);
                 }
                 return true;

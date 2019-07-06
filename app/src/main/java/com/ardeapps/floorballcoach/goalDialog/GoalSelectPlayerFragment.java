@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
-import com.ardeapps.floorballcoach.viewObjects.GoalSelectScorerFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.GoalSelectPlayerFragmentData;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoalSelectScorerFragment extends Fragment implements DataView {
+public class GoalSelectPlayerFragment extends Fragment implements DataView {
 
     public PlayerSelector.Listener mListener = null;
 
@@ -27,11 +27,11 @@ public class GoalSelectScorerFragment extends Fragment implements DataView {
     List<String> selectedPlayerIds = new ArrayList<>();
     List<String> disabledPlayerIds = new ArrayList<>();
 
-    private GoalSelectScorerFragmentData data;
+    private GoalSelectPlayerFragmentData data;
 
     @Override
     public void setData(Object viewData) {
-        data = (GoalSelectScorerFragmentData) viewData;
+        data = (GoalSelectPlayerFragmentData) viewData;
 
         disabledPlayerIds = new ArrayList<>();
         if(data.getDisabledPlayerId() != null) {
@@ -39,17 +39,17 @@ public class GoalSelectScorerFragment extends Fragment implements DataView {
         }
 
         selectedPlayerIds = new ArrayList<>();
-        if(data.getScorerPlayerId() != null) {
-            selectedPlayerIds.add(data.getScorerPlayerId());
+        if(data.getPlayerId() != null) {
+            selectedPlayerIds.add(data.getPlayerId());
         }
     }
 
     @Override
-    public GoalSelectScorerFragmentData getData() {
+    public GoalSelectPlayerFragmentData getData() {
         if(playerSelector.getSelectedPlayerIds() != null) {
-            data.setScorerPlayerId(playerSelector.getSelectedPlayerIds().get(0));
+            data.setPlayerId(playerSelector.getSelectedPlayerIds().get(0));
         } else {
-            data.setScorerPlayerId(null);
+            data.setPlayerId(null);
         }
         return data;
     }
