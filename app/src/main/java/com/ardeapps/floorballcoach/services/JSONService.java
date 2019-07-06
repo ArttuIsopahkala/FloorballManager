@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.objects.Player;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
@@ -14,8 +15,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class JSONService extends FirebaseDatabaseService {
@@ -53,6 +56,39 @@ public class JSONService extends FirebaseDatabaseService {
             }
         }
         return playerIdMap;
+    }
+
+    protected Player getPlayer(String playerId) {
+        return getPlayers(Arrays.asList(playerId)).get(0);
+    }
+
+    protected ArrayList<Player> getPlayers(List<String> playerIds) {
+        ArrayList<Player> playerList = new ArrayList<>();
+        String result = readFileContent();
+        if(result != null) {
+            JSONObject json = convertToJSONObject(result);
+            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject teamsNode = getJSONObject(root, PLAYERS);
+
+            Iterator<String> teams = teamsNode.keys();
+            while (teams.hasNext()) {
+                String teamKeyId = teams.next();
+                JSONObject teamObj = getJSONObject(teamsNode, teamKeyId);
+
+                Iterator<String> players = teamObj.keys();
+                while (players.hasNext()) {
+                    String playerKeyId = players.next();
+                    if(playerIds.contains(playerKeyId)) {
+                        JSONObject value = getJSONObject(teamObj, playerKeyId);
+                        try {
+                            Player player = new ObjectMapper().readValue(value.toString(), Player.class);
+                            playerList.add(player);
+                        } catch (IOException e) {}
+                    }
+                }
+            }
+        }
+        return playerList;
     }
 
     protected ArrayList<Goal> getPlayerGoals(String playerId) {

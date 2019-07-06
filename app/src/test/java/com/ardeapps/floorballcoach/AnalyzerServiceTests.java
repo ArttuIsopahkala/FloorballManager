@@ -1,6 +1,7 @@
 package com.ardeapps.floorballcoach;
 
 import com.ardeapps.floorballcoach.objects.Goal;
+import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.PlayerChemistry;
 import com.ardeapps.floorballcoach.services.AnalyzerService;
 import com.ardeapps.floorballcoach.services.JSONService;
@@ -8,6 +9,7 @@ import com.ardeapps.floorballcoach.services.JSONService;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class AnalyzerServiceTests extends JSONService {
@@ -17,6 +19,16 @@ public class AnalyzerServiceTests extends JSONService {
         String teamId = "-LYDu_zW16xskSIhIlOm"; // "O2 jyväskylä"
         String lineId = "-LYDuaJHLYXZBTjVtWjK"; // "1. kenttä"
         String testPlayerId = "-LYDueLQnDlNS3iny3r2";
+
+        Player player = getPlayer(testPlayerId);
+        if(player != null) {
+            System.out.println("player: " + player.getName());
+        }
+
+        ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));
+        for(Player player1 : players) {
+            System.out.println("players: " + player1.getName());
+        }
 
         System.out.println("All goals by team:");
         ArrayList<Goal> teamGoals = getTeamGoals(teamId);
