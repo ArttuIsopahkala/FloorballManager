@@ -1,8 +1,9 @@
 package com.ardeapps.floorballcoach;
 
+import com.ardeapps.floorballcoach.objects.Chemistry;
 import com.ardeapps.floorballcoach.objects.Goal;
+import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
-import com.ardeapps.floorballcoach.objects.PlayerChemistry;
 import com.ardeapps.floorballcoach.services.AnalyzerService;
 import com.ardeapps.floorballcoach.services.JSONService;
 
@@ -40,11 +41,28 @@ public class AnalyzerServiceTests extends JSONService {
         Map<String, String> playerIdMap = getPlayersOfLine(teamId, lineId);
         // TODO testaa
         ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));
-        ArrayList<PlayerChemistry> playerChemistries =  AnalyzerService.getPlayerChemistries(players, getTeamGoals(teamId));
+        ArrayList<Chemistry> playerChemistries =  AnalyzerService.getPlayerChemistries(players, getTeamGoals(teamId));
 
         String bestAssister = AnalyzerService.getBestScorerOrAssistant(false, "-LYDueLQnDlNS3iny3r2", getTeamGoals(teamId));
         System.out.println(bestAssister);
 
+    }
+
+    @Test
+    public void testGetLineChemistry() {
+        String teamId = "-LYDu_zW16xskSIhIlOm"; // "O2 jyväskylä"
+        String lineId = "-LYDuaJHLYXZBTjVtWjK"; // "1. kenttä"
+
+        Line line = getLine(teamId, lineId);
+        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = AnalyzerService.getLineChemistry(line, getTeamGoals(teamId));
+        for (Map.Entry<Player.Position, ArrayList<Chemistry>> chemistry : lineChemistry.entrySet()) {
+            Player.Position position = chemistry.getKey();
+            ArrayList<Chemistry> chemistries = chemistry.getValue();
+            System.out.println(position.toDatabaseName());
+            for(Chemistry chem : chemistries) {
+                System.out.println(chem.getComparePosition() + ": " + chem.getChemistryPoints());
+            }
+        }
     }
 
     @Test
@@ -66,12 +84,12 @@ public class AnalyzerServiceTests extends JSONService {
         String player2Compare = AnalyzerService.getBestScorerOrAssistant(true, testPlayerId, getTeamGoals(teamId));
         System.out.println("player2Compare= " + player2Compare);
 
-        int newChemistry = AnalyzerService.getChemistryPoints(testPlayer, comparePlayer, getTeamGoals(teamId));
+        int newChemistry = AnalyzerService.getChemistryPoints(testPlayer.getPlayerId(), comparePlayer.getPlayerId(), getTeamGoals(teamId));
         System.out.println(newChemistry);
 
         ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));
 
-        ArrayList<PlayerChemistry> chemistryList = AnalyzerService.getPlayerChemistries(players, getTeamGoals(teamId));
+        ArrayList<Chemistry> chemistryList = AnalyzerService.getPlayerChemistries(players, getTeamGoals(teamId));
         boolean isEmpty = chemistryList.isEmpty();
         System.out.println(isEmpty);
     }

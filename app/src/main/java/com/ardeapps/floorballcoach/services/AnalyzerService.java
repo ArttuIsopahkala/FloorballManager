@@ -4,7 +4,6 @@ import com.ardeapps.floorballcoach.objects.Chemistry;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
-import com.ardeapps.floorballcoach.objects.PlayerChemistry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,12 +14,12 @@ public class AnalyzerService {
 
     /**
      * Database path: goalsTeamGame
-     * @param player Player object to compare against
-     * @param comparedPlayer Player object to compare
+     * @param playerId player to compare against
+     * @param comparedPlayerId player to compare
      * @param goals goals saved for team
      * @return count of chemistry points
      */
-    public static int getChemistryPoints(Player player, Player comparedPlayer, ArrayList<Goal> goals) {
+    public static int getChemistryPoints(String playerId, String comparedPlayerId, ArrayList<Goal> goals) {
 
         int chemistryPoints = 0;
 
@@ -31,8 +30,6 @@ public class AnalyzerService {
 
             List<String> goalPlayerIds = goal.getPlayerIds();
 
-            String playerId = player.getPlayerId();
-            String comparedPlayerId = comparedPlayer.getPlayerId();
             String scorerId = goal.getScorerId();
             String assistantId = goal.getAssistantId();
 
@@ -107,21 +104,23 @@ public class AnalyzerService {
      * @param goals Team goals where chemistry is calculated
      * @return List of player chemistries
      */
-    public static ArrayList<PlayerChemistry> getPlayerChemistries(ArrayList<Player> players, ArrayList<Goal> goals) {
+    public static ArrayList<Chemistry> getPlayerChemistries(ArrayList<Player> players, ArrayList<Goal> goals) {
 
-        ArrayList<PlayerChemistry> playerChemistryList = new ArrayList<>();
+        ArrayList<Chemistry> playerChemistryList = new ArrayList<>();
 
         for(Player player : players) {
-            PlayerChemistry playerChemistry = new PlayerChemistry();
-            playerChemistry.setPlayerId(player.getPlayerId());
+            Chemistry chemistry = new Chemistry();
+            chemistry.setPlayerId(player.getPlayerId());
             for(Player comparePlayer : players) {
                 if(!comparePlayer.getPlayerId().equals(player.getPlayerId())) {
-                    int chemistryPoints = getChemistryPoints(player, comparePlayer, goals);
-                    playerChemistry.getComparePlayers().put(comparePlayer.getPlayerId(), chemistryPoints);
+                    int chemistryPoints = getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
+                    chemistry.setChemistryPoints(chemistryPoints);
+                    chemistry.setComparePlayerId(comparePlayer.getPlayerId());
+                    chemistry.setComparePosition(comparePlayer.getPosition());
                 }
             }
 
-            playerChemistryList.add(playerChemistry);
+            playerChemistryList.add(chemistry);
         }
 
         return playerChemistryList;
@@ -152,7 +151,7 @@ public class AnalyzerService {
      * @return chemistries list indexed by playerId
      *
      */
-    public static Map<Player.Position, ArrayList<Chemistry>> getPlayerChemistries(Line line, ArrayList<Goal> goals) {
+    public static Map<Player.Position, ArrayList<Chemistry>> getLineChemistry(Line line, ArrayList<Goal> goals) {
         Map<Player.Position, ArrayList<Chemistry>> chemistryMap = new HashMap<>();
 
         if(line != null && line.getPlayerIdMap() != null) {
@@ -171,8 +170,8 @@ public class AnalyzerService {
                         chemistry.setPlayerId(playerId);
                         chemistry.setComparePlayerId(comparedPlayerId);
                         chemistry.setComparePosition(comparedPosition);
-                        // TODO käytä oikeita chemistry pointseja
-                        chemistry.setChemistryPoints((int)(Math.random() * 100));
+                        int chemistryPoints = getChemistryPoints(playerId, comparedPlayerId, goals);
+                        chemistry.setChemistryPoints(chemistryPoints);
 
                         chemistries.add(chemistry);
                     }

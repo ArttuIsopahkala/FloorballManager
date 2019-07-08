@@ -55,7 +55,7 @@ public class LineFragment extends Fragment implements DataView {
         if(line != null) {
             // TODO hae oikea data
             ArrayList<Goal> goals = JSONService.getTeamGoals(AppRes.getInstance().getSelectedTeam().getTeamId());
-            chemistriesMap = AnalyzerService.getPlayerChemistries(data.getLine(), goals);
+            chemistriesMap = AnalyzerService.getLineChemistry(data.getLine(), goals);
 
             Map<Position, Integer> cp = getCompareChemistries(Position.C);
             setChemistryText(c_lw_text, cp.get(Position.LW));
@@ -101,7 +101,7 @@ public class LineFragment extends Fragment implements DataView {
     private Map<Player.Position, ArrayList<Chemistry>> chemistriesMap = new HashMap<>();
 
     private void setChemistryText(TextView textView, Integer points) {
-        textView.setText(points != null ? points + "%" : "");
+        textView.setText(points != null ? String.valueOf(points) : "");
     }
 
     @Override
@@ -281,6 +281,7 @@ public class LineFragment extends Fragment implements DataView {
             }
 
             Logger.log(position.toDatabaseName() + ": " + percent + "%");
+            // TODO JATKA
            /* ArrayList<Chemistry> chemistries = chemistriesMap.get(player.getPlayerId());
             if(chemistries != null) {
                 ArrayList<Chemistry> filtered = getFilteredChemistries(positionsToCompare, chemistries);

@@ -25,6 +25,35 @@ public class JSONService extends FirebaseDatabaseService {
 
     private final static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_28_6.json";
 
+    public static Line getLine(String teamId, String lineId) {
+        Line line = new Line();
+        String result = readFileContent();
+        if(result != null) {
+            JSONObject json = convertToJSONObject(result);
+            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject linesObj = getJSONObject(root, LINES);
+
+            Iterator<String> teams = linesObj.keys();
+            while (teams.hasNext()) {
+                String teamKeyId = teams.next();
+                if(teamKeyId.equals(teamId)) {
+                    JSONObject teamObj = getJSONObject(linesObj, teamKeyId);
+                    Iterator<String> lines = teamObj.keys();
+                    while (lines.hasNext()) {
+                        String lineKeyId = lines.next();
+                        if (lineId.equals(lineKeyId)) {
+                            JSONObject lineObj = getJSONObject(teamObj, lineKeyId);
+                            try {
+                                line = new ObjectMapper().readValue(lineObj.toString(), Line.class);
+                            } catch (IOException e) {}
+                        }
+                    }
+                }
+            }
+        }
+        return line;
+    }
+
     // getPlayersOfLine("-LYDuaJHLYXZBTjVtWjK")
     public static Map<String, String> getPlayersOfLine(String teamId, String lineId) {
         Map<String, String> playerIdMap = new HashMap<>();
