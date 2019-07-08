@@ -3,64 +3,130 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
+    android:focusable="true">
     <LinearLayout
         android:id="@+id/attackers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp">
-        <LinearLayout
+        <include
+            android:id="@+id/card_lw"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.333"
-            android:gravity="center">
-            <include
-                android:id="@+id/card_lw"
-                layout="@layout/container_card_player"/>
-        </LinearLayout>
-        <LinearLayout
+            android:layout_weight="0.5"
+            layout="@layout/container_card_player"/>
+        <TextView
+            android:id="@+id/c_lw_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="20%"
+            android:textColor="@color/color_text_black"
+            android:textSize="20sp"/>
+        <include
+            android:id="@+id/card_c"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.333"
-            android:gravity="center">
-            <include
-                android:id="@+id/card_c"
-                layout="@layout/container_card_player"/>
-        </LinearLayout>
-        <LinearLayout
+            android:layout_weight="0.5"
+            layout="@layout/container_card_player"/>
+        <TextView
+            android:id="@+id/c_rw_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="20%"
+            android:textColor="@color/color_text_black"
+            android:textSize="20sp"/>
+        <include
+            android:id="@+id/card_rw"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.333"
-            android:gravity="center">
-            <include
-                android:id="@+id/card_rw"
-                layout="@layout/container_card_player"/>
-        </LinearLayout>
+            android:layout_weight="0.5"
+            layout="@layout/container_card_player"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/middleChemistryContainer"
+        android:layout_below="@+id/attackers"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="50dp">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"/>
+        <TextView
+            android:id="@+id/ld_lw_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:text="20%"
+            android:textColor="@color/color_text_black"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/c_ld_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:text="20%"
+            android:textColor="@color/color_text_black"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/c_rd_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:text="20%"
+            android:textColor="@color/color_text_black"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/rd_rw_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:text="20%"
+            android:textColor="@color/color_text_black"
+            android:textSize="20sp"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/defenders"
-        android:layout_below="@+id/attackers"
+        android:layout_below="@+id/middleChemistryContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp">
-        <LinearLayout
+        android:layout_height="wrap_content">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"/>
+        <include
+            android:id="@+id/card_ld"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:gravity="center">
-            <include
-                android:id="@+id/card_ld"
-                layout="@layout/container_card_player"/>
-        </LinearLayout>
-        <LinearLayout
+            layout="@layout/container_card_player"/>
+        <TextView
+            android:id="@+id/ld_rd_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="20%"
+            android:textColor="@color/color_text_black"
+            android:textSize="20sp"/>
+        <include
+            android:id="@+id/card_rd"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:gravity="center">
-            <include
-                android:id="@+id/card_rd"
-                layout="@layout/container_card_player"/>
-        </LinearLayout>
+            layout="@layout/container_card_player"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"/>
     </LinearLayout>
 </RelativeLayout>

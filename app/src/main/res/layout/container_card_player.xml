@@ -1,35 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="120dp"
     android:layout_height="wrap_content"
-    android:gravity="center"
     android:clickable="true"
     android:focusable="true">
-
-    <ImageView
-        android:id="@+id/pictureImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:adjustViewBounds="true"
-        android:scaleType="centerInside"
-        android:background="@drawable/default_picture"
-        android:visibility="gone"/>
-
-    <com.ardeapps.floorballcoach.views.IconView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/addIcon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="@string/icon_plus"
-        app:iconFont="@string/icon_solid"
-        app:iconSize="50sp"
-        app:iconColor="@color/color_text_black"/>
-    <TextView
-        android:id="@+id/nameText"
+    <RelativeLayout
+        android:id="@+id/container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+        <RelativeLayout
+            android:id="@+id/pictureContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+            <ImageView
+                android:id="@+id/chemistryBorder"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/circle"
+                android:layout_centerInParent="true"/>
+            <ImageView
+                android:id="@+id/pictureImage"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:background="@drawable/default_picture"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+        <com.ardeapps.floorballcoach.views.IconView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/addIcon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:text="@string/icon_plus"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="60sp"
+            app:iconColor="@color/color_text_black"/>
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_below="@id/container"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:text="Arttu Isopahkala"
         android:textColor="@color/color_text_black"
-        android:textSize="20sp"/>
-</LinearLayout>
+        android:textSize="18sp"/>
+
+</RelativeLayout>

@@ -88,6 +88,7 @@ public class Player {
      * @param playerId not null
      * @return player name or 'Poistettu pelaaja'
      */
+    @Exclude
     public static String getPlayerName(String playerId) {
         Player player = AppRes.getInstance().getPlayers().get(playerId);
         if (player != null) {
@@ -97,6 +98,7 @@ public class Player {
         }
     }
 
+    @Exclude
     public static String getPositionText(String value, boolean shorten) {
         if(value == null) {
             return "";
@@ -117,6 +119,7 @@ public class Player {
         }
     }
 
+    @Exclude
     public static String getTypeText(String value) {
         if(value == null) {
             return "";
@@ -146,6 +149,7 @@ public class Player {
         }
     }
 
+    @Exclude
     public String getNameWithNumber(boolean numberFirst) {
         String name = "";
         if(numberFirst) {

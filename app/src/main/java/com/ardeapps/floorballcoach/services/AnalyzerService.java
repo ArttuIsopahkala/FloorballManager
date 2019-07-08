@@ -1,5 +1,6 @@
 package com.ardeapps.floorballcoach.services;
 
+import com.ardeapps.floorballcoach.objects.Chemistry;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
@@ -143,5 +144,44 @@ public class AnalyzerService {
         Map<Integer, Line> lines = new HashMap<>();
 
         return null;
+    }
+
+    /**
+     * @param line player chemistries from this line are calculated
+     * @param goals team goals where chemistry is calculated
+     * @return chemistries list indexed by playerId
+     *
+     */
+    public static Map<Player.Position, ArrayList<Chemistry>> getPlayerChemistries(Line line, ArrayList<Goal> goals) {
+        Map<Player.Position, ArrayList<Chemistry>> chemistryMap = new HashMap<>();
+
+        if(line != null && line.getPlayerIdMap() != null) {
+            Map<String, String> playersMap = line.getPlayerIdMap();
+            for (Map.Entry<String, String> player : playersMap.entrySet()) {
+                final String position = player.getKey();
+                final String playerId = player.getValue();
+                ArrayList<Chemistry> chemistries = new ArrayList<>();
+
+                for (Map.Entry<String, String> comparePlayer : playersMap.entrySet()) {
+                    String comparedPosition = comparePlayer.getKey();
+                    String comparedPlayerId = comparePlayer.getValue();
+
+                    if(!playerId.equals(comparedPlayerId)) {
+                        Chemistry chemistry = new Chemistry();
+                        chemistry.setPlayerId(playerId);
+                        chemistry.setComparePlayerId(comparedPlayerId);
+                        chemistry.setComparePosition(comparedPosition);
+                        // TODO käytä oikeita chemistry pointseja
+                        chemistry.setChemistryPoints((int)(Math.random() * 100));
+
+                        chemistries.add(chemistry);
+                    }
+                }
+
+                chemistryMap.put(Player.Position.fromDatabaseName(position), chemistries);
+            }
+        }
+
+        return chemistryMap;
     }
 }

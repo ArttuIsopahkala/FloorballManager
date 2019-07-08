@@ -26,7 +26,7 @@ public class JSONService extends FirebaseDatabaseService {
     private final static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_28_6.json";
 
     // getPlayersOfLine("-LYDuaJHLYXZBTjVtWjK")
-    protected Map<String, String> getPlayersOfLine(String teamId, String lineId) {
+    public static Map<String, String> getPlayersOfLine(String teamId, String lineId) {
         Map<String, String> playerIdMap = new HashMap<>();
         String result = readFileContent();
         if(result != null) {
@@ -58,11 +58,11 @@ public class JSONService extends FirebaseDatabaseService {
         return playerIdMap;
     }
 
-    protected Player getPlayer(String playerId) {
+    public static Player getPlayer(String playerId) {
         return getPlayers(Arrays.asList(playerId)).get(0);
     }
 
-    protected ArrayList<Player> getPlayers(List<String> playerIds) {
+    public static ArrayList<Player> getPlayers(List<String> playerIds) {
         ArrayList<Player> playerList = new ArrayList<>();
         String result = readFileContent();
         if(result != null) {
@@ -91,7 +91,7 @@ public class JSONService extends FirebaseDatabaseService {
         return playerList;
     }
 
-    protected ArrayList<Goal> getPlayerGoals(String playerId) {
+    public static ArrayList<Goal> getPlayerGoals(String playerId) {
         ArrayList<Goal> goalsList = new ArrayList<>();
         String result = readFileContent();
         if(result != null) {
@@ -126,7 +126,7 @@ public class JSONService extends FirebaseDatabaseService {
         return goalsList;
     }
 
-    protected ArrayList<Goal> getTeamGoals(String teamId) {
+    public static ArrayList<Goal> getTeamGoals(String teamId) {
         ArrayList<Goal> goalsList = new ArrayList<>();
         String result = readFileContent();
         if(result != null) {
