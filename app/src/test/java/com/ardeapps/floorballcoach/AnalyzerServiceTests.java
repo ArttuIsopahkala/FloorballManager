@@ -94,5 +94,19 @@ public class AnalyzerServiceTests extends JSONService {
         System.out.println(isEmpty);
     }
 
+    @Test
+    public void fastTesting() {
+
+        String teamId = "-LYDu_zW16xskSIhIlOm";
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(getPlayer("-LYDueLQnDlNS3iny3r2"));
+        players.add(getPlayer("-LZf3phcktGRlKYCJYNo"));
+        players.add(getPlayer("-LZf423Q01lgFW8yD5Dl"));
+        players.add(getPlayer("-LZf45PcYqU3sb7p5GFr"));
+        players.add(getPlayer("-LZf4BuzjpwdhZFWX1G5"));
+
+        AnalyzerService.getBestPlayerChemistries(players, getTeamGoals(teamId));
+    }
+
 }
 

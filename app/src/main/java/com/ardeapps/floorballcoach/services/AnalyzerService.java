@@ -26,6 +26,7 @@ public class AnalyzerService {
         // +3 = if playerId has scored and compareId assisted
         // +2 = if playerId has assisted and compareId scored
         // +1 = if compareId and playerId has been on the field when goal happened
+        // -1 = if playerId and compareId has been on the field when goal happened and isOpponentGoal == true
         for(Goal goal : goals) {
 
             List<String> goalPlayerIds = goal.getPlayerIds();
@@ -37,9 +38,9 @@ public class AnalyzerService {
 
             if(goal.isOpponentGoal() && playersInSameLine) {
                 chemistryPoints--;
-            } else if(!goal.isOpponentGoal() && playerId.equals(scorerId) && comparedPlayerId.equals(assistantId)) {
+            } else if(!goal.isOpponentGoal() && (playerId.equals(scorerId) && comparedPlayerId.equals(assistantId) || playerId.equals(assistantId) && comparedPlayerId.equals(scorerId))) {
                 chemistryPoints += 3;
-            } else if(!goal.isOpponentGoal() && comparedPlayerId.equals(scorerId) && playerId.equals(assistantId)) {
+            } else if(!goal.isOpponentGoal() && (playerId.equals(scorerId) || comparedPlayerId.equals(scorerId) || playerId.equals(assistantId) || comparedPlayerId.equals(assistantId))) {
                 chemistryPoints += 2;
             } else if(!goal.isOpponentGoal() && playersInSameLine) {
                 chemistryPoints++;
@@ -128,19 +129,43 @@ public class AnalyzerService {
 
     /**
      * Database path: goalsTeamGame
-     * @param playerIdMap players which chemistries are calculated
+     * @param players All players in a team
      * @param goals team goals where chemistry is calculated
      * @return List on Lines of Players with best chemistries (Integer = Line number)
      *
      * This method should get List of Players and return Lines where are separated players in the way that
      * best chemistries are taken in notice between players and their positions
      *
+     * Something like this:
+     *     bestChemistryPointsCalculation(List<Players> players, List<Goals> goals) {
+     *
+     *     List<Players> centers = players.getCenters();
+     *
+     *     List<PlayerChemistries> playerChemistries = getChemistries() (chemistries between every player)
+     *
+     *     take every center one by one, get 4 highest player chemistryPoints (notice correct positions (LW, RW, LD, RD))
+     *     Calculate best average chemistry for a Line (all positions) from the previous calculation
+     *
+     *     List<Lines> bestLines = create best lines (1. line center and players with average best chemistries between every player
+     *                                                2. second best etc)
+     *
+     *     Can be appended in the future to make best lines for defending (weight to defenders chemistry), goalmaking (weight to forwards chemsitry) etc
+     *
      */
-    public static Map<Integer, Line> getBestPlayerChemistries(Map<String, String> playerIdMap, ArrayList<Goal> goals) {
+    public static Map<Integer, Line> getBestPlayerChemistries(ArrayList<Player> players, ArrayList<Goal> goals) {
         // TODO tee loppuun ja testaa
         // playerIdMap:
         // key = position(Player.Position), value = playerId
-        Map<Integer, Line> lines = new HashMap<>();
+        ArrayList<Player> centers = new ArrayList<>();
+        String centerPosition = "C";
+
+        ArrayList<Chemistry> playerChemistries = getPlayerChemistries(players, goals);
+
+        for (Player player : players) {
+            if(player.getPosition().equals(centerPosition)) {
+                centers.add(player);
+            }
+        }
 
         return null;
     }
