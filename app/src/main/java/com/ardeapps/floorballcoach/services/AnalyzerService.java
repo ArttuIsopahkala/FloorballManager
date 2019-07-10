@@ -6,6 +6,7 @@ import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,25 +29,22 @@ public class AnalyzerService {
         // +1 = if compareId and playerId has been on the field when goal happened
         // -1 = if playerId and compareId has been on the field when goal happened and isOpponentGoal == true
         for(Goal goal : goals) {
+            List<String> comparePlayers = Arrays.asList(playerId, comparedPlayerId);
+            List<String> scorerAndAssistant = Arrays.asList(goal.getScorerId(), goal.getAssistantId());
 
-            List<String> goalPlayerIds = goal.getPlayerIds();
-
-            String scorerId = goal.getScorerId();
-            String assistantId = goal.getAssistantId();
-
-            boolean playersInSameLine = goalPlayerIds != null && goalPlayerIds.contains(playerId) && goalPlayerIds.contains(comparedPlayerId);
-
-            if(goal.isOpponentGoal() && playersInSameLine) {
-                chemistryPoints--;
-            } else if(!goal.isOpponentGoal() && (playerId.equals(scorerId) && comparedPlayerId.equals(assistantId) || playerId.equals(assistantId) && comparedPlayerId.equals(scorerId))) {
-                chemistryPoints += 3;
-            } else if(!goal.isOpponentGoal() && (playerId.equals(scorerId) || comparedPlayerId.equals(scorerId) || playerId.equals(assistantId) || comparedPlayerId.equals(assistantId))) {
-                chemistryPoints += 2;
-            } else if(!goal.isOpponentGoal() && playersInSameLine) {
-                chemistryPoints++;
+            boolean bothPlayersOnField = goal.getPlayerIds() != null && goal.getPlayerIds().containsAll(comparePlayers);
+            if(bothPlayersOnField) {
+                if(goal.isOpponentGoal()) {
+                    chemistryPoints--;
+                } else if(!goal.isOpponentGoal() && scorerAndAssistant.containsAll(comparePlayers)) {
+                    chemistryPoints += 3;
+                } else if(!goal.isOpponentGoal() && (scorerAndAssistant.contains(playerId) || scorerAndAssistant.contains(comparedPlayerId))) {
+                    chemistryPoints += 2;
+                } else if(!goal.isOpponentGoal()) {
+                    chemistryPoints++;
+                }
             }
         }
-
         return chemistryPoints;
     }
 
