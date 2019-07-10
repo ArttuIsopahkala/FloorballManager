@@ -1,5 +1,6 @@
 package com.ardeapps.floorballcoach.services;
 
+import com.ardeapps.floorballcoach.adapters.PlayerListAdapter;
 import com.ardeapps.floorballcoach.objects.Chemistry;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
@@ -155,17 +156,87 @@ public class AnalyzerService {
         // playerIdMap:
         // key = position(Player.Position), value = playerId
         ArrayList<Player> centers = new ArrayList<>();
-        String centerPosition = "C";
+        ArrayList<Player> listOfPlayers = players;
+        Map<Integer, Line> listOfBestLines = new HashMap<>();
 
-        ArrayList<Chemistry> playerChemistries = getPlayerChemistries(players, goals);
+        // don't know if needed ArrayList<Chemistry> playerChemistries = getPlayerChemistries(players, goals);
 
         for (Player player : players) {
-            if(player.getPosition().equals(centerPosition)) {
+            Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
+            if(position == Player.Position.C) {
                 centers.add(player);
             }
         }
 
-        return null;
+        // Remove centers from the listOfPlayers
+        for (Player center : centers) {
+            listOfPlayers.remove(center);
+        }
+
+        for (Player center : centers) {
+            for (Player player : listOfPlayers) {
+
+                int bestChemistryPointsLw = 0;
+                int bestChemistryPointsRw = 0;
+                int bestChemistryPointsLd = 0;
+                int bestChemistryPointsRd = 0;
+
+                Player bestLeftWing = null;
+                Player bestRightWing = null;
+                Player bestLeftDefender = null;
+                Player bestRightDefender = null;
+
+                int playersChemistryPoints = getChemistryPoints(center.getPlayerId(), player.getPlayerId(), goals);
+
+                Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
+                if(position == Player.Position.LW) {
+                    if(bestChemistryPointsLw < playersChemistryPoints) {
+                        bestChemistryPointsLw = playersChemistryPoints;
+                        bestLeftWing = player.clone();
+                    }
+                } else if(position == Player.Position.RW) {
+                    if(bestChemistryPointsRw < playersChemistryPoints) {
+                        bestChemistryPointsRw = playersChemistryPoints;
+                        bestRightWing = player.clone();
+                    }
+                } else if(position == Player.Position.LD) {
+                    if(bestChemistryPointsLd < playersChemistryPoints) {
+                        bestChemistryPointsLd = playersChemistryPoints;
+                        bestLeftDefender = player.clone();
+                    }
+                } else if(position == Player.Position.RD) {
+                    if(bestChemistryPointsRd < playersChemistryPoints) {
+                        bestChemistryPointsRd = playersChemistryPoints;
+                        bestRightDefender = player.clone();
+                    }
+                }
+
+                // Remove players which are added to the line with the center so those are not taken notice
+                // for the next center and new line
+                listOfPlayers.remove(bestLeftWing);
+                listOfPlayers.remove(bestRightWing);
+                listOfPlayers.remove(bestLeftDefender);
+                listOfPlayers.remove(bestRightDefender);
+                centers.remove(center);
+
+                // This shit is here just to be reminder and example
+                Map<String, String> playerIdMap = new HashMap<>();
+                playerIdMap.put(bestLeftWing.getPlayerId(), bestLeftWing.getPosition());
+                playerIdMap.put(bestRightWing.getPlayerId(), bestRightWing.getPosition());
+                playerIdMap.put(bestLeftDefender.getPlayerId(), bestLeftDefender.getPosition());
+                playerIdMap.put(bestRightDefender.getPlayerId(), bestRightDefender.getPosition());
+
+                Line newFirstLine = new Line();
+                newFirstLine.setLineId("asd");
+                newFirstLine.setLineNumber(1);
+                newFirstLine.setPlayerIdMap(playerIdMap);
+
+                listOfBestLines.put(1, newFirstLine);
+
+            }
+        }
+
+        return listOfBestLines;
     }
 
     /**
