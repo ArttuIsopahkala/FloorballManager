@@ -156,23 +156,77 @@ public class AnalyzerService {
         // playerIdMap:
         // key = position(Player.Position), value = playerId
         ArrayList<Player> centers = new ArrayList<>();
-        ArrayList<Player> listOfPlayers = players;
+        Map<String, ArrayList<Chemistry>> centerPlayerChemistriesMap = new HashMap<>();
+        ArrayList<Chemistry> centerPlayerChemistryList = new ArrayList<>();
+        ArrayList<Player> listOfPlayers = new ArrayList<>();
         Map<Integer, Line> listOfBestLines = new HashMap<>();
 
-        // don't know if needed ArrayList<Chemistry> playerChemistries = getPlayerChemistries(players, goals);
+        ArrayList<Chemistry> playerChemistries = getPlayerChemistries(players, goals);
 
+        // Set center to own ArrayList and rest of the players to another
         for (Player player : players) {
             Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
             if(position == Player.Position.C) {
                 centers.add(player);
+            } else {
+                listOfPlayers.add(player);
             }
         }
 
-        // Remove centers from the listOfPlayers
+        // Create Map which contains centers and chemistries between every center individually and every player in other positions
         for (Player center : centers) {
-            listOfPlayers.remove(center);
+            for (Player player : listOfPlayers) {
+                int chemistryPoints = getChemistryPoints(center.getPlayerId(), player.getPlayerId(), goals);
+                Chemistry newChemistry = new Chemistry();
+                newChemistry.setPlayerId(center.getPlayerId());
+                newChemistry.setComparePlayerId(player.getPlayerId());
+                newChemistry.setComparePosition(player.getPosition());
+                newChemistry.setChemistryPoints(chemistryPoints);
+                centerPlayerChemistryList.add(newChemistry);
+            }
+
+            centerPlayerChemistriesMap.put(center.getPlayerId(), centerPlayerChemistryList);
         }
 
+        // TODO Continue from here probably save centerId + centerBestOverallChemistry to Map<String, Integer> or something and get best center from that
+        for (Player center : centers) {
+            ArrayList<Chemistry> chemistries = centerPlayerChemistriesMap.get(center.getPlayerId());
+
+            int centerBestOverallChemistry = 0;
+
+            int bestChemistryPointsLw = 0;
+            int bestChemistryPointsRw = 0;
+            int bestChemistryPointsLd = 0;
+            int bestChemistryPointsRd = 0;
+
+            for (Chemistry chemistry : chemistries) {
+
+                Player.Position position = Player.Position.fromDatabaseName(chemistry.getComparePosition());
+                int playerChemistryPoints = chemistry.getChemistryPoints();
+
+                if(position.equals(Player.Position.LW)) {
+                    if(bestChemistryPointsLw < playerChemistryPoints) {
+                        bestChemistryPointsLw = playerChemistryPoints;
+                    }
+                } else if(position == Player.Position.RW) {
+                    if(bestChemistryPointsRw < playerChemistryPoints) {
+                        bestChemistryPointsRw = playerChemistryPoints;
+                    }
+                } else if(position == Player.Position.LD) {
+                    if(bestChemistryPointsLd < playerChemistryPoints) {
+                        bestChemistryPointsLd = playerChemistryPoints;
+                    }
+                } else if(position == Player.Position.RD) {
+                    if(bestChemistryPointsRd < playerChemistryPoints) {
+                        bestChemistryPointsRd = playerChemistryPoints;
+                    }
+                }
+            }
+
+            centerBestOverallChemistry = bestChemistryPointsLw + bestChemistryPointsRw + bestChemistryPointsLd + bestChemistryPointsRd;
+        }
+
+        // TODO This is old code at the moment just to be reminder will not be used!
         for (Player center : centers) {
             for (Player player : listOfPlayers) {
 
