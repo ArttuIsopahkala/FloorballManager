@@ -253,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onLinesLoaded(Map<Integer, Line> lines) {
                         fragmentData.setLines(lines);
+
                         GoalsByTeamResource.getInstance().getGoals(game.getGameId(), new GetGoalsHandler() {
                             @Override
                             public void onGoalsLoaded(Map<String, Goal> goals) {

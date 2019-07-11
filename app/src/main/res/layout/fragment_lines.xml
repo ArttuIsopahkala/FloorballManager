@@ -13,13 +13,21 @@
         android:background="@color/color_menu"
         android:gravity="center"
         android:padding="15dp"
-        android:text="@string/main_selection_desc"
+        android:text="@string/lineup_title"
         android:textColor="@color/color_text_light"
         android:textSize="15sp" />
-    <com.ardeapps.floorballcoach.views.LineUpSelector
-        android:id="@+id/lineUpSelector"
+    <Button
+        android:id="@+id/analyzeChemistryButton"
         android:layout_below="@+id/infoText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@color/color_background_second"
+        android:text="@string/lineup_analyze"
+        android:textColor="@color/color_text_light" />
 
+    <com.ardeapps.floorballcoach.views.LineUpSelector
+        android:id="@+id/lineUpSelector"
+        android:layout_below="@+id/analyzeChemistryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

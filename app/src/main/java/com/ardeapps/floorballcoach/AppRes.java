@@ -4,11 +4,13 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.ardeapps.floorballcoach.objects.Game;
+import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Team;
 import com.ardeapps.floorballcoach.objects.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +28,9 @@ public class AppRes extends MultiDexApplication {
     private Map<String, Player> players = new HashMap<>();
     private Map<String, Game> games = new HashMap<>();
     private Map<Integer, Line> lines = new HashMap<>();
+    // For analyzer service
+    private Map<String, ArrayList<Goal>> goalsByGame = new HashMap<>();
+    private Map<String, ArrayList<Line>> linesByGame = new HashMap<>();
 
     private static AppRes instance;
 
@@ -147,6 +152,34 @@ public class AppRes extends MultiDexApplication {
         } else {
             lines.remove(lineId);
         }
+    }
+
+    /**
+     * GOALS BY GAME
+     */
+    public void setGoalsByGame(Map<String, ArrayList<Goal>> goalsByGame) {
+        this.goalsByGame = goalsByGame;
+    }
+
+    /**
+     * Get goals indexed by gameId
+     */
+    public Map<String, ArrayList<Goal>> getGoalsByGame() {
+        return goalsByGame;
+    }
+
+    /**
+     * LINES BY GAME
+     */
+    public void setLinesByGame(Map<String, ArrayList<Line>> linesByGame) {
+        this.linesByGame = linesByGame;
+    }
+
+    /**
+     * Get lines indexed by gameId
+     */
+    public Map<String, ArrayList<Line>> linesByGame() {
+        return linesByGame;
     }
 
 }

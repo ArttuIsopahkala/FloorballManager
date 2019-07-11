@@ -1,6 +1,6 @@
 package com.ardeapps.floorballcoach.services;
 
-import com.ardeapps.floorballcoach.adapters.PlayerListAdapter;
+import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.objects.Chemistry;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
@@ -295,12 +295,11 @@ public class AnalyzerService {
 
     /**
      * @param line player chemistries from this line are calculated
-     * @param goals team goals where chemistry is calculated
      * @return chemistries list indexed by playerId
-     *
      */
-    public static Map<Player.Position, ArrayList<Chemistry>> getLineChemistry(Line line, ArrayList<Goal> goals) {
+    public static Map<Player.Position, ArrayList<Chemistry>> getLineChemistry(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines) {
         Map<Player.Position, ArrayList<Chemistry>> chemistryMap = new HashMap<>();
+        ArrayList<Player> players = new ArrayList<>(AppRes.getInstance().getPlayers().values());
 
         if(line != null && line.getPlayerIdMap() != null) {
             Map<String, String> playersMap = line.getPlayerIdMap();
@@ -318,8 +317,8 @@ public class AnalyzerService {
                         chemistry.setPlayerId(playerId);
                         chemistry.setComparePlayerId(comparedPlayerId);
                         chemistry.setComparePosition(comparedPosition);
-                        int chemistryPoints = getChemistryPoints(playerId, comparedPlayerId, goals);
-                        chemistry.setChemistryPoints(chemistryPoints);
+                        int percent = AnalyzerService.getChemistryPointsPercent(playerId, comparedPlayerId, players, goals, lines);
+                        chemistry.setChemistryPoints(percent);
 
                         chemistries.add(chemistry);
                     }
@@ -330,5 +329,119 @@ public class AnalyzerService {
         }
 
         return chemistryMap;
+    }
+
+    /**
+     * @param playerId player to compare against
+     * @param comparedPlayerId player to compare
+     * @param gameGoals indexed by gameId
+     */
+    public static double getChemistryPointsAvg(String playerId, String comparedPlayerId, Map<String, ArrayList<Goal>> gameGoals) {
+        Map<String, Integer> chemistryMap = getChemistryPointsOfGames(playerId, comparedPlayerId, gameGoals);
+
+        int size = chemistryMap.size();
+        if(size == 0) {
+            return 0.0;
+        }
+
+        double sum = 0.0;
+        for (Map.Entry<String, Integer> entry : chemistryMap.entrySet()) {
+            int points = entry.getValue();
+            sum += points;
+        }
+
+        return sum / size;
+    }
+
+    /**
+     * @param playerId player to compare against
+     * @param comparedPlayerId player to compare
+     * @param gameGoals indexed by gameId
+     */
+    public static Map<String, Integer> getChemistryPointsOfGames(String playerId, String comparedPlayerId, Map<String, ArrayList<Goal>> gameGoals) {
+        Map<String, Integer> chemistryMap = new HashMap<>();
+
+        for (Map.Entry<String, ArrayList<Goal>> entry : gameGoals.entrySet()) {
+            final String gameId = entry.getKey();
+            final ArrayList<Goal> goals = entry.getValue();
+            int chemistryPoints = getChemistryPoints(playerId, comparedPlayerId, goals);
+            chemistryMap.put(gameId, chemistryPoints);
+        }
+
+        return chemistryMap;
+    }
+
+    public static int getChemistryPointsPercent(String playerId, String comparePlayerId, ArrayList<Player> players, Map<String, ArrayList<Goal>> teamGoalsMap, Map<String, ArrayList<Line>> teamLinesMap) {
+        int maxPoints = AnalyzerService.getMaxChemistryPoints(players, teamGoalsMap, teamLinesMap);
+        int minPoints = AnalyzerService.getMinChemistryPoints(players, teamGoalsMap, teamLinesMap);
+        ArrayList<Goal> goals = getGoalsWherePlayersInSameLine(playerId, comparePlayerId, teamGoalsMap, teamLinesMap);
+        int points = getChemistryPoints(playerId, comparePlayerId, goals);
+
+        return (int)Math.round((double)points / (maxPoints - minPoints) * 100);
+    }
+
+    public static int getMaxChemistryPoints(ArrayList<Player> players, Map<String, ArrayList<Goal>> gameGoals, Map<String, ArrayList<Line>> linesMap) {
+        int maxPoints = 0;
+        for(Player player : players) {
+            for(Player comparePlayer : players) {
+                if(!player.getPlayerId().equals(comparePlayer.getPlayerId())) {
+                    ArrayList<String> gameIds = getGameIdsWherePlayersInSameLine(player.getPlayerId(), comparePlayer.getPlayerId(), linesMap);
+                    ArrayList<Goal> goals = getGoalsOfGames(gameIds, gameGoals);
+                    int points = getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
+                    if(points > maxPoints) {
+                        maxPoints = points;
+                    }
+                }
+            }
+        }
+        return maxPoints;
+    }
+
+    public static int getMinChemistryPoints(ArrayList<Player> players, Map<String, ArrayList<Goal>> gameGoals, Map<String, ArrayList<Line>> linesMap) {
+        int minPoints = 999;
+        for(Player player : players) {
+            for(Player comparePlayer : players) {
+                if(!player.getPlayerId().equals(comparePlayer.getPlayerId())) {
+                    ArrayList<String> gameIds = getGameIdsWherePlayersInSameLine(player.getPlayerId(), comparePlayer.getPlayerId(), linesMap);
+                    ArrayList<Goal> goals = getGoalsOfGames(gameIds, gameGoals);
+                    int points = getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
+                    if(points < minPoints) {
+                        minPoints = points;
+                    }
+                }
+            }
+        }
+        return minPoints;
+    }
+
+    public static ArrayList<Goal> getGoalsWherePlayersInSameLine(String playerId, String comparePlayerId, Map<String, ArrayList<Goal>> gameGoals, Map<String, ArrayList<Line>> linesMap) {
+        ArrayList<String> gameIds = getGameIdsWherePlayersInSameLine(playerId, comparePlayerId, linesMap);
+        return getGoalsOfGames(gameIds, gameGoals);
+    }
+
+    public static ArrayList<String> getGameIdsWherePlayersInSameLine(String playerId, String comparedPlayerId, Map<String, ArrayList<Line>> linesMap) {
+        List<String> comparePlayers = Arrays.asList(playerId, comparedPlayerId);
+        ArrayList<String> gameIds = new ArrayList<>();
+        for (Map.Entry<String, ArrayList<Line>> entry : linesMap.entrySet()) {
+            final String gameId = entry.getKey();
+            final ArrayList<Line> lines = entry.getValue();
+            for(Line line : lines) {
+                if(line.getPlayerIdMap() != null && line.getPlayerIdMap().values().containsAll(comparePlayers)) {
+                    gameIds.add(gameId);
+                }
+            }
+        }
+        return gameIds;
+    }
+
+    public static ArrayList<Goal> getGoalsOfGames(ArrayList<String> gameIds, Map<String, ArrayList<Goal>> gameGoals) {
+        ArrayList<Goal> goals = new ArrayList<>();
+        for(String gameId : gameIds) {
+            ArrayList<Goal> foundGoals = gameGoals.get(gameId);
+            if(foundGoals != null) {
+                goals.addAll(foundGoals);
+            }
+        }
+        return goals;
     }
 }

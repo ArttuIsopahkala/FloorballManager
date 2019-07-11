@@ -23,7 +23,6 @@ import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Player.Position;
 import com.ardeapps.floorballcoach.services.AnalyzerService;
-import com.ardeapps.floorballcoach.services.JSONService;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
@@ -52,10 +51,27 @@ public class LineFragment extends Fragment implements DataView {
 
     public void update() {
         Line line = data.getLine();
+        setChemistryText(c_lw_text, null);
+        setChemistryText(c_rw_text, null);
+        setChemistryText(c_ld_text, null);
+        setChemistryText(c_rd_text, null);
+        setChemistryText(ld_rd_text, null);
+        setChemistryText(ld_lw_text, null);
+        setChemistryText(rd_rw_text, null);
+
         if(line != null) {
-            // TODO hae oikea data
-            ArrayList<Goal> goals = JSONService.getTeamGoals(AppRes.getInstance().getSelectedTeam().getTeamId());
-            chemistriesMap = AnalyzerService.getLineChemistry(data.getLine(), goals);
+            Map<String, ArrayList<Goal>> goals = AppRes.getInstance().getGoalsByGame();
+            Map<String, ArrayList<Line>> lines = AppRes.getInstance().linesByGame();
+            chemistriesMap = AnalyzerService.getLineChemistry(data.getLine(), goals, lines);
+            // TODO remove this test print
+            for (Map.Entry<Player.Position, ArrayList<Chemistry>> chemistry : chemistriesMap.entrySet()) {
+                Player.Position position = chemistry.getKey();
+                ArrayList<Chemistry> chemistries = chemistry.getValue();
+                System.out.println(position.toDatabaseName());
+                for(Chemistry chem : chemistries) {
+                    System.out.println(chem.getComparePosition() + ": " + chem.getChemistryPoints());
+                }
+            }
 
             Map<Position, Integer> cp = getCompareChemistries(Position.C);
             setChemistryText(c_lw_text, cp.get(Position.LW));
@@ -67,14 +83,6 @@ public class LineFragment extends Fragment implements DataView {
             setChemistryText(ld_lw_text, cp.get(Position.LW));
             cp = getCompareChemistries(Position.RD);
             setChemistryText(rd_rw_text, cp.get(Position.RW));
-        } else {
-            setChemistryText(c_lw_text, null);
-            setChemistryText(c_rw_text, null);
-            setChemistryText(c_ld_text, null);
-            setChemistryText(c_rd_text, null);
-            setChemistryText(ld_rd_text, null);
-            setChemistryText(ld_lw_text, null);
-            setChemistryText(rd_rw_text, null);
         }
 
         setCardView(card_lw, Position.LW);
@@ -101,7 +109,7 @@ public class LineFragment extends Fragment implements DataView {
     private Map<Player.Position, ArrayList<Chemistry>> chemistriesMap = new HashMap<>();
 
     private void setChemistryText(TextView textView, Integer points) {
-        textView.setText(points != null ? String.valueOf(points) : "");
+        textView.setText(points != null ? points + "%" : "");
     }
 
     @Override
@@ -234,7 +242,6 @@ public class LineFragment extends Fragment implements DataView {
             }
         });
     }
-
 
     /**
      * NOTE: Drawable must be set as 'background' in xml to this take effect

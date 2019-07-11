@@ -54,7 +54,7 @@ public class AnalyzerServiceTests extends JSONService {
         String lineId = "-LYDuaJHLYXZBTjVtWjK"; // "1. kenttä"
 
         Line line = getLine(teamId, lineId);
-        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = AnalyzerService.getLineChemistry(line, getTeamGoals(teamId));
+        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = AnalyzerService.getLineChemistry(line, getTeamGoalsByGameId(teamId), getLinesOfGames(teamId));
         for (Map.Entry<Player.Position, ArrayList<Chemistry>> chemistry : lineChemistry.entrySet()) {
             Player.Position position = chemistry.getKey();
             ArrayList<Chemistry> chemistries = chemistry.getValue();
@@ -63,6 +63,48 @@ public class AnalyzerServiceTests extends JSONService {
                 System.out.println(chem.getComparePosition() + ": " + chem.getChemistryPoints());
             }
         }
+    }
+
+    @Test
+    public void testGetChemistryPointsPercent() {
+        String teamId = "-LYDu_zW16xskSIhIlOm"; // "O2 jyväskylä"
+        String playerId = "-LZf45PcYqU3sb7p5GFr";
+        String comparePlayerId = "-LZf4BuzjpwdhZFWX1G5";
+
+        ArrayList<Player> players = getPlayers(teamId);
+        Map<String, ArrayList<Goal>> teamGoals = getTeamGoalsByGameId(teamId);
+        Map<String, ArrayList<Line>> teamLines = getLinesOfGames(teamId);
+
+        double percent = AnalyzerService.getChemistryPointsPercent(playerId, comparePlayerId, players, teamGoals, teamLines);
+        System.out.println("percent: " + percent);
+    }
+
+    @Test
+    public void getMaxAndMinChemistryPoints() {
+        String teamId = "-LYDu_zW16xskSIhIlOm"; // "O2 jyväskylä"
+        ArrayList<Player> players = getPlayers(teamId);
+        Map<String, ArrayList<Goal>> teamGoals = getTeamGoalsByGameId(teamId);
+        Map<String, ArrayList<Line>> teamLines = getLinesOfGames(teamId);
+        int minPoints = AnalyzerService.getMinChemistryPoints(players, teamGoals, teamLines);
+        int maxPoints = AnalyzerService.getMaxChemistryPoints(players, teamGoals, teamLines);
+        System.out.println("maxPoints: " + maxPoints);
+        System.out.println("minPoints: " + minPoints);
+    }
+
+    @Test
+    public void testGetChemistryPointsAvg() {
+        String teamId = "-LYDu_zW16xskSIhIlOm"; // "O2 jyväskylä"
+        String playerId = "-LYDueLQnDlNS3iny3r2";
+        String comparePlayerId = "-LZf423Q01lgFW8yD5Dl";
+
+        Map<String, ArrayList<Goal>> goals = getTeamGoalsByGameId(teamId);
+        Map<String, Integer> chemistryMap = AnalyzerService.getChemistryPointsOfGames(playerId, comparePlayerId, goals);
+        for (Map.Entry<String, Integer> entry : chemistryMap.entrySet()) {
+            int points = entry.getValue();
+            System.out.println(entry.getKey() + ": " + points);
+        }
+        double avg = AnalyzerService.getChemistryPointsAvg(playerId, comparePlayerId, goals);
+        System.out.println("AVG: " + avg);
     }
 
     @Test

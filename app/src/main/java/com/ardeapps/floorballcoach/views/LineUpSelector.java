@@ -91,6 +91,12 @@ public class LineUpSelector extends LinearLayout {
         return lines;
     }
 
+    public void updateLineFragments() {
+        for(LineFragment lineFragment : lineFragments) {
+            lineFragment.update();
+        }
+    }
+
     private LineFragment createLineFragment(final int lineNumber) {
         LineFragment lineFragment = new LineFragment();
         LineFragmentData data = new LineFragmentData();

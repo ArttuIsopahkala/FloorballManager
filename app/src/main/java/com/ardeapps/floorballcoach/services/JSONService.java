@@ -87,6 +87,41 @@ public class JSONService extends FirebaseDatabaseService {
         return playerIdMap;
     }
 
+    public static Map<String, ArrayList<Line>> getLinesOfGames(String teamId) {
+        Map<String, ArrayList<Line>> linesGameIdMap = new HashMap<>();
+        String result = readFileContent();
+        if(result != null) {
+            JSONObject json = convertToJSONObject(result);
+            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject teamsObj = getJSONObject(root, LINES_TEAM_GAME);
+
+            Iterator<String> teams = teamsObj.keys();
+            while (teams.hasNext()) {
+                String teamKeyId = teams.next();
+                if(teamKeyId.equals(teamId)) {
+                    JSONObject gamesObj = getJSONObject(teamsObj, teamKeyId);
+                    Iterator<String> games = gamesObj.keys();
+                    while (games.hasNext()) {
+                        String gameKeyId = games.next();
+                        JSONObject gameObj = getJSONObject(gamesObj, gameKeyId);
+                        Iterator<String> lines = gameObj.keys();
+                        ArrayList<Line> linesList = new ArrayList<>();
+                        while (lines.hasNext()) {
+                            String lineKeyId = lines.next();
+                            JSONObject lineObj = getJSONObject(gameObj, lineKeyId);
+                            try {
+                                Line line = new ObjectMapper().readValue(lineObj.toString(), Line.class);
+                                linesList.add(line);
+                            } catch (IOException e) {}
+                        }
+                        linesGameIdMap.put(gameKeyId, linesList);
+                    }
+                }
+            }
+        }
+        return linesGameIdMap;
+    }
+
     public static Player getPlayer(String playerId) {
         return getPlayers(Arrays.asList(playerId)).get(0);
     }
@@ -114,6 +149,36 @@ public class JSONService extends FirebaseDatabaseService {
                             playerList.add(player);
                         } catch (IOException e) {}
                     }
+                }
+            }
+        }
+        return playerList;
+    }
+
+    public static ArrayList<Player> getPlayers(String teamId) {
+        ArrayList<Player> playerList = new ArrayList<>();
+        String result = readFileContent();
+        if(result != null) {
+            JSONObject json = convertToJSONObject(result);
+            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject teamsNode = getJSONObject(root, PLAYERS);
+
+            Iterator<String> teams = teamsNode.keys();
+            while (teams.hasNext()) {
+                String teamKeyId = teams.next();
+                if(teamKeyId.equals(teamId)) {
+                    JSONObject teamObj = getJSONObject(teamsNode, teamKeyId);
+
+                    Iterator<String> players = teamObj.keys();
+                    while (players.hasNext()) {
+                        String playerKeyId = players.next();
+                        JSONObject value = getJSONObject(teamObj, playerKeyId);
+                        try {
+                            Player player = new ObjectMapper().readValue(value.toString(), Player.class);
+                            playerList.add(player);
+                        } catch (IOException e) {}
+                    }
+                    break;
                 }
             }
         }
@@ -189,6 +254,44 @@ public class JSONService extends FirebaseDatabaseService {
             }
         }
         return goalsList;
+    }
+
+    public static Map<String, ArrayList<Goal>> getTeamGoalsByGameId(String teamId) {
+        Map<String, ArrayList<Goal>> goalsMap = new HashMap<>();
+        String result = readFileContent();
+        if(result != null) {
+            JSONObject json = convertToJSONObject(result);
+            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject goalsTeamGame = getJSONObject(root, GOALS_TEAM_GAME);
+
+            Iterator<String> teams = goalsTeamGame.keys();
+            while (teams.hasNext()) {
+                String teamKeyId = teams.next();
+                if(teamKeyId.equals(teamId)) {
+                    JSONObject teamObj = getJSONObject(goalsTeamGame, teamKeyId);
+
+                    Iterator<String> games = teamObj.keys();
+                    while (games.hasNext()) {
+                        String gameId = games.next();
+                        JSONObject gameObj = getJSONObject(teamObj, gameId);
+
+                        ArrayList<Goal> goalsList = new ArrayList<>();
+                        Iterator<String> goals = gameObj.keys();
+                        while (goals.hasNext()) {
+                            String goalId = goals.next();
+                            JSONObject value = getJSONObject(gameObj, goalId);
+
+                            try {
+                                Goal goal = new ObjectMapper().readValue(value.toString(), Goal.class);
+                                goalsList.add(goal);
+                            } catch (IOException e) {}
+                        }
+                        goalsMap.put(gameId, goalsList);
+                    }
+                }
+            }
+        }
+        return goalsMap;
     }
 
     private static JSONObject convertToJSONObject(String json) {

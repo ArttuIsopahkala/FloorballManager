@@ -1,8 +1,9 @@
 package com.ardeapps.floorballcoach.resources;
 
 import com.ardeapps.floorballcoach.AppRes;
-import com.ardeapps.floorballcoach.handlers.SaveLinesHandler;
 import com.ardeapps.floorballcoach.handlers.GetLinesHandler;
+import com.ardeapps.floorballcoach.handlers.GetTeamLinesHandler;
+import com.ardeapps.floorballcoach.handlers.SaveLinesHandler;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.utils.StringUtils;
@@ -89,6 +90,32 @@ public class LinesTeamGameResource extends FirebaseDatabaseService {
 
     private void removeLine(String gameId, String lineId, final DeleteDataSuccessListener handler) {
         deleteData(database.child(gameId).child(lineId), handler);
+    }
+
+    /**
+     * Get lines indexed by gameId
+     */
+    public void getLines(final GetTeamLinesHandler handler) {
+        getData(database, new GetDataSuccessListener() {
+            @Override
+            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                final Map<String, ArrayList<Line>> linesMap = new HashMap<>();
+                for(DataSnapshot game : dataSnapshot.getChildren()) {
+                    String gameId = game.getKey();
+                    if(gameId != null) {
+                        ArrayList<Line> lines = new ArrayList<>();
+                        for(DataSnapshot snapshot : game.getChildren()) {
+                            Line line = snapshot.getValue(Line.class);
+                            if(line != null) {
+                                lines.add(line);
+                            }
+                        }
+                        linesMap.put(gameId, lines);
+                    }
+                }
+                handler.onTeamLinesLoaded(linesMap);
+            }
+        });
     }
 
     /**

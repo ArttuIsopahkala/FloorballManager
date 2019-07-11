@@ -137,6 +137,9 @@
     <string name="settings_invite_email_subject">Lataappa tämä sovellus!</string>
     <string name="settings_invite_title">Kuinka haluat kutsua kavereita?</string>
 
+    <string name="lineup_title">Oletuskentällisiä ehdotetaan uuden pelin luonnissa.</string>
+    <string name="lineup_analyze">Analysoi pelaajakemiat</string>
+
     <string name="error_invalid_value">Virheellinen arvo.</string>
     <string name="error_empty">Täytä kaikki kentät.</string>
     <string name="error_permission_not_granted">Olet estänyt toiminnon käytön.</string>

@@ -2,11 +2,13 @@ package com.ardeapps.floorballcoach.resources;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.handlers.GetGoalsHandler;
+import com.ardeapps.floorballcoach.handlers.GetTeamGoalsHandler;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,22 +42,27 @@ public class GoalsByTeamResource extends FirebaseDatabaseService {
     }
 
     /**
-     * Get all goals by team indexed by goalId
+     * Get all goals by team indexed by gameId
      */
-    public void getGoals(final GetGoalsHandler handler) {
+    public void getGoals(final GetTeamGoalsHandler handler) {
         getData(database, new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, Goal> goals = new HashMap<>();
+                final Map<String, ArrayList<Goal>> goalsMap = new HashMap<>();
                 for(DataSnapshot game : dataSnapshot.getChildren()) {
-                    for(DataSnapshot snapshot : game.getChildren()) {
-                        final Goal goal = snapshot.getValue(Goal.class);
-                        if(goal != null) {
-                            goals.put(goal.getGoalId(), goal);
+                    String gameId = game.getKey();
+                    if(gameId != null) {
+                        ArrayList<Goal> goals = new ArrayList<>();
+                        for(DataSnapshot snapshot : game.getChildren()) {
+                            final Goal goal = snapshot.getValue(Goal.class);
+                            if(goal != null) {
+                                goals.add(goal);
+                            }
                         }
+                        goalsMap.put(gameId, goals);
                     }
                 }
-                handler.onGoalsLoaded(goals);
+                handler.onTeamGoalsLoaded(goalsMap);
             }
         });
     }
