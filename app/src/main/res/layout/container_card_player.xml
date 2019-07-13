@@ -40,7 +40,16 @@
             app:iconFont="@string/icon_solid"
             app:iconSize="60sp"
             app:iconColor="@color/color_text_black"/>
-
+        <TextView
+            android:id="@+id/avgPercentText"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:text="57%"
+            android:textColor="@color/color_green_light"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
     </RelativeLayout>
     <TextView
         android:id="@+id/nameText"

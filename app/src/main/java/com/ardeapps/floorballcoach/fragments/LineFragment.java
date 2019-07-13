@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.SelectPlayerDialogFragment;
-import com.ardeapps.floorballcoach.objects.Chemistry;
+import com.ardeapps.floorballcoach.objects.Chemistry.ChemistryConnection;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
@@ -30,23 +30,34 @@ import com.ardeapps.floorballcoach.viewObjects.LineFragmentData;
 import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 
 public class LineFragment extends Fragment implements DataView {
 
     public interface Listener {
-        void onLineChanged(Line line, String playerId);
+        void onPlayerAdded(Line line, String playerId);
     }
 
     Listener mListener = null;
 
     public void setListener(Listener l) {
         mListener = l;
+    }
+
+    private LineFragmentData data;
+    Map<Position, Integer> closestChemistries;
+    Map<ChemistryConnection, Integer> chemistryConnections;
+
+    @Override
+    public void setData(Object viewData) {
+        data = (LineFragmentData) viewData;
+    }
+
+    @Override
+    public LineFragmentData getData() {
+        return data;
     }
 
     public void update() {
@@ -62,27 +73,18 @@ public class LineFragment extends Fragment implements DataView {
         if(line != null) {
             Map<String, ArrayList<Goal>> goals = AppRes.getInstance().getGoalsByGame();
             Map<String, ArrayList<Line>> lines = AppRes.getInstance().linesByGame();
-            chemistriesMap = AnalyzerService.getLineChemistry(data.getLine(), goals, lines);
-            // TODO remove this test print
-            for (Map.Entry<Player.Position, ArrayList<Chemistry>> chemistry : chemistriesMap.entrySet()) {
-                Player.Position position = chemistry.getKey();
-                ArrayList<Chemistry> chemistries = chemistry.getValue();
-                System.out.println(position.toDatabaseName());
-                for(Chemistry chem : chemistries) {
-                    System.out.println(chem.getComparePosition() + ": " + chem.getChemistryPoints());
-                }
-            }
+            ArrayList<Player> players = new ArrayList<>(AppRes.getInstance().getPlayers().values());
+            closestChemistries = AnalyzerService.getClosestChemistries(data.getLine(), goals, lines, players);
+            Logger.toast(closestChemistries.get(Position.LW));
+            chemistryConnections = AnalyzerService.getChemistryConnections(data.getLine(), goals, lines, players);
 
-            Map<Position, Integer> cp = getCompareChemistries(Position.C);
-            setChemistryText(c_lw_text, cp.get(Position.LW));
-            setChemistryText(c_rw_text, cp.get(Position.RW));
-            setChemistryText(c_ld_text, cp.get(Position.LD));
-            setChemistryText(c_rd_text, cp.get(Position.RD));
-            cp = getCompareChemistries(Position.LD);
-            setChemistryText(ld_rd_text, cp.get(Position.RD));
-            setChemistryText(ld_lw_text, cp.get(Position.LW));
-            cp = getCompareChemistries(Position.RD);
-            setChemistryText(rd_rw_text, cp.get(Position.RW));
+            setChemistryText(c_lw_text, chemistryConnections.get(ChemistryConnection.C_LW));
+            setChemistryText(c_rw_text, chemistryConnections.get(ChemistryConnection.C_RW));
+            setChemistryText(c_ld_text, chemistryConnections.get(ChemistryConnection.C_LD));
+            setChemistryText(c_rd_text, chemistryConnections.get(ChemistryConnection.C_RD));
+            setChemistryText(ld_rd_text, chemistryConnections.get(ChemistryConnection.LD_RD));
+            setChemistryText(ld_lw_text, chemistryConnections.get(ChemistryConnection.LD_LW));
+            setChemistryText(rd_rw_text, chemistryConnections.get(ChemistryConnection.RD_RW));
         }
 
         setCardView(card_lw, Position.LW);
@@ -105,21 +107,8 @@ public class LineFragment extends Fragment implements DataView {
     RelativeLayout card_ld;
     RelativeLayout card_rd;
 
-    private LineFragmentData data;
-    private Map<Player.Position, ArrayList<Chemistry>> chemistriesMap = new HashMap<>();
-
     private void setChemistryText(TextView textView, Integer points) {
         textView.setText(points != null ? points + "%" : "");
-    }
-
-    @Override
-    public void setData(Object viewData) {
-        data = (LineFragmentData) viewData;
-    }
-
-    @Override
-    public LineFragmentData getData() {
-        return data;
     }
 
     @Override
@@ -154,6 +143,7 @@ public class LineFragment extends Fragment implements DataView {
         ImageView pictureImage = card.findViewById(R.id.pictureImage);
         IconView addIcon = card.findViewById(R.id.addIcon);
         TextView nameText = card.findViewById(R.id.nameText);
+        TextView avgPercentText = card.findViewById(R.id.avgPercentText);
 
         // Default view
         addIcon.setClickable(false);
@@ -171,7 +161,7 @@ public class LineFragment extends Fragment implements DataView {
 
                 Player player = AppRes.getInstance().getPlayers().get(playerId);
 
-                setChemistryColorBorder(chemistryBorder, player);
+                setChemistryColorBorder(avgPercentText, chemistryBorder, player);
                 if(player == null) {
                     // Poistettu pelaaja
                     nameText.setText(getString(R.string.removed_player));
@@ -216,7 +206,9 @@ public class LineFragment extends Fragment implements DataView {
 
                         line.getPlayerIdMap().put(pos, playerId);
 
-                        mListener.onLineChanged(line, playerId);
+                        data.setLine(line);
+                        update();
+                        mListener.onPlayerAdded(line, playerId);
                     }
 
                     @Override
@@ -235,8 +227,13 @@ public class LineFragment extends Fragment implements DataView {
                         }
 
                         line.getPlayerIdMap().remove(pos);
+                        if(line.getPlayerIdMap().isEmpty()) {
+                            Logger.toast("KENTTÄ NULL");
+                            line = null;
+                        }
 
-                        mListener.onLineChanged(line, playerId);
+                        data.setLine(line);
+                        update();
                     }
                 });
             }
@@ -247,57 +244,21 @@ public class LineFragment extends Fragment implements DataView {
      * NOTE: Drawable must be set as 'background' in xml to this take effect
      * @param view border ImageView
      */
-    private void setChemistryColorBorder(ImageView view, Player player) {
+    private void setChemistryColorBorder(TextView avgPercentText, ImageView view, Player player) {
         // TODO tee loppuun
         int color = R.color.color_background; // Default color
+        String percentText = "";
         if(player != null) {
-            //AnalyzerService.getPlayerChemistries(player, )
-            List<Position> positionsToCompare = new ArrayList<>();
+            Integer percent;
+
             Position position = Position.fromDatabaseName(player.getPosition());
-            if(position == Position.LW) {
-                positionsToCompare = Arrays.asList(Position.C, Position.LD);
-            } else if(position == Position.C) {
-                positionsToCompare = Arrays.asList(Position.LW, Position.RW, Position.LD, Position.RD);
-            } else if(position == Position.RW) {
-                positionsToCompare = Arrays.asList(Position.C, Position.RD);
-            } else if(position == Position.LD) {
-                positionsToCompare = Arrays.asList(Position.C, Position.LW);
-            } else if(position == Position.RD) {
-                positionsToCompare = Arrays.asList(Position.C, Position.RW);
-            }
+            percent = closestChemistries.get(position);
 
-            double chemistryCount = 0;
-            double compareCount = 0;
-            Map<Position, Integer> chemistryPoints = getCompareChemistries(position);
-            for(Position comparePos : positionsToCompare) {
-                Integer points = chemistryPoints.get(comparePos);
-                if(points != null) {
-                    Logger.log(position.toDatabaseName() + ": comp: " + comparePos.toDatabaseName() + " " +points);
-                    compareCount++;
-                    chemistryCount += points;
+            if(percent != null) {
+                if(position == Position.LW) {
+                    Logger.toast(percent + "%"); // Tähän tulee oikein 32%??
                 }
-            }
-            int percent = (int)Math.round(chemistryCount / compareCount);
-
-            if(percent > 0 && percent <= 33) {
-                color = R.color.color_red_light;
-            } else if(percent > 33 && percent <= 66) {
-                color = R.color.color_orange_light;
-            } else if(percent > 66 && percent <= 100) {
-                color = R.color.color_green_light;
-            }
-
-            Logger.log(position.toDatabaseName() + ": " + percent + "%");
-            // TODO JATKA
-           /* ArrayList<Chemistry> chemistries = chemistriesMap.get(player.getPlayerId());
-            if(chemistries != null) {
-                ArrayList<Chemistry> filtered = getFilteredChemistries(positionsToCompare, chemistries);
-                for(Chemistry chemistry : filtered) {
-                    chemistryCount += chemistry.getChemistryPoints();
-                }
-
-                int percent = (int)Math.round(chemistryCount / filtered.size());
-
+                percentText = percent + "%";
                 if(percent > 0 && percent <= 33) {
                     color = R.color.color_red_light;
                 } else if(percent > 33 && percent <= 66) {
@@ -305,7 +266,9 @@ public class LineFragment extends Fragment implements DataView {
                 } else if(percent > 66 && percent <= 100) {
                     color = R.color.color_green_light;
                 }
-            }*/
+            }
+
+            Logger.log(position.toDatabaseName() + ": " + percent + "%");
         }
 
         Drawable background = view.getBackground();
@@ -316,34 +279,8 @@ public class LineFragment extends Fragment implements DataView {
         } else if (background instanceof ColorDrawable) {
             ((ColorDrawable)background).setColor(ContextCompat.getColor(AppRes.getContext(), color));
         }
-    }
 
-    /**
-     * @param position
-     * @return chemistry points indexed by compared positions
-     */
-    private Map<Position, Integer> getCompareChemistries(Position position) {
-        Map<Position, Integer> chemistryPoints = new HashMap<>();
-        ArrayList<Chemistry> chemistries = chemistriesMap.get(position);
-        if(chemistries != null) {
-            for(Chemistry chemistry : chemistries) {
-                Position comparePosition = Position.fromDatabaseName(chemistry.getComparePosition());
-                chemistryPoints.put(comparePosition, chemistry.getChemistryPoints());
-            }
-        }
-
-        return chemistryPoints;
-    }
-
-    private ArrayList<Chemistry> getFilteredChemistries(List<Position> positions, ArrayList<Chemistry> chemistries) {
-        ArrayList<Chemistry> filtered = new ArrayList<>();
-        for(Chemistry chemistry : chemistries) {
-            Position position = Position.fromDatabaseName(chemistry.getComparePosition());
-            if(positions.contains(position)) {
-                filtered.add(chemistry);
-            }
-        }
-        return filtered;
+        avgPercentText.setText(percentText);
     }
 
 }

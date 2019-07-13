@@ -139,14 +139,6 @@ public class GameSettingsFragment extends Fragment implements DataView {
             lineUpSelector.setLines(data.getLines());
         }
 
-        lineUpSelector.setListener(new LineUpSelector.Listener() {
-
-            @Override
-            public void onLinesChanged() {
-                // Not needed
-            }
-        });
-
         changeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

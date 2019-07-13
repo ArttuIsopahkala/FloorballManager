@@ -26,12 +26,6 @@ import java.util.Map;
 
 public class LineUpSelector extends LinearLayout {
 
-    private Listener mListener = null;
-
-    public interface Listener {
-        void onLinesChanged();
-    }
-
     TabLayout tabLayout;
     ViewPager linesPager;
     LinesPagerAdapter linesAdapter;
@@ -44,10 +38,6 @@ public class LineUpSelector extends LinearLayout {
 
     public LineUpSelector(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public void setListener(Listener listener) {
-        this.mListener = listener;
     }
 
     public void createView(Fragment parent) {
@@ -71,7 +61,7 @@ public class LineUpSelector extends LinearLayout {
     }
 
     public void setLines(Map<Integer, Line> lines) {
-        this.lines = lines;
+        this.lines = new HashMap<>(lines);
         for(LineFragment lineFragment : lineFragments) {
             LineFragmentData data = lineFragment.getData();
             Line line = lines.get(data.getLineNumber());
@@ -105,7 +95,7 @@ public class LineUpSelector extends LinearLayout {
         lineFragment.setListener(new LineFragment.Listener() {
 
             @Override
-            public void onLineChanged(Line line, String playerId) {
+            public void onPlayerAdded(Line line, String playerId) {
                 // Remove old player if he is in other lines
                 for(final Line existingLine : lines.values()) {
                     if(lineNumber != existingLine.getLineNumber()) {
@@ -119,10 +109,8 @@ public class LineUpSelector extends LinearLayout {
                         }
                     }
                 }
+                // Refresh state of lines
                 lines.put(lineNumber, line);
-
-                linesAdapter.updateLineFragment(line);
-                mListener.onLinesChanged();
             }
         });
 

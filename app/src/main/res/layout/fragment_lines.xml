@@ -16,18 +16,43 @@
         android:text="@string/lineup_title"
         android:textColor="@color/color_text_light"
         android:textSize="15sp" />
-    <Button
-        android:id="@+id/analyzeChemistryButton"
+    <LinearLayout
+        android:id="@+id/buttonsContainer"
         android:layout_below="@+id/infoText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_background_second"
-        android:text="@string/lineup_analyze"
-        android:textColor="@color/color_text_light" />
-
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/analyzeChemistryButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_margin="5dp"
+            android:background="@color/color_background_second"
+            android:text="@string/lineup_analyze"
+            android:textColor="@color/color_text_light"/>
+        <Button
+            android:id="@+id/getBestLinesButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_margin="5dp"
+            android:background="@color/color_background_second"
+            android:text="@string/lineup_best_lines"
+            android:textColor="@color/color_text_light" />
+    </LinearLayout>
     <com.ardeapps.floorballcoach.views.LineUpSelector
         android:id="@+id/lineUpSelector"
-        android:layout_below="@+id/analyzeChemistryButton"
+        android:layout_below="@+id/buttonsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_below="@+id/lineUpSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/color_background_second"
+        android:text="@string/save"
+        android:textColor="@color/color_text_light" />
 </RelativeLayout>

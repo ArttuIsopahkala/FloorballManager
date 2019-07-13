@@ -2,8 +2,18 @@ package com.ardeapps.floorballcoach.objects;
 
 public class Chemistry {
 
+    public enum ChemistryConnection {
+        C_LW,
+        C_RW,
+        C_LD,
+        C_RD,
+        LD_RD,
+        LD_LW,
+        RD_RW
+    }
+
     private String playerId;
-    private String comparePosition;
+    private Player.Position comparePosition;
     private String comparePlayerId;
     private int chemistryPoints;
 
@@ -18,11 +28,11 @@ public class Chemistry {
         this.playerId = playerId;
     }
 
-    public String getComparePosition() {
+    public Player.Position getComparePosition() {
         return comparePosition;
     }
 
-    public void setComparePosition(String comparePosition) {
+    public void setComparePosition(Player.Position comparePosition) {
         this.comparePosition = comparePosition;
     }
 

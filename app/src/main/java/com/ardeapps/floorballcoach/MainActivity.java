@@ -50,6 +50,7 @@ import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.viewObjects.GameFragmentData;
 import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
+import com.ardeapps.floorballcoach.viewObjects.LinesFragmentData;
 import com.ardeapps.floorballcoach.views.IconView;
 import com.ardeapps.floorballcoach.views.Loader;
 import com.google.firebase.auth.FirebaseAuth;
@@ -236,7 +237,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void goToLinesFragment() {
-                linesFragment.refreshData();
+                LinesFragmentData data = new LinesFragmentData();
+                data.setLines(AppRes.getInstance().getLines());
+                linesFragment.setData(data);
                 switchToFragment(linesFragment);
             }
 
@@ -343,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void refreshLinesFragment() {
-                linesFragment.refreshData();
+
             }
         });
 
@@ -429,7 +432,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(f instanceof GamesFragment) {
             titleText.setText(R.string.title_games);
         } else if(f instanceof GameSettingsFragment) {
-            titleText.setText(R.string.title_settings);
+            titleText.setText(R.string.title_game_settings);
         } else if(f instanceof TypesInfoFragment) {
             settingsIcon.setVisibility(View.GONE);
             titleText.setText(R.string.title_type);

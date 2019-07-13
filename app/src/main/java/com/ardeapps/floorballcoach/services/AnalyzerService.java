@@ -1,10 +1,12 @@
 package com.ardeapps.floorballcoach.services;
 
-import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.objects.Chemistry;
+import com.ardeapps.floorballcoach.objects.Chemistry.ChemistryConnection;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
+import com.ardeapps.floorballcoach.objects.Player.Position;
+import com.ardeapps.floorballcoach.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,7 +118,7 @@ public class AnalyzerService {
                     int chemistryPoints = getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
                     chemistry.setChemistryPoints(chemistryPoints);
                     chemistry.setComparePlayerId(comparePlayer.getPlayerId());
-                    chemistry.setComparePosition(comparePlayer.getPosition());
+                    chemistry.setComparePosition(Position.fromDatabaseName(comparePlayer.getPosition()));
                 }
             }
 
@@ -165,8 +167,8 @@ public class AnalyzerService {
 
         // Set center to own ArrayList and rest of the players to another
         for (Player player : players) {
-            Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
-            if(position == Player.Position.C) {
+            Position position = Position.fromDatabaseName(player.getPosition());
+            if(position == Position.C) {
                 centers.add(player);
             } else {
                 listOfPlayers.add(player);
@@ -180,7 +182,7 @@ public class AnalyzerService {
                 Chemistry newChemistry = new Chemistry();
                 newChemistry.setPlayerId(center.getPlayerId());
                 newChemistry.setComparePlayerId(player.getPlayerId());
-                newChemistry.setComparePosition(player.getPosition());
+                newChemistry.setComparePosition(Position.fromDatabaseName(player.getPosition()));
                 newChemistry.setChemistryPoints(chemistryPoints);
                 centerPlayerChemistryList.add(newChemistry);
             }
@@ -201,22 +203,22 @@ public class AnalyzerService {
 
             for (Chemistry chemistry : chemistries) {
 
-                Player.Position position = Player.Position.fromDatabaseName(chemistry.getComparePosition());
+                Position position = chemistry.getComparePosition();
                 int playerChemistryPoints = chemistry.getChemistryPoints();
 
-                if(position.equals(Player.Position.LW)) {
+                if(position.equals(Position.LW)) {
                     if(bestChemistryPointsLw < playerChemistryPoints) {
                         bestChemistryPointsLw = playerChemistryPoints;
                     }
-                } else if(position == Player.Position.RW) {
+                } else if(position == Position.RW) {
                     if(bestChemistryPointsRw < playerChemistryPoints) {
                         bestChemistryPointsRw = playerChemistryPoints;
                     }
-                } else if(position == Player.Position.LD) {
+                } else if(position == Position.LD) {
                     if(bestChemistryPointsLd < playerChemistryPoints) {
                         bestChemistryPointsLd = playerChemistryPoints;
                     }
-                } else if(position == Player.Position.RD) {
+                } else if(position == Position.RD) {
                     if(bestChemistryPointsRd < playerChemistryPoints) {
                         bestChemistryPointsRd = playerChemistryPoints;
                     }
@@ -242,23 +244,23 @@ public class AnalyzerService {
 
                 int playersChemistryPoints = getChemistryPoints(center.getPlayerId(), player.getPlayerId(), goals);
 
-                Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
-                if(position == Player.Position.LW) {
+                Position position = Position.fromDatabaseName(player.getPosition());
+                if(position == Position.LW) {
                     if(bestChemistryPointsLw < playersChemistryPoints) {
                         bestChemistryPointsLw = playersChemistryPoints;
                         bestLeftWing = player.clone();
                     }
-                } else if(position == Player.Position.RW) {
+                } else if(position == Position.RW) {
                     if(bestChemistryPointsRw < playersChemistryPoints) {
                         bestChemistryPointsRw = playersChemistryPoints;
                         bestRightWing = player.clone();
                     }
-                } else if(position == Player.Position.LD) {
+                } else if(position == Position.LD) {
                     if(bestChemistryPointsLd < playersChemistryPoints) {
                         bestChemistryPointsLd = playersChemistryPoints;
                         bestLeftDefender = player.clone();
                     }
-                } else if(position == Player.Position.RD) {
+                } else if(position == Position.RD) {
                     if(bestChemistryPointsRd < playersChemistryPoints) {
                         bestChemistryPointsRd = playersChemistryPoints;
                         bestRightDefender = player.clone();
@@ -294,12 +296,102 @@ public class AnalyzerService {
     }
 
     /**
+     * @param line which players are calculated
+     * @param goals all team goals
+     * @param lines lines in games
+     * @param players all players in team
+     * @return chemistry percent for chemistry lines and texts in UI
+     */
+    public static Map<ChemistryConnection, Integer> getChemistryConnections(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines, ArrayList<Player> players) {
+        Map<Position, ArrayList<Chemistry>> chemistryMap = getChemistriesInLineByPosition(line, goals, lines, players);
+
+        Map<ChemistryConnection, Integer> chemistryConnections = new HashMap<>();
+
+        // C
+        Map<Position, Integer> compareChemistryMap = getConvertCompareChemistryPointsForPosition(Position.C, chemistryMap);
+        Integer chemistry = compareChemistryMap.get(Position.LW);
+        if(chemistry != null) {
+            chemistryConnections.put(ChemistryConnection.C_LW, chemistry);
+        }
+        chemistry = compareChemistryMap.get(Position.RW);
+        if(chemistry != null) {
+            chemistryConnections.put(ChemistryConnection.C_RW, chemistry);
+        }
+        chemistry = compareChemistryMap.get(Position.LD);
+        if(chemistry != null) {
+            chemistryConnections.put(ChemistryConnection.C_RD, chemistry);
+        }
+        chemistry = compareChemistryMap.get(Position.RD);
+        if(chemistry != null) {
+            chemistryConnections.put(ChemistryConnection.C_RD, chemistry);
+        }
+
+        // LD
+        compareChemistryMap = getConvertCompareChemistryPointsForPosition(Position.LD, chemistryMap);
+        chemistry = compareChemistryMap.get(Position.RD);
+        if(chemistry != null) {
+            chemistryConnections.put(ChemistryConnection.LD_RD, chemistry);
+        }
+        chemistry = compareChemistryMap.get(Position.RD);
+        if(chemistry != null) {
+            chemistryConnections.put(ChemistryConnection.LD_LW, chemistry);
+        }
+
+        // RD
+        compareChemistryMap = getConvertCompareChemistryPointsForPosition(Position.RD, chemistryMap);
+        chemistry = compareChemistryMap.get(Position.RW);
+        if(chemistry != null) {
+            chemistryConnections.put(ChemistryConnection.RD_RW, chemistry);
+        }
+
+        return chemistryConnections;
+    }
+
+    /**
+     * @param line which players are calculated
+     * @param goals all team goals
+     * @param lines lines in games
+     * @param players all players in team
+     * @return average chemistry percent to closest players indexed by position
+     */
+    public static Map<Position, Integer> getClosestChemistries(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines, ArrayList<Player> players) {
+        Map<Position, ArrayList<Chemistry>> chemistryMap = getChemistriesInLineByPosition(line, goals, lines, players);
+
+        // Map contains closest players -> can make calculation straight
+        Map<Position, ArrayList<Chemistry>> filteredMap = getFilteredChemistryMapToClosestPlayers(chemistryMap);
+
+        Map<Position, Integer> closestChemistries = new HashMap<>();
+
+        // Calculate average points
+        for (Map.Entry<Position, ArrayList<Chemistry>> entry : filteredMap.entrySet()) {
+            Position position = entry.getKey();
+            ArrayList<Chemistry> chemistries = entry.getValue();
+
+            double chemistryCount = 0;
+            double chemistrySize = chemistries.size();
+            for(Chemistry chemistry : chemistries) {
+                if(position == Position.LW) {
+                    Logger.log("LW " + chemistry.getComparePosition() + ": " +chemistry.getChemistryPoints());
+                }
+                chemistryCount += chemistry.getChemistryPoints();
+            }
+
+            int percent = (int)Math.round(chemistryCount / chemistrySize);
+            if(position == Position.LW) {
+                Logger.log("LW percent: " + percent + " " + chemistryCount + "/" + chemistrySize);
+            }
+            closestChemistries.put(position, percent);
+        }
+
+        return closestChemistries;
+    }
+
+    /**
      * @param line player chemistries from this line are calculated
      * @return chemistries list indexed by playerId
      */
-    public static Map<Player.Position, ArrayList<Chemistry>> getLineChemistry(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines) {
+    public static Map<Player.Position, ArrayList<Chemistry>> getChemistriesInLineByPosition(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines, ArrayList<Player> players) {
         Map<Player.Position, ArrayList<Chemistry>> chemistryMap = new HashMap<>();
-        ArrayList<Player> players = new ArrayList<>(AppRes.getInstance().getPlayers().values());
 
         if(line != null && line.getPlayerIdMap() != null) {
             Map<String, String> playersMap = line.getPlayerIdMap();
@@ -309,7 +401,7 @@ public class AnalyzerService {
                 ArrayList<Chemistry> chemistries = new ArrayList<>();
 
                 for (Map.Entry<String, String> comparePlayer : playersMap.entrySet()) {
-                    String comparedPosition = comparePlayer.getKey();
+                    Position comparedPosition = Position.fromDatabaseName(comparePlayer.getKey());
                     String comparedPlayerId = comparePlayer.getValue();
 
                     if(!playerId.equals(comparedPlayerId)) {
@@ -329,6 +421,51 @@ public class AnalyzerService {
         }
 
         return chemistryMap;
+    }
+
+    public static Map<Position, ArrayList<Chemistry>> getFilteredChemistryMapToClosestPlayers(Map<Position, ArrayList<Chemistry>> chemistryMap) {
+        Map<Position, ArrayList<Chemistry>> filteredMap = new HashMap<>();
+
+        for (Map.Entry<Position, ArrayList<Chemistry>> entry : chemistryMap.entrySet()) {
+            Position position = entry.getKey();
+            ArrayList<Chemistry> chemistries = entry.getValue();
+
+            List<Position> closestPositions = new ArrayList<>();
+            if(position == Position.LW) {
+                closestPositions = Arrays.asList(Position.C, Position.LD);
+            } else if(position == Position.C) {
+                closestPositions = Arrays.asList(Position.LW, Position.RW, Position.LD, Position.RD);
+            } else if(position == Position.RW) {
+                closestPositions = Arrays.asList(Position.C, Position.RD);
+            } else if(position == Position.LD) {
+                closestPositions = Arrays.asList(Position.C, Position.LW);
+            } else if(position == Position.RD) {
+                closestPositions = Arrays.asList(Position.C, Position.RW);
+            }
+
+            ArrayList<Chemistry> filteredChemistries = new ArrayList<>();
+            for(Chemistry chemistry : chemistries) {
+                if(closestPositions.contains(chemistry.getComparePosition())) {
+                    filteredChemistries.add(chemistry);
+                }
+            }
+            filteredMap.put(position, filteredChemistries);
+        }
+
+        return filteredMap;
+    }
+
+    private static Map<Position, Integer> getConvertCompareChemistryPointsForPosition(Position position, Map<Position, ArrayList<Chemistry>> chemistryMap) {
+        Map<Position, Integer> chemistryPoints = new HashMap<>();
+        ArrayList<Chemistry> chemistries = chemistryMap.get(position);
+        if(chemistries != null) {
+            for(Chemistry chemistry : chemistries) {
+                Position comparePosition = chemistry.getComparePosition();
+                chemistryPoints.put(comparePosition, chemistry.getChemistryPoints());
+            }
+        }
+
+        return chemistryPoints;
     }
 
     /**
@@ -398,7 +535,7 @@ public class AnalyzerService {
     }
 
     public static int getMinChemistryPoints(ArrayList<Player> players, Map<String, ArrayList<Goal>> gameGoals, Map<String, ArrayList<Line>> linesMap) {
-        int minPoints = 999;
+        int minPoints = 999; // TODO
         for(Player player : players) {
             for(Player comparePlayer : players) {
                 if(!player.getPlayerId().equals(comparePlayer.getPlayerId())) {

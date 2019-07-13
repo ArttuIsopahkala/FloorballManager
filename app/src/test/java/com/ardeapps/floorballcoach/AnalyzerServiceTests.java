@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class AnalyzerServiceTests extends JSONService {
+
     @Test
     public void isChemistryPointsCorrect() {
 
@@ -54,13 +55,12 @@ public class AnalyzerServiceTests extends JSONService {
         String lineId = "-LYDuaJHLYXZBTjVtWjK"; // "1. kenttä"
 
         Line line = getLine(teamId, lineId);
-        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = AnalyzerService.getLineChemistry(line, getTeamGoalsByGameId(teamId), getLinesOfGames(teamId));
+        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = AnalyzerService.getChemistriesInLineByPosition(line, getTeamGoalsByGameId(teamId), getLinesOfGames(teamId), getPlayers(teamId));
         for (Map.Entry<Player.Position, ArrayList<Chemistry>> chemistry : lineChemistry.entrySet()) {
             Player.Position position = chemistry.getKey();
             ArrayList<Chemistry> chemistries = chemistry.getValue();
-            System.out.println(position.toDatabaseName());
             for(Chemistry chem : chemistries) {
-                System.out.println(chem.getComparePosition() + ": " + chem.getChemistryPoints());
+                System.out.println(position.toDatabaseName() + " -> " + chem.getComparePosition() + ": " + chem.getChemistryPoints());
             }
         }
     }

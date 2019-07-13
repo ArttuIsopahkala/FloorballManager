@@ -6,14 +6,11 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
         <TextView
             android:id="@+id/infoText"
             android:layout_width="match_parent"
@@ -42,21 +39,12 @@
             android:background="@color/color_background_second"
             android:text="@string/main_selection_add_team"
             android:textColor="@color/color_text_light" />
-            <ListView
-                android:id="@+id/teamList"
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@null"
-                android:dividerHeight="3dp" />
-        <Button
-            android:id="@+id/addPlayerButton"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+        <ListView
+            android:id="@+id/teamList"
             android:layout_marginTop="20dp"
-            android:background="@color/color_background_second"
-            android:text="@string/main_selection_add_player"
-            android:textColor="@color/color_text_light" />
-        </LinearLayout>
-    </ScrollView>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            android:dividerHeight="3dp" />
+    </LinearLayout>
 </RelativeLayout>

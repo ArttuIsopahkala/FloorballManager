@@ -68,6 +68,7 @@
     <string name="title_edit_player">Muokkaa pelaajaa</string>
     <string name="title_manage_players">Hallitse joukkueen pelaajia</string>
     <string name="title_settings">Asetukset</string>
+    <string name="title_game_settings">Ottelun asetukset</string>
     <string name="title_lines">Kentälliset</string>
     <string name="title_lines_default">Oletuskentälliset</string>
     <string name="title_game">Ottelu</string>
@@ -139,6 +140,9 @@
 
     <string name="lineup_title">Oletuskentällisiä ehdotetaan uuden pelin luonnissa.</string>
     <string name="lineup_analyze">Analysoi pelaajakemiat</string>
+    <string name="lineup_best_lines">Hae parhaat kentälliset</string>
+    <string name="lineup_lines_saved">Kentälliset tallennettu!</string>
+    <string name="lineup_lines_changed">Kentälliset muuttuivat. Tallennetaanko?</string>
 
     <string name="error_invalid_value">Virheellinen arvo.</string>
     <string name="error_empty">Täytä kaikki kentät.</string>

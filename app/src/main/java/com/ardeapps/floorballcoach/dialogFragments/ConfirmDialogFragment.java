@@ -25,7 +25,13 @@ public class ConfirmDialogFragment extends DialogFragment {
         void onDialogYesButtonClick();
     }
 
+    public interface ConfirmationDialogYesNoListener {
+        void onDialogYesButtonClick();
+        void onDialogNoButtonClick();
+    }
+
     ConfirmationDialogCloseListener mListener = null;
+    ConfirmationDialogYesNoListener yesNoListener = null;
     TextView desc_text;
     Button no_button;
     Button yes_button;
@@ -44,6 +50,10 @@ public class ConfirmDialogFragment extends DialogFragment {
 
     public void setListener(ConfirmationDialogCloseListener l) {
         mListener = l;
+    }
+
+    public void setListener(ConfirmationDialogYesNoListener l) {
+        yesNoListener = l;
     }
 
     @Override
@@ -68,6 +78,7 @@ public class ConfirmDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
+                yesNoListener.onDialogNoButtonClick();
             }
         });
 
@@ -77,6 +88,7 @@ public class ConfirmDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 dismiss();
                 mListener.onDialogYesButtonClick();
+                yesNoListener.onDialogYesButtonClick();
             }
         });
 

@@ -90,7 +90,7 @@ public class EditTeamFragment extends Fragment implements DataView {
             // Picture
             if (team.getLogo() != null) {
                 selectedLogo = team.getLogo();
-                logoImage.setImageDrawable(ImageUtil.getRoundedDrawable(selectedLogo));
+                logoImage.setImageBitmap(ImageUtil.getSquarePicture(selectedLogo));
                 ImageUtil.fadeImageIn(logoImage);
             }
 
@@ -155,15 +155,6 @@ public class EditTeamFragment extends Fragment implements DataView {
                             AppRes.getInstance().setSelectedTeam(teamToSave);
 
                             saveTeamToUser(teamToSave);
-                            /*// Add empty lines for team
-                            LinesResource.getInstance().addLines(new SaveLinesHandler() {
-                                @Override
-                                public void onLinesSaved(Map<Integer, Line> lines) {
-                                    AppRes.getInstance().setLines(lines);
-
-                                    saveTeamToUser(teamToSave);
-                                }
-                            });*/
                         }
                     });
                 }

@@ -75,4 +75,10 @@ public class Line {
         return sorted;
     }
 
+    public boolean isSame(Line line) {
+        if(line.getLineNumber() != getLineNumber() || !line.getPlayerIdMap().equals(getPlayerIdMap())) {
+            return false;
+        }
+        return true;
+    }
 }

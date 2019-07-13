@@ -71,7 +71,7 @@ public class TeamListAdapter extends BaseAdapter {
         final Team team = teams.get(position);
 
         if(team.getLogo() != null) {
-            holder.logoImage.setImageDrawable(ImageUtil.getRoundedDrawable(team.getLogo()));
+            holder.logoImage.setImageBitmap(ImageUtil.getSquarePicture(team.getLogo()));
         }
 
         holder.nameText.setText(team.getName());

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/edit"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:textColor="@color/color_text_light"
         android:background="@color/color_background_second" />
     <Button
@@ -22,7 +22,7 @@
         android:layout_below="@+id/editButton"
         android:text="@string/remove"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:textColor="@color/color_text_light"
         android:background="@color/color_background_second"/>
     <Button
