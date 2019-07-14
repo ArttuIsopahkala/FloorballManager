@@ -190,10 +190,12 @@ public class AnalyzerService {
         }
 
         // TODO Continue from here probably save centerId + centerBestOverallChemistry to Map<String, Integer> or something and get best center from that
+        Map<String, Integer> centersWithHighestChemistries = new HashMap<>();
         for (Player center : centers) {
+
             ArrayList<Chemistry> chemistries = centerPlayerChemistriesMap.get(center.getPlayerId());
 
-            int centerBestOverallChemistry = 0;
+            int centerBestOverallChemistry;
 
             int bestChemistryPointsLw = 0;
             int bestChemistryPointsRw = 0;
@@ -225,71 +227,25 @@ public class AnalyzerService {
             }
 
             centerBestOverallChemistry = bestChemistryPointsLw + bestChemistryPointsRw + bestChemistryPointsLd + bestChemistryPointsRd;
+
+            centersWithHighestChemistries.put(center.getPlayerId(), centerBestOverallChemistry);
         }
 
-        // TODO This is old code at the moment just to be reminder will not be used!
-        for (Player center : centers) {
-            for (Player player : listOfPlayers) {
+            // This shit is here just to be reminder and example
+            /*
+            Map<String, String> playerIdMap = new HashMap<>();
+            playerIdMap.put(bestLeftWing.getPlayerId(), bestLeftWing.getPosition());
+            playerIdMap.put(bestRightWing.getPlayerId(), bestRightWing.getPosition());
+            playerIdMap.put(bestLeftDefender.getPlayerId(), bestLeftDefender.getPosition());
+            playerIdMap.put(bestRightDefender.getPlayerId(), bestRightDefender.getPosition());
 
-                int bestChemistryPointsLw = 0;
-                int bestChemistryPointsRw = 0;
-                int bestChemistryPointsLd = 0;
-                int bestChemistryPointsRd = 0;
+            Line newFirstLine = new Line();
+            newFirstLine.setLineId("asd");
+            newFirstLine.setLineNumber(1);
+            newFirstLine.setPlayerIdMap(playerIdMap);
 
-                Player bestLeftWing = null;
-                Player bestRightWing = null;
-                Player bestLeftDefender = null;
-                Player bestRightDefender = null;
-
-                int playersChemistryPoints = getChemistryPoints(center.getPlayerId(), player.getPlayerId(), goals);
-
-                Position position = Position.fromDatabaseName(player.getPosition());
-                if(position == Position.LW) {
-                    if(bestChemistryPointsLw < playersChemistryPoints) {
-                        bestChemistryPointsLw = playersChemistryPoints;
-                        bestLeftWing = player.clone();
-                    }
-                } else if(position == Position.RW) {
-                    if(bestChemistryPointsRw < playersChemistryPoints) {
-                        bestChemistryPointsRw = playersChemistryPoints;
-                        bestRightWing = player.clone();
-                    }
-                } else if(position == Position.LD) {
-                    if(bestChemistryPointsLd < playersChemistryPoints) {
-                        bestChemistryPointsLd = playersChemistryPoints;
-                        bestLeftDefender = player.clone();
-                    }
-                } else if(position == Position.RD) {
-                    if(bestChemistryPointsRd < playersChemistryPoints) {
-                        bestChemistryPointsRd = playersChemistryPoints;
-                        bestRightDefender = player.clone();
-                    }
-                }
-
-                // Remove players which are added to the line with the center so those are not taken notice
-                // for the next center and new line
-                listOfPlayers.remove(bestLeftWing);
-                listOfPlayers.remove(bestRightWing);
-                listOfPlayers.remove(bestLeftDefender);
-                listOfPlayers.remove(bestRightDefender);
-                centers.remove(center);
-
-                // This shit is here just to be reminder and example
-                Map<String, String> playerIdMap = new HashMap<>();
-                playerIdMap.put(bestLeftWing.getPlayerId(), bestLeftWing.getPosition());
-                playerIdMap.put(bestRightWing.getPlayerId(), bestRightWing.getPosition());
-                playerIdMap.put(bestLeftDefender.getPlayerId(), bestLeftDefender.getPosition());
-                playerIdMap.put(bestRightDefender.getPlayerId(), bestRightDefender.getPosition());
-
-                Line newFirstLine = new Line();
-                newFirstLine.setLineId("asd");
-                newFirstLine.setLineNumber(1);
-                newFirstLine.setPlayerIdMap(playerIdMap);
-
-                listOfBestLines.put(1, newFirstLine);
-
-            }
-        }
+            listOfBestLines.put(1, newFirstLine);
+            */
 
         return listOfBestLines;
     }
