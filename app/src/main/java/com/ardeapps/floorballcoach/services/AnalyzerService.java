@@ -402,28 +402,4 @@ public class AnalyzerService {
         return closestChemistries;
     }
 
-    /**
-     * MAIN METHOD (called from UI)
-     *
-     * Calculates chemistry as percent between two players.
-     * This is how percent is calculated:
-     * 1. Get all chemistry points from all players.
-     * 2. Get minimum and maximum chemistries from those.
-     * 3. Get chemistry between two compared players.
-     * 4. Calculate percent where that chemistry takes place between min and max points.
-     * Note: Percent is calculated from games where both compared players have been set in the same line.
-     *
-     * @param playerId player to compare against
-     * @param comparePlayerId player to compare
-     * @return average chemistry points as percent (0-100)
-     */
-    public static int getChemistryPercent(String playerId, String comparePlayerId) {
-        ArrayList<Goal> goals = AnalyzerHelper.getGoalsWherePlayersInSameLine(playerId, comparePlayerId);
-        int points = AnalyzerHelper.getChemistryPoints(playerId, comparePlayerId, goals);
-        int maxPoints = AnalyzerHelper.getMaxChemistryPoints();
-        int minPoints = AnalyzerHelper.getMinChemistryPoints();
-
-        return (int)Math.round((double)points / (maxPoints - minPoints) * 100);
-    }
-
 }
