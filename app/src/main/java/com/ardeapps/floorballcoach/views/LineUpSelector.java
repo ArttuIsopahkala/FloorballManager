@@ -76,6 +76,7 @@ public class LineUpSelector extends LinearLayout {
         });
     }
 
+    // TODO ei päivity aina
     private void refreshLineChemistry() {
         int position = linesPager.getCurrentItem();
         LineFragmentData data = lineFragments.get(position).getData();

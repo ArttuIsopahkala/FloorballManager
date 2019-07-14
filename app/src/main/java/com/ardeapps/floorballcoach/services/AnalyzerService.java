@@ -403,7 +403,7 @@ public class AnalyzerService {
     }
 
     /**
-     * MEDIUM HELPER METHOD, USES SMALL HELPER METHODS
+     * MAIN METHOD (called from UI)
      *
      * Calculates chemistry as percent between two players.
      * This is how percent is calculated:
@@ -418,10 +418,10 @@ public class AnalyzerService {
      * @return average chemistry points as percent (0-100)
      */
     public static int getChemistryPercent(String playerId, String comparePlayerId) {
-        int maxPoints = AnalyzerHelper.getMaxChemistryPoints();
-        int minPoints = AnalyzerHelper.getMinChemistryPoints();
         ArrayList<Goal> goals = AnalyzerHelper.getGoalsWherePlayersInSameLine(playerId, comparePlayerId);
         int points = AnalyzerHelper.getChemistryPoints(playerId, comparePlayerId, goals);
+        int maxPoints = AnalyzerHelper.getMaxChemistryPoints();
+        int minPoints = AnalyzerHelper.getMinChemistryPoints();
 
         return (int)Math.round((double)points / (maxPoints - minPoints) * 100);
     }

@@ -50,50 +50,6 @@ public class AnalyzerHelper extends AnalyzerService {
     }
 
     /**
-     * NOT IN USE
-     *
-     * @param playerId player to compare against
-     * @param comparedPlayerId player to compare
-     * @param gameGoals indexed by gameId
-     */
-    public static double getChemistryPointsAvg(String playerId, String comparedPlayerId, Map<String, ArrayList<Goal>> gameGoals) {
-        Map<String, Integer> chemistryMap = getChemistryPointsOfGames(playerId, comparedPlayerId, gameGoals);
-
-        int size = chemistryMap.size();
-        if(size == 0) {
-            return 0.0;
-        }
-
-        double sum = 0.0;
-        for (Map.Entry<String, Integer> entry : chemistryMap.entrySet()) {
-            int points = entry.getValue();
-            sum += points;
-        }
-
-        return sum / size;
-    }
-
-    /**
-     * NOT IN USE
-     *
-     * @param playerId player to compare against
-     * @param comparedPlayerId player to compare
-     * @param gameGoals indexed by gameId
-     */
-    public static Map<String, Integer> getChemistryPointsOfGames(String playerId, String comparedPlayerId, Map<String, ArrayList<Goal>> gameGoals) {
-        Map<String, Integer> chemistryMap = new HashMap<>();
-
-        for (Map.Entry<String, ArrayList<Goal>> entry : gameGoals.entrySet()) {
-            final String gameId = entry.getKey();
-            final ArrayList<Goal> goals = entry.getValue();
-            int chemistryPoints = getChemistryPoints(playerId, comparedPlayerId, goals);
-            chemistryMap.put(gameId, chemistryPoints);
-        }
-
-        return chemistryMap;
-    }
-
-    /**
      * Get average chemistry percents of given chemistries
      * @param chemistries list to calculate
      * @return line chemistry percent
@@ -215,8 +171,7 @@ public class AnalyzerHelper extends AnalyzerService {
         for(Player player : playersInTeam) {
             for(Player comparePlayer : playersInTeam) {
                 if(!player.getPlayerId().equals(comparePlayer.getPlayerId())) {
-                    ArrayList<String> gameIds = getGameIdsWherePlayersInSameLine(player.getPlayerId(), comparePlayer.getPlayerId());
-                    ArrayList<Goal> goals = getGoalsOfGames(gameIds);
+                    ArrayList<Goal> goals = getGoalsWherePlayersInSameLine(player.getPlayerId(), comparePlayer.getPlayerId());
                     int points = getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
                     if(points > maxPoints) {
                         maxPoints = points;

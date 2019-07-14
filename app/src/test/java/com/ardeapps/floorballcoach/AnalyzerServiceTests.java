@@ -97,22 +97,6 @@ public class AnalyzerServiceTests extends JSONService {
     }
 
     @Test
-    public void testGetChemistryPointsAvg() {
-        String teamId = "-LYDu_zW16xskSIhIlOm"; // "O2 jyväskylä"
-        String playerId = "-LYDueLQnDlNS3iny3r2";
-        String comparePlayerId = "-LZf423Q01lgFW8yD5Dl";
-
-        Map<String, ArrayList<Goal>> goals = getTeamGoalsByGameId(teamId);
-        Map<String, Integer> chemistryMap = AnalyzerHelper.getChemistryPointsOfGames(playerId, comparePlayerId, goals);
-        for (Map.Entry<String, Integer> entry : chemistryMap.entrySet()) {
-            int points = entry.getValue();
-            System.out.println(entry.getKey() + ": " + points);
-        }
-        double avg = AnalyzerHelper.getChemistryPointsAvg(playerId, comparePlayerId, goals);
-        System.out.println("AVG: " + avg);
-    }
-
-    @Test
     public void testMethod() {
 
         String teamId = "-LYDu_zW16xskSIhIlOm"; // "O2 jyväskylä"
