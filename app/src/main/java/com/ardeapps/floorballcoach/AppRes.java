@@ -178,7 +178,7 @@ public class AppRes extends MultiDexApplication {
     /**
      * Get lines indexed by gameId
      */
-    public Map<String, ArrayList<Line>> linesByGame() {
+    public Map<String, ArrayList<Line>> getLinesByGame() {
         return linesByGame;
     }
 

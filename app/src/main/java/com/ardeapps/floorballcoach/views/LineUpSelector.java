@@ -7,11 +7,14 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.adapters.LinesPagerAdapter;
 import com.ardeapps.floorballcoach.fragments.LineFragment;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.services.AnalyzerService;
 import com.ardeapps.floorballcoach.viewObjects.LineFragmentData;
 
 import java.util.ArrayList;
@@ -29,6 +32,9 @@ public class LineUpSelector extends LinearLayout {
     TabLayout tabLayout;
     ViewPager linesPager;
     LinesPagerAdapter linesAdapter;
+    TextView lineChemistryValueText;
+    ProgressBar lineChemistryBar;
+
     Map<Integer, Line> lines = new HashMap<>();
     List<LineFragment> lineFragments = new ArrayList<>();
 
@@ -45,6 +51,8 @@ public class LineUpSelector extends LinearLayout {
         inflater.inflate(R.layout.container_line_up, this);
         linesPager = findViewById(R.id.linesPager);
         tabLayout = findViewById(R.id.tabLayout);
+        lineChemistryValueText = findViewById(R.id.lineChemistryValueText);
+        lineChemistryBar = findViewById(R.id.lineChemistryBar);
 
         lineFragments = new ArrayList<>();
         lineFragments.add(createLineFragment(1));
@@ -58,6 +66,24 @@ public class LineUpSelector extends LinearLayout {
         linesPager.setAdapter(linesAdapter);
         tabLayout.setupWithViewPager(linesPager);
         linesPager.setCurrentItem(0);
+
+        linesPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(final int position) {
+                refreshLineChemistry();
+            }
+        });
+    }
+
+    // TODO ei päivity aina
+    private void refreshLineChemistry() {
+        int position = linesPager.getCurrentItem();
+        LineFragmentData data = lineFragments.get(position).getData();
+        Line line = data.getLine();
+        int percent = AnalyzerService.getInstance().getLineChemistryPercent(line);
+        lineChemistryValueText.setText(String.valueOf(percent));
+        lineChemistryBar.setProgress(percent);
     }
 
     public void setLines(Map<Integer, Line> lines) {
@@ -68,6 +94,7 @@ public class LineUpSelector extends LinearLayout {
             data.setLine(line);
             lineFragment.setData(data);
         }
+        refreshLineChemistry();
     }
 
     public Map<Integer, Line> getLines() {
@@ -85,6 +112,7 @@ public class LineUpSelector extends LinearLayout {
         for(LineFragment lineFragment : lineFragments) {
             lineFragment.update();
         }
+        refreshLineChemistry();
     }
 
     private LineFragment createLineFragment(final int lineNumber) {
