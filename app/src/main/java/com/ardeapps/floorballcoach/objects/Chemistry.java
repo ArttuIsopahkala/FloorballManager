@@ -16,6 +16,7 @@ public class Chemistry {
     private Player.Position comparePosition;
     private String comparePlayerId;
     private int chemistryPoints;
+    private int chemistryPercent;
 
     public Chemistry() {
     }
@@ -50,5 +51,13 @@ public class Chemistry {
 
     public void setChemistryPoints(int chemistryPoints) {
         this.chemistryPoints = chemistryPoints;
+    }
+
+    public int getChemistryPercent() {
+        return chemistryPercent;
+    }
+
+    public void setChemistryPercent(int chemistryPercent) {
+        this.chemistryPercent = chemistryPercent;
     }
 }

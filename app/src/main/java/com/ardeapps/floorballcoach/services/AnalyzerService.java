@@ -6,7 +6,6 @@ import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Player.Position;
-import com.ardeapps.floorballcoach.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -296,19 +295,45 @@ public class AnalyzerService {
     }
 
     /**
+     * MAIN METHOD (called from UI)
+     *
+     * Get average percent for line. Average is calculated from closest positions.
      * @param line which players are calculated
      * @param goals all team goals
      * @param lines lines in games
      * @param players all players in team
-     * @return chemistry percent for chemistry lines and texts in UI
+     * @return chemistry percent for line
+     */
+    public static int getLineChemistryPercent(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines, ArrayList<Player> players) {
+        Map<Position, ArrayList<Chemistry>> chemistryMap = getChemistriesInLineForPositions(line, goals, lines, players);
+        Map<Position, ArrayList<Chemistry>> filteredMap = getFilteredChemistryMapToClosestPlayers(chemistryMap);
+        double percentSize = 0;
+        double percentCount = 0;
+        for (Map.Entry<Position, ArrayList<Chemistry>> entry : filteredMap.entrySet()) {
+            ArrayList<Chemistry> chemistries = entry.getValue();
+            percentSize += chemistries.size();
+            percentCount += getAverageChemistryPercent(chemistries);
+        }
+
+        return (int)Math.round(percentCount / percentSize);
+    }
+
+    /**
+     * MAIN METHOD (called from UI)
+     *
+     * Get map of chemistry connections and chemistry percents to use in UI
+     * @param line which players are calculated
+     * @param goals all team goals
+     * @param lines lines in games
+     * @param players all players in team
+     * @return chemistry percent for chemistry connection lines and texts in UI
      */
     public static Map<ChemistryConnection, Integer> getChemistryConnections(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines, ArrayList<Player> players) {
-        Map<Position, ArrayList<Chemistry>> chemistryMap = getChemistriesInLineByPosition(line, goals, lines, players);
+        Map<Position, ArrayList<Chemistry>> chemistryMap = getChemistriesInLineForPositions(line, goals, lines, players);
 
         Map<ChemistryConnection, Integer> chemistryConnections = new HashMap<>();
-
-        // C
-        Map<Position, Integer> compareChemistryMap = getConvertCompareChemistryPointsForPosition(Position.C, chemistryMap);
+        // Center
+        Map<Position, Integer> compareChemistryMap = getConvertCompareChemistryPercentsForPosition(Position.C, chemistryMap);
         Integer chemistry = compareChemistryMap.get(Position.LW);
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.C_LW, chemistry);
@@ -325,9 +350,8 @@ public class AnalyzerService {
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.C_RD, chemistry);
         }
-
-        // LD
-        compareChemistryMap = getConvertCompareChemistryPointsForPosition(Position.LD, chemistryMap);
+        // Left defender
+        compareChemistryMap = getConvertCompareChemistryPercentsForPosition(Position.LD, chemistryMap);
         chemistry = compareChemistryMap.get(Position.RD);
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.LD_RD, chemistry);
@@ -336,9 +360,8 @@ public class AnalyzerService {
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.LD_LW, chemistry);
         }
-
-        // RD
-        compareChemistryMap = getConvertCompareChemistryPointsForPosition(Position.RD, chemistryMap);
+        // Right defender
+        compareChemistryMap = getConvertCompareChemistryPercentsForPosition(Position.RD, chemistryMap);
         chemistry = compareChemistryMap.get(Position.RW);
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.RD_RW, chemistry);
@@ -348,16 +371,24 @@ public class AnalyzerService {
     }
 
     /**
+     * MAIN METHOD (called from UI)
+     *
+     * Get chemistry percents to closest players in line.
+     * This is how percent is calculated:
+     * 1. Get closest players for every line position.
+     * 2. Get chemistry percents between one position and closest positions.
+     * 3. Calculate average of those chemistry percents.
+     *
      * @param line which players are calculated
      * @param goals all team goals
      * @param lines lines in games
      * @param players all players in team
-     * @return average chemistry percent to closest players indexed by position
+     * @return chemistry percents to closest players indexed by position
      */
     public static Map<Position, Integer> getClosestChemistries(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines, ArrayList<Player> players) {
-        Map<Position, ArrayList<Chemistry>> chemistryMap = getChemistriesInLineByPosition(line, goals, lines, players);
+        Map<Position, ArrayList<Chemistry>> chemistryMap = getChemistriesInLineForPositions(line, goals, lines, players);
 
-        // Map contains closest players -> can make calculation straight
+        // Map contains only closest players, no others
         Map<Position, ArrayList<Chemistry>> filteredMap = getFilteredChemistryMapToClosestPlayers(chemistryMap);
 
         Map<Position, Integer> closestChemistries = new HashMap<>();
@@ -367,19 +398,7 @@ public class AnalyzerService {
             Position position = entry.getKey();
             ArrayList<Chemistry> chemistries = entry.getValue();
 
-            double chemistryCount = 0;
-            double chemistrySize = chemistries.size();
-            for(Chemistry chemistry : chemistries) {
-                if(position == Position.LW) {
-                    Logger.log("LW " + chemistry.getComparePosition() + ": " +chemistry.getChemistryPoints());
-                }
-                chemistryCount += chemistry.getChemistryPoints();
-            }
-
-            int percent = (int)Math.round(chemistryCount / chemistrySize);
-            if(position == Position.LW) {
-                Logger.log("LW percent: " + percent + " " + chemistryCount + "/" + chemistrySize);
-            }
+            int percent = getAverageChemistryPercent(chemistries);
             closestChemistries.put(position, percent);
         }
 
@@ -387,10 +406,78 @@ public class AnalyzerService {
     }
 
     /**
+     * NOT IN USE
+     *
+     * @param playerId player to compare against
+     * @param comparedPlayerId player to compare
+     * @param gameGoals indexed by gameId
+     */
+    public static double getChemistryPointsAvg(String playerId, String comparedPlayerId, Map<String, ArrayList<Goal>> gameGoals) {
+        Map<String, Integer> chemistryMap = getChemistryPointsOfGames(playerId, comparedPlayerId, gameGoals);
+
+        int size = chemistryMap.size();
+        if(size == 0) {
+            return 0.0;
+        }
+
+        double sum = 0.0;
+        for (Map.Entry<String, Integer> entry : chemistryMap.entrySet()) {
+            int points = entry.getValue();
+            sum += points;
+        }
+
+        return sum / size;
+    }
+
+    /**
+     * NOT IN USE
+     *
+     * @param playerId player to compare against
+     * @param comparedPlayerId player to compare
+     * @param gameGoals indexed by gameId
+     */
+    public static Map<String, Integer> getChemistryPointsOfGames(String playerId, String comparedPlayerId, Map<String, ArrayList<Goal>> gameGoals) {
+        Map<String, Integer> chemistryMap = new HashMap<>();
+
+        for (Map.Entry<String, ArrayList<Goal>> entry : gameGoals.entrySet()) {
+            final String gameId = entry.getKey();
+            final ArrayList<Goal> goals = entry.getValue();
+            int chemistryPoints = getChemistryPoints(playerId, comparedPlayerId, goals);
+            chemistryMap.put(gameId, chemistryPoints);
+        }
+
+        return chemistryMap;
+    }
+
+    /**
+     * HELPER METHOD
+     *
+     * Get average chemistry percents of given chemistries
+     * @param chemistries list to calculate
+     * @return line chemistry percent
+     */
+    public static int getAverageChemistryPercent(ArrayList<Chemistry> chemistries) {
+        double chemistryCount = 0;
+        double chemistrySize = chemistries.size();
+        for(Chemistry chemistry : chemistries) {
+            chemistryCount += chemistry.getChemistryPercent();
+        }
+
+        return (int)Math.round(chemistryCount / chemistrySize);
+    }
+
+    /**
+     * HELPER METHOD
+     *
+     * Get chemistries of players in line indexed by position.
+     * Chemistries are calculated from one line's position to other positions.
      * @param line player chemistries from this line are calculated
+     * @param goals all team goals
+     * @param lines lines in games
+     * @param players all players in team
      * @return chemistries list indexed by playerId
      */
-    public static Map<Player.Position, ArrayList<Chemistry>> getChemistriesInLineByPosition(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines, ArrayList<Player> players) {
+    public static Map<Player.Position, ArrayList<Chemistry>> getChemistriesInLineForPositions(Line line, Map<String, ArrayList<Goal>> goals, Map<String, ArrayList<Line>> lines, ArrayList<Player> players) {
         Map<Player.Position, ArrayList<Chemistry>> chemistryMap = new HashMap<>();
 
         if(line != null && line.getPlayerIdMap() != null) {
@@ -409,8 +496,11 @@ public class AnalyzerService {
                         chemistry.setPlayerId(playerId);
                         chemistry.setComparePlayerId(comparedPlayerId);
                         chemistry.setComparePosition(comparedPosition);
-                        int percent = AnalyzerService.getChemistryPointsPercent(playerId, comparedPlayerId, players, goals, lines);
-                        chemistry.setChemistryPoints(percent);
+                        ArrayList<Goal> filteredGoals = getGoalsWherePlayersInSameLine(playerId, comparedPlayerId, goals, lines);
+                        int points = getChemistryPoints(playerId, comparedPlayerId, filteredGoals);
+                        chemistry.setChemistryPoints(points);
+                        int percent = getChemistryPercent(playerId, comparedPlayerId, players, goals, lines);
+                        chemistry.setChemistryPercent(percent);
 
                         chemistries.add(chemistry);
                     }
@@ -423,6 +513,13 @@ public class AnalyzerService {
         return chemistryMap;
     }
 
+    /**
+     * HELPER METHOD
+     *
+     * Get filtered map to players' closest positions
+     * @param chemistryMap map indexed by position in line
+     * @return filtered map to closest positions
+     */
     public static Map<Position, ArrayList<Chemistry>> getFilteredChemistryMapToClosestPlayers(Map<Position, ArrayList<Chemistry>> chemistryMap) {
         Map<Position, ArrayList<Chemistry>> filteredMap = new HashMap<>();
 
@@ -455,13 +552,21 @@ public class AnalyzerService {
         return filteredMap;
     }
 
-    private static Map<Position, Integer> getConvertCompareChemistryPointsForPosition(Position position, Map<Position, ArrayList<Chemistry>> chemistryMap) {
+    /**
+     * HELPER METHOD
+     *
+     * Get chemistry percents between given position and other map's positions
+     * @param position position to use
+     * @param chemistryMap map of all positions
+     * @return chemistry points indexed by other positions
+     */
+    private static Map<Position, Integer> getConvertCompareChemistryPercentsForPosition(Position position, Map<Position, ArrayList<Chemistry>> chemistryMap) {
         Map<Position, Integer> chemistryPoints = new HashMap<>();
         ArrayList<Chemistry> chemistries = chemistryMap.get(position);
         if(chemistries != null) {
             for(Chemistry chemistry : chemistries) {
                 Position comparePosition = chemistry.getComparePosition();
-                chemistryPoints.put(comparePosition, chemistry.getChemistryPoints());
+                chemistryPoints.put(comparePosition, chemistry.getChemistryPercent());
             }
         }
 
@@ -469,54 +574,41 @@ public class AnalyzerService {
     }
 
     /**
+     * MEDIUM HELPER METHOD, USES SMALL HELPER METHODS
+     *
+     * Calculates chemistry as percent between two players.
+     * This is how percent is calculated:
+     * 1. Get all chemistry points from all players.
+     * 2. Get minimum and maximum chemistries from those.
+     * 3. Get chemistry between two compared players.
+     * 4. Calculate percent where that chemistry takes place between min and max points.
+     * Note: Percent is calculated from games where both compared players have been set in the same line.
+     *
      * @param playerId player to compare against
-     * @param comparedPlayerId player to compare
-     * @param gameGoals indexed by gameId
+     * @param comparePlayerId player to compare
+     * @param players all players in team
+     * @param teamGoalsMap all team goals
+     * @param teamLinesMap lines in games
+     * @return average chemistry points as percent (0-100)
      */
-    public static double getChemistryPointsAvg(String playerId, String comparedPlayerId, Map<String, ArrayList<Goal>> gameGoals) {
-        Map<String, Integer> chemistryMap = getChemistryPointsOfGames(playerId, comparedPlayerId, gameGoals);
-
-        int size = chemistryMap.size();
-        if(size == 0) {
-            return 0.0;
-        }
-
-        double sum = 0.0;
-        for (Map.Entry<String, Integer> entry : chemistryMap.entrySet()) {
-            int points = entry.getValue();
-            sum += points;
-        }
-
-        return sum / size;
-    }
-
-    /**
-     * @param playerId player to compare against
-     * @param comparedPlayerId player to compare
-     * @param gameGoals indexed by gameId
-     */
-    public static Map<String, Integer> getChemistryPointsOfGames(String playerId, String comparedPlayerId, Map<String, ArrayList<Goal>> gameGoals) {
-        Map<String, Integer> chemistryMap = new HashMap<>();
-
-        for (Map.Entry<String, ArrayList<Goal>> entry : gameGoals.entrySet()) {
-            final String gameId = entry.getKey();
-            final ArrayList<Goal> goals = entry.getValue();
-            int chemistryPoints = getChemistryPoints(playerId, comparedPlayerId, goals);
-            chemistryMap.put(gameId, chemistryPoints);
-        }
-
-        return chemistryMap;
-    }
-
-    public static int getChemistryPointsPercent(String playerId, String comparePlayerId, ArrayList<Player> players, Map<String, ArrayList<Goal>> teamGoalsMap, Map<String, ArrayList<Line>> teamLinesMap) {
-        int maxPoints = AnalyzerService.getMaxChemistryPoints(players, teamGoalsMap, teamLinesMap);
-        int minPoints = AnalyzerService.getMinChemistryPoints(players, teamGoalsMap, teamLinesMap);
+    public static int getChemistryPercent(String playerId, String comparePlayerId, ArrayList<Player> players, Map<String, ArrayList<Goal>> teamGoalsMap, Map<String, ArrayList<Line>> teamLinesMap) {
+        int maxPoints = getMaxChemistryPoints(players, teamGoalsMap, teamLinesMap);
+        int minPoints = getMinChemistryPoints(players, teamGoalsMap, teamLinesMap);
         ArrayList<Goal> goals = getGoalsWherePlayersInSameLine(playerId, comparePlayerId, teamGoalsMap, teamLinesMap);
         int points = getChemistryPoints(playerId, comparePlayerId, goals);
 
         return (int)Math.round((double)points / (maxPoints - minPoints) * 100);
     }
 
+    /**
+     * HELPER METHOD
+     *
+     * Get maximum chemistry points from all players of team
+     * @param players all players in team
+     * @param gameGoals goal lists indexed by gameId
+     * @param linesMap lines indexed by gameId
+     * @return maximum chemistry points
+     */
     public static int getMaxChemistryPoints(ArrayList<Player> players, Map<String, ArrayList<Goal>> gameGoals, Map<String, ArrayList<Line>> linesMap) {
         int maxPoints = 0;
         for(Player player : players) {
@@ -534,28 +626,55 @@ public class AnalyzerService {
         return maxPoints;
     }
 
+    /**
+     * HELPER METHOD
+     *
+     * Get minimum chemistry points from all players of team
+     * @param players all players in team
+     * @param gameGoals goal lists indexed by gameId
+     * @param linesMap lines indexed by gameId
+     * @return minimum chemistry points
+     */
     public static int getMinChemistryPoints(ArrayList<Player> players, Map<String, ArrayList<Goal>> gameGoals, Map<String, ArrayList<Line>> linesMap) {
-        int minPoints = 999; // TODO
+        Integer minPoints = null;
         for(Player player : players) {
             for(Player comparePlayer : players) {
                 if(!player.getPlayerId().equals(comparePlayer.getPlayerId())) {
-                    ArrayList<String> gameIds = getGameIdsWherePlayersInSameLine(player.getPlayerId(), comparePlayer.getPlayerId(), linesMap);
-                    ArrayList<Goal> goals = getGoalsOfGames(gameIds, gameGoals);
+                    ArrayList<Goal> goals = getGoalsWherePlayersInSameLine(player.getPlayerId(), comparePlayer.getPlayerId(), gameGoals, linesMap);
                     int points = getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
-                    if(points < minPoints) {
+                    if(minPoints == null || points < minPoints) {
                         minPoints = points;
                     }
                 }
             }
         }
-        return minPoints;
+        return minPoints == null ? 0 : minPoints; // Default min is zero
     }
 
+    /**
+     * HELPER METHOD
+     *
+     * Get goals where given players have been in the same line.
+     * @param playerId player 1
+     * @param comparePlayerId player 2
+     * @param gameGoals goal lists indexed by gameId
+     * @param linesMap lines indexed by gameId
+     * @return list of goals
+     */
     public static ArrayList<Goal> getGoalsWherePlayersInSameLine(String playerId, String comparePlayerId, Map<String, ArrayList<Goal>> gameGoals, Map<String, ArrayList<Line>> linesMap) {
         ArrayList<String> gameIds = getGameIdsWherePlayersInSameLine(playerId, comparePlayerId, linesMap);
         return getGoalsOfGames(gameIds, gameGoals);
     }
 
+    /**
+     * HELPER METHOD
+     *
+     * Get gameIds where given players are in the same line.
+     * @param playerId player 1
+     * @param comparedPlayerId player 2
+     * @param linesMap lines indexed by gameId
+     * @return gameIds list
+     */
     public static ArrayList<String> getGameIdsWherePlayersInSameLine(String playerId, String comparedPlayerId, Map<String, ArrayList<Line>> linesMap) {
         List<String> comparePlayers = Arrays.asList(playerId, comparedPlayerId);
         ArrayList<String> gameIds = new ArrayList<>();
@@ -571,6 +690,14 @@ public class AnalyzerService {
         return gameIds;
     }
 
+    /**
+     * HELPER METHOD
+     *
+     * Get goals from given games by gameIds.
+     * @param gameIds games
+     * @param gameGoals goal lists indexed by gameId
+     * @return goals from requested games
+     */
     public static ArrayList<Goal> getGoalsOfGames(ArrayList<String> gameIds, Map<String, ArrayList<Goal>> gameGoals) {
         ArrayList<Goal> goals = new ArrayList<>();
         for(String gameId : gameIds) {

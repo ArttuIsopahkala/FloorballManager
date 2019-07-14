@@ -141,8 +141,9 @@
     <string name="lineup_title">Oletuskentällisiä ehdotetaan uuden pelin luonnissa.</string>
     <string name="lineup_analyze">Analysoi pelaajakemiat</string>
     <string name="lineup_best_lines">Hae parhaat kentälliset</string>
-    <string name="lineup_lines_saved">Kentälliset tallennettu!</string>
+    <string name="lineup_lines_saved">Kentälliset tallennettu</string>
     <string name="lineup_lines_changed">Kentälliset muuttuivat. Tallennetaanko?</string>
+    <string name="lineup_chemistry">Kentän kemia</string>
 
     <string name="error_invalid_value">Virheellinen arvo.</string>
     <string name="error_empty">Täytä kaikki kentät.</string>

@@ -23,7 +23,7 @@ public class TypesInfoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.dialog_types_info, container, false);
+        View v = inflater.inflate(R.layout.fragment_types_info, container, false);
 
         LinearLayout typesContainer = v.findViewById(R.id.typesContainer);
 

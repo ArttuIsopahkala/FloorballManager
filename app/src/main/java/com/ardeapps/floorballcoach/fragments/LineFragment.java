@@ -75,7 +75,6 @@ public class LineFragment extends Fragment implements DataView {
             Map<String, ArrayList<Line>> lines = AppRes.getInstance().linesByGame();
             ArrayList<Player> players = new ArrayList<>(AppRes.getInstance().getPlayers().values());
             closestChemistries = AnalyzerService.getClosestChemistries(data.getLine(), goals, lines, players);
-            Logger.toast(closestChemistries.get(Position.LW));
             chemistryConnections = AnalyzerService.getChemistryConnections(data.getLine(), goals, lines, players);
 
             setChemistryText(c_lw_text, chemistryConnections.get(ChemistryConnection.C_LW));
@@ -161,7 +160,7 @@ public class LineFragment extends Fragment implements DataView {
 
                 Player player = AppRes.getInstance().getPlayers().get(playerId);
 
-                setChemistryColorBorder(avgPercentText, chemistryBorder, player);
+                setChemistryColorBorder(avgPercentText, chemistryBorder, position);
                 if(player == null) {
                     // Poistettu pelaaja
                     nameText.setText(getString(R.string.removed_player));
@@ -174,7 +173,6 @@ public class LineFragment extends Fragment implements DataView {
                         pictureImage.setImageResource(R.drawable.default_picture);
                     }
                 }
-
             }
         }
 
@@ -244,31 +242,22 @@ public class LineFragment extends Fragment implements DataView {
      * NOTE: Drawable must be set as 'background' in xml to this take effect
      * @param view border ImageView
      */
-    private void setChemistryColorBorder(TextView avgPercentText, ImageView view, Player player) {
-        // TODO tee loppuun
+    private void setChemistryColorBorder(TextView avgPercentText, ImageView view, Position position) {
         int color = R.color.color_background; // Default color
         String percentText = "";
-        if(player != null) {
-            Integer percent;
+        Integer percent;
 
-            Position position = Position.fromDatabaseName(player.getPosition());
-            percent = closestChemistries.get(position);
+        percent = closestChemistries.get(position);
 
-            if(percent != null) {
-                if(position == Position.LW) {
-                    Logger.toast(percent + "%"); // Tähän tulee oikein 32%??
-                }
-                percentText = percent + "%";
-                if(percent > 0 && percent <= 33) {
-                    color = R.color.color_red_light;
-                } else if(percent > 33 && percent <= 66) {
-                    color = R.color.color_orange_light;
-                } else if(percent > 66 && percent <= 100) {
-                    color = R.color.color_green_light;
-                }
+        if(percent != null) {
+            percentText = percent + "%";
+            if(percent > 0 && percent <= 33) {
+                color = R.color.color_red_light;
+            } else if(percent > 33 && percent <= 66) {
+                color = R.color.color_orange_light;
+            } else if(percent > 66 && percent <= 100) {
+                color = R.color.color_green_light;
             }
-
-            Logger.log(position.toDatabaseName() + ": " + percent + "%");
         }
 
         Drawable background = view.getBackground();

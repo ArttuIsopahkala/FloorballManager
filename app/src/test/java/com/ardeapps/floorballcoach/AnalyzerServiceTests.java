@@ -55,7 +55,7 @@ public class AnalyzerServiceTests extends JSONService {
         String lineId = "-LYDuaJHLYXZBTjVtWjK"; // "1. kenttä"
 
         Line line = getLine(teamId, lineId);
-        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = AnalyzerService.getChemistriesInLineByPosition(line, getTeamGoalsByGameId(teamId), getLinesOfGames(teamId), getPlayers(teamId));
+        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = AnalyzerService.getChemistriesInLineForPositions(line, getTeamGoalsByGameId(teamId), getLinesOfGames(teamId), getPlayers(teamId));
         for (Map.Entry<Player.Position, ArrayList<Chemistry>> chemistry : lineChemistry.entrySet()) {
             Player.Position position = chemistry.getKey();
             ArrayList<Chemistry> chemistries = chemistry.getValue();
@@ -75,7 +75,7 @@ public class AnalyzerServiceTests extends JSONService {
         Map<String, ArrayList<Goal>> teamGoals = getTeamGoalsByGameId(teamId);
         Map<String, ArrayList<Line>> teamLines = getLinesOfGames(teamId);
 
-        double percent = AnalyzerService.getChemistryPointsPercent(playerId, comparePlayerId, players, teamGoals, teamLines);
+        double percent = AnalyzerService.getChemistryPercent(playerId, comparePlayerId, players, teamGoals, teamLines);
         System.out.println("percent: " + percent);
     }
 
