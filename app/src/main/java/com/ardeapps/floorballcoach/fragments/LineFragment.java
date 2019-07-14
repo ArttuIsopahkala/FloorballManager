@@ -18,7 +18,6 @@ import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.SelectPlayerDialogFragment;
 import com.ardeapps.floorballcoach.objects.Chemistry.ChemistryConnection;
-import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Player.Position;
@@ -29,7 +28,6 @@ import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.viewObjects.LineFragmentData;
 import com.ardeapps.floorballcoach.views.IconView;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -69,13 +67,9 @@ public class LineFragment extends Fragment implements DataView {
         setChemistryText(ld_rd_text, null);
         setChemistryText(ld_lw_text, null);
         setChemistryText(rd_rw_text, null);
-
         if(line != null) {
-            Map<String, ArrayList<Goal>> goals = AppRes.getInstance().getGoalsByGame();
-            Map<String, ArrayList<Line>> lines = AppRes.getInstance().linesByGame();
-            ArrayList<Player> players = new ArrayList<>(AppRes.getInstance().getPlayers().values());
-            closestChemistries = AnalyzerService.getClosestChemistries(data.getLine(), goals, lines, players);
-            chemistryConnections = AnalyzerService.getChemistryConnections(data.getLine(), goals, lines, players);
+            closestChemistries = AnalyzerService.getInstance().getClosestChemistryPercentsForPosition(data.getLine());
+            chemistryConnections = AnalyzerService.getInstance().getChemistryConnections(data.getLine());
 
             setChemistryText(c_lw_text, chemistryConnections.get(ChemistryConnection.C_LW));
             setChemistryText(c_rw_text, chemistryConnections.get(ChemistryConnection.C_RW));
