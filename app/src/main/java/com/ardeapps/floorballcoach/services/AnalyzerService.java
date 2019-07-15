@@ -110,10 +110,10 @@ public class AnalyzerService {
     /**
      * Database path: statsPlayerGame
      * @param players List of Players which chemistries are calculated
-     * @param goals Team goals where chemistry is calculated
+     * @param goalss Team goals where chemistry is calculated
      * @return List of player chemistries
      */
-    public ArrayList<Chemistry> getPlayerChemistries(ArrayList<Player> players, ArrayList<Goal> goals) {
+    public ArrayList<Chemistry> getPlayerChemistries(ArrayList<Player> players, ArrayList<Goal> goalss) {
 
         ArrayList<Chemistry> playerChemistryList = new ArrayList<>();
 
@@ -122,6 +122,7 @@ public class AnalyzerService {
             chemistry.setPlayerId(player.getPlayerId());
             for(Player comparePlayer : players) {
                 if(!comparePlayer.getPlayerId().equals(player.getPlayerId())) {
+                    ArrayList<Goal> goals = AnalyzerHelper.getGoalsWherePlayersInSameLine(player.getPlayerId(), comparePlayer.getPlayerId());
                     int chemistryPoints = AnalyzerHelper.getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
                     chemistry.setChemistryPoints(chemistryPoints);
                     chemistry.setComparePlayerId(comparePlayer.getPlayerId());
