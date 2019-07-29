@@ -4,14 +4,17 @@
     <item name="color_background_second" type="color">#3E3E3E</item>
     <item name="color_background_third" type="color">#282828</item>
     <item name="color_background_fourth" type="color">#333333</item>
+    <item name="color_background_text" type="color">#9AC4C3B6</item>
 
     <item name="color_menu" type="color">#242425</item>
 
-    <item name="color_text_light" type="color">#C4C3B6</item>
+    <item name="color_text_light" type="color">#E4E3DD</item>
     <item name="color_text_light_secondary" type="color">#A09E8C</item>
     <item name="color_text_hint" type="color">#7C7A64</item>
 
     <item name="color_text_black" type="color">#0d0d0d</item>
+
+    <item name="color_floorball_field" type="color">#4F9EE6</item>
 
     <item name="color_blue_light" type="color">#69C8FF</item>
     <item name="color_blue" type="color">#4BB3D3</item>

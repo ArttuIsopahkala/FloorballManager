@@ -23,11 +23,11 @@
         android:padding="10dp"
         android:background="@color/color_background">
         <TextView
-            android:id="@+id/lineChemistryText"
+            android:id="@+id/teamChemistryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="@string/lineup_chemistry"
+            android:text="@string/lineup_line_chemistry"
             android:textColor="@color/color_text_light"
             android:textSize="18sp" />
         <TextView
@@ -35,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/lineChemistryBar"
             android:layout_toStartOf="@+id/lineChemistryBar"
             android:layout_marginEnd="20dp"
             android:text="87"
@@ -47,10 +46,10 @@
             android:id="@+id/lineChemistryBar"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/custom_progressbar"
             android:layout_centerVertical="true"
             android:max="100"
-            android:layout_alignParentEnd="true"
-            android:padding="8dp"/>
+            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
     <ImageView

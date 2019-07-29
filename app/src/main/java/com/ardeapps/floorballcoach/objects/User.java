@@ -6,23 +6,29 @@ import java.util.List;
 
 public class User {
 
-    public enum Role {
-        COACH,
-        PLAYER,
+    public enum Flag {
         PREMIUM,
-        ADMIN
+        ADMIN;
+
+        public String toDatabaseName() {
+            return this.name();
+        }
+
+        public static Flag fromDatabaseName(String value) {
+            return Enum.valueOf(Flag.class, value);
+        }
     }
 
     private String userId;
     private String email;
     private long creationTime;
     private long lastLoginTime;
-    private List<String> roles;
+    private boolean premium;
+    private boolean admin;
     private List<String> teamIds;
     private List<String> playerIds;
 
     public User() {
-
     }
 
     public User clone() {
@@ -31,11 +37,8 @@ public class User {
         clone.email = this.email;
         clone.lastLoginTime = this.lastLoginTime;
         clone.creationTime = this.creationTime;
-        if (this.roles == null) {
-            clone.roles = new ArrayList<>();
-        } else {
-            clone.roles = this.roles;
-        }
+        clone.premium = this.premium;
+        clone.admin = this.admin;
         if (this.teamIds == null) {
             clone.teamIds = new ArrayList<>();
         } else {
@@ -81,12 +84,20 @@ public class User {
         this.lastLoginTime = lastLoginTime;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public boolean isPremium() {
+        return premium;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setPremium(boolean premium) {
+        this.premium = premium;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public List<String> getTeamIds() {

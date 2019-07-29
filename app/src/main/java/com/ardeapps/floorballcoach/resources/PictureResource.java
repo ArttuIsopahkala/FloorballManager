@@ -2,6 +2,7 @@ package com.ardeapps.floorballcoach.resources;
 
 import android.graphics.Bitmap;
 
+import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.services.FirebaseStorageService;
 import com.google.firebase.storage.StorageReference;
 
@@ -19,7 +20,7 @@ public class PictureResource extends FirebaseStorageService {
         if (instance == null) {
             instance = new PictureResource();
         }
-        storage = getStorage().child(PICTURES);
+        storage = getStorage().child(PICTURES).child(AppRes.getInstance().getSelectedTeam().getTeamId());
         return instance;
     }
 

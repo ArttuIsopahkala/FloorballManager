@@ -56,7 +56,7 @@ public class LinesPagerAdapter extends FragmentStatePagerAdapter {
 
     public void updateLineFragment(Line line) {
         LineFragment lineFragment = lineFragments.get(line.getLineNumber() - 1);
-        LineFragmentData data = new LineFragmentData();
+        LineFragmentData data = lineFragment.getData();
         data.setLine(line);
         data.setLineNumber(line.getLineNumber());
         lineFragment.setData(data);

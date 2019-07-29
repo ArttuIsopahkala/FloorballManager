@@ -39,6 +39,7 @@ public class ImageUtil {
         Bitmap output = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension);
 
         RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(AppRes.getContext().getResources(), output);
+        dr.setAntiAlias(true);
         dr.setCornerRadius(Math.max(output.getWidth(), output.getHeight()) / 2.0f);
         return dr;
     }

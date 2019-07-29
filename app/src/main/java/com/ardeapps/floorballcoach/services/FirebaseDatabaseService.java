@@ -25,16 +25,18 @@ import com.google.firebase.database.ValueEventListener;
  */
 public class FirebaseDatabaseService {
 
-    // TODO 1. päätä nimet
-    protected static final String USERS = "users";
-    protected static final String USER_TEAMS = "userTeams";
+    protected static final String APP_DATA = "appData";
     protected static final String TEAMS = "teams";
-    protected static final String GAMES = "games";
-    protected static final String PLAYERS = "players";
-    protected static final String LINES = "lines";
-    protected static final String LINES_TEAM_GAME = "linesTeamGame";
-    protected static final String GOALS_TEAM_GAME = "goalsTeamGame";
-    protected static final String STATS_PLAYER_GAME = "statsPlayerGame";
+    protected static final String PLAYERS_GAMES_STATS = "players_games_stats";
+    protected static final String TEAMS_GAMES = "teams_games";
+    protected static final String TEAMS_GAMES_GOALS = "teams_games_goals";
+    protected static final String TEAMS_GAMES_LINES = "teams_games_lines";
+    protected static final String TEAMS_SEASONS = "teams_seasons";
+    protected static final String TEAMS_LINES = "teams_lines";
+    protected static final String TEAMS_PLAYERS = "teams_players";
+    protected static final String TEAMS_USER_CONNECTIONS = "teams_userConnections";
+    protected static final String USERS = "users";
+    protected static final String USER_INVITATIONS = "userInvitations";
 
     protected static final String DEBUG = "DEBUG";
     protected static final String RELEASE = "RELEASE";
@@ -51,6 +53,45 @@ public class FirebaseDatabaseService {
         } else {
             return FirebaseDatabase.getInstance().getReference().child(RELEASE);
         }
+    }
+
+    public static void updateDatabase() {
+        /*getData(getDatabase().child(TEAMS_SEASONS), new GetDataSuccessListener() {
+            @Override
+            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                for(DataSnapshot team : dataSnapshot.getChildren()) {
+                    for(DataSnapshot season : team.getChildren()) {
+                        String seasonName = (String)season.child("seasonName").getValue();
+                        editData(getDatabase().child(TEAMS_SEASONS).child(team.getKey()).child(season.getKey()).child("name"), seasonName);
+                        editData(getDatabase().child(TEAMS_SEASONS).child(team.getKey()).child(season.getKey()).child("seasonName"), null);
+                    }
+                }
+            }
+        });
+        final Season season = new Season();
+        season.setPeriodInMinutes(20);
+        season.setName("4. divari 2017-2018");
+        TeamsSeasonsResource.getInstance().addSeason(season, new AddDataSuccessListener() {
+            @Override
+            public void onAddDataSuccess(String id) {
+                season.setSeasonId(id);
+
+                TeamsGamesResource.getInstance().getGames(new GetGamesHandler() {
+                    @Override
+                    public void onGamesLoaded(Map<String, Game> games) {
+                        for(Game game : games.values()) {
+                            game.setSeasonId(season.getSeasonId());
+                            TeamsGamesResource.getInstance().editGame(game, new EditDataSuccessListener() {
+                                @Override
+                                public void onEditDataSuccess() {
+
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });*/
     }
 
     private static void onNetworkError() {

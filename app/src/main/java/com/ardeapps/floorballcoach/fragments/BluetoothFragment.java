@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.adapters.DeviceListAdapter;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
@@ -83,7 +85,7 @@ public class BluetoothFragment extends Fragment {
     }
     
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bluetooth, container, false);
 
@@ -131,8 +133,8 @@ public class BluetoothFragment extends Fragment {
         }
 
         // No permission to use bluetooth
-        int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissionCheck += ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int permissionCheck = ContextCompat.checkSelfPermission(AppRes.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissionCheck += ContextCompat.checkSelfPermission(AppRes.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
         if(permissionCheck != 0 && Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_ACCESS_COARSE_LOCATION);
             return;
@@ -171,7 +173,7 @@ public class BluetoothFragment extends Fragment {
 
         bluetooth.startDiscovery();
         IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        getActivity().registerReceiver(discoverReceiver, discoverDevicesIntent);
+        AppRes.getActivity().registerReceiver(discoverReceiver, discoverDevicesIntent);
     }
 
     /**
@@ -208,7 +210,7 @@ public class BluetoothFragment extends Fragment {
         Logger.log("LISÄÄ LAITTEITA EI LÖYDY");
         Logger.toast("LISÄÄ LAITTEITA EI LÖYDY");
         bluetooth.cancelDiscovery();
-        getActivity().unregisterReceiver(discoverReceiver);
+        AppRes.getActivity().unregisterReceiver(discoverReceiver);
 
         try {
             bsock = mBTDevices.get(0).createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
@@ -228,14 +230,14 @@ public class BluetoothFragment extends Fragment {
         startActivity(discoverableIntent);
 
         IntentFilter intentFilter = new IntentFilter(bluetooth.ACTION_SCAN_MODE_CHANGED);
-        getActivity().registerReceiver(mBroadcastReceiver2,intentFilter);
+        AppRes.getActivity().registerReceiver(mBroadcastReceiver2,intentFilter);
 
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //getActivity().unregisterReceiver(mBroadcastReceiver2);
+        //AppRes.getActivity().unregisterReceiver(mBroadcastReceiver2);
         //bluetooth.cancelDiscovery();
     }
 

@@ -9,20 +9,21 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Arttu on 19.1.2018.
  */
 
-public class GamesResource extends FirebaseDatabaseService {
-    private static GamesResource instance;
+public class TeamsGamesResource extends FirebaseDatabaseService {
+    private static TeamsGamesResource instance;
     private static DatabaseReference database;
 
-    public static GamesResource getInstance() {
+    public static TeamsGamesResource getInstance() {
         if (instance == null) {
-            instance = new GamesResource();
+            instance = new TeamsGamesResource();
         }
-        database = getDatabase().child(GAMES).child(AppRes.getInstance().getSelectedTeam().getTeamId());
+        database = getDatabase().child(TEAMS_GAMES).child(AppRes.getInstance().getSelectedTeam().getTeamId());
         return instance;
     }
 
@@ -39,19 +40,34 @@ public class GamesResource extends FirebaseDatabaseService {
         deleteData(database.child(gameId), handler);
     }
 
-    // TODO not used?
-    /*public void getGame(String gameId, final GetTeamHandler handler) {
-        getData(database.child(gameId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot snapshot) {
-                Game team = snapshot.getValue(Game.class);
-                handler.onTeamLoaded(team);
+    public void removeGames(final DeleteDataSuccessListener handler) {
+        deleteData(database, handler);
+    }
+
+    public void getGames(final Set<String> gameIds, final GetGamesHandler handler) {
+        final Map<String, Game> games = new HashMap<>();
+        if(!gameIds.isEmpty()) {
+            for(String gameId : gameIds) {
+                getData(database.child(gameId), new GetDataSuccessListener() {
+                    @Override
+                    public void onGetDataSuccess(DataSnapshot snapshot) {
+                        final Game game = snapshot.getValue(Game.class);
+                        if(game != null) {
+                            games.put(game.getGameId(), game);
+                        }
+                        if(gameIds.size() == games.size()) {
+                            handler.onGamesLoaded(games);
+                        }
+                    }
+                });
             }
-        });
-    }*/
+        } else {
+            handler.onGamesLoaded(games);
+        }
+    }
 
     /**
-     * Get teams and their logos indexed by teamId
+     * Get games indexed by gameId
      */
     public void getGames(final GetGamesHandler handler) {
         getData(database, new GetDataSuccessListener() {

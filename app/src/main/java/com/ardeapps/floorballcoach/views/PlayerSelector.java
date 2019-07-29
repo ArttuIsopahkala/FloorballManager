@@ -237,6 +237,9 @@ public class PlayerSelector extends LinearLayout {
     }
 
     public List<String> getSelectedPlayerIds() {
+        if(selectedPlayerIds == null) {
+            selectedPlayerIds = new ArrayList<>();
+        }
         return selectedPlayerIds;
     }
 }

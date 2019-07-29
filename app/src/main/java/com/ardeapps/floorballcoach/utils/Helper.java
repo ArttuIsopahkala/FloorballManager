@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -19,6 +20,7 @@ import com.ardeapps.floorballcoach.PrefRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.views.DatePicker;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -108,6 +110,13 @@ public class Helper {
 
             PrefRes.putBoolean(APP_STARTED_FIRST_TIME, false);
         }
+    }
+
+    public static void setSpinnerAdapter(Spinner spinner, ArrayList<String> titles) {
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(AppRes.getActivity(), android.R.layout.simple_spinner_item, titles);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAdapter.notifyDataSetChanged();
+        spinner.setAdapter(spinnerAdapter);
     }
 
     public static void setSpinnerSelection(final Spinner spinner, final int position) {

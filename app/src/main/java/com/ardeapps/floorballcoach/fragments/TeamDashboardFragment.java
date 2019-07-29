@@ -2,6 +2,7 @@ package com.ardeapps.floorballcoach.fragments;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +24,12 @@ public class TeamDashboardFragment extends Fragment {
     Button linesButton;
     Button playersButton;
     Button gamesButton;
+    Button settingsButton;
     TextView teamNameText;
     ImageView logoImage;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_team_dashboard, container, false);
 
@@ -35,6 +37,7 @@ public class TeamDashboardFragment extends Fragment {
         gamesButton = v.findViewById(R.id.gamesButton);
         linesButton = v.findViewById(R.id.linesButton);
         playersButton = v.findViewById(R.id.playersButton);
+        settingsButton = v.findViewById(R.id.settingsButton);
         teamNameText = v.findViewById(R.id.teamNameText);
         logoImage = v.findViewById(R.id.logoImage);
 
@@ -44,6 +47,8 @@ public class TeamDashboardFragment extends Fragment {
         } else {
             logoImage.setImageResource(R.drawable.default_logo);
         }
+
+        teamNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
 
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +72,12 @@ public class TeamDashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentListeners.getInstance().getFragmentChangeListener().goToPlayersFragment();
+            }
+        });
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentListeners.getInstance().getFragmentChangeListener().goToTeamSettingsFragment();
             }
         });
         return v;

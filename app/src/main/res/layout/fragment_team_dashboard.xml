@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background"
     android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
-    <ScrollView
+    android:focusable="true">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
         <LinearLayout
             android:id="@+id/titleContainer"
             android:layout_width="match_parent"
@@ -43,7 +38,7 @@
             android:layout_below="@+id/teamNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:background="@color/color_background_second"
             android:text="@string/team_dashboard_new_game"
             android:textColor="@color/color_text_light" />
@@ -52,7 +47,7 @@
             android:layout_below="@+id/newGameButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:background="@color/color_background_second"
             android:text="@string/team_dashboard_games"
             android:textColor="@color/color_text_light" />
@@ -61,7 +56,7 @@
             android:layout_below="@+id/gamesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:background="@color/color_background_second"
             android:text="@string/team_dashboard_lines"
             android:textColor="@color/color_text_light" />
@@ -70,9 +65,18 @@
             android:layout_below="@+id/linesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:background="@color/color_background_second"
             android:text="@string/team_dashboard_players"
             android:textColor="@color/color_text_light" />
-        </RelativeLayout>
-    </ScrollView>
-</RelativeLayout>
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_below="@+id/playersButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_background_second"
+            android:text="@string/team_dashboard_settings"
+            android:textColor="@color/color_text_light" />
+    </RelativeLayout>
+</ScrollView>

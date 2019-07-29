@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class JSONService extends FirebaseDatabaseService {
 
-    private final static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_28_6.json";
+    private final static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/java/com/ardeapps/floorballcoach/database_dumbs/floorball-coach-export_24_7.json";
 
     public static Line getLine(String teamId, String lineId) {
         Line line = new Line();
@@ -31,7 +31,7 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject linesObj = getJSONObject(root, LINES);
+            JSONObject linesObj = getJSONObject(root, TEAMS_LINES);
 
             Iterator<String> teams = linesObj.keys();
             while (teams.hasNext()) {
@@ -61,7 +61,7 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject linesObj = getJSONObject(root, LINES);
+            JSONObject linesObj = getJSONObject(root, TEAMS_LINES);
 
             Iterator<String> teams = linesObj.keys();
             while (teams.hasNext()) {
@@ -93,7 +93,7 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject teamsObj = getJSONObject(root, LINES_TEAM_GAME);
+            JSONObject teamsObj = getJSONObject(root, TEAMS_GAMES_LINES);
 
             Iterator<String> teams = teamsObj.keys();
             while (teams.hasNext()) {
@@ -132,7 +132,7 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject teamsNode = getJSONObject(root, PLAYERS);
+            JSONObject teamsNode = getJSONObject(root, TEAMS_PLAYERS);
 
             Iterator<String> teams = teamsNode.keys();
             while (teams.hasNext()) {
@@ -161,7 +161,7 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject teamsNode = getJSONObject(root, PLAYERS);
+            JSONObject teamsNode = getJSONObject(root, TEAMS_PLAYERS);
 
             Iterator<String> teams = teamsNode.keys();
             while (teams.hasNext()) {
@@ -191,7 +191,7 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject statsPlayerGame = getJSONObject(root, STATS_PLAYER_GAME);
+            JSONObject statsPlayerGame = getJSONObject(root, PLAYERS_GAMES_STATS);
 
             Iterator<String> players = statsPlayerGame.keys();
             while (players.hasNext()) {
@@ -226,7 +226,7 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject goalsTeamGame = getJSONObject(root, GOALS_TEAM_GAME);
+            JSONObject goalsTeamGame = getJSONObject(root, TEAMS_GAMES_GOALS);
 
             Iterator<String> teams = goalsTeamGame.keys();
             while (teams.hasNext()) {
@@ -262,7 +262,7 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject goalsTeamGame = getJSONObject(root, GOALS_TEAM_GAME);
+            JSONObject goalsTeamGame = getJSONObject(root, TEAMS_GAMES_GOALS);
 
             Iterator<String> teams = goalsTeamGame.keys();
             while (teams.hasNext()) {

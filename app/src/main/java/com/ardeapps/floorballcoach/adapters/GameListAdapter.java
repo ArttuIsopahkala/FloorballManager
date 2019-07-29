@@ -27,7 +27,6 @@ public class GameListAdapter extends BaseAdapter {
     private Context ctx;
     private boolean adapterFirstTime;
 
-
     public GameListAdapter(Context ctx) { // Activity
         this.ctx = ctx;
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

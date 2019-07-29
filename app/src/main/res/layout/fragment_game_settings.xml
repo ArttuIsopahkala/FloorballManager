@@ -1,169 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_background"
     android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
-    <ScrollView
+    android:focusable="true">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <RelativeLayout
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+        <LinearLayout
+            android:id="@+id/homeContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/homeContainer"
-                android:layout_below="@+id/settingsContainer"
-                android:layout_width="match_parent"
+            android:padding="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:gravity="end"
+                android:text="@string/home"
+                android:textColor="@color/color_text_light"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="@string/away"
+                android:textColor="@color/color_text_light"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/teamsContainer"
+            android:layout_below="@+id/homeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <TextView
+                android:id="@+id/nameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/changeIcon"
+                android:layout_centerVertical="true"
+                android:text="O2 miehet 2"
+                android:textColor="@color/color_text_light"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <com.ardeapps.floorballcoach.views.IconView
+                android:id="@+id/changeIcon"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
                 android:padding="10dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:gravity="end"
-                    android:text="@string/home"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:text="@string/away"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-            <RelativeLayout
-                android:id="@+id/teamsContainer"
-                android:layout_below="@+id/homeContainer"
-                android:layout_width="match_parent"
-                android:layout_height="80dp">
-                <TextView
-                    android:id="@+id/nameText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/changeIcon"
-                    android:layout_toStartOf="@+id/changeIcon"
-                    android:layout_centerVertical="true"
-                    android:text="O2 miehet 2"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-                <com.ardeapps.floorballcoach.views.IconView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/changeIcon"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:padding="10dp"
-                    android:text="@string/icon_change"
-                    app:iconFont="@string/icon_solid"
-                    app:iconSize="20sp" />
-                <AutoCompleteTextView
-                    android:id="@+id/opponentEditText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/opponent"
-                    android:padding="10dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/changeIcon"
-                    android:layout_toEndOf="@+id/changeIcon"
-                    android:focusableInTouchMode="true"
-                    android:inputType="textCapWords"
-                    android:imeOptions="actionDone"
-                    android:textSize="20sp"
-                    android:completionThreshold="1"
-                    android:popupBackground="@color/color_background_second"
-                    android:textColor="@color/color_text_light"
-                    android:textColorHint="@color/color_text_hint" />
-            </RelativeLayout>
-            <LinearLayout
-                android:id="@+id/dateContainer"
-                android:layout_below="@+id/teamsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@color/color_background">
-                <TextView
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/date"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-                <com.ardeapps.floorballcoach.views.DatePicker
-                    android:id="@+id/datePicker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="18sp" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/periodContainer"
-                android:layout_below="@+id/dateContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@color/color_background">
-                <TextView
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/period_duration"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-                <Spinner
-                    android:id="@+id/periodSpinner"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color_text_light" />
-                <TextView
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/title_lines_default"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-                <com.ardeapps.floorballcoach.views.LineUpSelector
-                    android:id="@+id/lineUpSelector"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:id="@+id/saveButton"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="40dp"
-                    android:background="@color/color_background_second"
-                    android:text="@string/save"
-                    android:textColor="@color/color_text_light" />
-            </LinearLayout>
+                android:text="@string/icon_change"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="20sp" />
+            <AutoCompleteTextView
+                android:id="@+id/opponentEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/opponent"
+                android:padding="10dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/changeIcon"
+                android:focusableInTouchMode="true"
+                android:inputType="textCapWords"
+                android:imeOptions="actionDone"
+                android:textSize="20sp"
+                android:completionThreshold="1"
+                android:popupBackground="@color/color_background_second"
+                android:textColor="@color/color_text_light"
+                android:textColorHint="@color/color_text_hint" />
         </RelativeLayout>
-    </ScrollView>
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/dateContainer"
+            android:layout_below="@+id/teamsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@color/color_background">
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/date"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <com.ardeapps.floorballcoach.views.DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_text_light"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_below="@+id/dateContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@color/color_background">
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/season"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/noSeasonsText"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/team_settings_no_seasons"
+                    android:textColor="@color/color_text_light_secondary"
+                    android:textSize="16sp"
+                    android:textStyle="italic"/>
+                <Spinner
+                    android:id="@+id/seasonSpinner"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/color_text_light" />
+                <com.ardeapps.floorballcoach.views.IconView
+                    android:id="@+id/addSeasonIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/icon_plus"
+                    app:iconFont="@string/icon_solid"
+                    app:iconSize="18sp" />
+            </RelativeLayout>
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/title_lines_default"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <com.ardeapps.floorballcoach.views.LineUpSelector
+                android:id="@+id/lineUpSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="40dp"
+                android:background="@color/color_background_second"
+                android:text="@string/save"
+                android:textColor="@color/color_text_light" />
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

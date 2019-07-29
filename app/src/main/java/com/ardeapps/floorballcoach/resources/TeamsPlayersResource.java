@@ -20,15 +20,15 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class PlayersResource extends FirebaseDatabaseService {
-    private static PlayersResource instance;
+public class TeamsPlayersResource extends FirebaseDatabaseService {
+    private static TeamsPlayersResource instance;
     private static DatabaseReference database;
 
-    public static PlayersResource getInstance() {
+    public static TeamsPlayersResource getInstance() {
         if (instance == null) {
-            instance = new PlayersResource();
+            instance = new TeamsPlayersResource();
         }
-        database = getDatabase().child(PLAYERS).child(AppRes.getInstance().getSelectedTeam().getTeamId());
+        database = getDatabase().child(TEAMS_PLAYERS).child(AppRes.getInstance().getSelectedTeam().getTeamId());
         return instance;
     }
 
@@ -41,8 +41,22 @@ public class PlayersResource extends FirebaseDatabaseService {
         editData(database.child(player.getPlayerId()), player, handler);
     }
 
-    public void removePlayer(String playerId, final DeleteDataSuccessListener handler) {
-        deleteData(database.child(playerId), handler);
+    public void removePlayer(final Player player, final DeleteDataSuccessListener handler) {
+        deleteData(database.child(player.getPlayerId()), new DeleteDataSuccessListener() {
+            @Override
+            public void onDeleteDataSuccess() {
+                if(player.isPictureUploaded()) {
+                    PictureResource.getInstance().removePicture(player.getPlayerId(), new FirebaseStorageService.DeleteBitmapSuccessListener() {
+                        @Override
+                        public void onDeleteBitmapSuccess() {
+                            handler.onDeleteDataSuccess();
+                        }
+                    });
+                } else {
+                    handler.onDeleteDataSuccess();
+                }
+            }
+        });
     }
 
     public void getPlayer(String playerId, final GetPlayerHandler handler) {
@@ -79,9 +93,12 @@ public class PlayersResource extends FirebaseDatabaseService {
                         @Override
                         public void onGetBitmapsSuccess(Map<String, Bitmap> bitmaps) {
                             for(Map.Entry<String, Bitmap> entry : bitmaps.entrySet()) {
-                                String key = entry.getKey();
-                                Bitmap value = entry.getValue();
-                                players.get(key).setPicture(value);
+                                String playerId = entry.getKey();
+                                Bitmap bitmap = entry.getValue();
+                                Player player = players.get(playerId);
+                                if(player != null) {
+                                    player.setPicture(bitmap);
+                                }
                             }
                             handler.onPlayersLoaded(players);
                         }

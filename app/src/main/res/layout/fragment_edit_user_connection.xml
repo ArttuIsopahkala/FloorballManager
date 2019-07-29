@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    android:clickable="true"
+    android:focusable="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_menu"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="@string/add_user_connection_desc"
+            android:textColor="@color/color_text_light"
+            android:textSize="15sp" />
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:text="@string/add_user_connection_email"
+            android:textColor="@color/color_text_light"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/emailText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:hint="@string/login_email"
+            android:focusableInTouchMode="true"
+            android:maxLength="250"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:nextFocusRight="@+id/passwordText"
+            android:textColor="@color/color_text_light"
+            android:textColorHint="@color/color_text_hint" />
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:text="@string/add_user_connection_role"
+            android:textColor="@color/color_text_light"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/roleInfoText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/add_user_connection_info_player"
+            android:textColor="@color/color_text_light_secondary"
+            android:textSize="14sp"/>
+        <Spinner
+            android:id="@+id/roleSpinner"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textColor="@color/color_text_light" />
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center"
+            android:background="@color/color_background_second"
+            android:text="@string/save"
+            android:textColor="@color/color_text_light" />
+    </LinearLayout>
+</ScrollView>

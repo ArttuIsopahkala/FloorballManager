@@ -3,6 +3,7 @@ package com.ardeapps.floorballcoach.fragments;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,10 @@ import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.SelectPictureDialogFragment;
 import com.ardeapps.floorballcoach.objects.Team;
 import com.ardeapps.floorballcoach.objects.User;
+import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.resources.LogoResource;
 import com.ardeapps.floorballcoach.resources.TeamsResource;
+import com.ardeapps.floorballcoach.resources.TeamsUserConnectionsResource;
 import com.ardeapps.floorballcoach.resources.UsersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FirebaseStorageService;
@@ -76,7 +79,7 @@ public class EditTeamFragment extends Fragment implements DataView {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_edit_team, container, false);
 
@@ -102,7 +105,7 @@ public class EditTeamFragment extends Fragment implements DataView {
             @Override
             public void onClick(View v) {
                 final SelectPictureDialogFragment dialog = new SelectPictureDialogFragment();
-                dialog.show(getActivity().getSupportFragmentManager(), "Vaihda logo");
+                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Vaihda logo");
                 dialog.setListener(new SelectPictureDialogFragment.SelectPictureDialogCloseListener() {
                     @Override
                     public void onPictureSelected(Bitmap logo) {
@@ -141,6 +144,7 @@ public class EditTeamFragment extends Fragment implements DataView {
                     TeamsResource.getInstance().editTeam(teamToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                         @Override
                         public void onEditDataSuccess() {
+                            AppRes.getInstance().setSelectedTeam(teamToSave);
                             saveTeamToUser(teamToSave);
                         }
                     });
@@ -151,10 +155,9 @@ public class EditTeamFragment extends Fragment implements DataView {
                         @Override
                         public void onAddDataSuccess(String id) {
                             teamToSave.setTeamId(id);
-                            // This is necessary to add lines at this point
                             AppRes.getInstance().setSelectedTeam(teamToSave);
 
-                            saveTeamToUser(teamToSave);
+                            addUserConnection(teamToSave);
                         }
                     });
                 }
@@ -162,6 +165,23 @@ public class EditTeamFragment extends Fragment implements DataView {
         });
 
         return v;
+    }
+
+    private void addUserConnection(final Team teamToSave) {
+        final UserConnection userConnection = new UserConnection();
+        User user = AppRes.getInstance().getUser();
+        userConnection.setEmail(user.getEmail());
+        userConnection.setUserId(user.getUserId());
+        userConnection.setRole(UserConnection.Role.ADMIN.toDatabaseName());
+        userConnection.setStatus(UserConnection.Status.CONNECTED.toDatabaseName());
+        TeamsUserConnectionsResource.getInstance().addUserConnection(userConnection, new FirebaseDatabaseService.AddDataSuccessListener() {
+            @Override
+            public void onAddDataSuccess(String id) {
+                userConnection.setUserConnectionId(id);
+                AppRes.getInstance().setUserConnection(userConnection.getUserConnectionId(), userConnection);
+                saveTeamToUser(teamToSave);
+            }
+        });
     }
 
     private void saveTeamToUser(final Team teamToSave) {

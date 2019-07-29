@@ -15,6 +15,7 @@ public class PrefRes {
     public static final String APP_STARTED_FIRST_TIME = "appStartedFirstTime";
     public static final String IS_APP_VISIBLE = "isAppVisible";
     public static final String EMAIL = "email";
+    public static final String SEASON_ID = "seasonId";
     // TODO mene tallennettuun team dashboardiin
     public static final String SELECTED_TEAM_ID = "selectedTeamId";
 

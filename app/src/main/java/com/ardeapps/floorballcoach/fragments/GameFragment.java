@@ -2,6 +2,7 @@ package com.ardeapps.floorballcoach.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.ardeapps.floorballcoach.goalDialog.GoalWizardDialogFragment;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
+import com.ardeapps.floorballcoach.objects.Season;
 import com.ardeapps.floorballcoach.resources.GoalResourcesWrapper;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.StringUtils;
@@ -39,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class GameFragment extends Fragment implements DataView {
 
     TextView dateText;
+    TextView seasonText;
     TextView periodDurationText;
     TextView homeNameText;
     TextView awayNameText;
@@ -70,7 +73,14 @@ public class GameFragment extends Fragment implements DataView {
     }
 
     public void update() {
-        periodDurationText.setText(data.getGame().getPeriodInMinutes() + "min");
+        Season season = AppRes.getInstance().getSeasons().get(data.getGame().getSeasonId());
+        if(season != null) {
+            seasonText.setText(season.getName());
+            periodDurationText.setText(season.getPeriodInMinutes() + "min");
+        } else {
+            seasonText.setText("-");
+            periodDurationText.setText("-");
+        }
         dateText.setText(StringUtils.getDateText(data.getGame().getDate()));
 
         String homeName = data.getGame().isHomeGame() ? AppRes.getInstance().getSelectedTeam().getName() : data.getGame().getOpponentName();
@@ -97,7 +107,7 @@ public class GameFragment extends Fragment implements DataView {
         homeGoals = 0;
         awayGoals = 0;
 
-        long firstPeriodEnd = TimeUnit.MINUTES.toMillis(data.getGame().getPeriodInMinutes());
+        long firstPeriodEnd = TimeUnit.MINUTES.toMillis(season.getPeriodInMinutes());
         long secondPeriodEnd = firstPeriodEnd * 2;
         for(Goal goal : data.getGoals().values()) {
             if(goal.getTime() < firstPeriodEnd) {
@@ -118,11 +128,12 @@ public class GameFragment extends Fragment implements DataView {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
 
         dateText = v.findViewById(R.id.dateText);
+        seasonText = v.findViewById(R.id.seasonText);
         periodDurationText = v.findViewById(R.id.periodDurationText);
         homeNameText = v.findViewById(R.id.homeNameText);
         awayNameText = v.findViewById(R.id.awayNameText);
@@ -302,7 +313,7 @@ public class GameFragment extends Fragment implements DataView {
             @Override
             public void onClick(View v) {
                 final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
-                dialog.show(getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
+                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
                 dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
                     @Override
                     public void onEditItem() {
@@ -340,7 +351,7 @@ public class GameFragment extends Fragment implements DataView {
 
     private void openGoalWizardDialog(final Goal goal, boolean homeGoal) {
         final GoalWizardDialogFragment dialog = new GoalWizardDialogFragment();
-        dialog.show(getActivity().getSupportFragmentManager(), "Muokkaa maalia");
+        dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa maalia");
         final boolean opponentGoal = (data.getGame().isHomeGame() && !homeGoal) || (!data.getGame().isHomeGame() && homeGoal);
 
         GoalWizardDialogData dialogData = new GoalWizardDialogData();

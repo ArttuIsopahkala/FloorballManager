@@ -260,6 +260,18 @@ public class AnalyzerService {
     }
 
     /**
+     * Database path: goalsTeamGame
+     *
+     * Get best lines using goals from 3 last games
+     * @return List on Lines of Players with best chemistries (Integer = Line number)
+     *
+     */
+    public Map<Integer, Line> getHotLines() {
+        Map<Integer, Line> listOfBestLines = new HashMap<>();
+        return listOfBestLines;
+    }
+
+    /**
      * MAIN METHOD (called from UI)
      *
      * Get average percent for line. Average is calculated from closest positions.
@@ -269,12 +281,35 @@ public class AnalyzerService {
     public int getLineChemistryPercent(Line line) {
         Map<ChemistryConnection, Integer> chemistryConnections = getChemistryConnections(line);
         double percentSize = chemistryConnections.size();
+        if(percentSize == 0) {
+            return 0;
+        }
         double percentCount = 0;
         for (Map.Entry<ChemistryConnection, Integer> entry : chemistryConnections.entrySet()) {
             Integer percent = entry.getValue();
             percentCount += percent == null ? 0 : percent;
         }
 
+        return (int)Math.round(percentCount / percentSize);
+    }
+
+    /**
+     * MAIN METHOD (called from UI)
+     *
+     * Get average percent for team. Percent is average of line chemistry percentages.
+     * @param lines team lines
+     * @return chemistry percent for team
+     */
+    public int getTeamChemistryPercent(Map<Integer, Line> lines) {
+        double percentSize = lines.size();
+        if(percentSize == 0) {
+            return 0;
+        }
+        double percentCount = 0;
+        for (Map.Entry<Integer, Line> entry : lines.entrySet()) {
+            Line line = entry.getValue();
+            percentCount += getLineChemistryPercent(line);
+        }
         return (int)Math.round(percentCount / percentSize);
     }
 
@@ -301,7 +336,7 @@ public class AnalyzerService {
         }
         chemistry = compareChemistryMap.get(Position.LD);
         if(chemistry != null) {
-            chemistryConnections.put(ChemistryConnection.C_RD, chemistry);
+            chemistryConnections.put(ChemistryConnection.C_LD, chemistry);
         }
         chemistry = compareChemistryMap.get(Position.RD);
         if(chemistry != null) {
@@ -313,7 +348,7 @@ public class AnalyzerService {
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.LD_RD, chemistry);
         }
-        chemistry = compareChemistryMap.get(Position.RD);
+        chemistry = compareChemistryMap.get(Position.LW);
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.LD_LW, chemistry);
         }

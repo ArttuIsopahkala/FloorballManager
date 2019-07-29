@@ -1,167 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_background"
     android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
-    <ScrollView
+    android:focusable="true">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <RelativeLayout
-                android:id="@+id/logoContainer"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="10dp">
-                <ImageView
-                    android:id="@+id/pictureImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/default_picture"/>
-                <RelativeLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/circle"/>
-                    <com.ardeapps.floorballcoach.views.IconView
-                        android:id="@+id/selectPictureIcon"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp"
-                        android:text="@string/icon_edit"
-                        app:iconFont="@string/icon_solid"
-                        app:iconSize="16sp" />
-                </RelativeLayout>
-            </RelativeLayout>
-            <LinearLayout
-                android:layout_below="@+id/logoContainer"
+            android:id="@+id/logoContainer"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp">
+            <ImageView
+                android:id="@+id/pictureImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@color/color_background">
-                <EditText
-                    android:id="@+id/nameText"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:hint="@string/add_player_name"
-                    android:focusableInTouchMode="true"
-                    android:nextFocusRight="@+id/numberText"
-                    android:inputType="textCapWords"
-                    android:textColor="@color/color_text_light"
-                    android:textColorHint="@color/color_text_hint" />
-                <EditText
-                    android:id="@+id/numberText"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:hint="@string/add_player_number"
-                    android:focusableInTouchMode="true"
-                    android:inputType="number"
-                    android:textColor="@color/color_text_light"
-                    android:textColorHint="@color/color_text_hint" />
-                <LinearLayout
-                    android:id="@+id/shootsContent"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginRight="20dp"
-                        android:text="@string/add_player_shoots"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <RadioGroup
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" >
-                        <RadioButton
-                            android:id="@+id/leftRadioButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:text="@string/left"
-                            android:textColor="@color/color_text_light_secondary" />
-                        <RadioButton
-                            android:id="@+id/rightRadioButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/right"
-                            android:textColor="@color/color_text_light_secondary"/>
-                    </RadioGroup>
-                </LinearLayout>
+                android:src="@drawable/default_picture"/>
+            <RelativeLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/circle"/>
+                <com.ardeapps.floorballcoach.views.IconView
+                    android:id="@+id/selectPictureIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:text="@string/icon_edit"
+                    app:iconFont="@string/icon_solid"
+                    app:iconSize="16sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_below="@+id/logoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@color/color_background">
+            <EditText
+                android:id="@+id/nameText"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="@string/add_player_name"
+                android:focusableInTouchMode="true"
+                android:maxLength="250"
+                android:nextFocusRight="@+id/numberText"
+                android:inputType="textCapWords"
+                android:textColor="@color/color_text_light"
+                android:textColorHint="@color/color_text_hint" />
+            <EditText
+                android:id="@+id/numberText"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="@string/add_player_number"
+                android:focusableInTouchMode="true"
+                android:maxLength="250"
+                android:inputType="number"
+                android:textColor="@color/color_text_light"
+                android:textColorHint="@color/color_text_hint" />
+            <LinearLayout
+                android:id="@+id/shootsContent"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
                 <TextView
-                    android:layout_width="300dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/add_player_position"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="@string/add_player_shoots"
                     android:textColor="@color/color_text_light"
                     android:textSize="16sp"
                     android:textStyle="bold" />
-                <Spinner
-                    android:id="@+id/positionSpinner"
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
-                    android:textColor="@color/color_text_light"
-                    android:layout_marginBottom="20dp" />
-                <RelativeLayout
-                    android:layout_width="300dp"
+                <RadioGroup
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
-                    <TextView
+                    android:orientation="vertical" >
+                    <RadioButton
+                        android:id="@+id/leftRadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="@string/add_player_type"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <com.ardeapps.floorballcoach.views.IconView
-                        android:id="@+id/typeInfoIcon"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:background="@color/color_background_third"
-                        android:text="@string/icon_info"
-                        app:iconFont="@string/icon_solid"
-                        app:iconSize="22dp" />
-                </RelativeLayout>
-                <Spinner
-                    android:id="@+id/typeSpinner"
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
-                    android:textColor="@color/color_text_light" />
-                <Button
-                    android:id="@+id/saveButton"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:background="@color/color_background_second"
-                    android:text="@string/save"
-                    android:textColor="@color/color_text_light" />
+                        android:checked="true"
+                        android:text="@string/left"
+                        android:textColor="@color/color_text_light_secondary" />
+                    <RadioButton
+                        android:id="@+id/rightRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/right"
+                        android:textColor="@color/color_text_light_secondary"/>
+                </RadioGroup>
             </LinearLayout>
-        </RelativeLayout>
-    </ScrollView>
-</RelativeLayout>
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/add_player_position"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/positionSpinner"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:textColor="@color/color_text_light"
+                android:layout_marginBottom="20dp" />
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/add_player_type"
+                    android:textColor="@color/color_text_light"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <com.ardeapps.floorballcoach.views.IconView
+                    android:id="@+id/typeInfoIcon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/color_background_third"
+                    android:text="@string/icon_info"
+                    app:iconFont="@string/icon_solid"
+                    app:iconSize="22dp" />
+            </RelativeLayout>
+            <Spinner
+                android:id="@+id/typeSpinner"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:textColor="@color/color_text_light" />
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:background="@color/color_background_second"
+                android:text="@string/save"
+                android:textColor="@color/color_text_light" />
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

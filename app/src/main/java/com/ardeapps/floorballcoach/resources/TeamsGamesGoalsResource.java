@@ -16,15 +16,15 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class GoalsByTeamResource extends FirebaseDatabaseService {
-    private static GoalsByTeamResource instance;
+public class TeamsGamesGoalsResource extends FirebaseDatabaseService {
+    private static TeamsGamesGoalsResource instance;
     private static DatabaseReference database;
 
-    public static GoalsByTeamResource getInstance() {
+    public static TeamsGamesGoalsResource getInstance() {
         if (instance == null) {
-            instance = new GoalsByTeamResource();
+            instance = new TeamsGamesGoalsResource();
         }
-        database = getDatabase().child(GOALS_TEAM_GAME).child(AppRes.getInstance().getSelectedTeam().getTeamId());
+        database = getDatabase().child(TEAMS_GAMES_GOALS).child(AppRes.getInstance().getSelectedTeam().getTeamId());
         return instance;
     }
 
@@ -39,6 +39,10 @@ public class GoalsByTeamResource extends FirebaseDatabaseService {
 
     public void removeGoal(String gameId, String goalId, final DeleteDataSuccessListener handler) {
         deleteData(database.child(gameId).child(goalId), handler);
+    }
+
+    public void removeGoals(final DeleteDataSuccessListener handler) {
+        deleteData(database, handler);
     }
 
     /**

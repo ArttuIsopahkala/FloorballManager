@@ -6,6 +6,7 @@ public class LineFragmentData {
 
     private Line line;
     private int lineNumber;
+    private boolean showChemistry;
 
     public LineFragmentData() {
     }
@@ -24,5 +25,13 @@ public class LineFragmentData {
 
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
+    }
+
+    public boolean isShowChemistry() {
+        return showChemistry;
+    }
+
+    public void setShowChemistry(boolean showChemistry) {
+        this.showChemistry = showChemistry;
     }
 }

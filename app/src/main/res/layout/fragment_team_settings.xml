@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="20dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/editTeamButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_background_second"
+            android:text="@string/team_settings_edit"
+            android:textColor="@color/color_text_light"/>
+        <Button
+            android:id="@+id/addUserConnectionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_background_second"
+            android:text="@string/team_settings_add_connection"
+            android:textColor="@color/color_text_light"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/team_settings_connections"
+            android:textColor="@color/color_text_light"
+            android:textSize="18sp" />
+        <LinearLayout
+            android:id="@+id/userConnectionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/team_settings_invitation_status"
+            android:textColor="@color/color_text_light"
+            android:textSize="18sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <com.ardeapps.floorballcoach.views.IconView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:text="@string/icon_check"
+                app:iconColor="@color/color_green_light"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/team_settings_connected"
+                android:textColor="@color/color_text_light"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <com.ardeapps.floorballcoach.views.IconView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:text="@string/icon_clock"
+                app:iconColor="@color/color_yellow_light"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/team_settings_pending"
+                android:textColor="@color/color_text_light"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <com.ardeapps.floorballcoach.views.IconView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:text="@string/icon_close"
+                app:iconColor="@color/color_red_light"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/team_settings_deny"
+                android:textColor="@color/color_text_light"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/removeTeamButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:background="@color/color_red_light"
+            android:text="@string/team_settings_remove_team"
+            android:textColor="@color/color_text_black"/>
+    </LinearLayout>
+</ScrollView>

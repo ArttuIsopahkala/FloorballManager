@@ -17,17 +17,14 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:text="@string/icon_back"
-            android:onClick="goBack"
             app:iconFont="@string/icon_solid"
             app:iconSize="18sp" />
         <TextView
             android:id="@+id/titleText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/backIcon"
-            android:layout_toRightOf="@+id/backIcon"
             android:gravity="center_vertical"
             android:textColor="@color/color_text_light"
             android:textSize="18sp"
@@ -39,7 +36,6 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:text="@string/icon_user"
-            android:onClick="goToSettings"
             app:iconFont="@string/icon_solid"
             app:iconSize="18sp" />
     </RelativeLayout>

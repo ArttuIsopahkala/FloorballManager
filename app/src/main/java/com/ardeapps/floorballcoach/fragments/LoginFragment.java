@@ -1,6 +1,7 @@
 package com.ardeapps.floorballcoach.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,6 @@ import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
-
-import java.util.Arrays;
 
 import static com.ardeapps.floorballcoach.PrefRes.EMAIL;
 import static com.ardeapps.floorballcoach.utils.Helper.isValidEmail;
@@ -45,7 +44,7 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
@@ -187,7 +186,6 @@ public class LoginFragment extends Fragment {
                     user.setEmail(email);
                     user.setCreationTime(now);
                     user.setLastLoginTime(now);
-                    user.setRoles(Arrays.asList(User.Role.COACH.name()));
                     UsersResource.getInstance().editUser(user, new FirebaseDatabaseService.EditDataSuccessListener() {
                         @Override
                         public void onEditDataSuccess() {

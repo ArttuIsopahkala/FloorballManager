@@ -51,7 +51,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
                 android:text="@string/icon_email"
                 app:iconFont="@string/icon_solid"
                 app:iconSize="16sp" />
@@ -61,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/login_email"
                 android:focusableInTouchMode="true"
+                android:maxLength="250"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:nextFocusRight="@+id/passwordText"
@@ -90,6 +90,7 @@
                 android:hint="@string/login_password"
                 android:imeOptions="actionDone"
                 android:focusableInTouchMode="true"
+                android:maxLength="250"
                 android:inputType="textPassword"
                 android:textColor="@color/color_text_light"
                 android:textColorHint="@color/color_text_hint"/>

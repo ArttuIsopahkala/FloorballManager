@@ -18,21 +18,6 @@ public class Shoot {
         }
     }
 
-    public enum Mode {
-        AV,
-        YV,
-        FULL,
-        RL;
-
-        public String toDatabaseName() {
-            return this.name();
-        }
-
-        public static Type fromDatabaseName(String value) {
-            return Enum.valueOf(Type.class, value);
-        }
-    }
-
     private String shootId;
     private String teamId;
     private String playerId;

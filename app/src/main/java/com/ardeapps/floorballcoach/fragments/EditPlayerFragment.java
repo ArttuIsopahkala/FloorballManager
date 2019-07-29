@@ -2,11 +2,11 @@ package com.ardeapps.floorballcoach.fragments;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,10 +18,11 @@ import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.SelectPictureDialogFragment;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.resources.PictureResource;
-import com.ardeapps.floorballcoach.resources.PlayersResource;
+import com.ardeapps.floorballcoach.resources.TeamsPlayersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FirebaseStorageService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
+import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
@@ -50,13 +51,9 @@ public class EditPlayerFragment extends Fragment implements DataView {
     Spinner positionSpinner;
     Spinner typeSpinner;
 
-    ArrayAdapter<String> positionSpinnerAdapter;
-    ArrayAdapter<String> typeSpinnerAdapter;
     public Listener mListener = null;
     Player player;
-    Map<Player.Type, String> typeMap;
     ArrayList<Player.Type> types;
-    Map<Player.Position, String> positionMap;
     ArrayList<Player.Position> positionTypes;
     Bitmap selectedPicture;
 
@@ -99,43 +96,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        positionMap = new TreeMap<>();
-        positionMap.put(Player.Position.LW, getString(R.string.position_lw));
-        positionMap.put(Player.Position.C, getString(R.string.position_c));
-        positionMap.put(Player.Position.RW, getString(R.string.position_rw));
-        positionMap.put(Player.Position.LD, getString(R.string.position_ld));
-        positionMap.put(Player.Position.RD, getString(R.string.position_rd));
-        ArrayList<String> positions = new ArrayList<>(positionMap.values());
-        positionTypes = new ArrayList<>(positionMap.keySet());
-
-        positionSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, positions);
-        positionSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        positionSpinnerAdapter.notifyDataSetChanged();
-
-        typeMap = new TreeMap<>();
-        typeMap.put(Player.Type.GRINDER_FORWARD, getString(R.string.grinder_forward));
-        typeMap.put(Player.Type.PLAY_MAKER_FORWARD, getString(R.string.play_maker_forward));
-        typeMap.put(Player.Type.POWER_FORWARD, getString(R.string.power_forward));
-        typeMap.put(Player.Type.SNIPER_FORWARD, getString(R.string.sniper_forward));
-        typeMap.put(Player.Type.TWO_WAY_FORWARD, getString(R.string.two_way_forward));
-        typeMap.put(Player.Type.DEFENSIVE_DEFENDER, getString(R.string.defensive_defender));
-        typeMap.put(Player.Type.POWER_DEFENDER, getString(R.string.power_defender));
-        typeMap.put(Player.Type.OFFENSIVE_DEFENDER, getString(R.string.offensive_defender));
-        typeMap.put(Player.Type.TWO_WAY_DEFENDER, getString(R.string.two_way_defender));
-        ArrayList<String> typeTexts = new ArrayList<>();
-        typeTexts.add(getString(R.string.type_not_set));
-        typeTexts.addAll(typeMap.values());
-        types = new ArrayList<>(typeMap.keySet());
-
-        typeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, typeTexts);
-        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinnerAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_edit_player, container, false);
 
@@ -150,8 +111,31 @@ public class EditPlayerFragment extends Fragment implements DataView {
         positionSpinner = v.findViewById(R.id.positionSpinner);
         typeSpinner = v.findViewById(R.id.typeSpinner);
 
-        positionSpinner.setAdapter(positionSpinnerAdapter);
-        typeSpinner.setAdapter(typeSpinnerAdapter);
+        Map<Player.Position, String> positionMap = new TreeMap<>();
+        positionMap.put(Player.Position.LW, getString(R.string.position_lw));
+        positionMap.put(Player.Position.C, getString(R.string.position_c));
+        positionMap.put(Player.Position.RW, getString(R.string.position_rw));
+        positionMap.put(Player.Position.LD, getString(R.string.position_ld));
+        positionMap.put(Player.Position.RD, getString(R.string.position_rd));
+        ArrayList<String> positionTitles = new ArrayList<>(positionMap.values());
+        positionTypes = new ArrayList<>(positionMap.keySet());
+        Helper.setSpinnerAdapter(positionSpinner, positionTitles);
+
+        Map<Player.Type, String> typeMap = new TreeMap<>();
+        typeMap.put(Player.Type.GRINDER_FORWARD, getString(R.string.grinder_forward));
+        typeMap.put(Player.Type.PLAY_MAKER_FORWARD, getString(R.string.play_maker_forward));
+        typeMap.put(Player.Type.POWER_FORWARD, getString(R.string.power_forward));
+        typeMap.put(Player.Type.SNIPER_FORWARD, getString(R.string.sniper_forward));
+        typeMap.put(Player.Type.TWO_WAY_FORWARD, getString(R.string.two_way_forward));
+        typeMap.put(Player.Type.DEFENSIVE_DEFENDER, getString(R.string.defensive_defender));
+        typeMap.put(Player.Type.POWER_DEFENDER, getString(R.string.power_defender));
+        typeMap.put(Player.Type.OFFENSIVE_DEFENDER, getString(R.string.offensive_defender));
+        typeMap.put(Player.Type.TWO_WAY_DEFENDER, getString(R.string.two_way_defender));
+        ArrayList<String> typeTitles = new ArrayList<>();
+        typeTitles.add(getString(R.string.type_not_set));
+        typeTitles.addAll(typeMap.values());
+        types = new ArrayList<>(typeMap.keySet());
+        Helper.setSpinnerAdapter(typeSpinner, typeTitles);
 
         resetFields();
         if (player != null) {
@@ -197,7 +181,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
             @Override
             public void onClick(View v) {
                 final SelectPictureDialogFragment dialog = new SelectPictureDialogFragment();
-                dialog.show(getActivity().getSupportFragmentManager(), "Vaihda kuva");
+                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Vaihda kuva");
                 dialog.setListener(new SelectPictureDialogFragment.SelectPictureDialogCloseListener() {
                     @Override
                     public void onPictureSelected(Bitmap logo) {
@@ -261,14 +245,14 @@ public class EditPlayerFragment extends Fragment implements DataView {
                 playerToSave.setType(type);
 
                 if (player != null) {
-                    PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                    TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                         @Override
                         public void onEditDataSuccess() {
                             handlePictureAndSave(playerToSave);
                         }
                     });
                 } else {
-                    PlayersResource.getInstance().addPlayer(playerToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
+                    TeamsPlayersResource.getInstance().addPlayer(playerToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
                         @Override
                         public void onAddDataSuccess(String id) {
                             playerToSave.setPlayerId(id);
@@ -291,7 +275,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     @Override
                     public void onAddBitmapSuccess() {
                         playerToSave.setPictureUploaded(true);
-                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                        TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                             @Override
                             public void onEditDataSuccess() {
                                 playerToSave.setPicture(selectedPicture);
@@ -303,7 +287,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
             } else {
                 // Picture not changed
                 playerToSave.setPictureUploaded(false);
-                PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                     @Override
                     public void onEditDataSuccess() {
                         playerToSave.setPicture(null);
@@ -318,7 +302,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     @Override
                     public void onAddBitmapSuccess() {
                         playerToSave.setPictureUploaded(true);
-                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                        TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                             @Override
                             public void onEditDataSuccess() {
                                 playerToSave.setPicture(selectedPicture);
@@ -333,7 +317,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     @Override
                     public void onDeleteBitmapSuccess() {
                         playerToSave.setPictureUploaded(false);
-                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                        TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                             @Override
                             public void onEditDataSuccess() {
                                 playerToSave.setPicture(null);

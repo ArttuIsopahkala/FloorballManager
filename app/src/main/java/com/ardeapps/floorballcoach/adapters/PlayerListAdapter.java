@@ -70,6 +70,8 @@ public class PlayerListAdapter extends BaseAdapter {
 
         if(player.getPicture() != null) {
             holder.pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
+        } else {
+            holder.pictureImage.setImageResource(R.drawable.default_picture);
         }
 
         Player.Shoots shoots = Player.Shoots.fromDatabaseName(player.getShoots());
