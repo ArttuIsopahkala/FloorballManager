@@ -23,12 +23,7 @@ public class GameListAdapter extends BaseAdapter {
     public Listener mListener = null;
     private ArrayList<Game> games = new ArrayList<>();
 
-    // TODO tarviiko? animoi
-    private Context ctx;
-    private boolean adapterFirstTime;
-
     public GameListAdapter(Context ctx) { // Activity
-        this.ctx = ctx;
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -36,8 +31,8 @@ public class GameListAdapter extends BaseAdapter {
         mListener = l;
     }
 
-    public void refreshData() {
-        games = new ArrayList<>(AppRes.getInstance().getGames().values());
+    public void setGames(ArrayList<Game> games) {
+        this.games = games;
         Collections.sort(games, new Comparator<Game>() {
             @Override
             public int compare(Game o1, Game o2) {
@@ -66,7 +61,6 @@ public class GameListAdapter extends BaseAdapter {
         final Holder holder = new Holder();
         if (v == null) {
             v = inflater.inflate(R.layout.list_item_game, null);
-            adapterFirstTime = true;
         }
 
         holder.gameContainer = v.findViewById(R.id.gameContainer);
@@ -106,7 +100,6 @@ public class GameListAdapter extends BaseAdapter {
             }
         });
 
-        adapterFirstTime = false;
         return v;
     }
 

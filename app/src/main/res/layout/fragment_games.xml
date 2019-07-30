@@ -6,8 +6,31 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/seasonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/season"
+            android:layout_gravity="center"
+            android:textColor="@color/color_text_light"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <Spinner
+            android:id="@+id/seasonSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/color_text_light" />
+    </LinearLayout>
     <TextView
         android:id="@+id/noGamesText"
+        android:layout_below="@+id/seasonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_menu"
@@ -15,11 +38,10 @@
         android:padding="15dp"
         android:text="@string/games_no_games"
         android:textColor="@color/color_text_light"
-        android:textSize="15sp" />
+        android:textSize="15sp"/>
     <ListView
         android:id="@+id/gameList"
-        android:layout_below="@+id/noGamesText"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/seasonContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
