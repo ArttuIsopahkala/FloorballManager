@@ -1,16 +1,23 @@
 package com.ardeapps.floorballcoach.fragments;
 
+import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.ardeapps.floorballcoach.AppRes;
@@ -21,7 +28,6 @@ import com.ardeapps.floorballcoach.resources.PictureResource;
 import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FirebaseStorageService;
-import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
 import com.ardeapps.floorballcoach.utils.Logger;
@@ -33,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static com.ardeapps.floorballcoach.utils.Helper.setCheckBoxChecked;
 import static com.ardeapps.floorballcoach.utils.Helper.setEditTextValue;
 import static com.ardeapps.floorballcoach.utils.Helper.setRadioButtonChecked;
 import static com.ardeapps.floorballcoach.utils.Helper.setSpinnerSelection;
@@ -41,7 +48,6 @@ import static com.ardeapps.floorballcoach.utils.Helper.setSpinnerSelection;
 public class EditPlayerFragment extends Fragment implements DataView {
 
     IconView selectPictureIcon;
-    IconView typeInfoIcon;
     Button saveButton;
     ImageView pictureImage;
     EditText nameText;
@@ -49,11 +55,12 @@ public class EditPlayerFragment extends Fragment implements DataView {
     RadioButton leftRadioButton;
     RadioButton rightRadioButton;
     Spinner positionSpinner;
-    Spinner typeSpinner;
+    LinearLayout strengthsContainer;
 
     public Listener mListener = null;
     Player player;
     ArrayList<Player.Type> types;
+    ArrayList<CheckBox> strengthCheckBoxes = new ArrayList<>();
     ArrayList<Player.Position> positionTypes;
     Bitmap selectedPicture;
 
@@ -92,16 +99,18 @@ public class EditPlayerFragment extends Fragment implements DataView {
         setEditTextValue(numberText, "");
         setRadioButtonChecked(leftRadioButton, true);
         setSpinnerSelection(positionSpinner, 0);
-        setSpinnerSelection(typeSpinner, 0);
+        for(CheckBox checkBox : strengthCheckBoxes) {
+            setCheckBoxChecked(checkBox, false);
+        }
     }
 
     @Override
+    @SuppressLint("RestrictedApi")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_edit_player, container, false);
 
         selectPictureIcon = v.findViewById(R.id.selectPictureIcon);
-        typeInfoIcon = v.findViewById(R.id.typeInfoIcon);
         saveButton = v.findViewById(R.id.saveButton);
         pictureImage = v.findViewById(R.id.pictureImage);
         nameText = v.findViewById(R.id.nameText);
@@ -109,7 +118,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
         leftRadioButton = v.findViewById(R.id.leftRadioButton);
         rightRadioButton = v.findViewById(R.id.rightRadioButton);
         positionSpinner = v.findViewById(R.id.positionSpinner);
-        typeSpinner = v.findViewById(R.id.typeSpinner);
+        strengthsContainer = v.findViewById(R.id.strengthsContainer);
 
         Map<Player.Position, String> positionMap = new TreeMap<>();
         positionMap.put(Player.Position.LW, getString(R.string.position_lw));
@@ -121,21 +130,27 @@ public class EditPlayerFragment extends Fragment implements DataView {
         positionTypes = new ArrayList<>(positionMap.keySet());
         Helper.setSpinnerAdapter(positionSpinner, positionTitles);
 
-        Map<Player.Type, String> typeMap = new TreeMap<>();
-        typeMap.put(Player.Type.GRINDER_FORWARD, getString(R.string.grinder_forward));
-        typeMap.put(Player.Type.PLAY_MAKER_FORWARD, getString(R.string.play_maker_forward));
-        typeMap.put(Player.Type.POWER_FORWARD, getString(R.string.power_forward));
-        typeMap.put(Player.Type.SNIPER_FORWARD, getString(R.string.sniper_forward));
-        typeMap.put(Player.Type.TWO_WAY_FORWARD, getString(R.string.two_way_forward));
-        typeMap.put(Player.Type.DEFENSIVE_DEFENDER, getString(R.string.defensive_defender));
-        typeMap.put(Player.Type.POWER_DEFENDER, getString(R.string.power_defender));
-        typeMap.put(Player.Type.OFFENSIVE_DEFENDER, getString(R.string.offensive_defender));
-        typeMap.put(Player.Type.TWO_WAY_DEFENDER, getString(R.string.two_way_defender));
-        ArrayList<String> typeTitles = new ArrayList<>();
-        typeTitles.add(getString(R.string.type_not_set));
-        typeTitles.addAll(typeMap.values());
-        types = new ArrayList<>(typeMap.keySet());
-        Helper.setSpinnerAdapter(typeSpinner, typeTitles);
+        Map<Player.Skill, String> strengthTextsMap = Player.getStrengthTextsMap();
+        strengthsContainer.removeAllViewsInLayout();
+        strengthCheckBoxes = new ArrayList<>();
+        for (Map.Entry<Player.Skill, String> entry : strengthTextsMap.entrySet()) {
+            Player.Skill skill = entry.getKey();
+            String title = entry.getValue();
+
+            final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            AppCompatCheckBox checkBox = new AppCompatCheckBox(AppRes.getActivity());
+            checkBox.setText(title);
+            checkBox.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_text_light));
+            checkBox.setLayoutParams(params);
+            checkBox.setTag(skill);
+
+            ColorStateList color = ContextCompat.getColorStateList(AppRes.getContext(), R.color.color_text_light);
+            checkBox.setSupportButtonTintList(color);
+
+            strengthCheckBoxes.add(checkBox);
+            strengthsContainer.addView(checkBox);
+        }
 
         resetFields();
         if (player != null) {
@@ -164,19 +179,13 @@ public class EditPlayerFragment extends Fragment implements DataView {
             Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
             setSpinnerSelection(positionSpinner, positionTypes.indexOf(position));
 
-            // Type
-            if(player.getType() != null) {
-                Player.Type type = Player.Type.fromDatabaseName(player.getType());
-                setSpinnerSelection(typeSpinner, types.indexOf(type) + 1); // +1 because first is empty
+            // Strengths
+            for(CheckBox checkBox : strengthCheckBoxes) {
+                Player.Skill skill = (Player.Skill)checkBox.getTag();
+                setCheckBoxChecked(checkBox, player.getStrengths().contains(skill.toDatabaseName()));
             }
         }
 
-        typeInfoIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToTypesInfoFragment();
-            }
-        });
         selectPictureIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,13 +234,21 @@ public class EditPlayerFragment extends Fragment implements DataView {
                         return;
                     }
                 }
+                // Collect strengths
+                ArrayList<String> strengths = new ArrayList<>();
+                for(CheckBox checkBox : strengthCheckBoxes) {
+                    Player.Skill skill = (Player.Skill)checkBox.getTag();
+                    if(checkBox.isChecked()) {
+                        strengths.add(skill.toDatabaseName());
+                    }
+                }
+                if(strengths.size() > 3) {
+                    Logger.toast(getString(R.string.strengths_too_many_error));
+                    return;
+                }
+
                 int positionSpinnerPosition = positionSpinner.getSelectedItemPosition();
                 String position = positionTypes.get(positionSpinnerPosition).toDatabaseName();
-                int typeSpinnerPosition = typeSpinner.getSelectedItemPosition();
-                String type = null;
-                if(typeSpinnerPosition > 0) {
-                    type = types.get(typeSpinnerPosition - 1).toDatabaseName(); // -1 because first is empty
-                }
                 String shoots = leftRadioButton.isChecked() ? Player.Shoots.LEFT.toDatabaseName() : Player.Shoots.RIGHT.toDatabaseName();
 
                 final Player playerToSave = player != null ? player.clone() : new Player();
@@ -242,7 +259,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     playerToSave.setNumber(number);
                 }
                 playerToSave.setPosition(position);
-                playerToSave.setType(type);
+                playerToSave.setStrengths(strengths);
 
                 if (player != null) {
                     PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {

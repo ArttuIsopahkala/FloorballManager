@@ -74,7 +74,6 @@ public class PlayerListAdapter extends BaseAdapter {
         String shootsText = AppRes.getContext().getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
         holder.nameNumberShootsText.setText(player.getNameWithNumber(false) + " | " + shootsText);
         holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
-        holder.typeText.setText(Player.getTypeText(player.getType()));
 
         if(type == PlayerHolder.ViewType.MANAGE) {
             holder.statisticsIcon.setOnClickListener(new View.OnClickListener() {

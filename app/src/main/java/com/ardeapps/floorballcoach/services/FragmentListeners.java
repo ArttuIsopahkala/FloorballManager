@@ -57,7 +57,6 @@ public class FragmentListeners {
         void goToGameSettingsFragment(GameSettingsFragmentData gameSettingsFragmentData);
         void goToGamesFragment();
         void goToBluetoothFragment();
-        void goToTypesInfoFragment();
         void goToPlayerStatsFragment(Player player);
         void goToTeamStatsFragment();
         void goToEditUserConnectionFragment(UserConnection userConnection);

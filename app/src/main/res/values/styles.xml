@@ -22,10 +22,12 @@
         <item name="colorControlActivated">@color/color_text_light</item>
         <item name="backgroundTint">@color/color_text_light</item>
     </style>
-
+    <style name="CheckBoxStyle" parent="AppTheme">
+        <item name="colorAccent">@color/color_text_light</item>
+    </style>
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/color_text_light</item>
-        <item name="android:background">@color/color_background</item>
+        <item name="android:background">@color/color_background_fourth</item>
     </style>
     <style name="mySpinnerText" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/color_text_light</item>

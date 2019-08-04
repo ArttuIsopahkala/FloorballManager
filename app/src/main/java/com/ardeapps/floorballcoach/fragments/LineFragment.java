@@ -313,7 +313,7 @@ public class LineFragment extends Fragment implements DataView {
     }
 
     private int getChemistryColor(int percent) {
-        int color = R.color.color_background; // Default color
+        int color = R.color.color_background_third; // Default color
         if (percent > 0 && percent <= 33) {
             color = R.color.color_red_light;
         } else if (percent > 33 && percent <= 66) {

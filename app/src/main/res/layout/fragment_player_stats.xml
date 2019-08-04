@@ -117,6 +117,29 @@
                         android:textSize="18sp"/>
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/strengthsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:baselineAligned="false">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/strengths_title"
+                    android:textColor="@color/color_text_light"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/strengthsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Syöttäminen, Laukominen, Fyysisyys"
+                    android:textColor="@color/color_text_light"
+                    android:textSize="18sp"/>
+            </LinearLayout>
         </LinearLayout>
         <TextView
             android:id="@+id/filterText"

@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -142,6 +143,15 @@ public class Helper {
             @Override
             public void run() {
                 radioButton.setChecked(checked);
+            }
+        });
+    }
+
+    public static void setCheckBoxChecked(final CheckBox checkBox, final boolean checked) {
+        checkBox.post(new Runnable() {
+            @Override
+            public void run() {
+                checkBox.setChecked(checked);
             }
         });
     }

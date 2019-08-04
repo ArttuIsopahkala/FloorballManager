@@ -56,10 +56,12 @@ public class UserInvitation {
         this.role = role;
     }
 
+    @Exclude
     public Team getTeam() {
         return team;
     }
 
+    @Exclude
     public void setTeam(Team team) {
         this.team = team;
     }

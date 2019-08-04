@@ -81,7 +81,6 @@
     <string name="title_game">Ottelu</string>
     <string name="title_games">Pelatut ottelut</string>
     <string name="title_new_game">Uusi ottelu</string>
-    <string name="title_type">Pelaajan tyyppi</string>
     <string name="title_team_settings">Joukkueen hallinta</string>
     <string name="title_player_stats">Pelaajan tilastot</string>
     <string name="title_team_stats">Joukkueen tilastot</string>
@@ -151,10 +150,22 @@
     <string name="add_player_number">Pelinumero</string>
     <string name="add_player_shoots">Kätisyys</string>
     <string name="add_player_position">Pelipaikka</string>
-    <string name="add_player_type">Tyyppi</string>
     <string name="add_player_shoots_left">LEFT</string>
     <string name="add_player_shoots_right">RIGHT</string>
     <string name="add_player_remove_confirmation">Haluatko siirtää poistettujen listalle? Pelaajan voi palauttaa tai poistaa lopullisesti joukkueen asetuksista.</string>
+
+    <string name="strengths_title">Vahvuudet</string>
+    <string name="strengths_desc">Valitse enintään kolme. Vahvuuksia käytetään pelaajakemioiden laskemisessa ja ne näkyvät vain Adminille.</string>
+    <string name="strengths_speed">Nopeus ja kestävyys</string>
+    <string name="strengths_passing">Syöttäminen</string>
+    <string name="strengths_shooting">Laukominen</string>
+    <string name="strengths_ball_handling">Pallonkäsittely</string>
+    <string name="strengths_game_sense">Peliäly</string>
+    <string name="strengths_ball_protection">Pallon suojaaminen</string>
+    <string name="strengths_interception">Syötönkatkot ja pallon riistäminen</string>
+    <string name="strengths_blocking">Peittäminen</string>
+    <string name="strengths_physicality">Fyysisyys</string>
+    <string name="strengths_too_many_error">Valitse enintään 3 vahvuutta.</string>
 
     <string name="team_dashboard_games">Ottelut</string>
     <string name="team_dashboard_players">Pelaajat</string>
@@ -174,7 +185,7 @@
     <string name="team_settings_remove_team_successful">Joukkue ja sen data poistettu. Avaa sovellus uudelleen.</string>
     <string name="team_settings_invitation_status">Kutsun tilat:</string>
     <string name="team_settings_pending">Kutsu lähetetty.</string>
-    <string name="team_settings_connected">Kutsu hyväksytty.</string>
+    <string name="team_settings_connected">Käyttäjä liitetty.</string>
     <string name="team_settings_deny">Kutsu hylätty.</string>
     <string name="team_settings_removed_players">Poistetut pelaajat</string>
 

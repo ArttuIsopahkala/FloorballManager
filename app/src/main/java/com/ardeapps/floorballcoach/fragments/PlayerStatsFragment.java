@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -87,6 +88,8 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     Spinner seasonSpinner;
     LinearLayout seasonContainer;
     TextView noSeasonsText;
+    LinearLayout strengthsContainer;
+    TextView strengthsText;
 
     private double imageWidth;
     private double imageHeight;
@@ -150,13 +153,17 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         bestAssistantText = v.findViewById(R.id.bestAssistantText);
         bestScorerText = v.findViewById(R.id.bestScorerText);
         bestSameLineText = v.findViewById(R.id.bestSameLineText);
+        strengthsContainer = v.findViewById(R.id.strengthsContainer);
+        strengthsText = v.findViewById(R.id.strengthsText);
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
         if(role == UserConnection.Role.PLAYER) {
             editIcon.setVisibility(View.GONE);
+            strengthsContainer.setVisibility(View.GONE);
         } else {
             editIcon.setVisibility(View.VISIBLE);
+            strengthsContainer.setVisibility(View.VISIBLE);
         }
 
         setSeasonSpinner();
@@ -174,6 +181,24 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         Player.Shoots shoots = Player.Shoots.fromDatabaseName(player.getShoots());
         String shootsString = getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
         shootsText.setText(shootsString);
+
+        String result = "";
+        List<String> strengths = player.getStrengths();
+        if(!strengths.isEmpty()) {
+            Map<Player.Skill, String> strengthTextsMap = Player.getStrengthTextsMap();
+            int addedCount = 0;
+            for(String strength : strengths) {
+                Player.Skill skill = Player.Skill.fromDatabaseName(strength);
+                if(addedCount > 0) {
+                    result += ", ";
+                }
+                result += strengthTextsMap.get(skill);
+                addedCount++;
+            }
+        } else {
+            result = "-";
+        }
+        strengthsText.setText(result);
 
         Map<Goal.Mode, String> gameModeMap = new HashMap<>();
         gameModeMap.put(null, getString(R.string.player_stats_all_game_modes));

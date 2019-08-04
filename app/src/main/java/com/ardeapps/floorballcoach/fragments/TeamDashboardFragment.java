@@ -48,15 +48,14 @@ public class TeamDashboardFragment extends Fragment {
             logoImage.setImageResource(R.drawable.default_logo);
         }
 
+        teamNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
+
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
         if(role == UserConnection.Role.PLAYER) {
-            teamNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
-            gamesButton.setVisibility(View.GONE);
             linesButton.setVisibility(View.GONE);
             settingsButton.setVisibility(View.GONE);
         } else {
-            gamesButton.setVisibility(View.VISIBLE);
             linesButton.setVisibility(View.VISIBLE);
             settingsButton.setVisibility(View.VISIBLE);
         }

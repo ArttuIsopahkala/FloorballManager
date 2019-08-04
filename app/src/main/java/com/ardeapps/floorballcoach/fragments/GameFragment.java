@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
@@ -21,6 +20,7 @@ import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Season;
+import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.resources.GoalsResourceWrapper;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.StringUtils;
@@ -149,6 +149,18 @@ public class GameFragment extends Fragment implements DataView {
         lineStats3 = v.findViewById(R.id.lineStats3);
         lineStats4 = v.findViewById(R.id.lineStats4);
 
+        // Role specific content
+        UserConnection.Role role = AppRes.getInstance().getSelectedRole();
+        if(role == UserConnection.Role.PLAYER) {
+            settingsIcon.setVisibility(View.GONE);
+            homeGoalButton.setVisibility(View.GONE);
+            awayGoalButton.setVisibility(View.GONE);
+        } else {
+            settingsIcon.setVisibility(View.VISIBLE);
+            homeGoalButton.setVisibility(View.VISIBLE);
+            awayGoalButton.setVisibility(View.VISIBLE);
+        }
+
         update();
 
         settingsIcon.setOnClickListener(new View.OnClickListener() {
@@ -188,9 +200,6 @@ public class GameFragment extends Fragment implements DataView {
         TextView awayAssistText;
         TextView timeText;
         TextView scoreText;
-        RelativeLayout goalContainer;
-        LinearLayout homeContainer;
-        LinearLayout awayContainer;
     }
 
     private void setPeriodView(LinearLayout view, int period, List<Goal> goals) {
@@ -219,9 +228,6 @@ public class GameFragment extends Fragment implements DataView {
             holder.awayAssistText = cv.findViewById(R.id.awayAssistText);
             holder.timeText = cv.findViewById(R.id.timeText);
             holder.scoreText = cv.findViewById(R.id.scoreText);
-            holder.goalContainer = cv.findViewById(R.id.goalContainer);
-            holder.homeContainer = cv.findViewById(R.id.homeContainer);
-            holder.awayContainer = cv.findViewById(R.id.awayContainer);
 
             String scorerName = "";
             String assistantName = "";
@@ -302,6 +308,16 @@ public class GameFragment extends Fragment implements DataView {
                 holder.homeGoalMenuIcon.setVisibility(View.GONE);
                 holder.awayGoalMenuIcon.setVisibility(View.VISIBLE);
                 setGoalMenuIconListener(holder.awayGoalMenuIcon, goal, false);
+            }
+
+            // Role specific content
+            UserConnection.Role role = AppRes.getInstance().getSelectedRole();
+            if(role == UserConnection.Role.PLAYER) {
+                holder.homeGoalMenuIcon.setVisibility(View.GONE);
+                holder.awayGoalMenuIcon.setVisibility(View.GONE);
+            } else {
+                holder.homeGoalMenuIcon.setVisibility(View.VISIBLE);
+                holder.awayGoalMenuIcon.setVisibility(View.VISIBLE);
             }
 
             goalList.addView(cv);

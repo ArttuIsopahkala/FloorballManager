@@ -32,7 +32,6 @@ import com.ardeapps.floorballcoach.fragments.SettingsFragment;
 import com.ardeapps.floorballcoach.fragments.TeamDashboardFragment;
 import com.ardeapps.floorballcoach.fragments.TeamSettingsFragment;
 import com.ardeapps.floorballcoach.fragments.TeamStatsFragment;
-import com.ardeapps.floorballcoach.fragments.TypesInfoFragment;
 import com.ardeapps.floorballcoach.handlers.GetAppDataHandler;
 import com.ardeapps.floorballcoach.handlers.GetGoalsHandler;
 import com.ardeapps.floorballcoach.handlers.GetLinesHandler;
@@ -92,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     GamesFragment gamesFragment;
     GameSettingsFragment gameSettingsFragment;
     BluetoothFragment bluetoothFragment;
-    TypesInfoFragment typesInfoFragment;
     TeamSettingsFragment teamSettingsFragment;
     PlayerStatsFragment playerStatsFragment;
     EditUserConnectionFragment editUserConnectionFragment;
@@ -134,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         gamesFragment = new GamesFragment();
         gameSettingsFragment = new GameSettingsFragment();
         bluetoothFragment = new BluetoothFragment();
-        typesInfoFragment = new TypesInfoFragment();
         teamSettingsFragment = new TeamSettingsFragment();
         playerStatsFragment = new PlayerStatsFragment();
         editUserConnectionFragment = new EditUserConnectionFragment();
@@ -161,6 +158,17 @@ public class MainActivity extends AppCompatActivity {
         UsersResource.getInstance().getUser(userId, new GetUserHandler() {
             @Override
             public void onUserLoaded(final User user) {
+                // If user is removed from database, remove auth also
+                if(user == null) {
+                    Logger.toast(R.string.login_error_user_not_found);
+                    FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if(authUser != null) {
+                        authUser.delete();
+                    }
+                    FirebaseAuth.getInstance().signOut();
+                    FragmentListeners.getInstance().getFragmentChangeListener().goToLoginFragment();
+                    return;
+                }
                 // Update lastLoginTime silently
                 user.setLastLoginTime(System.currentTimeMillis());
                 UsersResource.getInstance().editUser(user);
@@ -375,11 +383,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void goToTypesInfoFragment() {
-                switchToFragment(typesInfoFragment);
-            }
-
-            @Override
             public void goToPlayerStatsFragment(final Player player) {
                 playerStatsFragment.setData(player);
                 switchToFragment(playerStatsFragment);
@@ -553,9 +556,6 @@ public class MainActivity extends AppCompatActivity {
             titleText.setText(R.string.title_games);
         } else if(f instanceof GameSettingsFragment) {
             titleText.setText(R.string.title_game_settings);
-        } else if(f instanceof TypesInfoFragment) {
-            settingsIcon.setVisibility(View.GONE);
-            titleText.setText(R.string.title_type);
         } else if(f instanceof TeamSettingsFragment) {
             titleText.setText(R.string.title_team_settings);
         } else if(f instanceof PlayerStatsFragment) {

@@ -7,6 +7,11 @@ import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class Player {
 
     public enum Position {
@@ -45,6 +50,26 @@ public class Player {
         }
     }
 
+    public enum Skill {
+        SPEED,
+        PASSING,
+        SHOOTING,
+        BALL_HANDLING,
+        GAME_SENSE,
+        BALL_PROTECTION,
+        INTERCEPTION,
+        BLOCKING,
+        PHYSICALITY;
+
+        public String toDatabaseName() {
+            return this.name();
+        }
+
+        public static Skill fromDatabaseName(String value) {
+            return Enum.valueOf(Skill.class, value);
+        }
+    }
+
     public enum Shoots {
         LEFT,
         RIGHT;
@@ -64,7 +89,7 @@ public class Player {
     private Long number;
     private String shoots;
     private String position;
-    private String type;
+    private List<String> strengths;
     private boolean active;
     private boolean pictureUploaded;
     @Exclude
@@ -81,6 +106,7 @@ public class Player {
         clone.number = this.number;
         clone.shoots = this.shoots;
         clone.position = this.position;
+        clone.strengths = this.strengths;
         clone.active = this.active;
         clone.pictureUploaded = this.pictureUploaded;
         return clone;
@@ -122,33 +148,19 @@ public class Player {
     }
 
     @Exclude
-    public static String getTypeText(String value) {
-        if(value == null) {
-            return "";
-        }
-        Type type = Type.fromDatabaseName(value);
+    public static Map<Skill, String> getStrengthTextsMap() {
         Context ctx = AppRes.getContext();
-        if(type == Type.GRINDER_FORWARD) {
-            return ctx.getString(R.string.grinder_forward);
-        } else if(type == Type.PLAY_MAKER_FORWARD) {
-            return ctx.getString(R.string.play_maker_forward);
-        } else if(type == Type.POWER_FORWARD) {
-            return ctx.getString(R.string.power_forward);
-        } else if(type == Type.SNIPER_FORWARD) {
-            return ctx.getString(R.string.sniper_forward);
-        } else if(type == Type.TWO_WAY_FORWARD) {
-            return ctx.getString(R.string.two_way_forward);
-        } else if(type == Type.DEFENSIVE_DEFENDER) {
-            return ctx.getString(R.string.defensive_defender);
-        } else if(type == Type.POWER_DEFENDER) {
-            return ctx.getString(R.string.power_defender);
-        } else if(type == Type.OFFENSIVE_DEFENDER) {
-            return ctx.getString(R.string.offensive_defender);
-        } else if(type == Type.TWO_WAY_DEFENDER) {
-            return ctx.getString(R.string.two_way_defender);
-        } else {
-            return "";
-        }
+        Map<Skill, String> strengthsMap = new TreeMap<>();
+        strengthsMap.put(Player.Skill.SPEED, ctx.getString(R.string.strengths_speed));
+        strengthsMap.put(Player.Skill.PASSING, ctx.getString(R.string.strengths_passing));
+        strengthsMap.put(Player.Skill.SHOOTING, ctx.getString(R.string.strengths_shooting));
+        strengthsMap.put(Player.Skill.BALL_HANDLING, ctx.getString(R.string.strengths_ball_handling));
+        strengthsMap.put(Player.Skill.GAME_SENSE, ctx.getString(R.string.strengths_game_sense));
+        strengthsMap.put(Player.Skill.BALL_PROTECTION, ctx.getString(R.string.strengths_ball_protection));
+        strengthsMap.put(Player.Skill.INTERCEPTION, ctx.getString(R.string.strengths_interception));
+        strengthsMap.put(Player.Skill.BLOCKING, ctx.getString(R.string.strengths_blocking));
+        strengthsMap.put(Player.Skill.PHYSICALITY, ctx.getString(R.string.strengths_physicality));
+        return strengthsMap;
     }
 
     @Exclude
@@ -216,12 +228,15 @@ public class Player {
         this.position = position;
     }
 
-    public String getType() {
-        return type;
+    public List<String> getStrengths() {
+        if(strengths == null) {
+            strengths = new ArrayList<>();
+        }
+        return strengths;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setStrengths(List<String> strengths) {
+        this.strengths = strengths;
     }
 
     public boolean isActive() {

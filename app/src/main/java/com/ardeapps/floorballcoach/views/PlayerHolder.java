@@ -16,7 +16,6 @@ public class PlayerHolder {
     public ImageView pictureImage;
     public TextView nameNumberShootsText;
     public TextView positionText;
-    public TextView typeText;
     public IconView statisticsIcon;
     public IconView arrowIcon;
 
@@ -37,7 +36,6 @@ public class PlayerHolder {
         pictureImage = v.findViewById(R.id.pictureImage);
         nameNumberShootsText = v.findViewById(R.id.nameNumberShootsText);
         positionText = v.findViewById(R.id.positionText);
-        typeText = v.findViewById(R.id.typeText);
         statisticsIcon = v.findViewById(R.id.statisticsIcon);
         arrowIcon = v.findViewById(R.id.arrowIcon);
 
@@ -52,7 +50,6 @@ public class PlayerHolder {
                 pictureImage.setVisibility(View.VISIBLE);
                 nameNumberShootsText.setVisibility(View.VISIBLE);
                 positionText.setVisibility(View.VISIBLE);
-                typeText.setVisibility(View.VISIBLE);
                 statisticsIcon.setVisibility(View.VISIBLE);
                 arrowIcon.setVisibility(View.GONE);
                 break;
@@ -60,7 +57,6 @@ public class PlayerHolder {
                 pictureImage.setVisibility(View.VISIBLE);
                 nameNumberShootsText.setVisibility(View.VISIBLE);
                 positionText.setVisibility(View.VISIBLE);
-                typeText.setVisibility(View.GONE);
                 statisticsIcon.setVisibility(View.GONE);
                 arrowIcon.setVisibility(View.VISIBLE);
                 break;
