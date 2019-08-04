@@ -64,8 +64,7 @@ public class TimePicker extends LinearLayout {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String minutes = s.toString();
                 if (!StringUtils.isEmptyString(minutes)) {
-                    int value = Integer.parseInt(minutes);
-                    if (count == 2 || value > 5) {
+                    if (count == 2) {
                         secondsText.setFocusableInTouchMode(true);
                         secondsText.requestFocus();
                     }
@@ -145,9 +144,6 @@ public class TimePicker extends LinearLayout {
         String minutesString = minutesText.getText().toString();
         if (!StringUtils.isEmptyString(minutesString)) {
             newMinutes = Integer.parseInt(minutesString);
-            if (newMinutes > 59) {
-                newMinutes = minutes;
-            }
         }
         setMinutesText(newMinutes);
     }

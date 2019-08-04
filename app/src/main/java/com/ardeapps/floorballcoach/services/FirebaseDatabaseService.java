@@ -58,30 +58,32 @@ public class FirebaseDatabaseService {
 
     public static void updateDatabase() {
         final String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
-        /*GamesResource.getInstance().getAllGames(new GetGamesHandler() {
+        /*getData(getDatabase().child(TEAMS_SEASONS), new GetDataSuccessListener() {
             @Override
-            public void onGamesLoaded(final Map<String, Game> games) {
-                getData(getDatabase().child(PLAYERS_GAMES_STATS), new GetDataSuccessListener() {
-                    @Override
-                    public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot player : dataSnapshot.getChildren()) {
-                            final String playerId = player.getKey();
-                            for(DataSnapshot gameShot : player.getChildren()) {
-                                final String gameId = gameShot.getKey();
-                                Game game = games.get(gameId);
-                                if(game != null) {
-                                    for(DataSnapshot goalShot : gameShot.getChildren()) {
-                                        final Goal goal = goalShot.getValue(Goal.class);
-                                        goal.setSeasonId(game.getSeasonId());
-                                        editData(getDatabase().child(PLAYERS_SEASONS_GAMES_STATS).child(playerId).child(game.getSeasonId()).child(gameId).child(goal.getGoalId()), goal);
-                                    }
-                                }
-                            }
-                        }
+            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                for(DataSnapshot team : dataSnapshot.getChildren()) {
+                    for(DataSnapshot season : team.getChildren()) {
+                        editData(getDatabase().child(TEAMS_SEASONS).child(team.getKey()).child(season.getKey()).child("periodInMinutes"), null);
                     }
-                });
+                }
             }
         });
+        for(final String playerId : AppRes.getInstance().getPlayers().keySet()) {
+            PlayerGamesResource.getInstance().getAllGames(playerId, new GetGamesHandler() {
+                @Override
+                public void onGamesLoaded(Map<String, Game> games) {
+                    for(Map.Entry<String, Game> entry : games.entrySet()) {
+                        String seasonId = entry.getKey();
+                        Game game = entry.getValue();
+                        game.setPeriodInMinutes(15);
+
+                        PlayerGamesResource.getInstance().editGame(playerId, seasonId, game);
+                    }
+                }
+            });
+        }*/
+
+        /*
         GamesResource.getInstance().getGames(new GetGamesHandler() {
             @Override
             public void onGamesLoaded(final Map<String, Game> gamesMap) {

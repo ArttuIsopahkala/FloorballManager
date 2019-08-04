@@ -4,7 +4,6 @@ public class Season {
 
     private String seasonId;
     private String name;
-    private int periodInMinutes;
 
     public Season() {
     }
@@ -13,7 +12,6 @@ public class Season {
         Season clone = new Season();
         clone.seasonId = this.seasonId;
         clone.name = this.name;
-        clone.periodInMinutes = this.periodInMinutes;
         return clone;
     }
 
@@ -31,14 +29,6 @@ public class Season {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getPeriodInMinutes() {
-        return periodInMinutes;
-    }
-
-    public void setPeriodInMinutes(int periodInMinutes) {
-        this.periodInMinutes = periodInMinutes;
     }
 
 }

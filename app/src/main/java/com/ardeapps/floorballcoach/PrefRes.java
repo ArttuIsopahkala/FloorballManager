@@ -18,6 +18,7 @@ public class PrefRes {
     public static final String IS_APP_VISIBLE = "isAppVisible";
     public static final String EMAIL = "email";
     private static final String SEASON_ID = "seasonId";
+    private static final String PERIOD_DURATION = "periodDuration";
 
     private static SharedPreferences getSharedPref() {
         return AppRes.getContext().getSharedPreferences(APP_PREF, 0);
@@ -37,6 +38,24 @@ public class PrefRes {
 
     public static boolean containsKey(String key) {
         return getSharedPref().contains(key);
+    }
+
+    private static String getPeriodDurationKey(String seasonId) {
+        return PERIOD_DURATION + "_" + seasonId;
+    }
+
+    public static void setPeriodDuration(String seasonId, long duration) {
+        SharedPreferences.Editor editor = getSharedPref().edit();
+        editor.putLong(getPeriodDurationKey(seasonId), duration);
+        editor.apply();
+    }
+
+    public static Long getPeriodDuration(String seasonId) {
+        long duration = getSharedPref().getLong(getPeriodDurationKey(seasonId), -1);
+        if(duration == -1) {
+            return null;
+        }
+        return duration;
     }
 
     private static String getSeasonIdKey(String teamId) {

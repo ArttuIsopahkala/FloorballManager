@@ -9,6 +9,7 @@ public class Game {
     private String opponentName;
     private Integer homeGoals;
     private Integer awayGoals;
+    private long periodInMinutes;
 
     public Game() {
     }
@@ -22,6 +23,7 @@ public class Game {
         clone.opponentName = this.opponentName;
         clone.homeGoals = this.homeGoals;
         clone.awayGoals = this.awayGoals;
+        clone.periodInMinutes = this.periodInMinutes;
         return clone;
     }
 
@@ -79,5 +81,13 @@ public class Game {
 
     public void setHomeGame(boolean homeGame) {
         this.homeGame = homeGame;
+    }
+
+    public long getPeriodInMinutes() {
+        return periodInMinutes;
+    }
+
+    public void setPeriodInMinutes(long periodInMinutes) {
+        this.periodInMinutes = periodInMinutes;
     }
 }

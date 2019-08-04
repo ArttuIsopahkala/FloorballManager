@@ -1,7 +1,6 @@
 package com.ardeapps.floorballcoach.resources;
 
 import com.ardeapps.floorballcoach.AppRes;
-import com.ardeapps.floorballcoach.handlers.GetAllGamesHandler;
 import com.ardeapps.floorballcoach.handlers.GetGamesHandler;
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Season;
@@ -9,7 +8,6 @@ import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,33 +48,6 @@ public class GamesResource extends FirebaseDatabaseService {
 
     public void removeAllGames(final DeleteDataSuccessListener handler) {
         deleteData(database, handler);
-    }
-
-    /**
-     * Get games indexed by seasonId
-     */
-    @Deprecated
-    public void getAllGames(final GetAllGamesHandler handler) {
-        getData(database, new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, ArrayList<Game>> gamesMap = new HashMap<>();
-                for(DataSnapshot season : dataSnapshot.getChildren()) {
-                    String seasonId = season.getKey();
-                    if(seasonId != null) {
-                        ArrayList<Game> games = new ArrayList<>();
-                        for (DataSnapshot gameSnapShot : season.getChildren()) {
-                            final Game game = gameSnapShot.getValue(Game.class);
-                            if (game != null) {
-                                games.add(game);
-                            }
-                        }
-                        gamesMap.put(seasonId, games);
-                    }
-                }
-                handler.onAllGamesLoaded(gamesMap);
-            }
-        });
     }
 
     /**

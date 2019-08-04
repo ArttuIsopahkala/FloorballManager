@@ -115,4 +115,8 @@ public class PlayerGamesResource extends FirebaseDatabaseService {
             }
         });
     }
+
+    public void editGame(String playerId, String seasonId, Game game) {
+        editData(database.child(playerId).child(seasonId).child(game.getGameId()), game);
+    }
 }

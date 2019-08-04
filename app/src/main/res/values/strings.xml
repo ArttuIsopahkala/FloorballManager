@@ -44,6 +44,7 @@
     <string name="player">Pelaaja</string>
     <string name="season">Tunniste</string>
     <string name="nothing">Ei mikään</string>
+    <string name="overtime">Jatkoaika</string>
 
     <string name="stats_games">Ottelut</string>
     <string name="stats_points">Pisteet</string>

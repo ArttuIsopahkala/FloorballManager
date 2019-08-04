@@ -170,10 +170,14 @@
             <include
                 android:id="@+id/periodLayout3"
                 layout="@layout/container_monitor_period"/>
+            <include
+                android:id="@+id/periodLayoutJA"
+                layout="@layout/container_monitor_period"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:padding="5dp"
                 android:background="@color/color_background_third">

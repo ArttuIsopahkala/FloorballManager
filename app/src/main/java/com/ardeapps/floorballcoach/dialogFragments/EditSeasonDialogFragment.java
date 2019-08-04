@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
@@ -23,8 +22,6 @@ import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -42,10 +39,8 @@ public class EditSeasonDialogFragment extends DialogFragment {
 
     EditText seasonEditText;
     TextView seasonInfoText;
-    Spinner periodSpinner;
     Button saveButton;
 
-    final ArrayList<Integer> durations = new ArrayList<>(Arrays.asList(20, 15, 10, 5));
     Season season;
 
     public void setSeason(Season season) {
@@ -61,25 +56,16 @@ public class EditSeasonDialogFragment extends DialogFragment {
 
         seasonEditText = v.findViewById(R.id.seasonEditText);
         seasonInfoText = v.findViewById(R.id.seasonInfoText);
-        periodSpinner = v.findViewById(R.id.periodSpinner);
         saveButton = v.findViewById(R.id.saveButton);
-
-        ArrayList<String> durationTitles = new ArrayList<>();
-        for(Integer duration : durations) {
-            durationTitles.add(duration + "min");
-        }
-        Helper.setSpinnerAdapter(periodSpinner, durationTitles);
 
         Calendar calendar = GregorianCalendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         String hintYears = year + "-" + (year + 1);
         seasonInfoText.setText(getString(R.string.team_settings_season_info, hintYears));
         Helper.setEditTextValue(seasonEditText, "");
-        Helper.setSpinnerSelection(periodSpinner, 0);
 
         if(season != null) {
             Helper.setEditTextValue(seasonEditText, season.getName());
-            Helper.setSpinnerSelection(periodSpinner, durations.indexOf(season.getPeriodInMinutes()));
         }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +98,6 @@ public class EditSeasonDialogFragment extends DialogFragment {
 
         final Season seasonToSave = season != null ? season.clone() : new Season();
         seasonToSave.setName(seasonName);
-        seasonToSave.setPeriodInMinutes(durations.get(periodSpinner.getSelectedItemPosition()));
 
         if(season != null) {
             SeasonsResource.getInstance().editSeason(seasonToSave, new FirebaseDatabaseService.EditDataSuccessListener() {

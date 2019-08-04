@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
@@ -34,6 +35,7 @@ import com.ardeapps.floorballcoach.views.IconView;
 import com.ardeapps.floorballcoach.views.LineUpSelector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Map;
@@ -49,9 +51,11 @@ public class GameSettingsFragment extends Fragment implements DataView {
     TextView seasonText;
     LineUpSelector lineUpSelector;
     Button saveButton;
+    Spinner periodSpinner;
 
     private GameSettingsFragmentData data;
     boolean isHomeGame = true;
+    final ArrayList<Long> durations = new ArrayList<>(Arrays.asList(20L, 15L, 10L, 5L));
 
     public Listener mListener = null;
 
@@ -100,14 +104,16 @@ public class GameSettingsFragment extends Fragment implements DataView {
 
         resetField();
 
-        if(data.getGame() != null) {
-            isHomeGame = data.getGame().isHomeGame();
+        Game game = data.getGame();
+        if(game != null) {
+            isHomeGame = game.isHomeGame();
             setTeamSides(isHomeGame);
-            Helper.setEditTextValue(opponentEditText, data.getGame().getOpponentName());
+            Helper.setEditTextValue(opponentEditText, game.getOpponentName());
             Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(data.getGame().getDate());
+            cal.setTimeInMillis(game.getDate());
             Helper.setDatePickerValue(datePicker, cal);
             lineUpSelector.setLines(data.getLines());
+            Helper.setSpinnerSelection(periodSpinner, durations.indexOf(game.getPeriodInMinutes()));
         }
     }
 
@@ -118,6 +124,13 @@ public class GameSettingsFragment extends Fragment implements DataView {
         nameText.setText(AppRes.getInstance().getSelectedTeam().getName());
         Helper.setEditTextValue(opponentEditText, "");
         Helper.setDatePickerValue(datePicker, Calendar.getInstance());
+
+        Long duration = PrefRes.getPeriodDuration(AppRes.getInstance().getSelectedSeason().getSeasonId());
+        if(duration != null) {
+            Helper.setSpinnerSelection(periodSpinner, durations.indexOf(duration));
+        } else {
+            Helper.setSpinnerSelection(periodSpinner, 0);
+        }
     }
 
     @Override
@@ -132,6 +145,13 @@ public class GameSettingsFragment extends Fragment implements DataView {
         seasonText = v.findViewById(R.id.seasonText);
         lineUpSelector = v.findViewById(R.id.lineUpSelector);
         saveButton = v.findViewById(R.id.saveButton);
+        periodSpinner = v.findViewById(R.id.periodSpinner);
+
+        ArrayList<String> durationTitles = new ArrayList<>();
+        for(Long duration : durations) {
+            durationTitles.add(duration + "min");
+        }
+        Helper.setSpinnerAdapter(periodSpinner, durationTitles);
 
         update();
 
@@ -183,12 +203,22 @@ public class GameSettingsFragment extends Fragment implements DataView {
             return;
         }
 
+        if(AppRes.getInstance().getSelectedSeason() == null || periodSpinner.getSelectedItemPosition() < 0) {
+            Logger.toast(R.string.error_empty);
+            return;
+        }
+
+        String seasonId = AppRes.getInstance().getSelectedSeason().getSeasonId();
+        long periodDuration = durations.get(periodSpinner.getSelectedItemPosition());
+        // Save duration for season
+        PrefRes.setPeriodDuration(seasonId, periodDuration);
+
         final Game gameToSave = data.getGame() != null ? data.getGame().clone() : new Game();
         gameToSave.setDate(datePicker.getDate().getTimeInMillis());
         gameToSave.setHomeGame(isHomeGame);
         gameToSave.setOpponentName(opponentName);
-        String seasonId = AppRes.getInstance().getSelectedSeason().getSeasonId();
         gameToSave.setSeasonId(seasonId);
+        gameToSave.setPeriodInMinutes(periodDuration);
 
         if(data.getGame() != null) {
             GamesResource.getInstance().editGame(gameToSave, new FirebaseDatabaseService.EditDataSuccessListener() {

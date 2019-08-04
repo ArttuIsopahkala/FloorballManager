@@ -285,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
                         // Store selected team and load team data
                         AppRes.getInstance().setUserConnections(userConnections);
                         AppRes.getInstance().setSelectedTeam(team);
+
                         LinesResource.getInstance().getLines(new GetLinesHandler() {
                             @Override
                             public void onLinesLoaded(Map<Integer, Line> lines) {

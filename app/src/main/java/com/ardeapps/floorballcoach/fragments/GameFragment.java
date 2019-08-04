@@ -50,6 +50,7 @@ public class GameFragment extends Fragment implements DataView {
     LinearLayout periodLayout1;
     LinearLayout periodLayout2;
     LinearLayout periodLayout3;
+    LinearLayout periodLayoutJA;
     LinearLayout lineStats1;
     LinearLayout lineStats2;
     LinearLayout lineStats3;
@@ -76,7 +77,7 @@ public class GameFragment extends Fragment implements DataView {
         Season season = AppRes.getInstance().getSeasons().get(data.getGame().getSeasonId());
         if(season != null) {
             seasonText.setText(season.getName());
-            periodDurationText.setText(season.getPeriodInMinutes() + "min");
+            periodDurationText.setText(data.getGame().getPeriodInMinutes() + "min");
         } else {
             seasonText.setText("-");
             periodDurationText.setText("-");
@@ -104,23 +105,28 @@ public class GameFragment extends Fragment implements DataView {
         ArrayList<Goal> goalsPeriod1 = new ArrayList<>();
         ArrayList<Goal> goalsPeriod2 = new ArrayList<>();
         ArrayList<Goal> goalsPeriod3 = new ArrayList<>();
+        ArrayList<Goal> goalsPeriodJA = new ArrayList<>();
         homeGoals = 0;
         awayGoals = 0;
 
-        long firstPeriodEnd = TimeUnit.MINUTES.toMillis(season.getPeriodInMinutes());
+        long firstPeriodEnd = TimeUnit.MINUTES.toMillis(data.getGame().getPeriodInMinutes());
         long secondPeriodEnd = firstPeriodEnd * 2;
+        long thirdPeriodEnd = firstPeriodEnd * 3;
         for(Goal goal : data.getGoals().values()) {
             if(goal.getTime() < firstPeriodEnd) {
                 goalsPeriod1.add(goal);
             } else if (goal.getTime() > firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
                 goalsPeriod2.add(goal);
-            } else {
+            } else if (goal.getTime() > secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
                 goalsPeriod3.add(goal);
+            } else {
+                goalsPeriodJA.add(goal);
             }
         }
         setPeriodView(periodLayout1, 1, goalsPeriod1);
         setPeriodView(periodLayout2, 2, goalsPeriod2);
         setPeriodView(periodLayout3, 3, goalsPeriod3);
+        setPeriodView(periodLayoutJA, 4, goalsPeriodJA);
         setLineStatsView(lineStats1, data.getLines().get(1));
         setLineStatsView(lineStats2, data.getLines().get(2));
         setLineStatsView(lineStats3, data.getLines().get(3));
@@ -144,6 +150,7 @@ public class GameFragment extends Fragment implements DataView {
         periodLayout1 = v.findViewById(R.id.periodLayout1);
         periodLayout2 = v.findViewById(R.id.periodLayout2);
         periodLayout3 = v.findViewById(R.id.periodLayout3);
+        periodLayoutJA = v.findViewById(R.id.periodLayoutJA);
         lineStats1 = v.findViewById(R.id.lineStats1);
         lineStats2 = v.findViewById(R.id.lineStats2);
         lineStats3 = v.findViewById(R.id.lineStats3);
@@ -206,7 +213,16 @@ public class GameFragment extends Fragment implements DataView {
         TextView periodText = view.findViewById(R.id.periodText);
         LinearLayout goalList = view.findViewById(R.id.goalList);
 
-        periodText.setText(period + ". " + getString(R.string.period).toUpperCase());
+        if(period == 4) {
+            periodText.setText(getString(R.string.overtime).toUpperCase());
+            if(goals.isEmpty()) {
+                view.setVisibility(View.GONE);
+            } else {
+                view.setVisibility(View.VISIBLE);
+            }
+        } else {
+            periodText.setText(period + ". " + getString(R.string.period).toUpperCase());
+        }
 
         goalList.removeAllViewsInLayout();
         LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
@@ -300,24 +316,21 @@ public class GameFragment extends Fragment implements DataView {
             holder.timeText.setText(StringUtils.getMinSecTimeText(goal.getTime()));
             holder.scoreText.setText(homeGoals + " - " + awayGoals);
 
-            if(isHomeGoal) {
-                holder.awayGoalMenuIcon.setVisibility(View.GONE);
-                holder.homeGoalMenuIcon.setVisibility(View.VISIBLE);
-                setGoalMenuIconListener(holder.homeGoalMenuIcon, goal, true);
-            } else {
-                holder.homeGoalMenuIcon.setVisibility(View.GONE);
-                holder.awayGoalMenuIcon.setVisibility(View.VISIBLE);
-                setGoalMenuIconListener(holder.awayGoalMenuIcon, goal, false);
-            }
-
             // Role specific content
             UserConnection.Role role = AppRes.getInstance().getSelectedRole();
             if(role == UserConnection.Role.PLAYER) {
                 holder.homeGoalMenuIcon.setVisibility(View.GONE);
                 holder.awayGoalMenuIcon.setVisibility(View.GONE);
             } else {
-                holder.homeGoalMenuIcon.setVisibility(View.VISIBLE);
-                holder.awayGoalMenuIcon.setVisibility(View.VISIBLE);
+                if(isHomeGoal) {
+                    holder.awayGoalMenuIcon.setVisibility(View.GONE);
+                    holder.homeGoalMenuIcon.setVisibility(View.VISIBLE);
+                    setGoalMenuIconListener(holder.homeGoalMenuIcon, goal, true);
+                } else {
+                    holder.homeGoalMenuIcon.setVisibility(View.GONE);
+                    holder.awayGoalMenuIcon.setVisibility(View.VISIBLE);
+                    setGoalMenuIconListener(holder.awayGoalMenuIcon, goal, false);
+                }
             }
 
             goalList.addView(cv);
