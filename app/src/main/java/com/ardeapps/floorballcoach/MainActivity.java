@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             }
                         }
-                        // TODO vie pelaaja pelaaja/joukkuetilastoihin UserConnection.Role role
+
                         if(!connectionFound) {
                             ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.main_selection_connection_not_found));
                             dialogFragment.show(getSupportFragmentManager(), "Ei oikeutta joukkueeseen. Poistetaanko?");

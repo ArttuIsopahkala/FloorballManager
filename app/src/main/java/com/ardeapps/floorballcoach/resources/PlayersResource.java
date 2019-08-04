@@ -41,11 +41,6 @@ public class PlayersResource extends FirebaseDatabaseService {
         editData(database.child(player.getPlayerId()), player, handler);
     }
 
-    // TODO poista
-    public void editPlayer(Player player) {
-        editData(database.child(player.getPlayerId()), player);
-    }
-
     public void removePlayer(final Player player, final DeleteDataSuccessListener handler) {
         deleteData(database.child(player.getPlayerId()), new DeleteDataSuccessListener() {
             @Override

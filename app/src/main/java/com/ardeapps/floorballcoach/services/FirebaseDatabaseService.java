@@ -8,9 +8,6 @@ import android.support.annotation.NonNull;
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.BuildConfig;
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.handlers.GetPlayersHandler;
-import com.ardeapps.floorballcoach.objects.Player;
-import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.views.Loader;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,8 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Map;
 
 /**
  * Created by Arttu on 4.5.2017.
@@ -63,15 +58,6 @@ public class FirebaseDatabaseService {
 
     public static void updateDatabase() {
         final String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
-        PlayersResource.getInstance().getPlayers(new GetPlayersHandler() {
-            @Override
-            public void onPlayersLoaded(Map<String, Player> players) {
-                for(Player player : players.values()) {
-                    player.setActive(true);
-                    PlayersResource.getInstance().editPlayer(player);
-                }
-            }
-        });
         /*GamesResource.getInstance().getAllGames(new GetGamesHandler() {
             @Override
             public void onGamesLoaded(final Map<String, Game> games) {
