@@ -42,7 +42,24 @@
     <string name="remove">Poista</string>
     <string name="admin">Admin</string>
     <string name="player">Pelaaja</string>
-    <string name="season">Kausi</string>
+    <string name="season">Tunniste</string>
+    <string name="nothing">Ei mikään</string>
+
+    <string name="stats_games">Ottelut</string>
+    <string name="stats_points">Pisteet</string>
+    <string name="stats_goals">Maalit</string>
+    <string name="stats_assists">Syötöt</string>
+    <string name="stats_points_per_game">P/O</string>
+    <string name="stats_goals_per_game">M/O</string>
+    <string name="stats_assists_per_game">S/O</string>
+    <string name="stats_plus_minus">+/-</string>
+    <string name="stats_plus">+</string>
+    <string name="stats_minus">-</string>
+    <string name="stats_yv_abbr">YV</string>
+    <string name="stats_av_abbr">AV</string>
+    <string name="stats_rl_abbr">RL</string>
+    <string name="stats_goals_abbr">M</string>
+    <string name="stats_assists_abbr">S</string>
 
     <string name="select_picture_load_url">Lataa</string>
     <string name="select_picture_from_gallery">Valitse galleriasta</string>
@@ -67,6 +84,8 @@
     <string name="title_type">Pelaajan tyyppi</string>
     <string name="title_team_settings">Joukkueen hallinta</string>
     <string name="title_player_stats">Pelaajan tilastot</string>
+    <string name="title_team_stats">Joukkueen tilastot</string>
+    <string name="title_inactive_players">Poistetut pelaajat</string>
 
     <string name="login_email">Sähköposti</string>
     <string name="login_password">Salasana</string>
@@ -87,13 +106,15 @@
     <string name="login_forgot_password_info">Lähetämme sähköpostiisi linkin salasanan vaihtamiseen.</string>
     <string name="login_forgot_password_sent">Tarkista sähköpostisi. Lähetimme ohjeet salasanan vaihtoon.</string>
 
-    <string name="main_selection_desc">Lisää joukkue tai pelaaja, jota haluat seurata.</string>
+    <string name="main_selection_desc">Lisää tai valitse joukkue, jota haluat seurata.</string>
     <string name="main_selection_add_team">Lisää joukkue</string>
     <string name="main_selection_add_player">Lisää pelaaja</string>
     <string name="main_selection_user_invitation_info">Sinulle on uusia kutsuja!</string>
     <string name="main_selection_user_invitation_admin">Kutsu Adminiksi joukkueeseen:</string>
     <string name="main_selection_user_invitation_player">Kutsu pelaajaksi joukkueeseen:</string>
     <string name="main_selection_connection_not_found">Sinulla ei ole oikeuksia joukkueeseen. Ota yhteyttä joukkueen ylläpitäjään tai poista liitos. Poistetaanko joukkue listalta?</string>
+
+    <string name="players_no_players">Ei lisättyjä pelaajia.</string>
 
     <string name="add_event_goal">Maali</string>
     <string name="add_event_save">Torjuttu</string>
@@ -120,11 +141,11 @@
     <string name="add_team_name_hint">Joukkueen nimi</string>
 
     <string name="team_settings_season_info">Esim. Kausi %1$s tai Suomen Cup. Voit myöhemmin suodattaa tilastoja nimen perusteella.</string>
-    <string name="team_settings_exists">Tällä nimellä löytyy jo kausi.</string>
-    <string name="team_settings_no_seasons">Ei lisättyjä kausia.</string>
+    <string name="team_settings_exists">Tällä nimellä löytyy jo tunniste.</string>
+    <string name="team_settings_no_seasons">Ei lisättyjä tunnisteita.</string>
     <string name="team_settings_no_lines">Aseta kentälliset.</string>
-    <string name="team_settings_season_not_selected">Kautta ei valittu.</string>
-    <string name="team_settings_season_hint">Kauden nimi</string>
+    <string name="team_settings_season_not_selected">Tunnistetta ei valittu.</string>
+    <string name="team_settings_season_hint">Tunniste</string>
 
     <string name="add_player_name">Nimi</string>
     <string name="add_player_number">Pelinumero</string>
@@ -133,13 +154,15 @@
     <string name="add_player_type">Tyyppi</string>
     <string name="add_player_shoots_left">LEFT</string>
     <string name="add_player_shoots_right">RIGHT</string>
-    <string name="add_player_remove_confirmation">Haluatko varmasti poistaa tämän pelaajan? Myös kaikki pelaajaan liitetyt tilastot poistetaan.</string>
+    <string name="add_player_remove_confirmation">Haluatko siirtää poistettujen listalle? Pelaajan voi palauttaa tai poistaa lopullisesti joukkueen asetuksista.</string>
 
-    <string name="team_dashboard_new_game">Uusi ottelu</string>
     <string name="team_dashboard_games">Ottelut</string>
     <string name="team_dashboard_players">Pelaajat</string>
-    <string name="team_dashboard_lines">Kentälliset</string>
+    <string name="team_dashboard_lines">Kokoonpano</string>
+    <string name="team_dashboard_team_stats">Tilastot</string>
     <string name="team_dashboard_settings">Joukkueen hallinta</string>
+    <string name="team_dashboard_seasons_info">Aloita luomalla tunniste, jonka alle ottelut luodaan.</string>
+    <string name="team_dashboard_seasons_not_selected">Tunnistetta ei ole valittu.</string>
 
     <string name="team_settings_edit">Muokkaa joukkueen tietoja</string>
     <string name="team_settings_add_connection">Lisää jäsen</string>
@@ -153,8 +176,13 @@
     <string name="team_settings_pending">Kutsu lähetetty.</string>
     <string name="team_settings_connected">Kutsu hyväksytty.</string>
     <string name="team_settings_deny">Kutsu hylätty.</string>
+    <string name="team_settings_removed_players">Poistetut pelaajat</string>
 
-    <string name="add_user_connection_desc">Syötä sähköposti, joka halutaan linkittää joukkueeseen. Linkitettävä käyttäjä näkee kutsun joukkueeseen sovelluksen aloitusnäkymässä.</string>
+    <string name="inactive_players_move_player_active">Palauta pelaajalistalle</string>
+    <string name="inactive_players_remove_player_confirmation">Haluatko varmasti poistaa tämän pelaajan? Myös kaikki pelaajaan liitetyt tilastot poistetaan. Toimintoa ei voi kumota.</string>
+    <string name="inactive_players_no_players">Ei poistettuja pelaajia.</string>
+
+    <string name="add_user_connection_desc">Anna sähköposti, jonka haluat linkittää joukkueeseen. Linkitettävä käyttäjä näkee kutsun joukkueeseen sovelluksen aloitusnäkymässä.</string>
     <string name="add_user_connection_email">Jäsenen sähköposti</string>
     <string name="add_user_connection_role">Rooli</string>
     <string name="add_user_connection_info_admin">Täysi hallinta joukkueeseen.</string>
@@ -176,6 +204,7 @@
     <string name="lineup_team_chemistry">Joukkueen kemia</string>
 
     <string name="games_no_games">Ei lisättyjä otteluita.</string>
+    <string name="games_new_game">Uusi ottelu</string>
 
     <string name="game_add_goal">Lisää maali +</string>
     <string name="game_stat_goal_abbr">M</string>
@@ -201,7 +230,23 @@
     <string name="player_stats_filter_assists">Maalit, joissa syöttäjänä</string>
     <string name="player_stats_all_games">Kaikki ottelut</string>
     <string name="player_stats_all_game_modes">Kaikki pelimuodot</string>
-    <string name="player_stats_all_seasons">Kaikki kaudet</string>
+    <string name="player_stats_all_seasons">Kaikki tunnisteet</string>
+    <string name="player_stats_best_stats">Parhaat tehopisteet</string>
+    <string name="player_stats_longest_stat">Pisin pisteputki</string>
+    <string name="player_stats_game">ottelu</string>
+    <string name="player_stats_games">ottelua</string>
+    <string name="player_stats_best_plus_minus">Paras +/- ottelussa</string>
+    <string name="player_stats_best_line_players">Parhaat ketjukaverit</string>
+    <string name="player_stats_best_assistant">Paras syöttäjä</string>
+    <string name="player_stats_assist">syöttö</string>
+    <string name="player_stats_assists">syöttöä</string>
+    <string name="player_stats_best_scorer">Eniten maaleja syötöistä</string>
+    <string name="player_stats_score">maali</string>
+    <string name="player_stats_scores">maalia</string>
+    <string name="player_stats_best_assistant_or_scorer">Eniten maaleja yhdessä</string>
+    <string name="player_stats_best_same_line">Paras ketjukaveri</string>
+    <string name="player_stats_together_score">maali yhdessä</string>
+    <string name="player_stats_together_scores">maalia yhdessä</string>
 
     <string name="error_invalid_value">Virheellinen arvo.</string>
     <string name="error_empty">Täytä kaikki kentät.</string>

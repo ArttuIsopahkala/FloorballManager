@@ -8,6 +8,9 @@ import android.support.annotation.NonNull;
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.BuildConfig;
 import com.ardeapps.floorballcoach.R;
+import com.ardeapps.floorballcoach.handlers.GetPlayersHandler;
+import com.ardeapps.floorballcoach.objects.Player;
+import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.views.Loader;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
+
 /**
  * Created by Arttu on 4.5.2017.
  */
@@ -27,10 +32,11 @@ public class FirebaseDatabaseService {
 
     protected static final String APP_DATA = "appData";
     protected static final String TEAMS = "teams";
-    protected static final String PLAYERS_GAMES_STATS = "players_games_stats";
-    protected static final String TEAMS_GAMES = "teams_games";
-    protected static final String TEAMS_GAMES_GOALS = "teams_games_goals";
-    protected static final String TEAMS_GAMES_LINES = "teams_games_lines";
+    protected static final String PLAYERS_SEASONS_GAMES_STATS = "players_seasons_games_stats";
+    protected static final String PLAYERS_SEASONS_GAMES = "players_seasons_games";
+    protected static final String TEAMS_SEASONS_GAMES = "teams_seasons_games";
+    protected static final String TEAMS_SEASONS_GAMES_GOALS = "teams_seasons_games_goals";
+    protected static final String TEAMS_SEASONS_GAMES_LINES = "teams_seasons_games_lines";
     protected static final String TEAMS_SEASONS = "teams_seasons";
     protected static final String TEAMS_LINES = "teams_lines";
     protected static final String TEAMS_PLAYERS = "teams_players";
@@ -56,32 +62,117 @@ public class FirebaseDatabaseService {
     }
 
     public static void updateDatabase() {
-        /*getData(getDatabase().child(TEAMS_SEASONS), new GetDataSuccessListener() {
+        final String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
+        PlayersResource.getInstance().getPlayers(new GetPlayersHandler() {
+            @Override
+            public void onPlayersLoaded(Map<String, Player> players) {
+                for(Player player : players.values()) {
+                    player.setActive(true);
+                    PlayersResource.getInstance().editPlayer(player);
+                }
+            }
+        });
+        /*GamesResource.getInstance().getAllGames(new GetGamesHandler() {
+            @Override
+            public void onGamesLoaded(final Map<String, Game> games) {
+                getData(getDatabase().child(PLAYERS_GAMES_STATS), new GetDataSuccessListener() {
+                    @Override
+                    public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot player : dataSnapshot.getChildren()) {
+                            final String playerId = player.getKey();
+                            for(DataSnapshot gameShot : player.getChildren()) {
+                                final String gameId = gameShot.getKey();
+                                Game game = games.get(gameId);
+                                if(game != null) {
+                                    for(DataSnapshot goalShot : gameShot.getChildren()) {
+                                        final Goal goal = goalShot.getValue(Goal.class);
+                                        goal.setSeasonId(game.getSeasonId());
+                                        editData(getDatabase().child(PLAYERS_SEASONS_GAMES_STATS).child(playerId).child(game.getSeasonId()).child(gameId).child(goal.getGoalId()), goal);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        GamesResource.getInstance().getGames(new GetGamesHandler() {
+            @Override
+            public void onGamesLoaded(final Map<String, Game> gamesMap) {
+                // Add seasonId to goal and move to new location
+                GoalsResource.getInstance().getGoals(new GetTeamGoalsHandler() {
+                    @Override
+                    public void onTeamGoalsLoaded(Map<String, ArrayList<Goal>> goalsMap) {
+                        for(Map.Entry<String, ArrayList<Goal>> entry : goalsMap.entrySet()) {
+                            String gameId = entry.getKey();
+                            ArrayList<Goal> goals = entry.getValue();
+
+                            Game game = gamesMap.get(gameId);
+                            for(Goal goal : goals) {
+                                goal.setSeasonId(game.getSeasonId());
+                                editData(getDatabase().child(TEAMS_SEASONS_GAMES_GOALS).child(teamId).child(game.getSeasonId()).child(game.getGameId()).child(goal.getGoalId()), goal);
+                            }
+
+                        }
+                    }
+                });
+
+                LinesInGameResource.getInstance().getLines(new GetTeamLinesHandler() {
+                    @Override
+                    public void onTeamLinesLoaded(Map<String, ArrayList<Line>> linesMap) {
+                        for(Map.Entry<String, ArrayList<Line>> entry : linesMap.entrySet()) {
+                            String gameId = entry.getKey();
+                            ArrayList<Line> lines = entry.getValue();
+
+                            Game game = gamesMap.get(gameId);
+                            for(Line line : lines) {
+                                line.setGameId(game.getGameId());
+                                line.setSeasonId(game.getSeasonId());
+                                editData(getDatabase().child(TEAMS_SEASONS_GAMES_LINES).child(teamId).child(game.getSeasonId()).child(game.getGameId()).child(line.getLineId()), line);
+                            }
+
+                        }
+                    }
+                });
+
+                // Move teams_games to teams_seasons_games
+                for(Map.Entry<String, Game> entry : gamesMap.entrySet()) {
+                    Game game = entry.getValue();
+                    editData(getDatabase().child(TEAMS_SEASONS_GAMES).child(teamId).child(game.getSeasonId()).child(game.getGameId()), game);
+                }
+            }
+        });*/
+
+
+        /*
+        // Move teams_games to teams_seasons_games
+        getData(getDatabase().child(TEAMS_GAMES), new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
                 for(DataSnapshot team : dataSnapshot.getChildren()) {
-                    for(DataSnapshot season : team.getChildren()) {
-                        String seasonName = (String)season.child("seasonName").getValue();
-                        editData(getDatabase().child(TEAMS_SEASONS).child(team.getKey()).child(season.getKey()).child("name"), seasonName);
-                        editData(getDatabase().child(TEAMS_SEASONS).child(team.getKey()).child(season.getKey()).child("seasonName"), null);
+                    for(DataSnapshot game : team.getChildren()) {
+                        String seasonId = (String)game.child("seasonId").getValue();
+                        editData(getDatabase().child(TEAMS_SEASONS_GAMES).child(team.getKey()).child(seasonId).child(game.getKey()), game);
+                        editData(getDatabase().child(TEAMS_GAMES).child(team.getKey()).child(game.getKey()), null);
                     }
                 }
             }
         });
-        final Season season = new Season();
+
+        /*final Season season = new Season();
         season.setPeriodInMinutes(20);
         season.setName("4. divari 2017-2018");
-        TeamsSeasonsResource.getInstance().addSeason(season, new AddDataSuccessListener() {
+        SeasonsResource.getInstance().addSeason(season, new AddDataSuccessListener() {
             @Override
             public void onAddDataSuccess(String id) {
                 season.setSeasonId(id);
 
-                TeamsGamesResource.getInstance().getGames(new GetGamesHandler() {
+                GamesResource.getInstance().getGames(new GetGamesHandler() {
                     @Override
                     public void onGamesLoaded(Map<String, Game> games) {
                         for(Game game : games.values()) {
                             game.setSeasonId(season.getSeasonId());
-                            TeamsGamesResource.getInstance().editGame(game, new EditDataSuccessListener() {
+                            GamesResource.getInstance().editGame(game, new EditDataSuccessListener() {
                                 @Override
                                 public void onEditDataSuccess() {
 

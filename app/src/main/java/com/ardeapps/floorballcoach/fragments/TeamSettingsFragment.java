@@ -19,13 +19,13 @@ import com.ardeapps.floorballcoach.handlers.GetUserConnectionsHandler;
 import com.ardeapps.floorballcoach.objects.Team;
 import com.ardeapps.floorballcoach.objects.User;
 import com.ardeapps.floorballcoach.objects.UserConnection;
-import com.ardeapps.floorballcoach.resources.TeamsGamesGoalsResource;
-import com.ardeapps.floorballcoach.resources.TeamsGamesLinesResource;
-import com.ardeapps.floorballcoach.resources.TeamsGamesResource;
-import com.ardeapps.floorballcoach.resources.TeamsLinesResource;
+import com.ardeapps.floorballcoach.resources.GoalsResource;
+import com.ardeapps.floorballcoach.resources.LinesInGameResource;
+import com.ardeapps.floorballcoach.resources.GamesResource;
+import com.ardeapps.floorballcoach.resources.LinesResource;
+import com.ardeapps.floorballcoach.resources.SeasonsResource;
 import com.ardeapps.floorballcoach.resources.TeamsResource;
-import com.ardeapps.floorballcoach.resources.TeamsSeasonsResource;
-import com.ardeapps.floorballcoach.resources.TeamsUserConnectionsResource;
+import com.ardeapps.floorballcoach.resources.UserConnectionsResource;
 import com.ardeapps.floorballcoach.resources.UserInvitationsResource;
 import com.ardeapps.floorballcoach.resources.UsersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
@@ -42,6 +42,7 @@ public class TeamSettingsFragment extends Fragment {
     Button editTeamButton;
     Button addUserConnectionButton;
     Button removeTeamButton;
+    Button inactivePlayersButton;
     LinearLayout userConnectionsContainer;
 
     private Map<String, UserConnection> userConnections = new HashMap<>();
@@ -107,7 +108,7 @@ public class TeamSettingsFragment extends Fragment {
                         @Override
                         public void onDialogYesButtonClick() {
                             final String userConnectionId = userConnection.getUserConnectionId();
-                            TeamsUserConnectionsResource.getInstance().removeUserConnection(userConnectionId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                            UserConnectionsResource.getInstance().removeUserConnection(userConnectionId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                 @Override
                                 public void onDeleteDataSuccess() {
                                     userConnections.remove(userConnectionId);
@@ -142,6 +143,7 @@ public class TeamSettingsFragment extends Fragment {
         addUserConnectionButton = v.findViewById(R.id.addUserConnectionButton);
         userConnectionsContainer = v.findViewById(R.id.userConnectionsContainer);
         removeTeamButton = v.findViewById(R.id.removeTeamButton);
+        inactivePlayersButton = v.findViewById(R.id.inactivePlayersButton);
 
         removeTeamButton.setVisibility(AppRes.getInstance().getUser().isAdmin() ? View.VISIBLE : View.GONE);
 
@@ -159,6 +161,13 @@ public class TeamSettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentListeners.getInstance().getFragmentChangeListener().goToEditUserConnectionFragment(null);
+            }
+        });
+
+        inactivePlayersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentListeners.getInstance().getFragmentChangeListener().goToInactivePlayersFragment();
             }
         });
 
@@ -189,31 +198,31 @@ public class TeamSettingsFragment extends Fragment {
     private void deleteAllTeamData() {
         // Delete all team data
         final Team team = AppRes.getInstance().getSelectedTeam();
-        TeamsUserConnectionsResource.getInstance().getUserConnections(team.getTeamId(), new GetUserConnectionsHandler() {
+        UserConnectionsResource.getInstance().getUserConnections(team.getTeamId(), new GetUserConnectionsHandler() {
             @Override
             public void onUserConnectionsLoaded(final Map<String, UserConnection> userConnections) {
                 UserInvitationsResource.getInstance().removeUserInvitations(userConnections.keySet(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
                     @Override
                     public void onDeleteDataSuccess() {
-                        TeamsUserConnectionsResource.getInstance().removeUserConnections(team.getTeamId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                        UserConnectionsResource.getInstance().removeUserConnections(team.getTeamId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
                             @Override
                             public void onDeleteDataSuccess() {
-                                TeamsLinesResource.getInstance().removeLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                LinesResource.getInstance().removeAllLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                     @Override
                                     public void onDeleteDataSuccess() {
-                                        TeamsGamesLinesResource.getInstance().removeLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                        LinesInGameResource.getInstance().removeAllLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                             @Override
                                             public void onDeleteDataSuccess() {
-                                                TeamsGamesGoalsResource.getInstance().removeGoals(new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                                GoalsResource.getInstance().removeAllGoals(new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                                     @Override
                                                     public void onDeleteDataSuccess() {
-                                                        TeamsGamesResource.getInstance().removeGames(new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                                        GamesResource.getInstance().removeAllGames(new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                                             @Override
                                                             public void onDeleteDataSuccess() {
                                                                 TeamsResource.getInstance().removeTeam(team, new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                                                     @Override
                                                                     public void onDeleteDataSuccess() {
-                                                                        TeamsSeasonsResource.getInstance().removeSeasons(new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                                                        SeasonsResource.getInstance().removeAllSeasons(new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                                                             @Override
                                                                             public void onDeleteDataSuccess() {
                                                                                 User user = AppRes.getInstance().getUser();

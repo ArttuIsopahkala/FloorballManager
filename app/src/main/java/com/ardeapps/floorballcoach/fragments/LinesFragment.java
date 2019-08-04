@@ -17,9 +17,9 @@ import com.ardeapps.floorballcoach.handlers.GetTeamLinesHandler;
 import com.ardeapps.floorballcoach.handlers.SaveLinesHandler;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
-import com.ardeapps.floorballcoach.resources.TeamsGamesGoalsResource;
-import com.ardeapps.floorballcoach.resources.TeamsGamesLinesResource;
-import com.ardeapps.floorballcoach.resources.TeamsLinesResource;
+import com.ardeapps.floorballcoach.resources.GoalsResource;
+import com.ardeapps.floorballcoach.resources.LinesInGameResource;
+import com.ardeapps.floorballcoach.resources.LinesResource;
 import com.ardeapps.floorballcoach.services.AnalyzerService;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.views.LineUpSelector;
@@ -55,7 +55,7 @@ public class LinesFragment extends Fragment {
             @Override
             public void onLinesChanged() {
                 Map<Integer, Line> linesToSave = lineUpSelector.getLines();
-                TeamsLinesResource.getInstance().saveLines(linesToSave, new SaveLinesHandler() {
+                LinesResource.getInstance().saveLines(linesToSave, new SaveLinesHandler() {
                     @Override
                     public void onLinesSaved(Map<Integer, Line> lines) {
                         AppRes.getInstance().setLines(lines);
@@ -69,11 +69,11 @@ public class LinesFragment extends Fragment {
         analyzeChemistryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TeamsGamesGoalsResource.getInstance().getGoals(new GetTeamGoalsHandler() {
+                GoalsResource.getInstance().getAllGoals(new GetTeamGoalsHandler() {
                     @Override
                     public void onTeamGoalsLoaded(Map<String, ArrayList<Goal>> goals) {
                         AppRes.getInstance().setGoalsByGame(goals);
-                        TeamsGamesLinesResource.getInstance().getLines(new GetTeamLinesHandler() {
+                        LinesInGameResource.getInstance().getLines(new GetTeamLinesHandler() {
                             @Override
                             public void onTeamLinesLoaded(Map<String, ArrayList<Line>> lines) {
                                 AppRes.getInstance().setLinesByGame(lines);

@@ -20,13 +20,13 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class TeamsPlayersResource extends FirebaseDatabaseService {
-    private static TeamsPlayersResource instance;
+public class PlayersResource extends FirebaseDatabaseService {
+    private static PlayersResource instance;
     private static DatabaseReference database;
 
-    public static TeamsPlayersResource getInstance() {
+    public static PlayersResource getInstance() {
         if (instance == null) {
-            instance = new TeamsPlayersResource();
+            instance = new PlayersResource();
         }
         database = getDatabase().child(TEAMS_PLAYERS).child(AppRes.getInstance().getSelectedTeam().getTeamId());
         return instance;
@@ -39,6 +39,11 @@ public class TeamsPlayersResource extends FirebaseDatabaseService {
 
     public void editPlayer(Player player, final EditDataSuccessListener handler) {
         editData(database.child(player.getPlayerId()), player, handler);
+    }
+
+    // TODO poista
+    public void editPlayer(Player player) {
+        editData(database.child(player.getPlayerId()), player);
     }
 
     public void removePlayer(final Player player, final DeleteDataSuccessListener handler) {

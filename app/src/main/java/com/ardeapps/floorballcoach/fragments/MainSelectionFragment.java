@@ -18,7 +18,7 @@ import com.ardeapps.floorballcoach.objects.Team;
 import com.ardeapps.floorballcoach.objects.User;
 import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.objects.UserInvitation;
-import com.ardeapps.floorballcoach.resources.TeamsUserConnectionsResource;
+import com.ardeapps.floorballcoach.resources.UserConnectionsResource;
 import com.ardeapps.floorballcoach.resources.UserInvitationsResource;
 import com.ardeapps.floorballcoach.resources.UsersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
@@ -82,7 +82,7 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
                 holder.removeIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TeamsUserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.DENY, null, new FirebaseDatabaseService.EditDataSuccessListener() {
+                        UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.DENY, null, new FirebaseDatabaseService.EditDataSuccessListener() {
                             @Override
                             public void onEditDataSuccess() {
                                 UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
@@ -115,7 +115,7 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
                                     public void onDeleteDataSuccess() {
                                         AppRes.getInstance().setUserInvitation(userInvitation.getUserConnectionId(), null);
                                         // Set user connection as connected
-                                        TeamsUserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.CONNECTED, userToSave.getUserId(), new FirebaseDatabaseService.EditDataSuccessListener() {
+                                        UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.CONNECTED, userToSave.getUserId(), new FirebaseDatabaseService.EditDataSuccessListener() {
                                             @Override
                                             public void onEditDataSuccess() {
                                                 update();

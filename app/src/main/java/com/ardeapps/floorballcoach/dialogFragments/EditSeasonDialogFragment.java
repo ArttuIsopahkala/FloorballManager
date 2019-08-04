@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.objects.Season;
-import com.ardeapps.floorballcoach.resources.TeamsSeasonsResource;
+import com.ardeapps.floorballcoach.resources.SeasonsResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
@@ -115,7 +115,7 @@ public class EditSeasonDialogFragment extends DialogFragment {
         seasonToSave.setPeriodInMinutes(durations.get(periodSpinner.getSelectedItemPosition()));
 
         if(season != null) {
-            TeamsSeasonsResource.getInstance().editSeason(seasonToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+            SeasonsResource.getInstance().editSeason(seasonToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                 @Override
                 public void onEditDataSuccess() {
                     AppRes.getInstance().setSeason(seasonToSave.getSeasonId(), seasonToSave);
@@ -123,7 +123,7 @@ public class EditSeasonDialogFragment extends DialogFragment {
                 }
             });
         } else {
-            TeamsSeasonsResource.getInstance().addSeason(seasonToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
+            SeasonsResource.getInstance().addSeason(seasonToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
                 @Override
                 public void onAddDataSuccess(String id) {
                     seasonToSave.setSeasonId(id);

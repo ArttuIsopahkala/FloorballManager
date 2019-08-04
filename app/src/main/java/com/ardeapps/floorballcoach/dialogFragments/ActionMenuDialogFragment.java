@@ -15,6 +15,29 @@ import com.ardeapps.floorballcoach.R;
 
 public class ActionMenuDialogFragment extends DialogFragment {
 
+    public static ActionMenuDialogFragment newInstance(String editText) {
+        ActionMenuDialogFragment f = new ActionMenuDialogFragment();
+
+        // Supply num input as an argument.
+        Bundle args = new Bundle();
+        args.putString("editText", editText);
+        f.setArguments(args);
+
+        return f;
+    }
+
+    String editText;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments() == null) {
+            editText = getString(R.string.edit);
+        } else {
+            editText = getArguments().getString("editText", getString(R.string.edit));
+        }
+    }
+
     public interface GoalMenuDialogCloseListener
     {
         void onEditItem();
@@ -43,6 +66,8 @@ public class ActionMenuDialogFragment extends DialogFragment {
         removeButton = v.findViewById(R.id.removeButton);
         cancelButton = v.findViewById(R.id.cancelButton);
 
+        editButton.setText(editText);
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,4 +91,5 @@ public class ActionMenuDialogFragment extends DialogFragment {
 
         return v;
     }
+
 }

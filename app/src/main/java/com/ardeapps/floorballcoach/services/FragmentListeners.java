@@ -1,10 +1,10 @@
 package com.ardeapps.floorballcoach.services;
 
 import com.ardeapps.floorballcoach.objects.Game;
-import com.ardeapps.floorballcoach.objects.UserConnection;
-import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Team;
+import com.ardeapps.floorballcoach.objects.UserConnection;
+import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 
 /**
  * Created by Arttu on 18.6.2017.
@@ -62,6 +62,7 @@ public class FragmentListeners {
         void goToTeamStatsFragment();
         void goToEditUserConnectionFragment(UserConnection userConnection);
         void goToTeamSettingsFragment();
+        void goToInactivePlayersFragment();
     }
 
     public interface PermissionHandledListener {

@@ -29,7 +29,8 @@
             android:layout_marginTop="20dp"
             android:background="@color/color_background_second"
             android:text="BLUETOOTH"
-            android:textColor="@color/color_text_light" />
+            android:textColor="@color/color_text_light"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/userInvitationInfoText"

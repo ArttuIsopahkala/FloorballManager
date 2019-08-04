@@ -20,7 +20,7 @@ import com.ardeapps.floorballcoach.objects.User;
 import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.resources.LogoResource;
 import com.ardeapps.floorballcoach.resources.TeamsResource;
-import com.ardeapps.floorballcoach.resources.TeamsUserConnectionsResource;
+import com.ardeapps.floorballcoach.resources.UserConnectionsResource;
 import com.ardeapps.floorballcoach.resources.UsersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FirebaseStorageService;
@@ -174,7 +174,7 @@ public class EditTeamFragment extends Fragment implements DataView {
         userConnection.setUserId(user.getUserId());
         userConnection.setRole(UserConnection.Role.ADMIN.toDatabaseName());
         userConnection.setStatus(UserConnection.Status.CONNECTED.toDatabaseName());
-        TeamsUserConnectionsResource.getInstance().addUserConnection(userConnection, new FirebaseDatabaseService.AddDataSuccessListener() {
+        UserConnectionsResource.getInstance().addUserConnection(userConnection, new FirebaseDatabaseService.AddDataSuccessListener() {
             @Override
             public void onAddDataSuccess(String id) {
                 userConnection.setUserConnectionId(id);

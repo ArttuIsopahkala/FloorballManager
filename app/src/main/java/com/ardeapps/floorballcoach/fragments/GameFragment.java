@@ -21,7 +21,7 @@ import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Season;
-import com.ardeapps.floorballcoach.resources.GoalResourcesWrapper;
+import com.ardeapps.floorballcoach.resources.GoalsResourceWrapper;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.StringUtils;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
@@ -329,7 +329,7 @@ public class GameFragment extends Fragment implements DataView {
                         dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
                             @Override
                             public void onDialogYesButtonClick() {
-                                GoalResourcesWrapper.getInstance(data).removeGoal(goal, isHomeGoal, new GoalResourcesWrapper.RemoveGoalListener() {
+                                GoalsResourceWrapper.getInstance(data).removeGoal(goal, isHomeGoal, new GoalsResourceWrapper.RemoveGoalListener() {
                                     @Override
                                     public void onGoalRemoved(GameFragmentData data) {
                                         GameFragment.this.data = data;
@@ -365,7 +365,7 @@ public class GameFragment extends Fragment implements DataView {
             @Override
             public void onGoalSaved(final Goal goalToSave) {
                 dialog.dismiss();
-                GoalResourcesWrapper.getInstance(data).editGoal(goal, goalToSave, opponentGoal, new GoalResourcesWrapper.EditGoalListener() {
+                GoalsResourceWrapper.getInstance(data).editGoal(goal, goalToSave, opponentGoal, new GoalsResourceWrapper.EditGoalListener() {
                     @Override
                     public void onGoalEdited(GameFragmentData data) {
                         GameFragment.this.data = data;

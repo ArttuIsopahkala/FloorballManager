@@ -20,6 +20,14 @@
             android:text="@string/team_settings_edit"
             android:textColor="@color/color_text_light"/>
         <Button
+            android:id="@+id/inactivePlayersButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_background_second"
+            android:text="@string/team_settings_removed_players"
+            android:textColor="@color/color_text_light"/>
+        <Button
             android:id="@+id/addUserConnectionButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

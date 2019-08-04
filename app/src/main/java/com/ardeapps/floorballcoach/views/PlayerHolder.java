@@ -21,6 +21,7 @@ public class PlayerHolder {
     public IconView arrowIcon;
 
     public enum ViewType {
+        @Deprecated
         MANAGE,
         SELECT,
     }

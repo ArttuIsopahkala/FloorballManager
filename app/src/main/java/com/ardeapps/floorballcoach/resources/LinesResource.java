@@ -17,13 +17,13 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class TeamsLinesResource extends FirebaseDatabaseService {
-    private static TeamsLinesResource instance;
+public class LinesResource extends FirebaseDatabaseService {
+    private static LinesResource instance;
     private static DatabaseReference database;
 
-    public static TeamsLinesResource getInstance() {
+    public static LinesResource getInstance() {
         if (instance == null) {
-            instance = new TeamsLinesResource();
+            instance = new LinesResource();
         }
         database = getDatabase().child(TEAMS_LINES).child(AppRes.getInstance().getSelectedTeam().getTeamId());
         return instance;
@@ -90,7 +90,7 @@ public class TeamsLinesResource extends FirebaseDatabaseService {
         deleteData(database.child(lineId), handler);
     }
 
-    public void removeLines(final DeleteDataSuccessListener handler) {
+    public void removeAllLines(final DeleteDataSuccessListener handler) {
         deleteData(database, handler);
     }
 

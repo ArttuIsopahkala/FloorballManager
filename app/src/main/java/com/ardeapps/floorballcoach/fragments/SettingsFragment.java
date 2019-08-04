@@ -17,6 +17,7 @@ import com.ardeapps.floorballcoach.BuildConfig;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballcoach.dialogFragments.InfoDialogFragment;
+import com.ardeapps.floorballcoach.objects.AppData;
 import com.ardeapps.floorballcoach.services.AppInviteService;
 import com.ardeapps.floorballcoach.services.FirebaseAuthService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
@@ -105,7 +106,7 @@ public class SettingsFragment extends Fragment {
         privacyPolicyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl(AppRes.getInstance().getAppData().getPrivacyPolicyUrl());
+                openUrl(AppData.PRIVACY_POLICY_URL);
             }
         });
 

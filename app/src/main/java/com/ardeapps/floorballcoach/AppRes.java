@@ -4,12 +4,11 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 
-import com.ardeapps.floorballcoach.objects.AppData;
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Goal;
-import com.ardeapps.floorballcoach.objects.Season;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
+import com.ardeapps.floorballcoach.objects.Season;
 import com.ardeapps.floorballcoach.objects.Team;
 import com.ardeapps.floorballcoach.objects.User;
 import com.ardeapps.floorballcoach.objects.UserConnection;
@@ -26,18 +25,18 @@ public class AppRes extends MultiDexApplication {
 
     private static Context mContext;
     private static FragmentActivity mActivity;
-    private AppData appData;
     private User user;
     private Map<String, Team> teams;
     private Map<String, UserInvitation> userInvitations;
     // Selected team's info
     private Team selectedTeam;
+    private Season selectedSeason;
     private UserConnection.Role selectedRole;
     private Map<String, Player> players;
-    private Map<String, Game> games;
     private Map<String, Season> seasons;
     private Map<Integer, Line> lines;
     private Map<String, UserConnection> userConnections;
+    private Map<String, Game> games; // Loaded in TeamDashboardFragment
     // For analyzer service
     private Map<String, ArrayList<Goal>> goalsByGame;
     private Map<String, ArrayList<Line>> linesByGame;
@@ -66,6 +65,7 @@ public class AppRes extends MultiDexApplication {
     public void resetData() {
         user = null;
         selectedTeam = null;
+        selectedSeason = null;
         selectedRole = null;
         teams = null;
         userInvitations = null;
@@ -75,14 +75,6 @@ public class AppRes extends MultiDexApplication {
         userConnections = null;
         goalsByGame = null;
         linesByGame = null;
-    }
-
-    public AppData getAppData() {
-        return appData;
-    }
-
-    public void setAppData(AppData appData) {
-        this.appData = appData;
     }
 
     public User getUser() {
@@ -99,6 +91,14 @@ public class AppRes extends MultiDexApplication {
 
     public void setSelectedTeam(Team team) {
         selectedTeam = team;
+    }
+
+    public Season getSelectedSeason() {
+        return selectedSeason;
+    }
+
+    public void setSelectedSeason(Season selectedSeason) {
+        this.selectedSeason = selectedSeason;
     }
 
     public UserConnection.Role getSelectedRole() {

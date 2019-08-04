@@ -47,10 +47,12 @@ public class Team {
         this.logoUploaded = logoUploaded;
     }
 
+    @Exclude
     public Bitmap getLogo() {
         return logo;
     }
 
+    @Exclude
     public void setLogo(Bitmap logo) {
         this.logo = logo;
     }

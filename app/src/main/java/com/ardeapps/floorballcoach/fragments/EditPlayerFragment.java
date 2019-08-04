@@ -18,7 +18,7 @@ import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.SelectPictureDialogFragment;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.resources.PictureResource;
-import com.ardeapps.floorballcoach.resources.TeamsPlayersResource;
+import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FirebaseStorageService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
@@ -67,7 +67,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
     }
 
     @Override
-    public Object getData() {
+    public Player getData() {
         return player;
     }
 
@@ -245,14 +245,15 @@ public class EditPlayerFragment extends Fragment implements DataView {
                 playerToSave.setType(type);
 
                 if (player != null) {
-                    TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                    PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                         @Override
                         public void onEditDataSuccess() {
                             handlePictureAndSave(playerToSave);
                         }
                     });
                 } else {
-                    TeamsPlayersResource.getInstance().addPlayer(playerToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
+                    playerToSave.setActive(true);
+                    PlayersResource.getInstance().addPlayer(playerToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
                         @Override
                         public void onAddDataSuccess(String id) {
                             playerToSave.setPlayerId(id);
@@ -275,7 +276,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     @Override
                     public void onAddBitmapSuccess() {
                         playerToSave.setPictureUploaded(true);
-                        TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                             @Override
                             public void onEditDataSuccess() {
                                 playerToSave.setPicture(selectedPicture);
@@ -287,7 +288,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
             } else {
                 // Picture not changed
                 playerToSave.setPictureUploaded(false);
-                TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                     @Override
                     public void onEditDataSuccess() {
                         playerToSave.setPicture(null);
@@ -302,7 +303,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     @Override
                     public void onAddBitmapSuccess() {
                         playerToSave.setPictureUploaded(true);
-                        TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                             @Override
                             public void onEditDataSuccess() {
                                 playerToSave.setPicture(selectedPicture);
@@ -317,7 +318,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     @Override
                     public void onDeleteBitmapSuccess() {
                         playerToSave.setPictureUploaded(false);
-                        TeamsPlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                             @Override
                             public void onEditDataSuccess() {
                                 playerToSave.setPicture(null);

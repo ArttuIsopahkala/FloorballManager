@@ -14,13 +14,13 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class TeamsSeasonsResource extends FirebaseDatabaseService {
-    private static TeamsSeasonsResource instance;
+public class SeasonsResource extends FirebaseDatabaseService {
+    private static SeasonsResource instance;
     private static DatabaseReference database;
 
-    public static TeamsSeasonsResource getInstance() {
+    public static SeasonsResource getInstance() {
         if (instance == null) {
-            instance = new TeamsSeasonsResource();
+            instance = new SeasonsResource();
         }
         database = getDatabase().child(TEAMS_SEASONS).child(AppRes.getInstance().getSelectedTeam().getTeamId());
         return instance;
@@ -39,7 +39,7 @@ public class TeamsSeasonsResource extends FirebaseDatabaseService {
         deleteData(database.child(seasonId), handler);
     }
 
-    public void removeSeasons(final DeleteDataSuccessListener handler) {
+    public void removeAllSeasons(final DeleteDataSuccessListener handler) {
         deleteData(database, handler);
     }
 

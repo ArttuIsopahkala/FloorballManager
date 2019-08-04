@@ -4,7 +4,7 @@ import com.ardeapps.floorballcoach.objects.Chemistry;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
-import com.ardeapps.floorballcoach.services.AnalyzerHelper;
+import com.ardeapps.floorballcoach.services.ChemistryHelper;
 import com.ardeapps.floorballcoach.services.AnalyzerService;
 import com.ardeapps.floorballcoach.services.JSONService;
 
@@ -69,7 +69,7 @@ public class AnalyzerServiceTests extends JSONService {
     @Test
     public void testGetLineChemistry() {
         Line line = getLine(teamId, lineId);
-        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = AnalyzerHelper.getChemistriesInLineForPositions(line);
+        Map<Player.Position, ArrayList<Chemistry>> lineChemistry = ChemistryHelper.getChemistriesInLineForPositions(line);
         for (Map.Entry<Player.Position, ArrayList<Chemistry>> chemistry : lineChemistry.entrySet()) {
             Player.Position position = chemistry.getKey();
             ArrayList<Chemistry> chemistries = chemistry.getValue();
@@ -84,14 +84,14 @@ public class AnalyzerServiceTests extends JSONService {
         String playerId = "-LZf45PcYqU3sb7p5GFr";
         String comparePlayerId = "-LZf4BuzjpwdhZFWX1G5";
 
-        double percent = AnalyzerHelper.getChemistryPercent(playerId, comparePlayerId);
+        double percent = ChemistryHelper.getChemistryPercent(playerId, comparePlayerId);
         System.out.println("percent: " + percent);
     }
 
     @Test
     public void getMaxAndMinChemistryPoints() {
-        int minPoints = AnalyzerHelper.getMinChemistryPoints();
-        int maxPoints = AnalyzerHelper.getMaxChemistryPoints();
+        int minPoints = ChemistryHelper.getMinChemistryPoints();
+        int maxPoints = ChemistryHelper.getMaxChemistryPoints();
         System.out.println("maxPoints: " + maxPoints);
         System.out.println("minPoints: " + minPoints);
     }
@@ -115,7 +115,7 @@ public class AnalyzerServiceTests extends JSONService {
         String player2Compare = AnalyzerService.getInstance().getBestScorerOrAssistant(true, testPlayerId, getTeamGoals(teamId));
         System.out.println("player2Compare= " + player2Compare);
 
-        int newChemistry = AnalyzerHelper.getChemistryPoints(testPlayer.getPlayerId(), comparePlayer.getPlayerId(), getTeamGoals(teamId));
+        int newChemistry = ChemistryHelper.getChemistryPoints(testPlayer.getPlayerId(), comparePlayer.getPlayerId(), getTeamGoals(teamId));
         System.out.println(newChemistry);
 
         ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));

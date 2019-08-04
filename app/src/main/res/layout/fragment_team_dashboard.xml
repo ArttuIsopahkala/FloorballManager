@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_background"
     android:clickable="true"
     android:focusable="true">
@@ -34,17 +35,8 @@
             android:textColor="@color/color_text_light"
             android:textSize="15sp" />
         <Button
-            android:id="@+id/newGameButton"
-            android:layout_below="@+id/teamNameText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@color/color_background_second"
-            android:text="@string/team_dashboard_new_game"
-            android:textColor="@color/color_text_light" />
-        <Button
             android:id="@+id/gamesButton"
-            android:layout_below="@+id/newGameButton"
+            android:layout_below="@+id/teamNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -70,8 +62,17 @@
             android:text="@string/team_dashboard_players"
             android:textColor="@color/color_text_light" />
         <Button
-            android:id="@+id/settingsButton"
+            android:id="@+id/teamStatsButton"
             android:layout_below="@+id/playersButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_background_second"
+            android:text="@string/team_dashboard_team_stats"
+            android:textColor="@color/color_text_light" />
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_below="@+id/teamStatsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

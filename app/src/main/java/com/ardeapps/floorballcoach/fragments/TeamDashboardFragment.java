@@ -13,17 +13,17 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
+import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
-import com.ardeapps.floorballcoach.viewObjects.GameSettingsFragmentData;
 
 
 public class TeamDashboardFragment extends Fragment {
 
-    Button newGameButton;
     Button linesButton;
     Button playersButton;
     Button gamesButton;
+    Button teamStatsButton;
     Button settingsButton;
     TextView teamNameText;
     ImageView logoImage;
@@ -33,9 +33,9 @@ public class TeamDashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_team_dashboard, container, false);
 
-        newGameButton = v.findViewById(R.id.newGameButton);
         gamesButton = v.findViewById(R.id.gamesButton);
         linesButton = v.findViewById(R.id.linesButton);
+        teamStatsButton = v.findViewById(R.id.teamStatsButton);
         playersButton = v.findViewById(R.id.playersButton);
         settingsButton = v.findViewById(R.id.settingsButton);
         teamNameText = v.findViewById(R.id.teamNameText);
@@ -48,14 +48,19 @@ public class TeamDashboardFragment extends Fragment {
             logoImage.setImageResource(R.drawable.default_logo);
         }
 
-        teamNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
+        // Role specific content
+        UserConnection.Role role = AppRes.getInstance().getSelectedRole();
+        if(role == UserConnection.Role.PLAYER) {
+            teamNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
+            gamesButton.setVisibility(View.GONE);
+            linesButton.setVisibility(View.GONE);
+            settingsButton.setVisibility(View.GONE);
+        } else {
+            gamesButton.setVisibility(View.VISIBLE);
+            linesButton.setVisibility(View.VISIBLE);
+            settingsButton.setVisibility(View.VISIBLE);
+        }
 
-        newGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(new GameSettingsFragmentData());
-            }
-        });
         gamesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +77,12 @@ public class TeamDashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentListeners.getInstance().getFragmentChangeListener().goToPlayersFragment();
+            }
+        });
+        teamStatsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentListeners.getInstance().getFragmentChangeListener().goToTeamStatsFragment();
             }
         });
         settingsButton.setOnClickListener(new View.OnClickListener() {

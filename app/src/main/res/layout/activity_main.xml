@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_menu"
     android:orientation="vertical">
     <RelativeLayout
@@ -30,14 +31,13 @@
             android:textSize="18sp"
             android:textStyle="bold" />
         <com.ardeapps.floorballcoach.views.IconView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/settingsIcon"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:text="@string/icon_user"
             app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
+            app:iconSize="18sp"/>
     </RelativeLayout>
 
     <FrameLayout

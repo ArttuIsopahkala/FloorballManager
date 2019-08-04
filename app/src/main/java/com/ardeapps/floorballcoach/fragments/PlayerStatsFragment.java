@@ -5,34 +5,47 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
+import com.ardeapps.floorballcoach.dialogFragments.ActionMenuDialogFragment;
+import com.ardeapps.floorballcoach.dialogFragments.ConfirmDialogFragment;
+import com.ardeapps.floorballcoach.handlers.GetGamesHandler;
+import com.ardeapps.floorballcoach.handlers.GetStatsHandler;
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Player;
+import com.ardeapps.floorballcoach.objects.PlayerStatsObject;
 import com.ardeapps.floorballcoach.objects.Season;
+import com.ardeapps.floorballcoach.objects.UserConnection;
+import com.ardeapps.floorballcoach.resources.PlayerGamesResource;
+import com.ardeapps.floorballcoach.resources.PlayerStatsResource;
+import com.ardeapps.floorballcoach.resources.PlayersResource;
+import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
+import com.ardeapps.floorballcoach.services.StatsHelper;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
 import com.ardeapps.floorballcoach.utils.StringUtils;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
-import com.ardeapps.floorballcoach.viewObjects.PlayerStatsFragmentData;
 import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -44,6 +57,27 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     TextView numberText;
     TextView shootsText;
     IconView editIcon;
+    TextView gamesText;
+    TextView pointsText;
+    TextView pointsPerGameText;
+    TextView plusText;
+    TextView minusText;
+    TextView plusMinusText;
+    TextView goalsText;
+    TextView goalsPerGameText;
+    TextView goalsYvText;
+    TextView goalsAvText;
+    TextView goalsRlText;
+    TextView assistsText;
+    TextView assistsPerGameText;
+    TextView assistsYvText;
+    TextView assistsAvText;
+    TextView bestStatsText;
+    TextView longestStatsText;
+    TextView bestPlusMinusText;
+    TextView bestAssistantText;
+    TextView bestScorerText;
+    TextView bestSameLineText;
 
     ImageView shootmapImage;
     RelativeLayout shootmapPointsContainer;
@@ -51,27 +85,30 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     Spinner gameModeSpinner;
     Spinner typeSpinner;
     Spinner seasonSpinner;
+    LinearLayout seasonContainer;
+    TextView noSeasonsText;
 
     private double imageWidth;
     private double imageHeight;
 
-    private PlayerStatsFragmentData data;
     private ArrayList<Game> sortedGames;
     private ArrayList<Goal.Mode> gameModes;
-    private ArrayList<String> seasonIds;
     int gameSpinnerPosition = 0;
     int gameModeSpinnerPosition = 0;
     int typeSpinnerPosition = 0;
-    int seasonSpinnerPosition = 0;
+
+    private Player player;
+    private Map<String, ArrayList<Goal>> stats = new HashMap<>();
+    private Map<String, Game> games = new HashMap<>();
 
     @Override
     public void setData(Object viewData) {
-        data = (PlayerStatsFragmentData)viewData;
+        player = (Player)viewData;
     }
 
     @Override
-    public PlayerStatsFragmentData getData() {
-        return data;
+    public Player getData() {
+        return player;
     }
 
     @Override
@@ -84,15 +121,46 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         numberText = v.findViewById(R.id.numberText);
         shootsText = v.findViewById(R.id.shootsText);
         editIcon = v.findViewById(R.id.editIcon);
+        seasonSpinner = v.findViewById(R.id.seasonSpinner);
+        seasonContainer = v.findViewById(R.id.seasonContainer);
+        noSeasonsText = v.findViewById(R.id.noSeasonsText);
         shootmapImage = v.findViewById(R.id.shootmapImage);
         shootmapPointsContainer = v.findViewById(R.id.shootmapPointsContainer);
         gameSpinner = v.findViewById(R.id.gameSpinner);
         gameModeSpinner = v.findViewById(R.id.gameModeSpinner);
         typeSpinner = v.findViewById(R.id.typeSpinner);
-        seasonSpinner = v.findViewById(R.id.seasonSpinner);
+        gamesText = v.findViewById(R.id.gamesText);
+        pointsText = v.findViewById(R.id.pointsText);
+        pointsPerGameText = v.findViewById(R.id.pointsPerGameText);
+        plusText = v.findViewById(R.id.plusText);
+        minusText = v.findViewById(R.id.minusText);
+        plusMinusText = v.findViewById(R.id.plusMinusText);
+        goalsText = v.findViewById(R.id.goalsText);
+        goalsPerGameText = v.findViewById(R.id.goalsPerGameText);
+        goalsYvText = v.findViewById(R.id.goalsYvText);
+        goalsAvText = v.findViewById(R.id.goalsAvText);
+        goalsRlText = v.findViewById(R.id.goalsRlText);
+        assistsText = v.findViewById(R.id.assistsText);
+        assistsPerGameText = v.findViewById(R.id.assistsPerGameText);
+        assistsYvText = v.findViewById(R.id.assistsYvText);
+        assistsAvText = v.findViewById(R.id.assistsAvText);
+        bestStatsText = v.findViewById(R.id.bestStatsText);
+        longestStatsText = v.findViewById(R.id.longestStatsText);
+        bestPlusMinusText = v.findViewById(R.id.bestPlusMinusText);
+        bestAssistantText = v.findViewById(R.id.bestAssistantText);
+        bestScorerText = v.findViewById(R.id.bestScorerText);
+        bestSameLineText = v.findViewById(R.id.bestSameLineText);
 
+        // Role specific content
+        UserConnection.Role role = AppRes.getInstance().getSelectedRole();
+        if(role == UserConnection.Role.PLAYER) {
+            editIcon.setVisibility(View.GONE);
+        } else {
+            editIcon.setVisibility(View.VISIBLE);
+        }
+
+        setSeasonSpinner();
         // Player Info
-        final Player player = data.getPlayer();
         if(player.getPicture() != null) {
             pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
         } else {
@@ -106,22 +174,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         Player.Shoots shoots = Player.Shoots.fromDatabaseName(player.getShoots());
         String shootsString = getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
         shootsText.setText(shootsString);
-
-        sortedGames = new ArrayList<>(data.getGames().values());
-        Collections.sort(sortedGames, new Comparator<Game>() {
-            @Override
-            public int compare(Game o1, Game o2) {
-                return Long.valueOf(o2.getDate()).compareTo(o1.getDate());
-            }
-        });
-
-        ArrayList<String> gameTitles = new ArrayList<>();
-        gameTitles.add(getString(R.string.player_stats_all_games));
-        for(Game game : sortedGames) {
-            String title = StringUtils.getDateText(game.getDate()) + ": " + game.getOpponentName();
-            gameTitles.add(title);
-        }
-        Helper.setSpinnerAdapter(gameSpinner, gameTitles);
 
         Map<Goal.Mode, String> gameModeMap = new HashMap<>();
         gameModeMap.put(null, getString(R.string.player_stats_all_game_modes));
@@ -137,15 +189,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         typeTitles.add(getString(R.string.player_stats_filter_goals));
         typeTitles.add(getString(R.string.player_stats_filter_assists));
         Helper.setSpinnerAdapter(typeSpinner, typeTitles);
-
-        seasonIds = new ArrayList<>();
-        ArrayList<String> seasonTitles = new ArrayList<>();
-        seasonTitles.add(getString(R.string.player_stats_all_seasons));
-        for(Season season : AppRes.getInstance().getSeasons().values()) {
-            seasonTitles.add(season.getName());
-            seasonIds.add(season.getSeasonId());
-        }
-        Helper.setSpinnerAdapter(seasonSpinner, seasonTitles);
 
         gameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -180,17 +223,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        seasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                seasonSpinnerPosition = position;
-                drawShootPoints();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
-        });
-
         ViewTreeObserver vto = shootmapImage.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
@@ -202,7 +234,9 @@ public class PlayerStatsFragment extends Fragment implements DataView {
                 Helper.setSpinnerSelection(gameSpinner, gameSpinnerPosition);
                 Helper.setSpinnerSelection(gameModeSpinner, gameModeSpinnerPosition);
                 Helper.setSpinnerSelection(typeSpinner, typeSpinnerPosition);
-                Helper.setSpinnerSelection(seasonSpinner, seasonSpinnerPosition);
+
+                Season season = AppRes.getInstance().getSelectedSeason();
+                loadStats(season != null ? season.getSeasonId() : null);
                 return true;
             }
         });
@@ -210,11 +244,252 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         editIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToEditPlayerFragment(player);
+                final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
+                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
+                dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
+                    @Override
+                    public void onEditItem() {
+                        dialog.dismiss();
+                        FragmentListeners.getInstance().getFragmentChangeListener().goToEditPlayerFragment(player);
+                    }
+
+                    @Override
+                    public void onRemoveItem() {
+                        dialog.dismiss();
+                        ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_player_remove_confirmation));
+                        dialogFragment.show(getChildFragmentManager(), "Siirretäänkö pelaaja poistettujen listalle?");
+                        dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
+                            @Override
+                            public void onDialogYesButtonClick() {
+                                player.setActive(false);
+                                PlayersResource.getInstance().editPlayer(player, new FirebaseDatabaseService.EditDataSuccessListener() {
+                                    @Override
+                                    public void onEditDataSuccess() {
+                                        AppRes.getInstance().setPlayer(player.getPlayerId(), player);
+                                        AppRes.getActivity().onBackPressed();
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 
         return v;
+    }
+
+    public void setSeasonSpinner() {
+        Map<String, Season> seasons = AppRes.getInstance().getSeasons();
+
+        if(seasons.isEmpty()) {
+            noSeasonsText.setVisibility(View.VISIBLE);
+            seasonSpinner.setVisibility(View.GONE);
+        } else {
+            noSeasonsText.setVisibility(View.GONE);
+            seasonSpinner.setVisibility(View.VISIBLE);
+        }
+        final ArrayList<String> seasonIds = new ArrayList<>();
+        ArrayList<String> seasonTitles = new ArrayList<>();
+        seasonTitles.add(getString(R.string.player_stats_all_seasons));
+        seasonIds.add(null);
+        for(Season season : seasons.values()) {
+            seasonTitles.add(season.getName());
+            seasonIds.add(season.getSeasonId());
+        }
+        Helper.setSpinnerAdapter(seasonSpinner, seasonTitles);
+        int seasonPosition = 0;
+        if(!seasons.isEmpty()) {
+            Season selectedSeason = AppRes.getInstance().getSelectedSeason();
+            if(selectedSeason != null) {
+                seasonPosition = seasonIds.indexOf(selectedSeason.getSeasonId());
+            }
+            Helper.setSpinnerSelection(seasonSpinner, seasonPosition > -1 ? seasonPosition : 0);
+        }
+
+        seasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String seasonId = seasonIds.get(position);
+                loadStats(seasonId);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+    }
+
+    private void loadStats(final String seasonId) {
+        final String playerId = player.getPlayerId();
+        if(seasonId == null) {
+            PlayerStatsResource.getInstance().getAllStats(playerId, new GetStatsHandler() {
+                @Override
+                public void onStatsLoaded(final Map<String, ArrayList<Goal>> stats) {
+                    PlayerGamesResource.getInstance().getAllGames(playerId, new GetGamesHandler() {
+                        @Override
+                        public void onGamesLoaded(Map<String, Game> games) {
+                            PlayerStatsFragment.this.stats = stats;
+                            PlayerStatsFragment.this.games = games;
+                            updateStats(seasonId);
+                        }
+                    });
+                }
+            });
+        } else {
+            PlayerStatsResource.getInstance().getStats(playerId, seasonId, new GetStatsHandler() {
+                @Override
+                public void onStatsLoaded(final Map<String, ArrayList<Goal>> stats) {
+                    PlayerGamesResource.getInstance().getGames(playerId, seasonId, new GetGamesHandler() {
+                        @Override
+                        public void onGamesLoaded(Map<String, Game> games) {
+                            PlayerStatsFragment.this.stats = stats;
+                            PlayerStatsFragment.this.games = games;
+                            updateStats(seasonId);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private void updateStats(String seasonId) {
+        drawShootPoints();
+
+        // Set games sorted by date
+        sortedGames = new ArrayList<>(games.values());
+        Collections.sort(sortedGames, new Comparator<Game>() {
+            @Override
+            public int compare(Game o1, Game o2) {
+                return Long.valueOf(o2.getDate()).compareTo(o1.getDate());
+            }
+        });
+
+        ArrayList<String> gameTitles = new ArrayList<>();
+        gameTitles.add(getString(R.string.player_stats_all_games));
+        for(Game game : sortedGames) {
+            String title = StringUtils.getDateText(game.getDate()) + ": " + game.getOpponentName();
+            gameTitles.add(title);
+        }
+        Helper.setSpinnerAdapter(gameSpinner, gameTitles);
+
+        // Collect filtered map
+        Map<Game, ArrayList<Goal>> filteredStats = new HashMap<>();
+        for(Game game : sortedGames) {
+            ArrayList<Goal> goals = stats.get(game.getGameId());
+            ArrayList<Goal> filteredGoals = new ArrayList<>();
+            if(goals != null) {
+                for (Goal goal : goals) {
+                    if (seasonId == null || seasonId.equals(goal.getSeasonId())) {
+                        filteredGoals.add(goal);
+                    }
+                }
+            }
+            filteredStats.put(game, filteredGoals);
+        }
+
+        PlayerStatsObject stats = StatsHelper.getPlayerStats(player.getPlayerId(), filteredStats);
+        gamesText.setText(String.valueOf(stats.gamesCount));
+        pointsText.setText(String.valueOf(stats.points));
+        pointsPerGameText.setText(getPerGameText(stats.pointsPerGame));
+        plusText.setText(String.valueOf(stats.pluses));
+        minusText.setText(String.valueOf(stats.minuses));
+        plusMinusText.setText(String.valueOf(stats.plusMinus));
+        goalsText.setText(String.valueOf(stats.scores));
+        goalsPerGameText.setText(getPerGameText(stats.scoresPerGame));
+        goalsYvText.setText(String.valueOf(stats.yvScores));
+        goalsAvText.setText(String.valueOf(stats.avScores));
+        goalsRlText.setText(String.valueOf(stats.rlScores));
+        assistsText.setText(String.valueOf(stats.assists));
+        assistsPerGameText.setText(getPerGameText(stats.assistsPerGame));
+        assistsYvText.setText(String.valueOf(stats.yvAssists));
+        assistsAvText.setText(String.valueOf(stats.avAssists));
+        bestStatsText.setText(stats.bestStats.first + " + " + stats.bestStats.second);
+        longestStatsText.setText(getLongestStatsText(stats.longestStats));
+        bestPlusMinusText.setText(String.valueOf(stats.bestPlusMinus));
+        bestAssistantText.setText(getBestAssistText(stats.bestAssists));
+        bestScorerText.setText(getBestScorerText(stats.bestScorers));
+        bestSameLineText.setText(getLineMateText(stats.bestLineMates));
+    }
+
+    private String getPerGameText(double value) {
+        return String.format(Locale.ENGLISH, "%.02f", value);
+    }
+
+    private String getLongestStatsText(int statsLength) {
+        String result = statsLength + " ";
+        if(statsLength == 1) {
+            result += getString(R.string.player_stats_game);
+        } else {
+            result += getString(R.string.player_stats_games);
+        }
+        return result;
+    }
+
+    private String getLineMateText(Pair<ArrayList<String>, Integer> value) {
+        String result = "-";
+        if(value.second != null && value.second > 0) {
+            result = getPlayersText(value.first) + ": " + value.second + " ";
+            if(value.second == 1) {
+                result += getString(R.string.player_stats_together_score);
+            } else {
+                result += getString(R.string.player_stats_together_scores);
+            }
+        }
+        return result;
+    }
+
+    private String getBestScorerText(Pair<ArrayList<String>, Integer> value) {
+        String result = "-";
+        if(value.second != null && value.second > 0) {
+            result = getPlayersText(value.first) + ", " + value.second + " ";
+            if(value.second == 1) {
+                result += getString(R.string.player_stats_score);
+            } else {
+                result += getString(R.string.player_stats_scores);
+            }
+        }
+        return result;
+    }
+
+    private String getBestAssistText(Pair<ArrayList<String>, Integer> value) {
+        String result = "-";
+        if(value.second != null && value.second > 0) {
+            result = getPlayersText(value.first) + ", " + value.second + " ";
+            if(value.second == 1) {
+                result += getString(R.string.player_stats_assist);
+            } else {
+                result += getString(R.string.player_stats_assists);
+            }
+        }
+        return result;
+    }
+
+    private String getPlayersText(ArrayList<String> playerIds) {
+        String result = "";
+        Map<String, Player> players = AppRes.getInstance().getPlayers();
+        if(!playerIds.isEmpty()) {
+            ArrayList<String> addedPlayerIds = new ArrayList<>();
+            for(String playerId : playerIds) {
+                Player player = players.get(playerId);
+                if(player != null) {
+                    if(addedPlayerIds.size() > 0) {
+                        result += ", ";
+                    }
+                    result += player.getName();
+                    addedPlayerIds.add(playerId);
+                    if(addedPlayerIds.size() == 2) {
+                        result += ".. ";
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     private void drawShootPoints() {
@@ -223,12 +498,10 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         ArrayList<Goal> filteredGoals = getFilteredGameGoals(gameSpinnerPosition);
         filteredGoals = getFilteredGameModeGoals(gameModeSpinnerPosition, filteredGoals);
         filteredGoals = getFilteredTypeGoals(typeSpinnerPosition, filteredGoals);
-        filteredGoals = getFilteredSeasonGoals(seasonSpinnerPosition, filteredGoals);
 
         for(Goal goal : filteredGoals) {
             double x = getPositionX(goal.getPositionPercentX());
             double y = getPositionY(goal.getPositionPercentY());
-
             drawShootPoint(x, y);
         }
     }
@@ -237,13 +510,13 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         ArrayList<Goal> filteredGoals = new ArrayList<>();
         if(spinnerPosition == 0) {
             // Show all
-            for(ArrayList<Goal> goals : data.getStats().values()) {
+            for(ArrayList<Goal> goals : stats.values()) {
                 filteredGoals.addAll(goals);
             }
         } else {
             // Show by game
             Game game = sortedGames.get(spinnerPosition - 1); // -1 because first is all
-            ArrayList<Goal> goals = data.getStats().get(game.getGameId());
+            ArrayList<Goal> goals = stats.get(game.getGameId());
             if(goals != null) {
                 filteredGoals.addAll(goals);
             }
@@ -251,25 +524,9 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         return filteredGoals;
     }
 
-    private ArrayList<Goal> getFilteredSeasonGoals(int spinnerPosition, ArrayList<Goal> goals) {
-        ArrayList<Goal> filteredGoals = new ArrayList<>();
-        if(spinnerPosition == 0) {
-            filteredGoals = goals;
-        } else {
-            String compareSeasonId = seasonIds.get(spinnerPosition - 1); // -1 because first is all
-            for(Goal goal : goals) {
-                Game game = data.getGames().get(goal.getGameId());
-                if(game != null && game.getSeasonId().equals(compareSeasonId)) {
-                    filteredGoals.add(goal);
-                }
-            }
-        }
-        return filteredGoals;
-    }
-
     private ArrayList<Goal> getFilteredTypeGoals(int spinnerPosition, ArrayList<Goal> goals) {
         ArrayList<Goal> filteredGoals = new ArrayList<>();
-        String playerId = data.getPlayer().getPlayerId();
+        String playerId = player.getPlayerId();
         for(Goal goal : goals) {
             // Goals
             if(spinnerPosition == 0 && goal.getScorerId().equals(playerId)) {

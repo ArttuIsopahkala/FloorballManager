@@ -22,6 +22,7 @@ public class Goal {
 
     private String goalId;
     private String gameId;
+    private String seasonId;
     private long time;
     private boolean opponentGoal;
     private String scorerId;
@@ -38,6 +39,7 @@ public class Goal {
         Goal clone = new Goal();
         clone.goalId = this.goalId;
         clone.gameId = this.gameId;
+        clone.seasonId = this.seasonId;
         clone.time = this.time;
         clone.opponentGoal = this.opponentGoal;
         clone.scorerId = this.scorerId;
@@ -58,6 +60,14 @@ public class Goal {
 
     public void setGoalId(String goalId) {
         this.goalId = goalId;
+    }
+
+    public String getSeasonId() {
+        return seasonId;
+    }
+
+    public void setSeasonId(String seasonId) {
+        this.seasonId = seasonId;
     }
 
     public long getTime() {

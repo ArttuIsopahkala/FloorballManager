@@ -26,8 +26,9 @@ public class AppDataResource extends FirebaseDatabaseService {
         getData(database, new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final AppData appData = dataSnapshot.getValue(AppData.class);
-                handler.onAppDataLoaded(appData);
+                AppData.PRIVACY_POLICY_URL = (String)dataSnapshot.child("PRIVACY_POLICY_URL").getValue();
+                AppData.NEWEST_VERSION_CODE = (long)dataSnapshot.child("NEWEST_VERSION_CODE").getValue();
+                handler.onAppDataLoaded();
             }
         });
     }

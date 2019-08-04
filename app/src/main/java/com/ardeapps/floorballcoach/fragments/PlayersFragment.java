@@ -8,37 +8,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.adapters.PlayerListAdapter;
-import com.ardeapps.floorballcoach.dialogFragments.ActionMenuDialogFragment;
-import com.ardeapps.floorballcoach.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballcoach.objects.Player;
-import com.ardeapps.floorballcoach.resources.PlayersGamesStatsResource;
-import com.ardeapps.floorballcoach.resources.TeamsPlayersResource;
-import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.views.PlayerHolder;
 
+import java.util.ArrayList;
 
-public class PlayersFragment extends Fragment implements PlayerListAdapter.PlayerListManageListener {
+
+public class PlayersFragment extends Fragment implements PlayerListAdapter.PlayerListSelectListener {
 
     Button createPlayerButton;
     ListView playerList;
+    TextView noPlayersText;
 
     PlayerListAdapter adapter;
 
     public void update() {
-        adapter.refreshData();
+        ArrayList<Player> players = new ArrayList<>();
+        for(Player player : AppRes.getInstance().getPlayers().values()) {
+            if(player.isActive()) {
+                players.add(player);
+            }
+        }
+        adapter.setPlayers(players);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new PlayerListAdapter(AppRes.getActivity(), PlayerHolder.ViewType.MANAGE);
-        adapter.setManageListener(this);
+        adapter = new PlayerListAdapter(AppRes.getActivity(), PlayerHolder.ViewType.SELECT);
+        adapter.setSelectListener(this);
     }
 
     @Override
@@ -48,11 +53,12 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
 
         createPlayerButton = v.findViewById(R.id.createPlayerButton);
         playerList = v.findViewById(R.id.playerList);
+        noPlayersText = v.findViewById(R.id.noPlayersText);
 
+        playerList.setEmptyView(noPlayersText);
         playerList.setAdapter(adapter);
 
-        adapter.refreshData();
-        adapter.notifyDataSetChanged();
+        update();
 
         createPlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,51 +71,7 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
     }
 
     @Override
-    public void onStatisticsClick(Player player) {
+    public void onPlayerSelected(Player player) {
         FragmentListeners.getInstance().getFragmentChangeListener().goToPlayerStatsFragment(player);
-    }
-
-    @Override
-    public void onContainerClick(final Player player) {
-        final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
-        dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
-        dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
-            @Override
-            public void onEditItem() {
-                dialog.dismiss();
-                FragmentListeners.getInstance().getFragmentChangeListener().goToEditPlayerFragment(player);
-            }
-
-            @Override
-            public void onRemoveItem() {
-                dialog.dismiss();
-                ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_player_remove_confirmation));
-                dialogFragment.show(getChildFragmentManager(), "Poistetaanko pelaaja ja tilastot?");
-                dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                    @Override
-                    public void onDialogYesButtonClick() {
-                        PlayersGamesStatsResource.getInstance().removeAllStats(player.getPlayerId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                            @Override
-                            public void onDeleteDataSuccess() {
-                                TeamsPlayersResource.getInstance().removePlayer(player, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                    @Override
-                                    public void onDeleteDataSuccess() {
-                                        AppRes.getInstance().setPlayer(player.getPlayerId(), null);
-                                        update();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-
-            @Override
-            public void onCancel() {
-                dialog.dismiss();
-            }
-        });
-
-
     }
 }

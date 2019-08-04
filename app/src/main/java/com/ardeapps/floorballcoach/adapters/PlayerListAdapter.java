@@ -36,12 +36,8 @@ public class PlayerListAdapter extends BaseAdapter {
         selectListener = l;
     }
 
-    public void refreshData() {
-        players = new ArrayList<>(AppRes.getInstance().getPlayers().values());
-    }
-
-    public void update() {
-
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
     }
 
     @Override

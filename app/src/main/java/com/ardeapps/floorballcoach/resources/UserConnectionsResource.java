@@ -15,13 +15,13 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class TeamsUserConnectionsResource extends FirebaseDatabaseService {
-    private static TeamsUserConnectionsResource instance;
+public class UserConnectionsResource extends FirebaseDatabaseService {
+    private static UserConnectionsResource instance;
     private static DatabaseReference database;
 
-    public static TeamsUserConnectionsResource getInstance() {
+    public static UserConnectionsResource getInstance() {
         if (instance == null) {
-            instance = new TeamsUserConnectionsResource();
+            instance = new UserConnectionsResource();
         }
         database = getDatabase().child(TEAMS_USER_CONNECTIONS);
         return instance;

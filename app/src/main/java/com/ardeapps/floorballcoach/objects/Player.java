@@ -65,6 +65,7 @@ public class Player {
     private String shoots;
     private String position;
     private String type;
+    private boolean active;
     private boolean pictureUploaded;
     @Exclude
     private transient Bitmap picture;
@@ -80,6 +81,7 @@ public class Player {
         clone.number = this.number;
         clone.shoots = this.shoots;
         clone.position = this.position;
+        clone.active = this.active;
         clone.pictureUploaded = this.pictureUploaded;
         return clone;
     }
@@ -222,6 +224,14 @@ public class Player {
         this.type = type;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public boolean isPictureUploaded() {
         return pictureUploaded;
     }
@@ -230,10 +240,12 @@ public class Player {
         this.pictureUploaded = pictureUploaded;
     }
 
+    @Exclude
     public Bitmap getPicture() {
         return picture;
     }
 
+    @Exclude
     public void setPicture(Bitmap picture) {
         this.picture = picture;
     }

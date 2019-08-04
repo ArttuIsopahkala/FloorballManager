@@ -18,15 +18,17 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class TeamsGamesLinesResource extends FirebaseDatabaseService {
-    private static TeamsGamesLinesResource instance;
+public class LinesInGameResource extends FirebaseDatabaseService {
+    private static LinesInGameResource instance;
     private static DatabaseReference database;
 
-    public static TeamsGamesLinesResource getInstance() {
+    public static LinesInGameResource getInstance() {
         if (instance == null) {
-            instance = new TeamsGamesLinesResource();
+            instance = new LinesInGameResource();
         }
-        database = getDatabase().child(TEAMS_GAMES_LINES).child(AppRes.getInstance().getSelectedTeam().getTeamId());
+        String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
+        String seasonId = AppRes.getInstance().getSelectedSeason().getSeasonId();
+        database = getDatabase().child(TEAMS_SEASONS_GAMES_LINES).child(teamId).child(seasonId);
         return instance;
     }
 
@@ -92,7 +94,7 @@ public class TeamsGamesLinesResource extends FirebaseDatabaseService {
         deleteData(database.child(gameId).child(lineId), handler);
     }
 
-    public void removeLines(final DeleteDataSuccessListener handler) {
+    public void removeAllLines(final DeleteDataSuccessListener handler) {
         deleteData(database, handler);
     }
 

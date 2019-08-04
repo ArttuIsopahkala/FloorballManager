@@ -1,0 +1,1559 @@
+{
+  "DEBUG" : {
+    "appData" : {
+      "NEWEST_VERSION_CODE" : 1,
+      "PRIVACY_POLICY_URL" : "www.google.com"
+    },
+    "players_seasons_games" : {
+      "-LYDueLQnDlNS3iny3r2" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "awayGoals" : 2,
+            "date" : 1557435600000,
+            "gameId" : "-LeYQbV36vtIZnMUVyeS",
+            "homeGame" : true,
+            "homeGoals" : 5,
+            "opponentName" : "Uusi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LkmoFUBe49P0F6JWMad" : {
+            "awayGoals" : 0,
+            "date" : 1564174800000,
+            "gameId" : "-LkmoFUBe49P0F6JWMad",
+            "homeGame" : true,
+            "homeGoals" : 1,
+            "opponentName" : "Kiina",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          }
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "-LlB2wLjFxRheLyopck-" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlB2wLjFxRheLyopck-",
+            "homeGame" : true,
+            "opponentName" : "Ääp",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          }
+        }
+      },
+      "-LZf3phcktGRlKYCJYNo" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "awayGoals" : 2,
+            "date" : 1557435600000,
+            "gameId" : "-LeYQbV36vtIZnMUVyeS",
+            "homeGame" : true,
+            "homeGoals" : 5,
+            "opponentName" : "Uusi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LkmoFUBe49P0F6JWMad" : {
+            "awayGoals" : 0,
+            "date" : 1564174800000,
+            "gameId" : "-LkmoFUBe49P0F6JWMad",
+            "homeGame" : true,
+            "homeGoals" : 1,
+            "opponentName" : "Kiina",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          }
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "-LlB2wLjFxRheLyopck-" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlB2wLjFxRheLyopck-",
+            "homeGame" : true,
+            "opponentName" : "Ääp",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          }
+        }
+      },
+      "-LZf423Q01lgFW8yD5Dl" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "awayGoals" : 2,
+            "date" : 1557435600000,
+            "gameId" : "-LeYQbV36vtIZnMUVyeS",
+            "homeGame" : true,
+            "homeGoals" : 5,
+            "opponentName" : "Uusi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LkmoFUBe49P0F6JWMad" : {
+            "awayGoals" : 0,
+            "date" : 1564174800000,
+            "gameId" : "-LkmoFUBe49P0F6JWMad",
+            "homeGame" : true,
+            "homeGoals" : 1,
+            "opponentName" : "Kiina",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          }
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "-LlAtax0oLqHypXxHegQ" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlAtax0oLqHypXxHegQ",
+            "homeGame" : true,
+            "opponentName" : "Add",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          },
+          "-LlAuqLjTJOe0HI0X26e" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlAuqLjTJOe0HI0X26e",
+            "homeGame" : true,
+            "opponentName" : "Sssd",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          }
+        }
+      },
+      "-LZf45PcYqU3sb7p5GFr" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "awayGoals" : 2,
+            "date" : 1557435600000,
+            "gameId" : "-LeYQbV36vtIZnMUVyeS",
+            "homeGame" : true,
+            "homeGoals" : 5,
+            "opponentName" : "Uusi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LkmoFUBe49P0F6JWMad" : {
+            "awayGoals" : 0,
+            "date" : 1564174800000,
+            "gameId" : "-LkmoFUBe49P0F6JWMad",
+            "homeGame" : true,
+            "homeGoals" : 1,
+            "opponentName" : "Kiina",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          }
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "-LlB2wLjFxRheLyopck-" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlB2wLjFxRheLyopck-",
+            "homeGame" : true,
+            "opponentName" : "Ääp",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          }
+        }
+      },
+      "-LZf4BuzjpwdhZFWX1G5" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "awayGoals" : 2,
+            "date" : 1557435600000,
+            "gameId" : "-LeYQbV36vtIZnMUVyeS",
+            "homeGame" : true,
+            "homeGoals" : 5,
+            "opponentName" : "Uusi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LkmoFUBe49P0F6JWMad" : {
+            "awayGoals" : 0,
+            "date" : 1564174800000,
+            "gameId" : "-LkmoFUBe49P0F6JWMad",
+            "homeGame" : true,
+            "homeGoals" : 1,
+            "opponentName" : "Kiina",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          }
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "-LlB2wLjFxRheLyopck-" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlB2wLjFxRheLyopck-",
+            "homeGame" : true,
+            "opponentName" : "Ääp",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          }
+        }
+      },
+      "-LZy0Wt7M7r3P7VmvXCQ" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "awayGoals" : 2,
+            "date" : 1557435600000,
+            "gameId" : "-LeYQbV36vtIZnMUVyeS",
+            "homeGame" : true,
+            "homeGoals" : 5,
+            "opponentName" : "Uusi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          }
+        }
+      },
+      "-Lkn2Q6Ep8FjHSzZ99C5" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LkmoFUBe49P0F6JWMad" : {
+            "awayGoals" : 0,
+            "date" : 1564174800000,
+            "gameId" : "-LkmoFUBe49P0F6JWMad",
+            "homeGame" : true,
+            "homeGoals" : 1,
+            "opponentName" : "Kiina",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          }
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "-LlAuqLjTJOe0HI0X26e" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlAuqLjTJOe0HI0X26e",
+            "homeGame" : true,
+            "opponentName" : "Sssd",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          }
+        }
+      }
+    },
+    "players_seasons_games_stats" : {
+      "-LYDueLQnDlNS3iny3r2" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LZBUEQTYxF9eTgPvXPf" : {
+            "-LdzAHaRtRX1CbYWMUk4" : {
+              "assistantId" : "-LZf3phcktGRlKYCJYNo",
+              "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+              "gameMode" : "FULL",
+              "goalId" : "-LdzAHaRtRX1CbYWMUk4",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LYDueLQnDlNS3iny3r2", "-LZf3phcktGRlKYCJYNo", "-LZf423Q01lgFW8yD5Dl" ],
+              "positionPercentX" : 0.34024401980455415,
+              "positionPercentY" : 0.6162144110454777,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 6000
+            },
+            "-LdzAersk3fnGTtNQJ5p" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+              "gameMode" : "YV",
+              "goalId" : "-LdzAersk3fnGTtNQJ5p",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LYDueLQnDlNS3iny3r2", "-LZf423Q01lgFW8yD5Dl" ],
+              "positionPercentX" : 0.33682678014345135,
+              "positionPercentY" : 0.5546099477805604,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 30000
+            }
+          },
+          "-LZBUpF1eXFKaIlSB49s" : {
+            "-Lc7IqYbe7I93ZGHDKrr" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LZBUpF1eXFKaIlSB49s",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7IqYbe7I93ZGHDKrr",
+              "opponentGoal" : false,
+              "positionPercentX" : 0.3624560776017225,
+              "positionPercentY" : 0.275646355924706,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 2000
+            }
+          },
+          "-LZFm_euIqKMQrJPS5zd" : {
+            "-Lc7I6QdKqulnsFZsTO9" : {
+              "assistantId" : "-LYDueLQnDlNS3iny3r2",
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "AV",
+              "goalId" : "-Lc7I6QdKqulnsFZsTO9",
+              "opponentGoal" : false,
+              "positionPercentX" : 0.6272922554927475,
+              "positionPercentY" : 0.19195730317898882,
+              "scorerId" : "-LZf423Q01lgFW8yD5Dl",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 14000
+            }
+          },
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "-LiEoJ6rTQACMv8kQB80" : {
+              "assistantId" : "-LYDueLQnDlNS3iny3r2",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "YV",
+              "goalId" : "-LiEoJ6rTQACMv8kQB80",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf4BuzjpwdhZFWX1G5", "-LYDueLQnDlNS3iny3r2", "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.5145232945985762,
+              "positionPercentY" : 0.29773098084984756,
+              "scorerId" : "-LZf4BuzjpwdhZFWX1G5",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 1000
+            }
+          }
+        }
+      },
+      "-LZf3phcktGRlKYCJYNo" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LZBUEQTYxF9eTgPvXPf" : {
+            "-LdzAHaRtRX1CbYWMUk4" : {
+              "assistantId" : "-LZf3phcktGRlKYCJYNo",
+              "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+              "gameMode" : "FULL",
+              "goalId" : "-LdzAHaRtRX1CbYWMUk4",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LYDueLQnDlNS3iny3r2", "-LZf3phcktGRlKYCJYNo", "-LZf423Q01lgFW8yD5Dl" ],
+              "positionPercentX" : 0.34024401980455415,
+              "positionPercentY" : 0.6162144110454777,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 6000
+            }
+          },
+          "-LZFm_euIqKMQrJPS5zd" : {
+            "-Lc7HR8xAvLIH2vJmwpO" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "YV",
+              "goalId" : "-Lc7HR8xAvLIH2vJmwpO",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.343661259465657,
+              "positionPercentY" : 0.3616601321478477,
+              "scorerId" : "-LZf3phcktGRlKYCJYNo",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 12000
+            },
+            "-Lc7INrvpIX8M3NJKJLD" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7INrvpIX8M3NJKJLD",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.3026543314546448,
+              "positionPercentY" : 0.5732075229339068,
+              "scorerId" : "-LZf3phcktGRlKYCJYNo",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 16000
+            }
+          }
+        }
+      },
+      "-LZf423Q01lgFW8yD5Dl" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LZBUEQTYxF9eTgPvXPf" : {
+            "-LdzAersk3fnGTtNQJ5p" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+              "gameMode" : "YV",
+              "goalId" : "-LdzAersk3fnGTtNQJ5p",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LYDueLQnDlNS3iny3r2", "-LZf423Q01lgFW8yD5Dl" ],
+              "positionPercentX" : 0.33682678014345135,
+              "positionPercentY" : 0.5546099477805604,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 30000
+            }
+          },
+          "-LZBUpF1eXFKaIlSB49s" : {
+            "-Lc7IqYbe7I93ZGHDKrr" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LZBUpF1eXFKaIlSB49s",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7IqYbe7I93ZGHDKrr",
+              "opponentGoal" : false,
+              "positionPercentX" : 0.3624560776017225,
+              "positionPercentY" : 0.275646355924706,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 2000
+            }
+          },
+          "-LZFm_euIqKMQrJPS5zd" : {
+            "-Lc7I6QdKqulnsFZsTO9" : {
+              "assistantId" : "-LYDueLQnDlNS3iny3r2",
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "AV",
+              "goalId" : "-Lc7I6QdKqulnsFZsTO9",
+              "opponentGoal" : false,
+              "positionPercentX" : 0.6272922554927475,
+              "positionPercentY" : 0.19195730317898882,
+              "scorerId" : "-LZf423Q01lgFW8yD5Dl",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 14000
+            }
+          },
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "-Lhfvjt8AjHHvg85K1w6" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-Lhfvjt8AjHHvg85K1w6",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.7161404866814206,
+              "positionPercentY" : 0.43256338298943814,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 44000
+            },
+            "-LiTwx3YlIDlXr2_zjnw" : {
+              "assistantId" : "-LZf45PcYqU3sb7p5GFr",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-LiTwx3YlIDlXr2_zjnw",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr", "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5" ],
+              "positionPercentX" : 0.3317009206517971,
+              "positionPercentY" : 0.35468606804859903,
+              "scorerId" : "-LZf423Q01lgFW8yD5Dl",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 9000
+            },
+            "-LiTzN0X_6QXB2y-ENWy" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "AV",
+              "goalId" : "-LiTzN0X_6QXB2y-ENWy",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.3385353999740028,
+              "positionPercentY" : 0.3523613445711745,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 56000
+            }
+          }
+        }
+      },
+      "-LZf45PcYqU3sb7p5GFr" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LZBUpF1eXFKaIlSB49s" : {
+            "-Lc7Il9FztAzpiMeaVEn" : {
+              "gameId" : "-LZBUpF1eXFKaIlSB49s",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7Il9FztAzpiMeaVEn",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.35733021811006827,
+              "positionPercentY" : 0.623188510589068,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 1000
+            }
+          },
+          "-LZFm_euIqKMQrJPS5zd" : {
+            "-Lc79vJ4wO5nn117v7r3" : {
+              "assistantId" : "-LZf4BuzjpwdhZFWX1G5",
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc79vJ4wO5nn117v7r3",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.4837681376486508,
+              "positionPercentY" : 0.3058674066878085,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 10000
+            },
+            "-Lc7IBRR5M_xednJJplh" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7IBRR5M_xednJJplh",
+              "opponentGoal" : false,
+              "positionPercentX" : 0.4017543337044049,
+              "positionPercentY" : 0.5522852951918191,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 1440000
+            },
+            "-LfYrdP_x9uo6GXsLeJ-" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-LfYrdP_x9uo6GXsLeJ-",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf45PcYqU3sb7p5GFr", null, "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf3phcktGRlKYCJYNo" ],
+              "positionPercentX" : 0.6607629427792916,
+              "positionPercentY" : 0.23311748381128586,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 5000
+            }
+          },
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "-Lhfvjt8AjHHvg85K1w6" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-Lhfvjt8AjHHvg85K1w6",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.7161404866814206,
+              "positionPercentY" : 0.43256338298943814,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 44000
+            },
+            "-LiTwx3YlIDlXr2_zjnw" : {
+              "assistantId" : "-LZf45PcYqU3sb7p5GFr",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-LiTwx3YlIDlXr2_zjnw",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr", "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5" ],
+              "positionPercentX" : 0.3317009206517971,
+              "positionPercentY" : 0.35468606804859903,
+              "scorerId" : "-LZf423Q01lgFW8yD5Dl",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 9000
+            },
+            "-LiTzN0X_6QXB2y-ENWy" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "AV",
+              "goalId" : "-LiTzN0X_6QXB2y-ENWy",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.3385353999740028,
+              "positionPercentY" : 0.3523613445711745,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 56000
+            }
+          }
+        }
+      },
+      "-LZf4BuzjpwdhZFWX1G5" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LZFm_euIqKMQrJPS5zd" : {
+            "-Lc79vJ4wO5nn117v7r3" : {
+              "assistantId" : "-LZf4BuzjpwdhZFWX1G5",
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc79vJ4wO5nn117v7r3",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.4837681376486508,
+              "positionPercentY" : 0.3058674066878085,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 10000
+            },
+            "-Lc7I2Qe7Zmytosp3R-N" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7I2Qe7Zmytosp3R-N",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.2975284719629906,
+              "positionPercentY" : 0.727799861965556,
+              "scorerId" : "-LZf4BuzjpwdhZFWX1G5",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 16000
+            }
+          },
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "-Lfo6nQwQCWKPnYXu5MV" : {
+              "assistantId" : "-LZf4BuzjpwdhZFWX1G5",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-Lfo6nQwQCWKPnYXu5MV",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf3phcktGRlKYCJYNo", "-LZy0Wt7M7r3P7VmvXCQ", "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.30436295128519625,
+              "positionPercentY" : 0.3918812183552918,
+              "scorerId" : "-LZf3phcktGRlKYCJYNo",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 4000
+            },
+            "-LiEoJ6rTQACMv8kQB80" : {
+              "assistantId" : "-LYDueLQnDlNS3iny3r2",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "YV",
+              "goalId" : "-LiEoJ6rTQACMv8kQB80",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf4BuzjpwdhZFWX1G5", "-LYDueLQnDlNS3iny3r2", "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.5145232945985762,
+              "positionPercentY" : 0.29773098084984756,
+              "scorerId" : "-LZf4BuzjpwdhZFWX1G5",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 1000
+            }
+          }
+        }
+      },
+      "-Lkn2Q6Ep8FjHSzZ99C5" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LkmoFUBe49P0F6JWMad" : {
+            "-Lkn2ak4KI4Bqe-1noGq" : {
+              "gameId" : "-LkmoFUBe49P0F6JWMad",
+              "gameMode" : "FULL",
+              "goalId" : "-Lkn2ak4KI4Bqe-1noGq",
+              "opponentGoal" : false,
+              "playerIds" : [ "-Lkn2Q6Ep8FjHSzZ99C5" ],
+              "positionPercentX" : 0.49914571612361347,
+              "positionPercentY" : 0.14785160503320993,
+              "scorerId" : "-Lkn2Q6Ep8FjHSzZ99C5",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 9000
+            }
+          }
+        }
+      }
+    },
+    "teams" : {
+      "-LYDu_zW16xskSIhIlOm" : {
+        "logoUploaded" : true,
+        "name" : "O2 miehet 2",
+        "teamId" : "-LYDu_zW16xskSIhIlOm"
+      },
+      "-LkjFwKfsixnhWXi8IMU" : {
+        "logoUploaded" : false,
+        "name" : "Djdj",
+        "teamId" : "-LkjFwKfsixnhWXi8IMU"
+      },
+      "-LkxlvOe5aZUWH8i9Hk9" : {
+        "logoUploaded" : false,
+        "name" : "Testi 29.7",
+        "teamId" : "-LkxlvOe5aZUWH8i9Hk9"
+      }
+    },
+    "teams_lines" : {
+      "-LYDu_zW16xskSIhIlOm" : {
+        "-LYDuaJHLYXZBTjVtWjK" : {
+          "lineId" : "-LYDuaJHLYXZBTjVtWjK",
+          "lineNumber" : 1,
+          "playerIdMap" : {
+            "C" : "-LZf45PcYqU3sb7p5GFr",
+            "LD" : "-LZf3phcktGRlKYCJYNo",
+            "LW" : "-LYDueLQnDlNS3iny3r2",
+            "RD" : "-LZf4BuzjpwdhZFWX1G5",
+            "RW" : "-LZf423Q01lgFW8yD5Dl"
+          }
+        }
+      }
+    },
+    "teams_players" : {
+      "-LYDu_zW16xskSIhIlOm" : {
+        "-LYDueLQnDlNS3iny3r2" : {
+          "name" : "Qrtu",
+          "pictureUploaded" : true,
+          "playerId" : "-LYDueLQnDlNS3iny3r2",
+          "position" : "LW",
+          "shoots" : "LEFT",
+          "teamId" : "-LYDu_zW16xskSIhIlOm"
+        },
+        "-LZf3phcktGRlKYCJYNo" : {
+          "name" : "Pelaaja2",
+          "pictureUploaded" : true,
+          "playerId" : "-LZf3phcktGRlKYCJYNo",
+          "position" : "C",
+          "shoots" : "LEFT",
+          "teamId" : "-LYDu_zW16xskSIhIlOm"
+        },
+        "-LZf423Q01lgFW8yD5Dl" : {
+          "name" : "Kolmonen",
+          "number" : 22,
+          "pictureUploaded" : true,
+          "playerId" : "-LZf423Q01lgFW8yD5Dl",
+          "position" : "RW",
+          "shoots" : "LEFT",
+          "teamId" : "-LYDu_zW16xskSIhIlOm"
+        },
+        "-LZf45PcYqU3sb7p5GFr" : {
+          "name" : "Pakki",
+          "number" : 15,
+          "pictureUploaded" : false,
+          "playerId" : "-LZf45PcYqU3sb7p5GFr",
+          "position" : "LD",
+          "shoots" : "LEFT",
+          "teamId" : "-LYDu_zW16xskSIhIlOm"
+        },
+        "-LZf4BuzjpwdhZFWX1G5" : {
+          "name" : "Oikee Paq",
+          "number" : 5,
+          "pictureUploaded" : false,
+          "playerId" : "-LZf4BuzjpwdhZFWX1G5",
+          "position" : "RD",
+          "shoots" : "LEFT",
+          "teamId" : "-LYDu_zW16xskSIhIlOm"
+        },
+        "-LZy0Wt7M7r3P7VmvXCQ" : {
+          "name" : "Sjsjjsjjsjs",
+          "pictureUploaded" : false,
+          "playerId" : "-LZy0Wt7M7r3P7VmvXCQ",
+          "position" : "LW",
+          "shoots" : "LEFT",
+          "teamId" : "-LYDu_zW16xskSIhIlOm"
+        },
+        "-Lkn2Q6Ep8FjHSzZ99C5" : {
+          "name" : "Kekkuli",
+          "pictureUploaded" : false,
+          "playerId" : "-Lkn2Q6Ep8FjHSzZ99C5",
+          "position" : "LW",
+          "shoots" : "LEFT",
+          "teamId" : "-LYDu_zW16xskSIhIlOm"
+        }
+      },
+      "-LkjFwKfsixnhWXi8IMU" : {
+        "-Lku6CwcRNyiJsXJyq6i" : {
+          "name" : "Asd",
+          "pictureUploaded" : false,
+          "playerId" : "-Lku6CwcRNyiJsXJyq6i",
+          "position" : "LW",
+          "shoots" : "LEFT",
+          "teamId" : "-LkjFwKfsixnhWXi8IMU"
+        }
+      },
+      "-LkxlvOe5aZUWH8i9Hk9" : {
+        "-Lkxp-9yTD33HKGX4GDe" : {
+          "name" : "Peluri",
+          "pictureUploaded" : false,
+          "playerId" : "-Lkxp-9yTD33HKGX4GDe",
+          "position" : "LW",
+          "shoots" : "LEFT",
+          "teamId" : "-LkxlvOe5aZUWH8i9Hk9"
+        }
+      }
+    },
+    "teams_seasons" : {
+      "-LYDu_zW16xskSIhIlOm" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "name" : "4. divari 2017-2018",
+          "periodInMinutes" : 20,
+          "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "name" : "4 Dirre 2019",
+          "periodInMinutes" : 15,
+          "seasonId" : "-Ll8fIecRq_l18b2_uja"
+        }
+      },
+      "-LkjFwKfsixnhWXi8IMU" : {
+        "-LkuAhA9HIPPBuCQBXW2" : {
+          "name" : "Kausi 2020",
+          "periodInMinutes" : 20,
+          "seasonId" : "-LkuAhA9HIPPBuCQBXW2"
+        },
+        "-LkuBKwjNdS6ZcC_yTF5" : {
+          "name" : "Kausi 2021",
+          "periodInMinutes" : 10,
+          "seasonId" : "-LkuBKwjNdS6ZcC_yTF5"
+        },
+        "-LkuEPlmSH4Jwg20nIV0" : {
+          "name" : "Kaudi2020",
+          "periodInMinutes" : 20,
+          "seasonId" : "-LkuEPlmSH4Jwg20nIV0"
+        },
+        "-LkuJ1crzb7nYapk2DFf" : {
+          "name" : "Kausu2019",
+          "periodInMinutes" : 5,
+          "seasonId" : "-LkuJ1crzb7nYapk2DFf"
+        },
+        "-LkuJdbSjYhyMX84Lw00" : {
+          "name" : "Ksudu17",
+          "periodInMinutes" : 20,
+          "seasonId" : "-LkuJdbSjYhyMX84Lw00"
+        },
+        "-LkuKDNZAr2HKXP1_WHJ" : {
+          "name" : "Asd16",
+          "periodInMinutes" : 20,
+          "seasonId" : "-LkuKDNZAr2HKXP1_WHJ"
+        },
+        "-LkuN2JJLApnehulTadS" : {
+          "name" : "Kausi666",
+          "periodInMinutes" : 20,
+          "seasonId" : "-LkuN2JJLApnehulTadS"
+        },
+        "-LkuNX-68tQKy8HOrEnD" : {
+          "name" : "Akfk",
+          "periodInMinutes" : 20,
+          "seasonId" : "-LkuNX-68tQKy8HOrEnD"
+        },
+        "-LkuOYsP75LYyBxE3m5I" : {
+          "name" : "Jakks",
+          "periodInMinutes" : 20,
+          "seasonId" : "-LkuOYsP75LYyBxE3m5I"
+        }
+      },
+      "-LkxlvOe5aZUWH8i9Hk9" : {
+        "-LkxuZ2LwHeZEkdZ1Rmu" : {
+          "name" : "Suomen Cup",
+          "periodInMinutes" : 20,
+          "seasonId" : "-LkxuZ2LwHeZEkdZ1Rmu"
+        }
+      }
+    },
+    "teams_seasons_games" : {
+      "-LYDu_zW16xskSIhIlOm" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LYc-D3RdEzZVBhpO9r1" : {
+            "awayGoals" : 0,
+            "date" : 1550613600000,
+            "gameId" : "-LYc-D3RdEzZVBhpO9r1",
+            "homeGame" : true,
+            "homeGoals" : 0,
+            "opponentName" : "Moi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LYc-tzDUMF0_aeR1CGl" : {
+            "awayGoals" : 0,
+            "date" : 1550008800000,
+            "gameId" : "-LYc-tzDUMF0_aeR1CGl",
+            "homeGame" : false,
+            "homeGoals" : 0,
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LYc0kE1Rqt5mysxy67I" : {
+            "awayGoals" : 0,
+            "date" : 1550008800000,
+            "gameId" : "-LYc0kE1Rqt5mysxy67I",
+            "homeGame" : false,
+            "homeGoals" : 0,
+            "opponentName" : "Asd",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LYc1etAllOrVCIOOHhs" : {
+            "awayGoals" : 0,
+            "date" : 1550008800000,
+            "gameId" : "-LYc1etAllOrVCIOOHhs",
+            "homeGame" : false,
+            "homeGoals" : 0,
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LYc8ZhUopm10RzunzpV" : {
+            "date" : 1550008800000,
+            "gameId" : "-LYc8ZhUopm10RzunzpV",
+            "homeGame" : true,
+            "opponentName" : "Erkki",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LZB8pZYCqTBc5OCFCbw" : {
+            "date" : 1550181600000,
+            "gameId" : "-LZB8pZYCqTBc5OCFCbw",
+            "homeGame" : false,
+            "opponentName" : "Uusi Peli Ukkkeliii",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LZBUEQTYxF9eTgPvXPf" : {
+            "awayGoals" : 2,
+            "date" : 1550613600000,
+            "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+            "homeGame" : true,
+            "homeGoals" : 2,
+            "opponentName" : "Uffu",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LZBUpF1eXFKaIlSB49s" : {
+            "awayGoals" : 1,
+            "date" : 1550613600000,
+            "gameId" : "-LZBUpF1eXFKaIlSB49s",
+            "homeGame" : true,
+            "homeGoals" : 1,
+            "opponentName" : "Jee",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LZFm_euIqKMQrJPS5zd" : {
+            "awayGoals" : 3,
+            "date" : 1550700000000,
+            "gameId" : "-LZFm_euIqKMQrJPS5zd",
+            "homeGame" : false,
+            "homeGoals" : 6,
+            "opponentName" : "Hou",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LeISNktP8vkXxA88yu-" : {
+            "date" : 1557176400000,
+            "gameId" : "-LeISNktP8vkXxA88yu-",
+            "homeGame" : true,
+            "opponentName" : "Moi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "awayGoals" : 2,
+            "date" : 1557435600000,
+            "gameId" : "-LeYQbV36vtIZnMUVyeS",
+            "homeGame" : true,
+            "homeGoals" : 5,
+            "opponentName" : "Uusi",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          },
+          "-LkmoFUBe49P0F6JWMad" : {
+            "awayGoals" : 0,
+            "date" : 1564174800000,
+            "gameId" : "-LkmoFUBe49P0F6JWMad",
+            "homeGame" : true,
+            "homeGoals" : 1,
+            "opponentName" : "Kiina",
+            "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+          }
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "-LlAtax0oLqHypXxHegQ" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlAtax0oLqHypXxHegQ",
+            "homeGame" : true,
+            "opponentName" : "Add",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          },
+          "-LlAuqLjTJOe0HI0X26e" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlAuqLjTJOe0HI0X26e",
+            "homeGame" : true,
+            "opponentName" : "Sssd",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          },
+          "-LlB2wLjFxRheLyopck-" : {
+            "date" : 1564606800000,
+            "gameId" : "-LlB2wLjFxRheLyopck-",
+            "homeGame" : true,
+            "opponentName" : "Ääp",
+            "seasonId" : "-Ll8fIecRq_l18b2_uja"
+          }
+        }
+      },
+      "-LkjFwKfsixnhWXi8IMU" : {
+        "-LkuAhA9HIPPBuCQBXW2" : {
+          "-LkuBCSHDr4T7LyOQhUt" : {
+            "date" : 1564261200000,
+            "gameId" : "-LkuBCSHDr4T7LyOQhUt",
+            "homeGame" : true,
+            "opponentName" : "Addi",
+            "seasonId" : "-LkuAhA9HIPPBuCQBXW2"
+          }
+        },
+        "-LkuBKwjNdS6ZcC_yTF5" : {
+          "-LkuEVo61hNqT9lzLNFC" : {
+            "date" : 1564261200000,
+            "gameId" : "-LkuEVo61hNqT9lzLNFC",
+            "homeGame" : true,
+            "opponentName" : "Assss",
+            "seasonId" : "-LkuBKwjNdS6ZcC_yTF5"
+          }
+        },
+        "-LkuEPlmSH4Jwg20nIV0" : {
+          "-LkuJ6d7ItWq8wtxPU12" : {
+            "date" : 1564261200000,
+            "gameId" : "-LkuJ6d7ItWq8wtxPU12",
+            "homeGame" : true,
+            "opponentName" : "Ddcllvvögööhohp",
+            "seasonId" : "-LkuEPlmSH4Jwg20nIV0"
+          },
+          "-LkuKHByBSXIQRlRTeqb" : {
+            "date" : 1564261200000,
+            "gameId" : "-LkuKHByBSXIQRlRTeqb",
+            "homeGame" : true,
+            "opponentName" : "Ääi",
+            "seasonId" : "-LkuEPlmSH4Jwg20nIV0"
+          }
+        },
+        "-LkuJ1crzb7nYapk2DFf" : {
+          "-LkuJhEVKlzavVNIsNs9" : {
+            "date" : 1564174800000,
+            "gameId" : "-LkuJhEVKlzavVNIsNs9",
+            "homeGame" : true,
+            "opponentName" : "Öö",
+            "seasonId" : "-LkuJ1crzb7nYapk2DFf"
+          }
+        },
+        "-LkuNX-68tQKy8HOrEnD" : {
+          "-LkuOzHT9LDGcH7FS5mT" : {
+            "date" : 1564347600000,
+            "gameId" : "-LkuOzHT9LDGcH7FS5mT",
+            "homeGame" : true,
+            "opponentName" : "Ppå",
+            "seasonId" : "-LkuNX-68tQKy8HOrEnD"
+          }
+        },
+        "-LkuOYsP75LYyBxE3m5I" : {
+          "-LkuOd5O2fz6951hVVcY" : {
+            "date" : 1564347600000,
+            "gameId" : "-LkuOd5O2fz6951hVVcY",
+            "homeGame" : true,
+            "opponentName" : "Jou",
+            "seasonId" : "-LkuOYsP75LYyBxE3m5I"
+          },
+          "-LkuOsjDTnpw3XcQC33J" : {
+            "date" : 1564347600000,
+            "gameId" : "-LkuOsjDTnpw3XcQC33J",
+            "homeGame" : true,
+            "opponentName" : "Jee",
+            "seasonId" : "-LkuOYsP75LYyBxE3m5I"
+          }
+        }
+      },
+      "-LkxlvOe5aZUWH8i9Hk9" : {
+        "-LkxuZ2LwHeZEkdZ1Rmu" : {
+          "-LkxuaDNoPvUoZacWbNd" : {
+            "date" : 1564347600000,
+            "gameId" : "-LkxuaDNoPvUoZacWbNd",
+            "homeGame" : true,
+            "opponentName" : "Asdi",
+            "seasonId" : "-LkxuZ2LwHeZEkdZ1Rmu"
+          }
+        }
+      }
+    },
+    "teams_seasons_games_goals" : {
+      "-LYDu_zW16xskSIhIlOm" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LZBUEQTYxF9eTgPvXPf" : {
+            "-LdzAHaRtRX1CbYWMUk4" : {
+              "assistantId" : "-LZf3phcktGRlKYCJYNo",
+              "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+              "gameMode" : "FULL",
+              "goalId" : "-LdzAHaRtRX1CbYWMUk4",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LYDueLQnDlNS3iny3r2", "-LZf3phcktGRlKYCJYNo", "-LZf423Q01lgFW8yD5Dl" ],
+              "positionPercentX" : 0.34024401980455415,
+              "positionPercentY" : 0.6162144110454777,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 6000
+            },
+            "-LdzAersk3fnGTtNQJ5p" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+              "gameMode" : "YV",
+              "goalId" : "-LdzAersk3fnGTtNQJ5p",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LYDueLQnDlNS3iny3r2", "-LZf423Q01lgFW8yD5Dl" ],
+              "positionPercentX" : 0.33682678014345135,
+              "positionPercentY" : 0.5546099477805604,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 30000
+            },
+            "-LdzCH3xkLWXtDRlOnb0" : {
+              "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+              "gameMode" : "FULL",
+              "goalId" : "-LdzCH3xkLWXtDRlOnb0",
+              "opponentGoal" : true,
+              "playerIds" : [ "-LZf45PcYqU3sb7p5GFr", "-LZf4BuzjpwdhZFWX1G5" ],
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 9000
+            },
+            "-LdzCN528ysyIzYvwOr8" : {
+              "gameId" : "-LZBUEQTYxF9eTgPvXPf",
+              "gameMode" : "FULL",
+              "goalId" : "-LdzCN528ysyIzYvwOr8",
+              "opponentGoal" : true,
+              "playerIds" : [ "-LZf45PcYqU3sb7p5GFr", "-LZf4BuzjpwdhZFWX1G5", "-LZf3phcktGRlKYCJYNo" ],
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 99000
+            }
+          },
+          "-LZBUpF1eXFKaIlSB49s" : {
+            "-Lc7Il9FztAzpiMeaVEn" : {
+              "gameId" : "-LZBUpF1eXFKaIlSB49s",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7Il9FztAzpiMeaVEn",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.35733021811006827,
+              "positionPercentY" : 0.623188510589068,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 1000
+            },
+            "-Lc7IqYbe7I93ZGHDKrr" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LZBUpF1eXFKaIlSB49s",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7IqYbe7I93ZGHDKrr",
+              "opponentGoal" : false,
+              "positionPercentX" : 0.3624560776017225,
+              "positionPercentY" : 0.275646355924706,
+              "scorerId" : "-LYDueLQnDlNS3iny3r2",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 2000
+            }
+          },
+          "-LZFm_euIqKMQrJPS5zd" : {
+            "-Lc79vJ4wO5nn117v7r3" : {
+              "assistantId" : "-LZf4BuzjpwdhZFWX1G5",
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc79vJ4wO5nn117v7r3",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.4837681376486508,
+              "positionPercentY" : 0.3058674066878085,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 10000
+            },
+            "-Lc7HR8xAvLIH2vJmwpO" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "YV",
+              "goalId" : "-Lc7HR8xAvLIH2vJmwpO",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.343661259465657,
+              "positionPercentY" : 0.3616601321478477,
+              "scorerId" : "-LZf3phcktGRlKYCJYNo",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 12000
+            },
+            "-Lc7I2Qe7Zmytosp3R-N" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7I2Qe7Zmytosp3R-N",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.2975284719629906,
+              "positionPercentY" : 0.727799861965556,
+              "scorerId" : "-LZf4BuzjpwdhZFWX1G5",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 16000
+            },
+            "-Lc7I6QdKqulnsFZsTO9" : {
+              "assistantId" : "-LYDueLQnDlNS3iny3r2",
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "AV",
+              "goalId" : "-Lc7I6QdKqulnsFZsTO9",
+              "opponentGoal" : false,
+              "positionPercentX" : 0.6272922554927475,
+              "positionPercentY" : 0.19195730317898882,
+              "scorerId" : "-LZf423Q01lgFW8yD5Dl",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 14000
+            },
+            "-Lc7IBRR5M_xednJJplh" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7IBRR5M_xednJJplh",
+              "opponentGoal" : false,
+              "positionPercentX" : 0.4017543337044049,
+              "positionPercentY" : 0.5522852951918191,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 1440000
+            },
+            "-Lc7INrvpIX8M3NJKJLD" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-Lc7INrvpIX8M3NJKJLD",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.3026543314546448,
+              "positionPercentY" : 0.5732075229339068,
+              "scorerId" : "-LZf3phcktGRlKYCJYNo",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 16000
+            },
+            "-LcIFKbv-ecPZOlwtcx1" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-LcIFKbv-ecPZOlwtcx1",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.5418612118873987,
+              "positionPercentY" : 0.5592593238467262,
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 12000
+            },
+            "-LcIGENjs7Y1OsIKup4m" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-LcIGENjs7Y1OsIKup4m",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.42396639150157317,
+              "positionPercentY" : 0.26983461811982795,
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 13000
+            },
+            "-LcIILP18VmHAFoiQgh1" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "YV",
+              "goalId" : "-LcIILP18VmHAFoiQgh1",
+              "opponentGoal" : true,
+              "positionPercentX" : 0.6170404844316606,
+              "positionPercentY" : 0.4895184701881896,
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 5000
+            },
+            "-LcIKuaR_VZQXYp1k3Ih" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-LcIKuaR_VZQXYp1k3Ih",
+              "opponentGoal" : true,
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 3000
+            },
+            "-LfYrVr-5ME_x9TDRhhs" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-LfYrVr-5ME_x9TDRhhs",
+              "opponentGoal" : true,
+              "playerIds" : [ "-LZf4BuzjpwdhZFWX1G5", "-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl", "-LZf3phcktGRlKYCJYNo" ],
+              "positionPercentX" : 0.30381471389645776,
+              "positionPercentY" : 0.25809435707678074,
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 300000
+            },
+            "-LfYrdP_x9uo6GXsLeJ-" : {
+              "gameId" : "-LZFm_euIqKMQrJPS5zd",
+              "gameMode" : "FULL",
+              "goalId" : "-LfYrdP_x9uo6GXsLeJ-",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf45PcYqU3sb7p5GFr", null, "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf3phcktGRlKYCJYNo" ],
+              "positionPercentX" : 0.6607629427792916,
+              "positionPercentY" : 0.23311748381128586,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 5000
+            }
+          },
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "-Lfo6VV1DeMCBuuAWByQ" : {
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-Lfo6VV1DeMCBuuAWByQ",
+              "opponentGoal" : true,
+              "playerIds" : [ "-LZy0Wt7M7r3P7VmvXCQ", "-LZf45PcYqU3sb7p5GFr" ],
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 7000
+            },
+            "-LhfvCw11K2RA1AE3Uks" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-LhfvCw11K2RA1AE3Uks",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.3932112345516478,
+              "positionPercentY" : 0.39071885661657957,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 55000
+            },
+            "-Lhfvjt8AjHHvg85K1w6" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-Lhfvjt8AjHHvg85K1w6",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.7161404866814206,
+              "positionPercentY" : 0.43256338298943814,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 44000
+            },
+            "-LiEoJ6rTQACMv8kQB80" : {
+              "assistantId" : "-LYDueLQnDlNS3iny3r2",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "YV",
+              "goalId" : "-LiEoJ6rTQACMv8kQB80",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf4BuzjpwdhZFWX1G5", "-LYDueLQnDlNS3iny3r2", "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.5145232945985762,
+              "positionPercentY" : 0.29773098084984756,
+              "scorerId" : "-LZf4BuzjpwdhZFWX1G5",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 1000
+            },
+            "-LiEoa_V-6dp0oVjxjkI" : {
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-LiEoa_V-6dp0oVjxjkI",
+              "opponentGoal" : true,
+              "playerIds" : [ "-LZf4BuzjpwdhZFWX1G5" ],
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 9000
+            },
+            "-LiTwx3YlIDlXr2_zjnw" : {
+              "assistantId" : "-LZf45PcYqU3sb7p5GFr",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "FULL",
+              "goalId" : "-LiTwx3YlIDlXr2_zjnw",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr", "-LZy0Wt7M7r3P7VmvXCQ", "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5" ],
+              "positionPercentX" : 0.3317009206517971,
+              "positionPercentY" : 0.35468606804859903,
+              "scorerId" : "-LZf423Q01lgFW8yD5Dl",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 9000
+            },
+            "-LiTzN0X_6QXB2y-ENWy" : {
+              "assistantId" : "-LZf423Q01lgFW8yD5Dl",
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "gameMode" : "AV",
+              "goalId" : "-LiTzN0X_6QXB2y-ENWy",
+              "opponentGoal" : false,
+              "playerIds" : [ "-LZf3phcktGRlKYCJYNo", "-LZf4BuzjpwdhZFWX1G5", "-LZf423Q01lgFW8yD5Dl", "-LZf45PcYqU3sb7p5GFr" ],
+              "positionPercentX" : 0.3385353999740028,
+              "positionPercentY" : 0.3523613445711745,
+              "scorerId" : "-LZf45PcYqU3sb7p5GFr",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 56000
+            }
+          },
+          "-LkmoFUBe49P0F6JWMad" : {
+            "-Lkn2ak4KI4Bqe-1noGq" : {
+              "gameId" : "-LkmoFUBe49P0F6JWMad",
+              "gameMode" : "FULL",
+              "goalId" : "-Lkn2ak4KI4Bqe-1noGq",
+              "opponentGoal" : false,
+              "playerIds" : [ "-Lkn2Q6Ep8FjHSzZ99C5" ],
+              "positionPercentX" : 0.49914571612361347,
+              "positionPercentY" : 0.14785160503320993,
+              "scorerId" : "-Lkn2Q6Ep8FjHSzZ99C5",
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H",
+              "time" : 9000
+            }
+          }
+        }
+      }
+    },
+    "teams_seasons_games_lines" : {
+      "-LYDu_zW16xskSIhIlOm" : {
+        "-Lktz7jrhSWX69PvVg_H" : {
+          "-LeISNktP8vkXxA88yu-" : {
+            "-LYDuaJHLYXZBTjVtWjK" : {
+              "gameId" : "-LeISNktP8vkXxA88yu-",
+              "lineId" : "-LYDuaJHLYXZBTjVtWjK",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "C" : "-LZf45PcYqU3sb7p5GFr",
+                "LW" : "-LZf3phcktGRlKYCJYNo",
+                "RW" : "-LZf423Q01lgFW8yD5Dl"
+              },
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+            },
+            "-LYDuaJZTjIJVc7txJpW" : {
+              "gameId" : "-LeISNktP8vkXxA88yu-",
+              "lineId" : "-LYDuaJZTjIJVc7txJpW",
+              "lineNumber" : 3,
+              "playerIdMap" : {
+                "RD" : "-LZf4BuzjpwdhZFWX1G5"
+              },
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+            },
+            "-LeIoOQ15Up6a-RZodrx" : {
+              "gameId" : "-LeISNktP8vkXxA88yu-",
+              "lineId" : "-LeIoOQ15Up6a-RZodrx",
+              "lineNumber" : 2,
+              "playerIdMap" : {
+                "LW" : "-LZy0Wt7M7r3P7VmvXCQ"
+              },
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+            }
+          },
+          "-LeYQbV36vtIZnMUVyeS" : {
+            "-LYDuaJHLYXZBTjVtWjK" : {
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "lineId" : "-LYDuaJHLYXZBTjVtWjK",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "C" : "-LZf45PcYqU3sb7p5GFr",
+                "LD" : "-LZf3phcktGRlKYCJYNo",
+                "LW" : "-LZy0Wt7M7r3P7VmvXCQ",
+                "RD" : "-LZf4BuzjpwdhZFWX1G5",
+                "RW" : "-LZf423Q01lgFW8yD5Dl"
+              },
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+            },
+            "-LhPd_btcRequ6Ihg2tS" : {
+              "gameId" : "-LeYQbV36vtIZnMUVyeS",
+              "lineId" : "-LhPd_btcRequ6Ihg2tS",
+              "lineNumber" : 2,
+              "playerIdMap" : {
+                "RW" : "-LYDueLQnDlNS3iny3r2"
+              },
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+            }
+          },
+          "-LkmoFUBe49P0F6JWMad" : {
+            "-LYDuaJHLYXZBTjVtWjK" : {
+              "gameId" : "-LkmoFUBe49P0F6JWMad",
+              "lineId" : "-LYDuaJHLYXZBTjVtWjK",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "C" : "-LZf45PcYqU3sb7p5GFr",
+                "LD" : "-LZf3phcktGRlKYCJYNo",
+                "LW" : "-LYDueLQnDlNS3iny3r2",
+                "RD" : "-LZf4BuzjpwdhZFWX1G5",
+                "RW" : "-LZf423Q01lgFW8yD5Dl"
+              },
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+            },
+            "-Lkn2UClHBxcPkb2c_qa" : {
+              "gameId" : "-LkmoFUBe49P0F6JWMad",
+              "lineId" : "-Lkn2UClHBxcPkb2c_qa",
+              "lineNumber" : 2,
+              "playerIdMap" : {
+                "LW" : "-Lkn2Q6Ep8FjHSzZ99C5"
+              },
+              "seasonId" : "-Lktz7jrhSWX69PvVg_H"
+            }
+          }
+        },
+        "-Ll8fIecRq_l18b2_uja" : {
+          "-LlAtax0oLqHypXxHegQ" : {
+            "-LYDuaJHLYXZBTjVtWjK" : {
+              "lineId" : "-LYDuaJHLYXZBTjVtWjK",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "RW" : "-LZf423Q01lgFW8yD5Dl"
+              }
+            }
+          },
+          "-LlAuqLjTJOe0HI0X26e" : {
+            "-LYDuaJHLYXZBTjVtWjK" : {
+              "lineId" : "-LYDuaJHLYXZBTjVtWjK",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "C" : "-Lkn2Q6Ep8FjHSzZ99C5",
+                "RW" : "-LZf423Q01lgFW8yD5Dl"
+              }
+            }
+          },
+          "-LlB2wLjFxRheLyopck-" : {
+            "-LYDuaJHLYXZBTjVtWjK" : {
+              "lineId" : "-LYDuaJHLYXZBTjVtWjK",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "C" : "-LZf45PcYqU3sb7p5GFr",
+                "LD" : "-LZf3phcktGRlKYCJYNo",
+                "LW" : "-LYDueLQnDlNS3iny3r2",
+                "RD" : "-LZf4BuzjpwdhZFWX1G5"
+              }
+            }
+          }
+        }
+      },
+      "-LkjFwKfsixnhWXi8IMU" : {
+        "-LkuAhA9HIPPBuCQBXW2" : {
+          "-LkuBCSHDr4T7LyOQhUt" : {
+            "-LkuBCirPvkY8TFbvcQf" : {
+              "gameId" : "-LkuBCSHDr4T7LyOQhUt",
+              "lineId" : "-LkuBCirPvkY8TFbvcQf",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "LW" : "-Lku6CwcRNyiJsXJyq6i"
+              },
+              "seasonId" : "-LkuAhA9HIPPBuCQBXW2"
+            }
+          }
+        },
+        "-LkuBKwjNdS6ZcC_yTF5" : {
+          "-LkuEVo61hNqT9lzLNFC" : {
+            "-LkuEVsOu4LWmFQj0Wcq" : {
+              "gameId" : "-LkuEVo61hNqT9lzLNFC",
+              "lineId" : "-LkuEVsOu4LWmFQj0Wcq",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "C" : "-Lku6CwcRNyiJsXJyq6i"
+              },
+              "seasonId" : "-LkuBKwjNdS6ZcC_yTF5"
+            }
+          }
+        },
+        "-LkuEPlmSH4Jwg20nIV0" : {
+          "-LkuJ6d7ItWq8wtxPU12" : {
+            "-LkuJ6hUuDRH7jtn7Bed" : {
+              "gameId" : "-LkuJ6d7ItWq8wtxPU12",
+              "lineId" : "-LkuJ6hUuDRH7jtn7Bed",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "RW" : "-Lku6CwcRNyiJsXJyq6i"
+              },
+              "seasonId" : "-LkuEPlmSH4Jwg20nIV0"
+            }
+          },
+          "-LkuKHByBSXIQRlRTeqb" : {
+            "-LkuJhHrVL9E_zggf56b" : {
+              "gameId" : "-LkuKHByBSXIQRlRTeqb",
+              "lineId" : "-LkuJhHrVL9E_zggf56b",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "C" : "-Lku6CwcRNyiJsXJyq6i"
+              },
+              "seasonId" : "-LkuEPlmSH4Jwg20nIV0"
+            }
+          }
+        },
+        "-LkuJ1crzb7nYapk2DFf" : {
+          "-LkuJhEVKlzavVNIsNs9" : {
+            "-LkuJhHrVL9E_zggf56b" : {
+              "gameId" : "-LkuJhEVKlzavVNIsNs9",
+              "lineId" : "-LkuJhHrVL9E_zggf56b",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "C" : "-Lku6CwcRNyiJsXJyq6i"
+              },
+              "seasonId" : "-LkuJ1crzb7nYapk2DFf"
+            }
+          }
+        },
+        "-LkuNX-68tQKy8HOrEnD" : {
+          "-LkuOzHT9LDGcH7FS5mT" : {
+            "-LkuOd9pzXg9dNdAPBOk" : {
+              "gameId" : "-LkuOzHT9LDGcH7FS5mT",
+              "lineId" : "-LkuOd9pzXg9dNdAPBOk",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "RD" : "-Lku6CwcRNyiJsXJyq6i"
+              },
+              "seasonId" : "-LkuNX-68tQKy8HOrEnD"
+            }
+          }
+        },
+        "-LkuOYsP75LYyBxE3m5I" : {
+          "-LkuOd5O2fz6951hVVcY" : {
+            "-LkuOd9pzXg9dNdAPBOk" : {
+              "gameId" : "-LkuOd5O2fz6951hVVcY",
+              "lineId" : "-LkuOd9pzXg9dNdAPBOk",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "RD" : "-Lku6CwcRNyiJsXJyq6i"
+              },
+              "seasonId" : "-LkuOYsP75LYyBxE3m5I"
+            }
+          },
+          "-LkuOsjDTnpw3XcQC33J" : {
+            "-LkuOd9pzXg9dNdAPBOk" : {
+              "gameId" : "-LkuOsjDTnpw3XcQC33J",
+              "lineId" : "-LkuOd9pzXg9dNdAPBOk",
+              "lineNumber" : 1,
+              "playerIdMap" : {
+                "RD" : "-Lku6CwcRNyiJsXJyq6i"
+              },
+              "seasonId" : "-LkuOYsP75LYyBxE3m5I"
+            }
+          }
+        }
+      }
+    },
+    "teams_userConnections" : {
+      "-LYDu_zW16xskSIhIlOm" : {
+        "-LYDu_zW16xskSIhIFil" : {
+          "email" : "arttu.isopahkala@hotmail.com",
+          "role" : "ADMIN",
+          "status" : "CONNECTED",
+          "userConnectionId" : "-LYDu_zW16xskSIhIFil",
+          "userId" : "3JRxfMxvB7gM7tZuwLuSXj8xE4H2"
+        },
+        "-LkmjYJjsaaXyKmVjEaM" : {
+          "email" : "arttu.isopahkala@gmail.com",
+          "role" : "PLAYER",
+          "status" : "PENDING",
+          "userConnectionId" : "-LkmjYJjsaaXyKmVjEaM"
+        }
+      },
+      "-LkjFwKfsixnhWXi8IMU" : {
+        "-LkjFwOTJvI1m2aJzuIf" : {
+          "email" : "arttu.isopahkala@hotmail.com",
+          "role" : "ADMIN",
+          "status" : "CONNECTED",
+          "userConnectionId" : "-LkjFwOTJvI1m2aJzuIf",
+          "userId" : "3JRxfMxvB7gM7tZuwLuSXj8xE4H2"
+        }
+      },
+      "-LkxlvOe5aZUWH8i9Hk9" : {
+        "-Lkxlvg25waNKsIyDU-s" : {
+          "email" : "arttu.isopahkala@hotmail.com",
+          "role" : "ADMIN",
+          "status" : "CONNECTED",
+          "userConnectionId" : "-Lkxlvg25waNKsIyDU-s",
+          "userId" : "3JRxfMxvB7gM7tZuwLuSXj8xE4H2"
+        }
+      }
+    },
+    "userInvitations" : {
+      "-LkmjYJjsaaXyKmVjEaM" : {
+        "email" : "arttu.isopahkala@gmail.com",
+        "role" : "PLAYER",
+        "teamId" : "-LYDu_zW16xskSIhIlOm",
+        "userConnectionId" : "-LkmjYJjsaaXyKmVjEaM"
+      }
+    },
+    "users" : {
+      "3JRxfMxvB7gM7tZuwLuSXj8xE4H2" : {
+        "admin" : true,
+        "creationTime" : 1549055188979,
+        "email" : "arttu.isopahkala@hotmail.com",
+        "lastLoginTime" : 1564653826611,
+        "premium" : false,
+        "teamIds" : [ "-LYDu_zW16xskSIhIlOm", "-LkjFwKfsixnhWXi8IMU", "-LkxlvOe5aZUWH8i9Hk9" ],
+        "userId" : "3JRxfMxvB7gM7tZuwLuSXj8xE4H2"
+      }
+    }
+  }
+}

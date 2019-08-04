@@ -2,6 +2,8 @@ package com.ardeapps.floorballcoach;
 
 import android.content.SharedPreferences;
 
+import com.ardeapps.floorballcoach.utils.StringUtils;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +17,7 @@ public class PrefRes {
     public static final String APP_STARTED_FIRST_TIME = "appStartedFirstTime";
     public static final String IS_APP_VISIBLE = "isAppVisible";
     public static final String EMAIL = "email";
-    public static final String SEASON_ID = "seasonId";
+    private static final String SEASON_ID = "seasonId";
     // TODO mene tallennettuun team dashboardiin
     public static final String SELECTED_TEAM_ID = "selectedTeamId";
 
@@ -37,6 +39,24 @@ public class PrefRes {
 
     public static boolean containsKey(String key) {
         return getSharedPref().contains(key);
+    }
+
+    private static String getSeasonIdKey(String teamId) {
+        return SEASON_ID + "_" + teamId;
+    }
+
+    public static void setSelectedSeasonId(String teamId, String seasonId) {
+        SharedPreferences.Editor editor = getSharedPref().edit();
+        editor.putString(getSeasonIdKey(teamId), seasonId);
+        editor.apply();
+    }
+
+    public static String getSelectedSeasonId(String teamId) {
+        String seasonId = getSharedPref().getString(getSeasonIdKey(teamId), "");
+        if(StringUtils.isEmptyString(seasonId)) {
+            return null;
+        }
+        return seasonId;
     }
 
     public static void putString(String key, String value) {

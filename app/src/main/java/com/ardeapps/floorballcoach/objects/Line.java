@@ -10,6 +10,8 @@ import java.util.TreeMap;
 public class Line {
 
     private String lineId;
+    private String gameId;
+    private String seasonId;
     private int lineNumber;
     private Map<String, String> playerIdMap;
 
@@ -19,6 +21,8 @@ public class Line {
     public Line clone() {
         Line clone = new Line();
         clone.lineId = this.lineId;
+        clone.gameId = this.gameId;
+        clone.seasonId = this.seasonId;
         clone.lineNumber = this.lineNumber;
         clone.playerIdMap = this.playerIdMap;
         return clone;
@@ -30,6 +34,22 @@ public class Line {
 
     public void setLineId(String lineId) {
         this.lineId = lineId;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
+
+    public String getSeasonId() {
+        return seasonId;
+    }
+
+    public void setSeasonId(String seasonId) {
+        this.seasonId = seasonId;
     }
 
     public int getLineNumber() {

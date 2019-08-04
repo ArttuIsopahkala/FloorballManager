@@ -120,6 +120,7 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
             if(position == max) {
                 Goal goalToSave = goalAdapter.getGoal();
                 goalToSave.setGameId(data.getGame().getGameId());
+                goalToSave.setSeasonId(data.getGame().getSeasonId());
                 goalToSave.setOpponentGoal(data.isOpponentGoal());
                 mListener.onGoalSaved(goalToSave);
             } else {

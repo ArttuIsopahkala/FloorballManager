@@ -11,19 +11,18 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.PrefRes;
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.dialogFragments.EditSeasonDialogFragment;
 import com.ardeapps.floorballcoach.handlers.SaveLinesHandler;
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Season;
-import com.ardeapps.floorballcoach.resources.TeamsGamesLinesResource;
-import com.ardeapps.floorballcoach.resources.TeamsGamesResource;
+import com.ardeapps.floorballcoach.resources.GamesResource;
+import com.ardeapps.floorballcoach.resources.LinesInGameResource;
+import com.ardeapps.floorballcoach.resources.PlayerGamesResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
@@ -36,9 +35,9 @@ import com.ardeapps.floorballcoach.views.LineUpSelector;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Map;
-
-import static com.ardeapps.floorballcoach.PrefRes.SEASON_ID;
+import java.util.Set;
 
 
 public class GameSettingsFragment extends Fragment implements DataView {
@@ -47,14 +46,11 @@ public class GameSettingsFragment extends Fragment implements DataView {
     DatePicker datePicker;
     AutoCompleteTextView opponentEditText;
     IconView changeIcon;
-    TextView noSeasonsText;
-    IconView addSeasonIcon;
-    Spinner seasonSpinner;
+    TextView seasonText;
     LineUpSelector lineUpSelector;
     Button saveButton;
 
     private GameSettingsFragmentData data;
-    ArrayList<String> seasonIds = new ArrayList<>();
     boolean isHomeGame = true;
 
     public Listener mListener = null;
@@ -92,21 +88,13 @@ public class GameSettingsFragment extends Fragment implements DataView {
         opponentEditText.setAdapter(adapter);
 
         Map<String, Season> seasons = AppRes.getInstance().getSeasons();
-        if(seasons.isEmpty()) {
-            noSeasonsText.setVisibility(View.VISIBLE);
-            seasonSpinner.setVisibility(View.GONE);
+        String seasonId = PrefRes.getSelectedSeasonId(AppRes.getInstance().getSelectedTeam().getTeamId());
+        Season season = seasons.get(seasonId);
+        if(season != null) {
+            seasonText.setText(season.getName());
         } else {
-            seasonSpinner.setVisibility(View.VISIBLE);
-            noSeasonsText.setVisibility(View.GONE);
+            seasonText.setText("-");
         }
-
-        seasonIds = new ArrayList<>();
-        ArrayList<String> seasonTitles = new ArrayList<>();
-        for(Season season : seasons.values()) {
-            seasonTitles.add(season.getName());
-            seasonIds.add(season.getSeasonId());
-        }
-        Helper.setSpinnerAdapter(seasonSpinner, seasonTitles);
 
         lineUpSelector.createView(this, false);
 
@@ -119,10 +107,6 @@ public class GameSettingsFragment extends Fragment implements DataView {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(data.getGame().getDate());
             Helper.setDatePickerValue(datePicker, cal);
-            int seasonPosition = seasonIds.indexOf(data.getGame().getSeasonId());
-            if(seasonPosition > -1) {
-                Helper.setSpinnerSelection(seasonSpinner, seasonPosition);
-            }
             lineUpSelector.setLines(data.getLines());
         }
     }
@@ -134,8 +118,6 @@ public class GameSettingsFragment extends Fragment implements DataView {
         nameText.setText(AppRes.getInstance().getSelectedTeam().getName());
         Helper.setEditTextValue(opponentEditText, "");
         Helper.setDatePickerValue(datePicker, Calendar.getInstance());
-        int seasonPosition = seasonIds.indexOf(PrefRes.getString(SEASON_ID));
-        Helper.setSpinnerSelection(seasonSpinner, seasonPosition > -1 ? seasonPosition : 0);
     }
 
     @Override
@@ -147,9 +129,7 @@ public class GameSettingsFragment extends Fragment implements DataView {
         opponentEditText = v.findViewById(R.id.opponentEditText);
         datePicker = v.findViewById(R.id.datePicker);
         changeIcon = v.findViewById(R.id.changeIcon);
-        noSeasonsText = v.findViewById(R.id.noSeasonsText);
-        addSeasonIcon = v.findViewById(R.id.addSeasonIcon);
-        seasonSpinner = v.findViewById(R.id.seasonSpinner);
+        seasonText = v.findViewById(R.id.seasonText);
         lineUpSelector = v.findViewById(R.id.lineUpSelector);
         saveButton = v.findViewById(R.id.saveButton);
 
@@ -160,22 +140,6 @@ public class GameSettingsFragment extends Fragment implements DataView {
             public void onClick(View v) {
                 isHomeGame = !isHomeGame;
                 setTeamSides(isHomeGame);
-            }
-        });
-
-        addSeasonIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final EditSeasonDialogFragment dialog = new EditSeasonDialogFragment();
-                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa kautta");
-                dialog.setListener(new EditSeasonDialogFragment.EditSeasonDialogCloseListener() {
-                    @Override
-                    public void onSeasonSaved(Season season) {
-                        AppRes.getInstance().setSeason(season.getSeasonId(), season);
-                        PrefRes.putString(SEASON_ID, season.getSeasonId());
-                        update();
-                    }
-                });
             }
         });
 
@@ -213,11 +177,6 @@ public class GameSettingsFragment extends Fragment implements DataView {
             return;
         }
 
-        if(seasonIds == null || seasonIds.isEmpty() || seasonSpinner.getSelectedItemPosition() >= seasonIds.size()) {
-            Logger.toast(R.string.team_settings_season_not_selected);
-            return;
-        }
-
         final Map<Integer, Line> linesToSave = lineUpSelector.getLines();
         if(linesToSave == null || linesToSave.isEmpty()) {
             Logger.toast(R.string.team_settings_no_lines);
@@ -228,42 +187,64 @@ public class GameSettingsFragment extends Fragment implements DataView {
         gameToSave.setDate(datePicker.getDate().getTimeInMillis());
         gameToSave.setHomeGame(isHomeGame);
         gameToSave.setOpponentName(opponentName);
-        String seasonId = seasonIds.get(seasonSpinner.getSelectedItemPosition());
+        String seasonId = AppRes.getInstance().getSelectedSeason().getSeasonId();
         gameToSave.setSeasonId(seasonId);
 
         if(data.getGame() != null) {
-            TeamsGamesResource.getInstance().editGame(gameToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+            GamesResource.getInstance().editGame(gameToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                 @Override
                 public void onEditDataSuccess() {
                     AppRes.getInstance().setGame(gameToSave.getGameId(), gameToSave);
-
-                    TeamsGamesLinesResource.getInstance().saveLines(gameToSave.getGameId(), linesToSave, new SaveLinesHandler() {
-                        @Override
-                        public void onLinesSaved(final Map<Integer, Line> lines) {
-                            mListener.onGameEdited(gameToSave, lines);
-                        }
-                    });
+                    saveLinesAndPlayerGames(false, gameToSave, linesToSave);
                 }
             });
         } else {
-            // Save seasonId to show later
-            PrefRes.putString(SEASON_ID, seasonId);
-            TeamsGamesResource.getInstance().addGame(gameToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
+            GamesResource.getInstance().addGame(gameToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
                 @Override
                 public void onAddDataSuccess(String id) {
                     gameToSave.setGameId(id);
                     AppRes.getInstance().setGame(gameToSave.getGameId(), gameToSave);
-
-                    TeamsGamesLinesResource.getInstance().saveLines(gameToSave.getGameId(), linesToSave, new SaveLinesHandler() {
-                        @Override
-                        public void onLinesSaved(final Map<Integer, Line> lines) {
-                            mListener.onGameCreated(gameToSave, lines);
-                        }
-                    });
+                    saveLinesAndPlayerGames(true, gameToSave, linesToSave);
                 }
             });
         }
+    }
 
+    private void saveLinesAndPlayerGames(final boolean gameCreated, final Game gameToSave, final Map<Integer, Line> linesToSave) {
+        LinesInGameResource.getInstance().saveLines(gameToSave.getGameId(), linesToSave, new SaveLinesHandler() {
+            @Override
+            public void onLinesSaved(final Map<Integer, Line> lines) {
+                final Set<String> playerIdsInLines = new HashSet<>();
+                for(Line line : lines.values()) {
+                    playerIdsInLines.addAll(line.getPlayerIdMap().values());
+                }
 
+                Set<String> playerIdsInRemove = new HashSet<>();
+                for(String playerId : AppRes.getInstance().getPlayers().keySet()) {
+                    if(!playerIdsInLines.contains(playerId)) {
+                        playerIdsInRemove.add(playerId);
+                    }
+                }
+
+                // First remove existing games
+                PlayerGamesResource.getInstance().removeGame(playerIdsInRemove, gameToSave.getGameId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                    @Override
+                    public void onDeleteDataSuccess() {
+
+                        // Add new games
+                        PlayerGamesResource.getInstance().editGame(playerIdsInLines, gameToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+                            @Override
+                            public void onEditDataSuccess() {
+                                if(gameCreated) {
+                                    mListener.onGameCreated(gameToSave, lines);
+                                } else {
+                                    mListener.onGameEdited(gameToSave, lines);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 }

@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class AnalyzerService {
 
+    // These must be se before calling methods. GoalsInGames is not loaded automatically.
+    // See LinesFragment and analyze chemistry button.
     protected static Map<String, ArrayList<Goal>> goalsInGames = new HashMap<>();
     protected static Map<String, ArrayList<Line>> linesInGames = new HashMap<>();
     protected static ArrayList<Player> playersInTeam = new ArrayList<>();
@@ -123,7 +125,7 @@ public class AnalyzerService {
             for(Player comparePlayer : players) {
                 if(!comparePlayer.getPlayerId().equals(player.getPlayerId())) {
                     ArrayList<Goal> goals = AnalyzerHelper.getGoalsWherePlayersInSameLine(player.getPlayerId(), comparePlayer.getPlayerId());
-                    int chemistryPoints = AnalyzerHelper.getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
+                    int chemistryPoints = ChemistryHelper.getChemistryPoints(player.getPlayerId(), comparePlayer.getPlayerId(), goals);
                     chemistry.setChemistryPoints(chemistryPoints);
                     chemistry.setComparePlayerId(comparePlayer.getPlayerId());
                     chemistry.setComparePosition(Position.fromDatabaseName(comparePlayer.getPosition()));
@@ -186,7 +188,7 @@ public class AnalyzerService {
         // Create Map which contains centers and chemistries between every center individually and every player in other positions
         for (Player center : centers) {
             for (Player player : listOfPlayers) {
-                int chemistryPoints = AnalyzerHelper.getChemistryPoints(center.getPlayerId(), player.getPlayerId(), goals);
+                int chemistryPoints = ChemistryHelper.getChemistryPoints(center.getPlayerId(), player.getPlayerId(), goals);
                 Chemistry newChemistry = new Chemistry();
                 newChemistry.setPlayerId(center.getPlayerId());
                 newChemistry.setComparePlayerId(player.getPlayerId());
@@ -321,11 +323,11 @@ public class AnalyzerService {
      * @return chemistry percent for chemistry connection lines and texts in UI
      */
     public Map<ChemistryConnection, Integer> getChemistryConnections(Line line) {
-        Map<Position, ArrayList<Chemistry>> chemistryMap = AnalyzerHelper.getChemistriesInLineForPositions(line);
+        Map<Position, ArrayList<Chemistry>> chemistryMap = ChemistryHelper.getChemistriesInLineForPositions(line);
 
         Map<ChemistryConnection, Integer> chemistryConnections = new HashMap<>();
         // Center
-        Map<Position, Integer> compareChemistryMap = AnalyzerHelper.getConvertCompareChemistryPercentsForPosition(Position.C, chemistryMap);
+        Map<Position, Integer> compareChemistryMap = ChemistryHelper.getConvertCompareChemistryPercentsForPosition(Position.C, chemistryMap);
         Integer chemistry = compareChemistryMap.get(Position.LW);
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.C_LW, chemistry);
@@ -343,7 +345,7 @@ public class AnalyzerService {
             chemistryConnections.put(ChemistryConnection.C_RD, chemistry);
         }
         // Left defender
-        compareChemistryMap = AnalyzerHelper.getConvertCompareChemistryPercentsForPosition(Position.LD, chemistryMap);
+        compareChemistryMap = ChemistryHelper.getConvertCompareChemistryPercentsForPosition(Position.LD, chemistryMap);
         chemistry = compareChemistryMap.get(Position.RD);
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.LD_RD, chemistry);
@@ -353,7 +355,7 @@ public class AnalyzerService {
             chemistryConnections.put(ChemistryConnection.LD_LW, chemistry);
         }
         // Right defender
-        compareChemistryMap = AnalyzerHelper.getConvertCompareChemistryPercentsForPosition(Position.RD, chemistryMap);
+        compareChemistryMap = ChemistryHelper.getConvertCompareChemistryPercentsForPosition(Position.RD, chemistryMap);
         chemistry = compareChemistryMap.get(Position.RW);
         if(chemistry != null) {
             chemistryConnections.put(ChemistryConnection.RD_RW, chemistry);
@@ -375,10 +377,10 @@ public class AnalyzerService {
      * @return chemistry percents to closest players indexed by position
      */
     public Map<Position, Integer> getClosestChemistryPercentsForPosition(Line line) {
-        Map<Position, ArrayList<Chemistry>> chemistryMap = AnalyzerHelper.getChemistriesInLineForPositions(line);
+        Map<Position, ArrayList<Chemistry>> chemistryMap = ChemistryHelper.getChemistriesInLineForPositions(line);
 
         // Map contains only closest players, no others
-        Map<Position, ArrayList<Chemistry>> filteredMap = AnalyzerHelper.getFilteredChemistryMapToClosestPlayers(chemistryMap);
+        Map<Position, ArrayList<Chemistry>> filteredMap = ChemistryHelper.getFilteredChemistryMapToClosestPlayers(chemistryMap);
 
         Map<Position, Integer> closestChemistries = new HashMap<>();
 
@@ -387,7 +389,7 @@ public class AnalyzerService {
             Position position = entry.getKey();
             ArrayList<Chemistry> chemistries = entry.getValue();
 
-            int percent = AnalyzerHelper.getAverageChemistryPercent(chemistries);
+            int percent = ChemistryHelper.getAverageChemistryPercent(chemistries);
             closestChemistries.put(position, percent);
         }
 

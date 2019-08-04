@@ -18,7 +18,7 @@ import com.ardeapps.floorballcoach.handlers.GetUserHandler;
 import com.ardeapps.floorballcoach.objects.User;
 import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.objects.UserInvitation;
-import com.ardeapps.floorballcoach.resources.TeamsUserConnectionsResource;
+import com.ardeapps.floorballcoach.resources.UserConnectionsResource;
 import com.ardeapps.floorballcoach.resources.UserInvitationsResource;
 import com.ardeapps.floorballcoach.resources.UsersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
@@ -161,7 +161,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             if(status != UserConnection.Status.CONNECTED) {
                 userConnectionToSave.setStatus(UserConnection.Status.PENDING.toDatabaseName());
             }
-            TeamsUserConnectionsResource.getInstance().editUserConnection(userConnectionToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
+            UserConnectionsResource.getInstance().editUserConnection(userConnectionToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                 @Override
                 public void onEditDataSuccess() {
                     AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
@@ -194,7 +194,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
                     userConnectionToSave.setRole(role.toDatabaseName());
                     userConnectionToSave.setStatus(UserConnection.Status.PENDING.toDatabaseName());
 
-                    TeamsUserConnectionsResource.getInstance().addUserConnection(userConnectionToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
+                    UserConnectionsResource.getInstance().addUserConnection(userConnectionToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
                         @Override
                         public void onAddDataSuccess(String id) {
                             userConnectionToSave.setUserConnectionId(id);

@@ -16,40 +16,71 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class TeamsGamesGoalsResource extends FirebaseDatabaseService {
-    private static TeamsGamesGoalsResource instance;
+public class GoalsResource extends FirebaseDatabaseService {
+    private static GoalsResource instance;
     private static DatabaseReference database;
+    private static String seasonId;
 
-    public static TeamsGamesGoalsResource getInstance() {
+    public static GoalsResource getInstance() {
         if (instance == null) {
-            instance = new TeamsGamesGoalsResource();
+            instance = new GoalsResource();
         }
-        database = getDatabase().child(TEAMS_GAMES_GOALS).child(AppRes.getInstance().getSelectedTeam().getTeamId());
+        String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
+        seasonId = AppRes.getInstance().getSelectedSeason().getSeasonId();
+        database = getDatabase().child(TEAMS_SEASONS_GAMES_GOALS).child(teamId);
         return instance;
     }
 
     public void addGoal(Goal goal, final AddDataSuccessListener handler) {
         goal.setGoalId(database.push().getKey());
-        addData(database.child(goal.getGameId()).child(goal.getGoalId()), goal, handler);
+        addData(database.child(seasonId).child(goal.getGameId()).child(goal.getGoalId()), goal, handler);
     }
 
     public void editGoal(Goal goal, final EditDataSuccessListener handler) {
-        editData(database.child(goal.getGameId()).child(goal.getGoalId()), goal, handler);
+        editData(database.child(seasonId).child(goal.getGameId()).child(goal.getGoalId()), goal, handler);
     }
 
     public void removeGoal(String gameId, String goalId, final DeleteDataSuccessListener handler) {
-        deleteData(database.child(gameId).child(goalId), handler);
+        deleteData(database.child(seasonId).child(gameId).child(goalId), handler);
     }
 
-    public void removeGoals(final DeleteDataSuccessListener handler) {
+    public void removeAllGoals(final DeleteDataSuccessListener handler) {
         deleteData(database, handler);
     }
 
     /**
-     * Get all goals by team indexed by gameId
+     * Get goals of all seasons indexed by gameId
      */
-    public void getGoals(final GetTeamGoalsHandler handler) {
+    public void getAllGoals(final GetTeamGoalsHandler handler) {
         getData(database, new GetDataSuccessListener() {
+            @Override
+            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                final Map<String, ArrayList<Goal>> goalsMap = new HashMap<>();
+                for(DataSnapshot season : dataSnapshot.getChildren()) {
+                    for(DataSnapshot game : season.getChildren()) {
+                        String gameId = game.getKey();
+                        if(gameId != null) {
+                            ArrayList<Goal> goals = new ArrayList<>();
+                            for(DataSnapshot snapshot : game.getChildren()) {
+                                final Goal goal = snapshot.getValue(Goal.class);
+                                if(goal != null) {
+                                    goals.add(goal);
+                                }
+                            }
+                            goalsMap.put(gameId, goals);
+                        }
+                    }
+                }
+                handler.onTeamGoalsLoaded(goalsMap);
+            }
+        });
+    }
+
+    /**
+     * Get goals of season indexed by gameId
+     */
+    public void getGoals(String seasonId, final GetTeamGoalsHandler handler) {
+        getData(database.child(seasonId), new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
                 final Map<String, ArrayList<Goal>> goalsMap = new HashMap<>();
@@ -75,7 +106,7 @@ public class TeamsGamesGoalsResource extends FirebaseDatabaseService {
      * Get goals of game indexed by goalId
      */
     public void getGoals(String gameId, final GetGoalsHandler handler) {
-        getData(database.child(gameId), new GetDataSuccessListener() {
+        getData(database.child(seasonId).child(gameId), new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
                 final Map<String, Goal> goals = new HashMap<>();
