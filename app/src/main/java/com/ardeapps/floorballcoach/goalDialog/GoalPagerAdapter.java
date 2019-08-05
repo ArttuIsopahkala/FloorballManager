@@ -221,6 +221,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         // Position
         GoalPositionFragmentData positionFragmentData = new GoalPositionFragmentData();
         positionFragmentData.setOpponentName(commonData.getGame().getOpponentName());
+        positionFragmentData.setOpponentGoal(commonData.isOpponentGoal());
         positionFragmentData.setPositionPercentX(null);
         positionFragmentData.setPositionPercentY(null);
 

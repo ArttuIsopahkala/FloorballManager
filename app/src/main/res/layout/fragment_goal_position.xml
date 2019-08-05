@@ -13,7 +13,7 @@
             android:id="@+id/shootmapImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/floorball_field"
+            android:src="@drawable/floorball_field_half"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"/>
         <ImageView

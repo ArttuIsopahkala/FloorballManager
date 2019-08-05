@@ -57,8 +57,13 @@ public class GoalPositionFragment extends Fragment implements DataView {
         homeNameText = v.findViewById(R.id.homeNameText);
 
         shootPointImage.setVisibility(View.GONE);
-        homeNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
-        awayNameText.setText(data.getOpponentName());
+        if(data.isOpponentGoal()) {
+            homeNameText.setText(data.getOpponentName());
+            awayNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
+        } else {
+            homeNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
+            awayNameText.setText(data.getOpponentName());
+        }
 
         ViewTreeObserver vto = shootmapImage.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {

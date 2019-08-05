@@ -5,6 +5,7 @@ public class GoalPositionFragmentData {
     private Double positionPercentX;
     private Double positionPercentY;
     private String opponentName;
+    private boolean isOpponentGoal;
 
     public GoalPositionFragmentData() {
     }
@@ -31,5 +32,13 @@ public class GoalPositionFragmentData {
 
     public void setOpponentName(String opponentName) {
         this.opponentName = opponentName;
+    }
+
+    public boolean isOpponentGoal() {
+        return isOpponentGoal;
+    }
+
+    public void setOpponentGoal(boolean opponentGoal) {
+        isOpponentGoal = opponentGoal;
     }
 }
