@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Arttu on 19.1.2018.
@@ -26,11 +27,12 @@ public class PlayerStatsResource extends FirebaseDatabaseService {
             instance = new PlayerStatsResource();
         }
 
+        String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
         Season season = AppRes.getInstance().getSelectedSeason();
         if(season != null) {
             seasonId = season.getSeasonId();
         }
-        database = getDatabase().child(PLAYERS_SEASONS_GAMES_STATS);
+        database = getDatabase().child(TEAMS_PLAYERS_SEASONS_GAMES_STATS).child(teamId);
         return instance;
     }
 
@@ -40,6 +42,25 @@ public class PlayerStatsResource extends FirebaseDatabaseService {
 
     public void removeStat(String playerId, String gameId, String goalId, final DeleteDataSuccessListener handler) {
         deleteData(database.child(playerId).child(seasonId).child(gameId).child(goalId), handler);
+    }
+
+    public void removeStats(final Set<String> playerIds, String gameId, final DeleteDataSuccessListener handler) {
+        if(!playerIds.isEmpty()) {
+            final ArrayList<String> removedStats = new ArrayList<>();
+            for(final String playerId : playerIds) {
+                deleteData(database.child(playerId).child(seasonId).child(gameId), new DeleteDataSuccessListener() {
+                    @Override
+                    public void onDeleteDataSuccess() {
+                        removedStats.add(playerId);
+                        if(playerIds.size() == removedStats.size()) {
+                            handler.onDeleteDataSuccess();
+                        }
+                    }
+                });
+            }
+        } else {
+            handler.onDeleteDataSuccess();
+        }
     }
 
     public void removeAllStats(String playerId, final DeleteDataSuccessListener handler) {

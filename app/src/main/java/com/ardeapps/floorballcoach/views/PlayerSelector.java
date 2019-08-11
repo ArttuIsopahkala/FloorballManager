@@ -118,7 +118,6 @@ public class PlayerSelector extends LinearLayout {
             } else {
                 selectAllRadioButton.setVisibility(View.GONE);
             }
-            selectAllRadioButton.setVisibility(multiSelect ? View.VISIBLE : View.GONE);
 
             lineText.setVisibility(View.VISIBLE);
             lineText.setText(line.getLineNumber() + ". " + AppRes.getContext().getString(R.string.line));
@@ -126,11 +125,14 @@ public class PlayerSelector extends LinearLayout {
             playersList.removeAllViewsInLayout();
             LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
 
-            for(final String playerId : line.getPlayerIdMap().values()) {
+            for (Map.Entry<String, String> entry : line.getSortedPlayers().entrySet()) {
+                final String position = entry.getKey();
+                final String playerId = entry.getValue();
+
                 final Player player = AppRes.getInstance().getPlayers().get(playerId);
 
                 View v = inf.inflate(R.layout.list_item_player, playersList, false);
-                final PlayerHolder holder = new PlayerHolder(v, PlayerHolder.ViewType.SELECT);
+                final PlayerHolder holder = new PlayerHolder(v);
                 holders.put(playerId, holder);
 
                 if(player == null) {
@@ -144,7 +146,7 @@ public class PlayerSelector extends LinearLayout {
                     }
 
                     holder.nameNumberShootsText.setText(player.getNameWithNumber(false));
-                    holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
+                    holder.positionText.setText(Player.getPositionText(position, false));
                 }
 
                 holder.playerContainer.setOnClickListener(new OnClickListener() {
@@ -207,6 +209,7 @@ public class PlayerSelector extends LinearLayout {
     }
 
     public void setSelections() {
+        setRadioButtons();
         for(Map.Entry<String, PlayerHolder> entry : holders.entrySet()) {
             String playerId = entry.getKey();
             PlayerHolder holder = entry.getValue();
@@ -223,16 +226,15 @@ public class PlayerSelector extends LinearLayout {
                 holder.setDisabled(false);
             }
         }
-        setRadioButtons();
     }
 
     public void setDisabledPlayerIds(List<String> playerIds) {
-        this.disabledPlayerIds = playerIds;
+        this.disabledPlayerIds = new ArrayList<>(playerIds);
         setSelections();
     }
 
     public void setSelectedPlayerIds(List<String> playerIds) {
-        this.selectedPlayerIds = playerIds;
+        this.selectedPlayerIds = new ArrayList<>(playerIds);
         setSelections();
     }
 

@@ -12,13 +12,13 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.handlers.GetTeamGoalsHandler;
+import com.ardeapps.floorballcoach.handlers.GetGoalsHandler;
 import com.ardeapps.floorballcoach.handlers.GetTeamLinesHandler;
 import com.ardeapps.floorballcoach.handlers.SaveLinesHandler;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Line;
+import com.ardeapps.floorballcoach.resources.GameLinesResource;
 import com.ardeapps.floorballcoach.resources.GoalsResource;
-import com.ardeapps.floorballcoach.resources.LinesInGameResource;
 import com.ardeapps.floorballcoach.resources.LinesResource;
 import com.ardeapps.floorballcoach.services.AnalyzerService;
 import com.ardeapps.floorballcoach.utils.Logger;
@@ -69,11 +69,11 @@ public class LinesFragment extends Fragment {
         analyzeChemistryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GoalsResource.getInstance().getAllGoals(new GetTeamGoalsHandler() {
+                GoalsResource.getInstance().getAllGoals(new GetGoalsHandler() {
                     @Override
-                    public void onTeamGoalsLoaded(Map<String, ArrayList<Goal>> goals) {
+                    public void onGoalsLoaded(Map<String, ArrayList<Goal>> goals) {
                         AppRes.getInstance().setGoalsByGame(goals);
-                        LinesInGameResource.getInstance().getLines(new GetTeamLinesHandler() {
+                        GameLinesResource.getInstance().getLines(new GetTeamLinesHandler() {
                             @Override
                             public void onTeamLinesLoaded(Map<String, ArrayList<Line>> lines) {
                                 AppRes.getInstance().setLinesByGame(lines);

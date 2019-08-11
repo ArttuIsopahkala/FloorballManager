@@ -25,13 +25,15 @@ public class AppRes extends MultiDexApplication {
 
     private static Context mContext;
     private static FragmentActivity mActivity;
-    private User user;
     private Map<String, Team> teams;
+    // User info
+    private User user;
     private Map<String, UserInvitation> userInvitations;
+    private UserConnection.Role selectedRole;
+    private String selectedPlayerId;
     // Selected team's info
     private Team selectedTeam;
     private Season selectedSeason;
-    private UserConnection.Role selectedRole;
     private Map<String, Player> players;
     private Map<String, Season> seasons;
     private Map<Integer, Line> lines;
@@ -66,6 +68,7 @@ public class AppRes extends MultiDexApplication {
         user = null;
         selectedTeam = null;
         selectedSeason = null;
+        selectedPlayerId = null;
         selectedRole = null;
         teams = null;
         userInvitations = null;
@@ -107,6 +110,14 @@ public class AppRes extends MultiDexApplication {
 
     public void setSelectedRole(UserConnection.Role selectedRole) {
         this.selectedRole = selectedRole;
+    }
+
+    public String getSelectedPlayerId() {
+        return selectedPlayerId;
+    }
+
+    public void setSelectedPlayerId(String selectedPlayerId) {
+        this.selectedPlayerId = selectedPlayerId;
     }
 
     @Override
@@ -204,6 +215,32 @@ public class AppRes extends MultiDexApplication {
         return players;
     }
 
+    public ArrayList<Player> getInActivePlayers() {
+        if(players == null) {
+            players = new HashMap<>();
+        }
+        ArrayList<Player> activePlayers = new ArrayList<>();
+        for(Player player : players.values()) {
+            if(!player.isActive()) {
+                activePlayers.add(player);
+            }
+        }
+        return activePlayers;
+    }
+
+    public ArrayList<Player> getActivePlayers() {
+        if(players == null) {
+            players = new HashMap<>();
+        }
+        ArrayList<Player> activePlayers = new ArrayList<>();
+        for(Player player : players.values()) {
+            if(player.isActive()) {
+                activePlayers.add(player);
+            }
+        }
+        return activePlayers;
+    }
+
     public void setPlayer(String playerId, Player player) {
         if(players == null) {
             players = new HashMap<>();
@@ -276,7 +313,7 @@ public class AppRes extends MultiDexApplication {
     }
 
     /**
-     * Get lines indexed by lineNumber
+     * Get lines indexed by userConnectionId
      */
     public Map<String, UserConnection> getUserConnections() {
         if(userConnections == null) {

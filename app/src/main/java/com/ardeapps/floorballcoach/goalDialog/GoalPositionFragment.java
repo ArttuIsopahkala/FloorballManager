@@ -129,11 +129,17 @@ public class GoalPositionFragment extends Fragment implements DataView {
     }
 
 
-    private double getPositionPercentX() {
+    private Double getPositionPercentX() {
+        if(positionX == null) {
+            return null;
+        }
         return positionX / imageWidth;
     }
 
-    private double getPositionPercentY() {
+    private Double getPositionPercentY() {
+        if(positionY == null) {
+            return null;
+        }
         return positionY / imageHeight;
     }
 

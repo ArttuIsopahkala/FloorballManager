@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
 import com.ardeapps.floorballcoach.viewObjects.GoalSelectPlayerFragmentData;
 import com.ardeapps.floorballcoach.views.PlayerSelector;
@@ -70,15 +69,6 @@ public class GoalSelectPlayerFragment extends Fragment implements DataView {
     public void updateSelection() {
         playerSelector.setSelectedPlayerIds(selectedPlayerIds);
         playerSelector.setDisabledPlayerIds(disabledPlayerIds);
-    }
-
-    public boolean validate() {
-        if(playerSelector.getSelectedPlayerIds().isEmpty()) {
-            Logger.toast(R.string.add_event_error_scorer);
-            return false;
-        }
-
-        return true;
     }
 
 }

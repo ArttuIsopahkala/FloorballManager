@@ -24,6 +24,7 @@ import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.SelectPictureDialogFragment;
 import com.ardeapps.floorballcoach.objects.Player;
+import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.resources.PictureResource;
 import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
@@ -56,10 +57,10 @@ public class EditPlayerFragment extends Fragment implements DataView {
     RadioButton rightRadioButton;
     Spinner positionSpinner;
     LinearLayout strengthsContainer;
+    LinearLayout strengthsContent;
 
     public Listener mListener = null;
     Player player;
-    ArrayList<Player.Type> types;
     ArrayList<CheckBox> strengthCheckBoxes = new ArrayList<>();
     ArrayList<Player.Position> positionTypes;
     Bitmap selectedPicture;
@@ -119,6 +120,15 @@ public class EditPlayerFragment extends Fragment implements DataView {
         rightRadioButton = v.findViewById(R.id.rightRadioButton);
         positionSpinner = v.findViewById(R.id.positionSpinner);
         strengthsContainer = v.findViewById(R.id.strengthsContainer);
+        strengthsContent = v.findViewById(R.id.strengthsContent);
+
+        // Role specific content
+        UserConnection.Role role = AppRes.getInstance().getSelectedRole();
+        if(role == UserConnection.Role.PLAYER) {
+            strengthsContent.setVisibility(View.GONE);
+        } else {
+            strengthsContent.setVisibility(View.VISIBLE);
+        }
 
         Map<Player.Position, String> positionMap = new TreeMap<>();
         positionMap.put(Player.Position.LW, getString(R.string.position_lw));

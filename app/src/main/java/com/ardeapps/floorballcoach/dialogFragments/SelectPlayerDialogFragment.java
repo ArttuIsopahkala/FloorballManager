@@ -16,7 +16,6 @@ import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.adapters.PlayerListAdapter;
 import com.ardeapps.floorballcoach.objects.Player;
-import com.ardeapps.floorballcoach.views.PlayerHolder;
 
 import java.util.ArrayList;
 
@@ -46,7 +45,7 @@ public class SelectPlayerDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new PlayerListAdapter(AppRes.getActivity(), PlayerHolder.ViewType.SELECT);
+        adapter = new PlayerListAdapter(AppRes.getActivity());
         adapter.setSelectListener(new PlayerListAdapter.PlayerListSelectListener() {
             @Override
             public void onPlayerSelected(Player player) {
@@ -69,12 +68,7 @@ public class SelectPlayerDialogFragment extends DialogFragment {
 
         playerList.setAdapter(adapter);
 
-        ArrayList<Player> players = new ArrayList<>();
-        for(Player player : AppRes.getInstance().getPlayers().values()) {
-            if(player.isActive()) {
-                players.add(player);
-            }
-        }
+        ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
         adapter.setPlayers(players);
         adapter.notifyDataSetChanged();
 

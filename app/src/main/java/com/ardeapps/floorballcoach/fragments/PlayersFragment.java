@@ -14,8 +14,8 @@ import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.adapters.PlayerListAdapter;
 import com.ardeapps.floorballcoach.objects.Player;
+import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
-import com.ardeapps.floorballcoach.views.PlayerHolder;
 
 import java.util.ArrayList;
 
@@ -29,12 +29,7 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
     PlayerListAdapter adapter;
 
     public void update() {
-        ArrayList<Player> players = new ArrayList<>();
-        for(Player player : AppRes.getInstance().getPlayers().values()) {
-            if(player.isActive()) {
-                players.add(player);
-            }
-        }
+        ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
         adapter.setPlayers(players);
         adapter.notifyDataSetChanged();
     }
@@ -42,7 +37,7 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new PlayerListAdapter(AppRes.getActivity(), PlayerHolder.ViewType.SELECT);
+        adapter = new PlayerListAdapter(AppRes.getActivity());
         adapter.setSelectListener(this);
     }
 
@@ -55,8 +50,20 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
         playerList = v.findViewById(R.id.playerList);
         noPlayersText = v.findViewById(R.id.noPlayersText);
 
+        // Role specific content
+        UserConnection.Role role = AppRes.getInstance().getSelectedRole();
+        if(role == UserConnection.Role.PLAYER) {
+            createPlayerButton.setVisibility(View.GONE);
+        } else {
+            createPlayerButton.setVisibility(View.VISIBLE);
+        }
+
         playerList.setEmptyView(noPlayersText);
         playerList.setAdapter(adapter);
+
+        ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
+        adapter.setPlayers(players);
+        adapter.notifyDataSetChanged();
 
         update();
 

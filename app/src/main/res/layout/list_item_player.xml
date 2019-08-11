@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/playerContainer"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="80dp"
     android:background="@color/color_background_third"
     android:baselineAligned="false">
     <ImageView
         android:id="@+id/pictureImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:padding="15dp"
+        android:padding="10dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:src="@drawable/default_picture"
@@ -31,15 +31,15 @@
         android:layout_height="match_parent"
         android:minHeight="90dp"
         android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
         <TextView
             android:id="@+id/nameNumberShootsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:text="Arttu Isopahkala | #11 | R"
             android:textColor="@color/color_text_light"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/positionText"
@@ -48,22 +48,8 @@
             android:layout_height="wrap_content"
             android:text="Keskushyökkääjä"
             android:textColor="@color/color_text_light_secondary"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
     </RelativeLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:orientation="horizontal">
-        <com.ardeapps.floorballcoach.views.IconView
-            android:id="@+id/statisticsIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:text="@string/icon_stats"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="16sp" />
-    </LinearLayout>
     <RelativeLayout
         android:id="@+id/disableOverlay"
         android:layout_width="match_parent"

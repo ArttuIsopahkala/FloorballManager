@@ -26,11 +26,12 @@ public class PlayerGamesResource extends FirebaseDatabaseService {
         if (instance == null) {
             instance = new PlayerGamesResource();
         }
+        String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
         Season season = AppRes.getInstance().getSelectedSeason();
         if(season != null) {
             seasonId = season.getSeasonId();
         }
-        database = getDatabase().child(PLAYERS_SEASONS_GAMES);
+        database = getDatabase().child(TEAMS_PLAYERS_SEASONS_GAMES).child(teamId);
         return instance;
     }
 
@@ -116,7 +117,4 @@ public class PlayerGamesResource extends FirebaseDatabaseService {
         });
     }
 
-    public void editGame(String playerId, String seasonId, Game game) {
-        editData(database.child(playerId).child(seasonId).child(game.getGameId()), game);
-    }
 }

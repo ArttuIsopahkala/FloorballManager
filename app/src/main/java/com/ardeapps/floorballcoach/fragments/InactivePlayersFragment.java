@@ -19,7 +19,6 @@ import com.ardeapps.floorballcoach.resources.PlayerGamesResource;
 import com.ardeapps.floorballcoach.resources.PlayerStatsResource;
 import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
-import com.ardeapps.floorballcoach.views.PlayerHolder;
 
 import java.util.ArrayList;
 
@@ -32,12 +31,7 @@ public class InactivePlayersFragment extends Fragment implements PlayerListAdapt
     PlayerListAdapter adapter;
 
     public void update() {
-        ArrayList<Player> players = new ArrayList<>();
-        for(Player player : AppRes.getInstance().getPlayers().values()) {
-            if(!player.isActive()) {
-                players.add(player);
-            }
-        }
+        ArrayList<Player> players = AppRes.getInstance().getInActivePlayers();
         adapter.setPlayers(players);
         adapter.notifyDataSetChanged();
     }
@@ -45,7 +39,7 @@ public class InactivePlayersFragment extends Fragment implements PlayerListAdapt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new PlayerListAdapter(AppRes.getActivity(), PlayerHolder.ViewType.SELECT);
+        adapter = new PlayerListAdapter(AppRes.getActivity());
         adapter.setSelectListener(this);
     }
 

@@ -22,7 +22,7 @@ import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Season;
 import com.ardeapps.floorballcoach.resources.GamesResource;
-import com.ardeapps.floorballcoach.resources.LinesInGameResource;
+import com.ardeapps.floorballcoach.resources.GameLinesResource;
 import com.ardeapps.floorballcoach.resources.PlayerGamesResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.utils.Helper;
@@ -241,7 +241,7 @@ public class GameSettingsFragment extends Fragment implements DataView {
     }
 
     private void saveLinesAndPlayerGames(final boolean gameCreated, final Game gameToSave, final Map<Integer, Line> linesToSave) {
-        LinesInGameResource.getInstance().saveLines(gameToSave.getGameId(), linesToSave, new SaveLinesHandler() {
+        GameLinesResource.getInstance().saveLines(gameToSave.getGameId(), linesToSave, new SaveLinesHandler() {
             @Override
             public void onLinesSaved(final Map<Integer, Line> lines) {
                 final Set<String> playerIdsInLines = new HashSet<>();

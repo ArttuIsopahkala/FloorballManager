@@ -60,7 +60,13 @@
     <string name="stats_av_abbr">AV</string>
     <string name="stats_rl_abbr">RL</string>
     <string name="stats_goals_abbr">M</string>
-    <string name="stats_assists_abbr">S</string>
+    <string name="stats_team_wins">Voitot</string>
+    <string name="stats_team_loses">Tappiot</string>
+    <string name="stats_team_draws">Tasapelit</string>
+    <string name="stats_team_plus_goals">Tehdyt maalit</string>
+    <string name="stats_team_minus_goals">Päästetyt maalit</string>
+    <string name="stats_team_plus_goals_period">Tehtyjen maalien jakauma</string>
+    <string name="stats_team_minus_goals_period">Päästettyjen maalien jakauma</string>
 
     <string name="select_picture_load_url">Lataa</string>
     <string name="select_picture_from_gallery">Valitse galleriasta</string>
@@ -74,7 +80,7 @@
     <string name="title_add_player">Lisää pelaaja</string>
     <string name="title_edit_team">Muokkaa joukkuetta</string>
     <string name="title_edit_player">Muokkaa pelaajaa</string>
-    <string name="title_manage_players">Hallitse joukkueen pelaajia</string>
+    <string name="title_manage_players">Joukkueen pelaajat</string>
     <string name="title_settings">Asetukset</string>
     <string name="title_game_settings">Ottelun asetukset</string>
     <string name="title_lines">Kentälliset</string>
@@ -112,7 +118,7 @@
     <string name="main_selection_user_invitation_info">Sinulle on uusia kutsuja!</string>
     <string name="main_selection_user_invitation_admin">Kutsu Adminiksi joukkueeseen:</string>
     <string name="main_selection_user_invitation_player">Kutsu pelaajaksi joukkueeseen:</string>
-    <string name="main_selection_connection_not_found">Sinulla ei ole oikeuksia joukkueeseen. Ota yhteyttä joukkueen ylläpitäjään tai poista liitos. Poistetaanko joukkue listalta?</string>
+    <string name="main_selection_connection_not_found">Sinulla ei ole enää oikeuksia tähän joukkueeseen. Ota halutessasi yhteyttä joukkueen ylläpitäjään.</string>
 
     <string name="players_no_players">Ei lisättyjä pelaajia.</string>
 
@@ -137,6 +143,7 @@
     <string name="add_event_error_scorer">Valitse maalintekijä.</string>
     <string name="add_event_error_line">Valitse vähemmän pelaajia.</string>
     <string name="add_event_remove_confirmation">Haluatko varmasti poistaa tämän maalin?</string>
+    <string name="add_event_other">Joku muu</string>
 
     <string name="add_team_name_hint">Joukkueen nimi</string>
 
@@ -170,8 +177,9 @@
 
     <string name="team_dashboard_games">Ottelut</string>
     <string name="team_dashboard_players">Pelaajat</string>
+    <string name="team_dashboard_own_stats">Omat tilastot</string>
     <string name="team_dashboard_lines">Kokoonpano</string>
-    <string name="team_dashboard_team_stats">Tilastot</string>
+    <string name="team_dashboard_team_stats">Joukkuetilastot</string>
     <string name="team_dashboard_settings">Joukkueen hallinta</string>
     <string name="team_dashboard_seasons_info">Aloita luomalla tunniste, jonka alle ottelut luodaan.</string>
     <string name="team_dashboard_seasons_not_selected">Tunnistetta ei ole valittu.</string>
@@ -218,6 +226,7 @@
     <string name="games_no_games">Ei lisättyjä otteluita.</string>
     <string name="games_new_game">Uusi ottelu</string>
 
+    <string name="game_remove_confirmation">Halutko varmasti poistaa tämän ottelun? Myös ottelun tilastot poistetaan pelaajilta.</string>
     <string name="game_add_goal">Lisää maali +</string>
     <string name="game_stat_goal_abbr">M</string>
     <string name="game_stat_assist_abbr">S</string>

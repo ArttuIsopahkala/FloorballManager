@@ -26,7 +26,7 @@ import com.ardeapps.floorballcoach.handlers.GetStatsHandler;
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Goal;
 import com.ardeapps.floorballcoach.objects.Player;
-import com.ardeapps.floorballcoach.objects.PlayerStatsObject;
+import com.ardeapps.floorballcoach.viewObjects.PlayerStatsData;
 import com.ardeapps.floorballcoach.objects.Season;
 import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.resources.PlayerGamesResource;
@@ -86,7 +86,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     Spinner gameModeSpinner;
     Spinner typeSpinner;
     Spinner seasonSpinner;
-    LinearLayout seasonContainer;
     TextView noSeasonsText;
     LinearLayout strengthsContainer;
     TextView strengthsText;
@@ -125,7 +124,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         shootsText = v.findViewById(R.id.shootsText);
         editIcon = v.findViewById(R.id.editIcon);
         seasonSpinner = v.findViewById(R.id.seasonSpinner);
-        seasonContainer = v.findViewById(R.id.seasonContainer);
         noSeasonsText = v.findViewById(R.id.noSeasonsText);
         shootmapImage = v.findViewById(R.id.shootmapImage);
         shootmapPointsContainer = v.findViewById(R.id.shootmapPointsContainer);
@@ -159,7 +157,13 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
         if(role == UserConnection.Role.PLAYER) {
-            editIcon.setVisibility(View.GONE);
+            // Allow player edit own info
+            String selectedPlayerId = AppRes.getInstance().getSelectedPlayerId();
+            if(player.getPlayerId().equals(selectedPlayerId)) {
+                editIcon.setVisibility(View.VISIBLE);
+            } else {
+                editIcon.setVisibility(View.GONE);
+            }
             strengthsContainer.setVisibility(View.GONE);
         } else {
             editIcon.setVisibility(View.VISIBLE);
@@ -360,7 +364,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
                         public void onGamesLoaded(Map<String, Game> games) {
                             PlayerStatsFragment.this.stats = stats;
                             PlayerStatsFragment.this.games = games;
-                            updateStats(seasonId);
+                            updateStats(null);
                         }
                     });
                 }
@@ -417,7 +421,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
             filteredStats.put(game, filteredGoals);
         }
 
-        PlayerStatsObject stats = StatsHelper.getPlayerStats(player.getPlayerId(), filteredStats);
+        PlayerStatsData stats = StatsHelper.getPlayerStats(player.getPlayerId(), filteredStats);
         gamesText.setText(String.valueOf(stats.gamesCount));
         pointsText.setText(String.valueOf(stats.points));
         pointsPerGameText.setText(getPerGameText(stats.pointsPerGame));
@@ -525,9 +529,14 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         filteredGoals = getFilteredTypeGoals(typeSpinnerPosition, filteredGoals);
 
         for(Goal goal : filteredGoals) {
-            double x = getPositionX(goal.getPositionPercentX());
-            double y = getPositionY(goal.getPositionPercentY());
-            drawShootPoint(x, y);
+            if(goal.getPositionPercentX() != null && goal.getPositionPercentY() != null) {
+                double x = getPositionX(goal.getPositionPercentX());
+                double y = getPositionY(goal.getPositionPercentY());
+                if(y > imageHeight) {
+                    y = imageHeight;
+                }
+                drawShootPoint(x, y);
+            }
         }
     }
 
@@ -554,7 +563,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         String playerId = player.getPlayerId();
         for(Goal goal : goals) {
             // Goals
-            if(spinnerPosition == 0 && goal.getScorerId().equals(playerId)) {
+            if(spinnerPosition == 0 && goal.getScorerId() != null && goal.getScorerId().equals(playerId)) {
                 filteredGoals.add(goal);
             } else if (spinnerPosition == 1 && goal.getAssistantId() != null && goal.getAssistantId().equals(playerId)){
                 filteredGoals.add(goal);
@@ -609,7 +618,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     }
 
     private double getPositionY(double positionPercentY) {
-        return imageHeight * 2 * positionPercentY; // multiple 2 because shootmap is half of full length
+        return imageHeight * positionPercentY;
     }
 
 }

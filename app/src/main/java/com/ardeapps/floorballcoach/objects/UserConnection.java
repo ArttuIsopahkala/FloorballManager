@@ -32,6 +32,7 @@ public class UserConnection {
     private String userConnectionId;
     private String status;
     private String userId;
+    private String playerId;
     private String email;
     private String role;
 
@@ -43,6 +44,7 @@ public class UserConnection {
         clone.userConnectionId = this.userConnectionId;
         clone.status = this.status;
         clone.userId = this.userId;
+        clone.playerId = this.playerId;
         clone.email = this.email;
         clone.role = this.role;
         return clone;
@@ -70,6 +72,14 @@ public class UserConnection {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
     }
 
     public String getEmail() {

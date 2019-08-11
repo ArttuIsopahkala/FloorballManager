@@ -21,7 +21,13 @@ import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.Season;
 import com.ardeapps.floorballcoach.objects.UserConnection;
+import com.ardeapps.floorballcoach.resources.GameLinesResource;
+import com.ardeapps.floorballcoach.resources.GamesResource;
+import com.ardeapps.floorballcoach.resources.GoalsResource;
 import com.ardeapps.floorballcoach.resources.GoalsResourceWrapper;
+import com.ardeapps.floorballcoach.resources.PlayerGamesResource;
+import com.ardeapps.floorballcoach.resources.PlayerStatsResource;
+import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.StringUtils;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
@@ -35,6 +41,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
@@ -173,10 +180,63 @@ public class GameFragment extends Fragment implements DataView {
         settingsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GameSettingsFragmentData gameSettingsFragmentData = new GameSettingsFragmentData();
-                gameSettingsFragmentData.setGame(data.getGame());
-                gameSettingsFragmentData.setLines(data.getLines());
-                FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(gameSettingsFragmentData);
+                final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
+                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
+                dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
+                    @Override
+                    public void onEditItem() {
+                        dialog.dismiss();
+                        GameSettingsFragmentData gameSettingsFragmentData = new GameSettingsFragmentData();
+                        gameSettingsFragmentData.setGame(data.getGame());
+                        gameSettingsFragmentData.setLines(data.getLines());
+                        FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(gameSettingsFragmentData);
+                    }
+
+                    @Override
+                    public void onRemoveItem() {
+                        dialog.dismiss();
+                        ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.game_remove_confirmation));
+                        dialogFragment.show(getChildFragmentManager(), "Poistetaanko ottelu?");
+                        dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
+                            @Override
+                            public void onDialogYesButtonClick() {
+                                final String gameId = data.getGame().getGameId();
+                                final Set<String> playerIds = AppRes.getInstance().getPlayers().keySet();
+                                PlayerStatsResource.getInstance().removeStats(playerIds, gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                    @Override
+                                    public void onDeleteDataSuccess() {
+                                        PlayerGamesResource.getInstance().removeGame(playerIds, gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                            @Override
+                                            public void onDeleteDataSuccess() {
+                                                GoalsResource.getInstance().removeGoals(gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                                    @Override
+                                                    public void onDeleteDataSuccess() {
+                                                        GameLinesResource.getInstance().removeLines(gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                                            @Override
+                                                            public void onDeleteDataSuccess() {
+                                                                GamesResource.getInstance().removeGame(gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                                                    @Override
+                                                                    public void onDeleteDataSuccess() {
+                                                                        AppRes.getActivity().onBackPressed();
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 
@@ -245,8 +305,8 @@ public class GameFragment extends Fragment implements DataView {
             holder.timeText = cv.findViewById(R.id.timeText);
             holder.scoreText = cv.findViewById(R.id.scoreText);
 
-            String scorerName = "";
-            String assistantName = "";
+            String scorerName;
+            String assistantName;
             // Collect data
             String scorerId = goal.getScorerId();
             if (scorerId != null) {
@@ -256,6 +316,8 @@ public class GameFragment extends Fragment implements DataView {
                 } else {
                     scorerName = AppRes.getContext().getString(R.string.removed_player);
                 }
+            } else {
+                scorerName = getString(R.string.goal).toUpperCase();
             }
             String assistantId = goal.getAssistantId();
             if (assistantId != null) {
@@ -265,6 +327,8 @@ public class GameFragment extends Fragment implements DataView {
                 } else {
                     assistantName = AppRes.getContext().getString(R.string.removed_player);
                 }
+            } else {
+                assistantName = "";
             }
 
             // Add goals

@@ -16,11 +16,12 @@ import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballcoach.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballcoach.handlers.GetUserConnectionsHandler;
+import com.ardeapps.floorballcoach.handlers.GetUserHandler;
 import com.ardeapps.floorballcoach.objects.Team;
 import com.ardeapps.floorballcoach.objects.User;
 import com.ardeapps.floorballcoach.objects.UserConnection;
+import com.ardeapps.floorballcoach.resources.GameLinesResource;
 import com.ardeapps.floorballcoach.resources.GoalsResource;
-import com.ardeapps.floorballcoach.resources.LinesInGameResource;
 import com.ardeapps.floorballcoach.resources.GamesResource;
 import com.ardeapps.floorballcoach.resources.LinesResource;
 import com.ardeapps.floorballcoach.resources.SeasonsResource;
@@ -33,6 +34,9 @@ import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.views.IconView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,7 +68,24 @@ public class TeamSettingsFragment extends Fragment {
         LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
         userConnectionsContainer.removeAllViews();
 
-        for(final UserConnection userConnection : userConnections.values()) {
+
+        ArrayList<UserConnection> userConnectionsList = new ArrayList<>(userConnections.values());
+        Collections.sort(userConnectionsList, new Comparator<UserConnection>() {
+            @Override
+            public int compare(UserConnection o1, UserConnection o2) {
+                UserConnection.Role role1 = UserConnection.Role.fromDatabaseName(o1.getRole());
+                UserConnection.Role role2 = UserConnection.Role.fromDatabaseName(o2.getRole());
+                if(role1 == role2) {
+                    return 0;
+                } else if(role1 == UserConnection.Role.ADMIN) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+
+        for(final UserConnection userConnection : userConnectionsList) {
             View cv = inf.inflate(R.layout.list_item_user_connection, userConnectionsContainer, false);
             holder.emailText = cv.findViewById(R.id.emailText);
             holder.roleText = cv.findViewById(R.id.roleText);
@@ -115,7 +136,19 @@ public class TeamSettingsFragment extends Fragment {
                                     UserInvitationsResource.getInstance().removeUserInvitation(userConnectionId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                         @Override
                                         public void onDeleteDataSuccess() {
-                                            update();
+                                            // Remove connection from user
+                                            if(userConnection.getUserId() != null) {
+                                                UsersResource.getInstance().getUser(userConnection.getUserId(), new GetUserHandler() {
+                                                    @Override
+                                                    public void onUserLoaded(User user) {
+                                                        user.getTeamIds().remove(AppRes.getInstance().getSelectedTeam().getTeamId());
+                                                        UsersResource.getInstance().editUser(user);
+                                                        update();
+                                                    }
+                                                });
+                                            } else {
+                                                update();
+                                            }
                                         }
                                     });
                                 }
@@ -210,7 +243,7 @@ public class TeamSettingsFragment extends Fragment {
                                 LinesResource.getInstance().removeAllLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                     @Override
                                     public void onDeleteDataSuccess() {
-                                        LinesInGameResource.getInstance().removeAllLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
+                                        GameLinesResource.getInstance().removeAllLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
                                             @Override
                                             public void onDeleteDataSuccess() {
                                                 GoalsResource.getInstance().removeAllGoals(new FirebaseDatabaseService.DeleteDataSuccessListener() {

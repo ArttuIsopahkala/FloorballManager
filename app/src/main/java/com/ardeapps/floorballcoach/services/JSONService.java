@@ -196,31 +196,36 @@ public class JSONService extends FirebaseDatabaseService {
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
             JSONObject root = getJSONObject(json, DEBUG);
-            JSONObject playersSeasonsGamesStats = getJSONObject(root, PLAYERS_SEASONS_GAMES_STATS);
+            JSONObject teamsPlayersSeasonsGamesStats = getJSONObject(root, TEAMS_PLAYERS_SEASONS_GAMES_STATS);
 
-            Iterator<String> players = playersSeasonsGamesStats.keys();
-            while (players.hasNext()) {
-                String playerKeyId = players.next();
-                if(playerKeyId.equals(playerId)) {
-                    JSONObject playerObj = getJSONObject(playersSeasonsGamesStats, playerKeyId);
-                    Iterator<String> seasons = playerObj.keys();
-                    while (seasons.hasNext()) {
-                        String seasonId = seasons.next();
-                        JSONObject seasonObj = getJSONObject(playerObj, seasonId);
+            Iterator<String> teams = teamsPlayersSeasonsGamesStats.keys();
+            while (teams.hasNext()) {
+                String teamId = teams.next();
+                JSONObject teamObj = getJSONObject(teamsPlayersSeasonsGamesStats, teamId);
+                Iterator<String> players = teamObj.keys();
+                while (players.hasNext()) {
+                    String playerKeyId = players.next();
+                    if(playerKeyId.equals(playerId)) {
+                        JSONObject playerObj = getJSONObject(teamsPlayersSeasonsGamesStats, playerKeyId);
+                        Iterator<String> seasons = playerObj.keys();
+                        while (seasons.hasNext()) {
+                            String seasonId = seasons.next();
+                            JSONObject seasonObj = getJSONObject(playerObj, seasonId);
 
-                        Iterator<String> games = seasonObj.keys();
-                        while (games.hasNext()) {
-                            String gameId = games.next();
-                            JSONObject gameObj = getJSONObject(seasonObj, gameId);
+                            Iterator<String> games = seasonObj.keys();
+                            while (games.hasNext()) {
+                                String gameId = games.next();
+                                JSONObject gameObj = getJSONObject(seasonObj, gameId);
 
-                            Iterator<String> goals = gameObj.keys();
-                            while (goals.hasNext()) {
-                                String goalId = goals.next();
-                                JSONObject value = getJSONObject(gameObj, goalId);
-                                try {
-                                    Goal goal = new ObjectMapper().readValue(value.toString(), Goal.class);
-                                    goalsList.add(goal);
-                                } catch (IOException e) {}
+                                Iterator<String> goals = gameObj.keys();
+                                while (goals.hasNext()) {
+                                    String goalId = goals.next();
+                                    JSONObject value = getJSONObject(gameObj, goalId);
+                                    try {
+                                        Goal goal = new ObjectMapper().readValue(value.toString(), Goal.class);
+                                        goalsList.add(goal);
+                                    } catch (IOException e) {}
+                                }
                             }
                         }
                     }

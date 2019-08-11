@@ -4,15 +4,17 @@ import android.util.Pair;
 
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Goal;
-import com.ardeapps.floorballcoach.objects.PlayerStatsObject;
+import com.ardeapps.floorballcoach.viewObjects.PlayerStatsData;
+import com.ardeapps.floorballcoach.viewObjects.TeamStatsData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class StatsHelper extends AnalyzerService {
 
-    public static PlayerStatsObject getPlayerStats(String playerId, Map<Game, ArrayList<Goal>> stats) {
+    public static PlayerStatsData getPlayerStats(String playerId, Map<Game, ArrayList<Goal>> stats) {
         int gamesCount = stats.size();
         int points = 0;
 
@@ -33,9 +35,6 @@ public class StatsHelper extends AnalyzerService {
         int longestStats = 0;
         int currentLongestStats = 0;
 
-        double pointsPerGame = 0.0;
-        double scoresPerGame = 0.0;
-        double assistsPerGame = 0.0;
         // Loop all games
         for (Map.Entry<Game, ArrayList<Goal>> entry : stats.entrySet()) {
             ArrayList<Goal> goals = entry.getValue();
@@ -119,6 +118,10 @@ public class StatsHelper extends AnalyzerService {
             }
         }
 
+        double pointsPerGame = 0.0;
+        double scoresPerGame = 0.0;
+        double assistsPerGame = 0.0;
+
         if(gamesCount > 0) {
             pointsPerGame = (double)points / gamesCount;
             scoresPerGame = (double)scores / gamesCount;
@@ -136,7 +139,7 @@ public class StatsHelper extends AnalyzerService {
         // Best line mates
         Pair<ArrayList<String>, Integer> bestLineMates = getBestLineMate(allGoals, playerId);
 
-        PlayerStatsObject result = new PlayerStatsObject();
+        PlayerStatsData result = new PlayerStatsData();
         result.gamesCount = gamesCount;
         result.points = points;
         result.pointsPerGame = pointsPerGame;
@@ -162,7 +165,175 @@ public class StatsHelper extends AnalyzerService {
         return result;
     }
 
-    public static Pair<ArrayList<String>, Integer> getBestLineMate(ArrayList<Goal> goals, String playerId) {
+    public static TeamStatsData getTeamStats(Map<Game, ArrayList<Goal>> stats) {
+
+        int gamesCount = stats.size();
+        int wins = 0;
+        int draws = 0;
+        int loses = 0;
+        int plusGoals = 0;
+        int plusGoalsYv = 0;
+        int plusGoalsAv = 0;
+        int plusGoalsRl = 0;
+        int minusGoals = 0;
+        int minusGoalsYv = 0;
+        int minusGoalsAv = 0;
+        int minusGoalsRl = 0;
+
+        int plusGoalsPeriod1 = 0;
+        int plusGoalsPeriod2 = 0;
+        int plusGoalsPeriod3 = 0;
+        int plusGoalsPeriodJA = 0;
+        int minusGoalsPeriod1 = 0;
+        int minusGoalsPeriod2 = 0;
+        int minusGoalsPeriod3 = 0;
+        int minusGoalsPeriodJA = 0;
+
+        // Loop all games
+        for (Map.Entry<Game, ArrayList<Goal>> entry : stats.entrySet()) {
+            Game game = entry.getKey();
+            ArrayList<Goal> goals = entry.getValue();
+
+            int homeGoals = game.getHomeGoals() != null ? game.getHomeGoals() : 0;
+            int awayGoals = game.getAwayGoals() != null ? game.getAwayGoals() : 0;
+
+            if(game.isHomeGame()) {
+                plusGoals += homeGoals;
+                minusGoals += awayGoals;
+                if(homeGoals > awayGoals) {
+                    wins++;
+                } else if (homeGoals < awayGoals) {
+                    loses++;
+                } else {
+                    draws++;
+                }
+            } else {
+                plusGoals += awayGoals;
+                minusGoals += homeGoals;
+                if(homeGoals < awayGoals) {
+                    wins++;
+                } else if (homeGoals > awayGoals) {
+                    loses++;
+                } else {
+                    draws++;
+                }
+            }
+
+            long firstPeriodEnd = TimeUnit.MINUTES.toMillis(game.getPeriodInMinutes());
+            long secondPeriodEnd = firstPeriodEnd * 2;
+            long thirdPeriodEnd = firstPeriodEnd * 3;
+
+            // LOOP GOALS
+            for (Goal goal : goals) {
+                Goal.Mode mode = Goal.Mode.fromDatabaseName(goal.getGameMode());
+                if(goal.isOpponentGoal()) {
+                    // MINUS GOALS
+                    if(goal.getTime() < firstPeriodEnd) {
+                        minusGoalsPeriod1++;
+                    } else if (goal.getTime() > firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
+                        minusGoalsPeriod2++;
+                    } else if (goal.getTime() > secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
+                        minusGoalsPeriod3++;
+                    } else {
+                        minusGoalsPeriodJA++;
+                    }
+
+                    if (mode == Goal.Mode.YV) {
+                        minusGoalsYv++;
+                    }
+                    if (mode == Goal.Mode.AV) {
+                        minusGoalsAv++;
+                    }
+                    if (mode == Goal.Mode.RL) {
+                        minusGoalsRl++;
+                    }
+                } else {
+                    // PLUS GOALS
+                    if(goal.getTime() < firstPeriodEnd) {
+                        plusGoalsPeriod1++;
+                    } else if (goal.getTime() > firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
+                        plusGoalsPeriod2++;
+                    } else if (goal.getTime() > secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
+                        plusGoalsPeriod3++;
+                    } else {
+                        plusGoalsPeriodJA++;
+                    }
+
+                    if (mode == Goal.Mode.YV) {
+                        plusGoalsYv++;
+                    }
+                    if (mode == Goal.Mode.AV) {
+                        plusGoalsAv++;
+                    }
+                    if (mode == Goal.Mode.RL) {
+                        plusGoalsRl++;
+                    }
+                }
+            }
+        }
+
+        int winPercent = 0;
+        int drawPercent = 0;
+        int losePercent = 0;
+        int plusGoalsPercentPeriod1 = 0;
+        int plusGoalsPercentPeriod2 = 0;
+        int plusGoalsPercentPeriod3 = 0;
+        int plusGoalsPercentPeriodJA = 0;
+        int minusGoalsPercentPeriod1 = 0;
+        int minusGoalsPercentPeriod2 = 0;
+        int minusGoalsPercentPeriod3 = 0;
+        int minusGoalsPercentPeriodJA = 0;
+
+        double plusGoalsPerGame = 0.0;
+        double minusGoalsPerGame = 0.0;
+
+        if(gamesCount > 0) {
+            winPercent = (int)Math.round((double)wins / gamesCount * 100);
+            drawPercent = (int)Math.round((double)draws / gamesCount * 100);
+            losePercent = (int)Math.round((double)loses / gamesCount * 100);
+            plusGoalsPerGame = (double)plusGoals / gamesCount;
+            minusGoalsPerGame = (double)minusGoals / gamesCount;
+            plusGoalsPercentPeriod1 = (int)Math.round((double)plusGoalsPeriod1 / plusGoals * 100);
+            plusGoalsPercentPeriod2 = (int)Math.round((double)plusGoalsPeriod2 / plusGoals * 100);
+            plusGoalsPercentPeriod3 = (int)Math.round((double)plusGoalsPeriod3 / plusGoals * 100);
+            plusGoalsPercentPeriodJA = (int)Math.round((double)plusGoalsPeriodJA / plusGoals * 100);
+            minusGoalsPercentPeriod1 = (int)Math.round((double)minusGoalsPeriod1 / minusGoals * 100);
+            minusGoalsPercentPeriod2 = (int)Math.round((double)minusGoalsPeriod2 / minusGoals * 100);
+            minusGoalsPercentPeriod3 = (int)Math.round((double)minusGoalsPeriod3 / minusGoals * 100);
+            minusGoalsPercentPeriodJA = (int)Math.round((double)minusGoalsPeriodJA / minusGoals * 100);
+        }
+
+        TeamStatsData result = new TeamStatsData();
+        result.gamesCount = gamesCount;
+        result.wins = wins;
+        result.draws = draws;
+        result.loses = draws;
+        result.plusGoals = plusGoals;
+        result.plusGoalsYv = plusGoalsYv;
+        result.plusGoalsAv = plusGoalsAv;
+        result.plusGoalsRl = plusGoalsRl;
+        result.minusGoals = minusGoals;
+        result.minusGoalsYv = minusGoalsYv;
+        result.minusGoalsAv = minusGoalsAv;
+        result.minusGoalsRl = minusGoalsRl;
+        result.winPercent = winPercent;
+        result.drawPercent = drawPercent;
+        result.losePercent = losePercent;
+        result.plusGoalsPerGame = plusGoalsPerGame;
+        result.minusGoalsPerGame = minusGoalsPerGame;
+        result.plusGoalsPercentPeriod1 = plusGoalsPercentPeriod1;
+        result.plusGoalsPercentPeriod2 = plusGoalsPercentPeriod2;
+        result.plusGoalsPercentPeriod3 = plusGoalsPercentPeriod3;
+        result.plusGoalsPercentPeriodJA = plusGoalsPercentPeriodJA;
+        result.minusGoalsPercentPeriod1 = minusGoalsPercentPeriod1;
+        result.minusGoalsPercentPeriod2 = minusGoalsPercentPeriod2;
+        result.minusGoalsPercentPeriod3 = minusGoalsPercentPeriod3;
+        result.minusGoalsPercentPeriodJA = minusGoalsPercentPeriodJA;
+
+        return result;
+    }
+
+    private static Pair<ArrayList<String>, Integer> getBestLineMate(ArrayList<Goal> goals, String playerId) {
         // Collect assists
         HashMap<String, Integer> players = new HashMap<>();
         for (Goal goal : goals) {
@@ -198,7 +369,7 @@ public class StatsHelper extends AnalyzerService {
         return new Pair<>(playerIds, mostStatsTogether);
     }
 
-    public static Pair<ArrayList<String>, Integer> getBestAssistants(ArrayList<Goal> goals, String playerId) {
+    private static Pair<ArrayList<String>, Integer> getBestAssistants(ArrayList<Goal> goals, String playerId) {
         // Collect assists
         HashMap<String, Integer> players = new HashMap<>();
         for (Goal goal : goals) {
@@ -231,7 +402,7 @@ public class StatsHelper extends AnalyzerService {
         return new Pair<>(assistantIds, highestAssist);
     }
 
-    public static Pair<ArrayList<String>, Integer> getBestScorers(ArrayList<Goal> goals, String playerId) {
+    private static Pair<ArrayList<String>, Integer> getBestScorers(ArrayList<Goal> goals, String playerId) {
         // Collect assists
         HashMap<String, Integer> players = new HashMap<>();
         for (Goal goal : goals) {

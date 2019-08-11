@@ -27,8 +27,8 @@ public class FirebaseDatabaseService {
 
     protected static final String APP_DATA = "appData";
     protected static final String TEAMS = "teams";
-    protected static final String PLAYERS_SEASONS_GAMES_STATS = "players_seasons_games_stats";
-    protected static final String PLAYERS_SEASONS_GAMES = "players_seasons_games";
+    protected static final String TEAMS_PLAYERS_SEASONS_GAMES_STATS = "teams_players_seasons_games_stats";
+    protected static final String TEAMS_PLAYERS_SEASONS_GAMES = "teams_players_seasons_games";
     protected static final String TEAMS_SEASONS_GAMES = "teams_seasons_games";
     protected static final String TEAMS_SEASONS_GAMES_GOALS = "teams_seasons_games_goals";
     protected static final String TEAMS_SEASONS_GAMES_LINES = "teams_seasons_games_lines";
@@ -50,6 +50,8 @@ public class FirebaseDatabaseService {
 
     protected static DatabaseReference getDatabase() {
         if (BuildConfig.DEBUG) {
+            // TODO CHANGE BACK TO DEBUG
+            //return FirebaseDatabase.getInstance().getReference().child(RELEASE);
             return FirebaseDatabase.getInstance().getReference().child(DEBUG);
         } else {
             return FirebaseDatabase.getInstance().getReference().child(RELEASE);
@@ -57,7 +59,44 @@ public class FirebaseDatabaseService {
     }
 
     public static void updateDatabase() {
-        final String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
+        /*final String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
+        getData(getDatabase().child(PLAYERS_SEASONS_GAMES), new GetDataSuccessListener() {
+            @Override
+            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                for(DataSnapshot player : dataSnapshot.getChildren()) {
+                    String playerId = player.getKey();
+                    if(AppRes.getInstance().getPlayers().keySet().contains(playerId)) {
+                        for(DataSnapshot season : player.getChildren()) {
+                            String seasonId = season.getKey();
+                            for(DataSnapshot snap : season.getChildren()) {
+                                Game game = snap.getValue(Game.class);
+                                editData(getDatabase().child(TEAMS_PLAYERS_SEASONS_GAMES).child(teamId).child(playerId).child(seasonId).child(game.getGameId()), game);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        getData(getDatabase().child(PLAYERS_SEASONS_GAMES_STATS), new GetDataSuccessListener() {
+            @Override
+            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                for(DataSnapshot player : dataSnapshot.getChildren()) {
+                    String playerId = player.getKey();
+                    if(AppRes.getInstance().getPlayers().keySet().contains(playerId)) {
+                        for(DataSnapshot season : player.getChildren()) {
+                            String seasonId = season.getKey();
+                            for(DataSnapshot game : season.getChildren()) {
+                                String gameId = game.getKey();
+                                for(DataSnapshot snap : game.getChildren()) {
+                                    Goal goal = snap.getValue(Goal.class);
+                                    editData(getDatabase().child(TEAMS_PLAYERS_SEASONS_GAMES_STATS).child(teamId).child(playerId).child(seasonId).child(gameId).child(goal.getGoalId()), goal);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });*/
         /*getData(getDatabase().child(TEAMS_SEASONS), new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
@@ -88,9 +127,9 @@ public class FirebaseDatabaseService {
             @Override
             public void onGamesLoaded(final Map<String, Game> gamesMap) {
                 // Add seasonId to goal and move to new location
-                GoalsResource.getInstance().getGoals(new GetTeamGoalsHandler() {
+                GoalsResource.getInstance().getGoals(new GetGoalsHandler() {
                     @Override
-                    public void onTeamGoalsLoaded(Map<String, ArrayList<Goal>> goalsMap) {
+                    public void onGoalsLoaded(Map<String, ArrayList<Goal>> goalsMap) {
                         for(Map.Entry<String, ArrayList<Goal>> entry : goalsMap.entrySet()) {
                             String gameId = entry.getKey();
                             ArrayList<Goal> goals = entry.getValue();
@@ -105,7 +144,7 @@ public class FirebaseDatabaseService {
                     }
                 });
 
-                LinesInGameResource.getInstance().getLines(new GetTeamLinesHandler() {
+                GameLinesResource.getInstance().getLines(new GetTeamLinesHandler() {
                     @Override
                     public void onTeamLinesLoaded(Map<String, ArrayList<Line>> linesMap) {
                         for(Map.Entry<String, ArrayList<Line>> entry : linesMap.entrySet()) {

@@ -164,14 +164,19 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
 
         if(goal == null) {
             // Scorer and assistan in same line -> select all players in line
-            if (scorerLineNumber != null) {
-                if (assistantLineNumber == null || scorerLineNumber.equals(assistantLineNumber)) {
-                    Line scorerLine = commonData.getLines().get(scorerLineNumber);
-                    if (scorerLine != null && scorerLine.getPlayerIdMap() != null) {
-                        ArrayList<String> selectedPlayers = new ArrayList<>(scorerLine.getPlayerIdMap().values());
-                        selectLineFragmentData.setSelectedPlayerIds(selectedPlayers);
-                    }
+            Line line = null;
+            if (scorerLineNumber != null && assistantLineNumber != null) {
+                if(scorerLineNumber.equals(assistantLineNumber)) {
+                    line = commonData.getLines().get(scorerLineNumber);
                 }
+            } else if (scorerLineNumber != null) {
+                line = commonData.getLines().get(scorerLineNumber);
+            } else if(assistantLineNumber != null) {
+                line = commonData.getLines().get(assistantLineNumber);
+            }
+            if (line != null && line.getPlayerIdMap() != null) {
+                ArrayList<String> selectedPlayers = new ArrayList<>(line.getPlayerIdMap().values());
+                selectLineFragmentData.setSelectedPlayerIds(selectedPlayers);
             }
         } else {
             // 1. Remove changed scorer/assistant from current playerIds
@@ -301,14 +306,11 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public boolean validate(int position) {
-        int scorerFragmentPosition = 1;
         Fragment fragment = fragments.get(position);
         if (fragment instanceof GoalDetailsFragment) {
             return ((GoalDetailsFragment) fragment).validate();
         } else if (fragment instanceof GoalSelectLineFragment) {
             return ((GoalSelectLineFragment) fragment).validate();
-        } else if (!commonData.isOpponentGoal() && position == scorerFragmentPosition) {
-            return ((GoalSelectPlayerFragment) fragment).validate();
         }
         return true;
     }

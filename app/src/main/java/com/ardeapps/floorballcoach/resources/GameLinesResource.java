@@ -18,13 +18,13 @@ import java.util.Map;
  * Created by Arttu on 19.1.2018.
  */
 
-public class LinesInGameResource extends FirebaseDatabaseService {
-    private static LinesInGameResource instance;
+public class GameLinesResource extends FirebaseDatabaseService {
+    private static GameLinesResource instance;
     private static DatabaseReference database;
 
-    public static LinesInGameResource getInstance() {
+    public static GameLinesResource getInstance() {
         if (instance == null) {
-            instance = new LinesInGameResource();
+            instance = new GameLinesResource();
         }
         String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
         String seasonId = AppRes.getInstance().getSelectedSeason().getSeasonId();
@@ -92,6 +92,10 @@ public class LinesInGameResource extends FirebaseDatabaseService {
 
     private void removeLine(String gameId, String lineId, final DeleteDataSuccessListener handler) {
         deleteData(database.child(gameId).child(lineId), handler);
+    }
+
+    public void removeLines(String gameId, final DeleteDataSuccessListener handler) {
+        deleteData(database.child(gameId), handler);
     }
 
     public void removeAllLines(final DeleteDataSuccessListener handler) {

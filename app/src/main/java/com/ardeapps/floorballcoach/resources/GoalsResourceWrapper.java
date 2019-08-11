@@ -39,25 +39,38 @@ public class GoalsResourceWrapper extends FirebaseDatabaseService {
                             handler.onGoalEdited(fragmentData);
                             return;
                         }
+                        boolean scorerAdded = !StringUtils.isEmptyString(goalToSave.getScorerId());
+                        boolean assistantAdded = !StringUtils.isEmptyString(goalToSave.getAssistantId());
 
-                        // Change scorer stats
-                        editScorerStatsGoal(oldGoal, goalToSave, new EditGoalStatsListener() {
-                            @Override
-                            public void editCompleted() {
-                                if(StringUtils.isEmptyString(goalToSave.getAssistantId())) {
-                                    handler.onGoalEdited(fragmentData);
-                                    return;
+                        if(scorerAdded && assistantAdded) {
+                            editScorerStatsGoal(oldGoal, goalToSave, new EditGoalStatsListener() {
+                                @Override
+                                public void editCompleted() {
+                                    editAssistantStatsGoal(oldGoal, goalToSave, new EditGoalStatsListener() {
+                                        @Override
+                                        public void editCompleted() {
+                                            handler.onGoalEdited(fragmentData);
+                                        }
+                                    });
                                 }
-
-                                // Change assistant stats
-                                editAssistantStatsGoal(oldGoal, goalToSave, new EditGoalStatsListener() {
-                                    @Override
-                                    public void editCompleted() {
-                                        handler.onGoalEdited(fragmentData);
-                                    }
-                                });
-                            }
-                        });
+                            });
+                        } else if(scorerAdded) {
+                            editScorerStatsGoal(oldGoal, goalToSave, new EditGoalStatsListener() {
+                                @Override
+                                public void editCompleted() {
+                                    handler.onGoalEdited(fragmentData);
+                                }
+                            });
+                        } else if(assistantAdded) {
+                            editAssistantStatsGoal(oldGoal, goalToSave, new EditGoalStatsListener() {
+                                @Override
+                                public void editCompleted() {
+                                    handler.onGoalEdited(fragmentData);
+                                }
+                            });
+                        } else {
+                            handler.onGoalEdited(fragmentData);
+                        }
                     }
                 });
             }
@@ -121,7 +134,7 @@ public class GoalsResourceWrapper extends FirebaseDatabaseService {
     }
 
     private void editScorerStatsGoal(Goal oldGoal, final Goal goalToSave, final EditGoalStatsListener listener) {
-        if(oldGoal != null && !oldGoal.getScorerId().equals(goalToSave.getScorerId())) {
+        if(oldGoal != null && !StringUtils.isEmptyString(oldGoal.getScorerId()) && !goalToSave.getScorerId().equals(oldGoal.getScorerId())) {
             // Scorer changed -> Remove goal from existing player stats and add to new
             PlayerStatsResource.getInstance().removeStat(oldGoal.getScorerId(), oldGoal.getGameId(), oldGoal.getGoalId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
                 @Override
@@ -146,7 +159,7 @@ public class GoalsResourceWrapper extends FirebaseDatabaseService {
     }
 
     private void editAssistantStatsGoal(Goal oldGoal, final Goal goalToSave, final EditGoalStatsListener listener) {
-        if(oldGoal != null && !StringUtils.isEmptyString(oldGoal.getAssistantId()) && !oldGoal.getAssistantId().equals(goalToSave.getAssistantId())) {
+        if(oldGoal != null && !StringUtils.isEmptyString(oldGoal.getAssistantId()) && !goalToSave.getAssistantId().equals(oldGoal.getAssistantId())) {
             PlayerStatsResource.getInstance().removeStat(oldGoal.getAssistantId(), oldGoal.getGameId(), oldGoal.getGoalId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
                 @Override
                 public void onDeleteDataSuccess() {
@@ -186,24 +199,38 @@ public class GoalsResourceWrapper extends FirebaseDatabaseService {
                             return;
                         }
 
-                        // Change scorer stats
-                        removeScorerStatsGoal(goal, new RemoveGoalStatsListener() {
-                            @Override
-                            public void removeCompleted() {
-                                if(StringUtils.isEmptyString(goal.getAssistantId())) {
-                                    handler.onGoalRemoved(fragmentData);
-                                    return;
-                                }
+                        boolean scorerAdded = !StringUtils.isEmptyString(goal.getScorerId());
+                        boolean assistantAdded = !StringUtils.isEmptyString(goal.getAssistantId());
 
-                                // Change assistant stats
-                                removeAssistantStatsGoal(goal, new RemoveGoalStatsListener() {
-                                    @Override
-                                    public void removeCompleted() {
-                                        handler.onGoalRemoved(fragmentData);
-                                    }
-                                });
-                            }
-                        });
+                        if(scorerAdded && assistantAdded) {
+                            removeScorerStatsGoal(goal, new RemoveGoalStatsListener() {
+                                @Override
+                                public void removeCompleted() {
+                                    removeAssistantStatsGoal(goal, new RemoveGoalStatsListener() {
+                                        @Override
+                                        public void removeCompleted() {
+                                            handler.onGoalRemoved(fragmentData);
+                                        }
+                                    });
+                                }
+                            });
+                        } else if(scorerAdded) {
+                            removeScorerStatsGoal(goal, new RemoveGoalStatsListener() {
+                                @Override
+                                public void removeCompleted() {
+                                    handler.onGoalRemoved(fragmentData);
+                                }
+                            });
+                        } else if(assistantAdded) {
+                            removeAssistantStatsGoal(goal, new RemoveGoalStatsListener() {
+                                @Override
+                                public void removeCompleted() {
+                                    handler.onGoalRemoved(fragmentData);
+                                }
+                            });
+                        } else {
+                            handler.onGoalRemoved(fragmentData);
+                        }
                     }
                 });
             }

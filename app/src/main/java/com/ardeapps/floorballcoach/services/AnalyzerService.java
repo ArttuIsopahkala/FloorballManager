@@ -30,7 +30,7 @@ public class AnalyzerService {
         if(!isJsonDatabase) {
             goalsInGames = AppRes.getInstance().getGoalsByGame();
             linesInGames = AppRes.getInstance().getLinesByGame();
-            playersInTeam = new ArrayList<>(AppRes.getInstance().getPlayers().values());
+            playersInTeam = AppRes.getInstance().getActivePlayers();
         }
 
         return instance;

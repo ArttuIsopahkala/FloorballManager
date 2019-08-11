@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.dialogFragments.ConfirmDialogFragment;
+import com.ardeapps.floorballcoach.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballcoach.fragments.BluetoothFragment;
 import com.ardeapps.floorballcoach.fragments.EditPlayerFragment;
 import com.ardeapps.floorballcoach.fragments.EditTeamFragment;
@@ -33,7 +34,7 @@ import com.ardeapps.floorballcoach.fragments.TeamDashboardFragment;
 import com.ardeapps.floorballcoach.fragments.TeamSettingsFragment;
 import com.ardeapps.floorballcoach.fragments.TeamStatsFragment;
 import com.ardeapps.floorballcoach.handlers.GetAppDataHandler;
-import com.ardeapps.floorballcoach.handlers.GetGoalsHandler;
+import com.ardeapps.floorballcoach.handlers.GetGameGoalsHandler;
 import com.ardeapps.floorballcoach.handlers.GetLinesHandler;
 import com.ardeapps.floorballcoach.handlers.GetPlayersHandler;
 import com.ardeapps.floorballcoach.handlers.GetSeasonsHandler;
@@ -53,7 +54,7 @@ import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.objects.UserInvitation;
 import com.ardeapps.floorballcoach.resources.AppDataResource;
 import com.ardeapps.floorballcoach.resources.GoalsResource;
-import com.ardeapps.floorballcoach.resources.LinesInGameResource;
+import com.ardeapps.floorballcoach.resources.GameLinesResource;
 import com.ardeapps.floorballcoach.resources.LinesResource;
 import com.ardeapps.floorballcoach.resources.PlayersResource;
 import com.ardeapps.floorballcoach.resources.SeasonsResource;
@@ -258,27 +259,19 @@ public class MainActivity extends AppCompatActivity {
                                 connectionFound = true;
                                 UserConnection.Role role = UserConnection.Role.fromDatabaseName(userConnection.getRole());
                                 AppRes.getInstance().setSelectedRole(role);
+                                AppRes.getInstance().setSelectedPlayerId(userConnection.getPlayerId());
                                 break;
                             }
                         }
 
                         if(!connectionFound) {
-                            ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.main_selection_connection_not_found));
-                            dialogFragment.show(getSupportFragmentManager(), "Ei oikeutta joukkueeseen. Poistetaanko?");
-                            dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                                @Override
-                                public void onDialogYesButtonClick() {
-                                    user.getTeamIds().remove(team.getTeamId());
-                                    AppRes.getInstance().setUser(user);
-                                    UsersResource.getInstance().editUser(user, new FirebaseDatabaseService.EditDataSuccessListener() {
-                                        @Override
-                                        public void onEditDataSuccess() {
-                                            AppRes.getInstance().setTeam(team.getTeamId(), null);
-                                            mainSelectionFragment.update();
-                                        }
-                                    });
-                                }
-                            });
+                            InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.main_selection_connection_not_found));
+                            dialog.show(getSupportFragmentManager(), "Ei oikeuksia joukkueeseen.");
+
+                            user.getTeamIds().remove(team.getTeamId());
+                            AppRes.getInstance().setUser(user);
+                            AppRes.getInstance().setTeam(team.getTeamId(), null);
+                            mainSelectionFragment.update();
                             return;
                         }
 
@@ -350,12 +343,12 @@ public class MainActivity extends AppCompatActivity {
             public void goToGameFragment(final Game game) {
                 final GameFragmentData fragmentData = new GameFragmentData();
                 fragmentData.setGame(game);
-                LinesInGameResource.getInstance().getLines(game.getGameId(), new GetLinesHandler() {
+                GameLinesResource.getInstance().getLines(game.getGameId(), new GetLinesHandler() {
                     @Override
                     public void onLinesLoaded(Map<Integer, Line> lines) {
                         fragmentData.setLines(lines);
 
-                        GoalsResource.getInstance().getGoals(game.getGameId(), new GetGoalsHandler() {
+                        GoalsResource.getInstance().getGoals(game.getGameId(), new GetGameGoalsHandler() {
                             @Override
                             public void onGoalsLoaded(Map<String, Goal> goals) {
                                 fragmentData.setGoals(goals);
@@ -465,14 +458,23 @@ public class MainActivity extends AppCompatActivity {
                 // Back pressed to pop back stack
                 onBackPressed();
 
-                // Ask to send invitation message if user not found
-                if(userConnection.getUserId() == null) {
-                    ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_user_connection_player_not_exists));
-                    dialogFragment.show(getSupportFragmentManager(), "Lähetetäänkö kutsu joukkueeseen?");
-                    dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
+                UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnection.getStatus());
+                if(status != UserConnection.Status.CONNECTED) {
+                    // Ask to send invitation message if user not found
+                    UsersResource.getInstance().getUserByEmail(userConnection.getEmail(), new GetUserHandler() {
                         @Override
-                        public void onDialogYesButtonClick() {
-                            AppInviteService.openChooser();
+                        public void onUserLoaded(User user) {
+                            if(user == null) {
+                                // Ask to send invitation message if user not found
+                                ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_user_connection_player_not_exists));
+                                dialogFragment.show(getSupportFragmentManager(), "Lähetetäänkö kutsu joukkueeseen?");
+                                dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
+                                    @Override
+                                    public void onDialogYesButtonClick() {
+                                        AppInviteService.openChooser();
+                                    }
+                                });
+                            }
                         }
                     });
                 }

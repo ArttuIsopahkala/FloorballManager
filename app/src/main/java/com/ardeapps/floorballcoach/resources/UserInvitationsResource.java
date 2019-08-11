@@ -84,7 +84,7 @@ public class UserInvitationsResource extends FirebaseDatabaseService {
                 }
 
                 for(final UserInvitation userInvitation : foundUserInvitations) {
-                    TeamsResource.getInstance().getTeam(userInvitation.getTeamId(), false, new GetTeamHandler() {
+                    TeamsResource.getInstance().getTeam(userInvitation.getTeamId(), true, new GetTeamHandler() {
                         @Override
                         public void onTeamLoaded(Team team) {
                             userInvitation.setTeam(team);

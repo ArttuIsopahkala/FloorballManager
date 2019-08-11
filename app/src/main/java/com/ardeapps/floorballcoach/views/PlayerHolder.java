@@ -16,27 +16,19 @@ public class PlayerHolder {
     public ImageView pictureImage;
     public TextView nameNumberShootsText;
     public TextView positionText;
-    public IconView statisticsIcon;
     public IconView arrowIcon;
-
-    public enum ViewType {
-        @Deprecated
-        MANAGE,
-        SELECT,
-    }
 
     private boolean isSelected;
     private boolean isDisabled;
     private int selectColor;
     private int deselectColor;
 
-    public PlayerHolder(View v, ViewType type) {
+    public PlayerHolder(View v) {
         playerContainer = v.findViewById(R.id.playerContainer);
         disableOverlay = v.findViewById(R.id.disableOverlay);
         pictureImage = v.findViewById(R.id.pictureImage);
         nameNumberShootsText = v.findViewById(R.id.nameNumberShootsText);
         positionText = v.findViewById(R.id.positionText);
-        statisticsIcon = v.findViewById(R.id.statisticsIcon);
         arrowIcon = v.findViewById(R.id.arrowIcon);
 
         selectColor = ContextCompat.getColor(AppRes.getContext(), R.color.color_player_selected);
@@ -44,23 +36,10 @@ public class PlayerHolder {
         pictureImage.setBackgroundColor(deselectColor);
         arrowIcon.setTextColor(deselectColor);
         disableOverlay.setVisibility(View.GONE);
-
-        switch (type) {
-            case MANAGE:
-                pictureImage.setVisibility(View.VISIBLE);
-                nameNumberShootsText.setVisibility(View.VISIBLE);
-                positionText.setVisibility(View.VISIBLE);
-                statisticsIcon.setVisibility(View.VISIBLE);
-                arrowIcon.setVisibility(View.GONE);
-                break;
-            case SELECT:
-                pictureImage.setVisibility(View.VISIBLE);
-                nameNumberShootsText.setVisibility(View.VISIBLE);
-                positionText.setVisibility(View.VISIBLE);
-                statisticsIcon.setVisibility(View.GONE);
-                arrowIcon.setVisibility(View.VISIBLE);
-                break;
-        }
+        pictureImage.setVisibility(View.VISIBLE);
+        nameNumberShootsText.setVisibility(View.VISIBLE);
+        positionText.setVisibility(View.VISIBLE);
+        arrowIcon.setVisibility(View.VISIBLE);
     }
 
     public void setSelected(boolean selected) {

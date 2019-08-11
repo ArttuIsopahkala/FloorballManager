@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
+import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
@@ -20,6 +21,7 @@ import com.ardeapps.floorballcoach.utils.ImageUtil;
 
 public class TeamDashboardFragment extends Fragment {
 
+    Button ownStatsButton;
     Button linesButton;
     Button playersButton;
     Button gamesButton;
@@ -33,6 +35,7 @@ public class TeamDashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_team_dashboard, container, false);
 
+        ownStatsButton = v.findViewById(R.id.ownStatsButton);
         gamesButton = v.findViewById(R.id.gamesButton);
         linesButton = v.findViewById(R.id.linesButton);
         teamStatsButton = v.findViewById(R.id.teamStatsButton);
@@ -55,11 +58,23 @@ public class TeamDashboardFragment extends Fragment {
         if(role == UserConnection.Role.PLAYER) {
             linesButton.setVisibility(View.GONE);
             settingsButton.setVisibility(View.GONE);
+            ownStatsButton.setVisibility(View.VISIBLE);
         } else {
             linesButton.setVisibility(View.VISIBLE);
             settingsButton.setVisibility(View.VISIBLE);
+            ownStatsButton.setVisibility(View.GONE);
         }
 
+        ownStatsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedPlayerId = AppRes.getInstance().getSelectedPlayerId();
+                Player player = AppRes.getInstance().getPlayers().get(selectedPlayerId);
+                if(player != null) {
+                    FragmentListeners.getInstance().getFragmentChangeListener().goToPlayerStatsFragment(player);
+                }
+            }
+        });
         gamesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

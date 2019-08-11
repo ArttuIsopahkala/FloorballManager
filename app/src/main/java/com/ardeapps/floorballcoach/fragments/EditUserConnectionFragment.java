@@ -9,25 +9,28 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.handlers.GetUserHandler;
-import com.ardeapps.floorballcoach.objects.User;
+import com.ardeapps.floorballcoach.objects.Player;
 import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.objects.UserInvitation;
 import com.ardeapps.floorballcoach.resources.UserConnectionsResource;
 import com.ardeapps.floorballcoach.resources.UserInvitationsResource;
-import com.ardeapps.floorballcoach.resources.UsersResource;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.utils.Helper;
+import com.ardeapps.floorballcoach.utils.ImageUtil;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
+import com.ardeapps.floorballcoach.views.PlayerHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.ardeapps.floorballcoach.utils.Helper.isValidEmail;
 import static com.ardeapps.floorballcoach.utils.Helper.setEditTextValue;
@@ -40,9 +43,12 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
     Spinner roleSpinner;
     TextView roleInfoText;
     Button saveButton;
+    TextView noPlayersText;
+    LinearLayout playersList;
 
-    private UserConnection userConnection;
-
+    Map<String, PlayerHolder> holders = new HashMap<>();
+    String selectedPlayerId;
+    private UserConnection oldUserConnection;
     public Listener mListener = null;
 
     public void setListener(Listener l) {
@@ -55,12 +61,12 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
 
     @Override
     public void setData(Object viewData) {
-        userConnection = (UserConnection)viewData;
+        oldUserConnection = (UserConnection)viewData;
     }
 
     @Override
     public UserConnection getData() {
-        return userConnection;
+        return oldUserConnection;
     }
 
     @Override
@@ -71,30 +77,77 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
         roleSpinner = v.findViewById(R.id.roleSpinner);
         roleInfoText = v.findViewById(R.id.roleInfoText);
         saveButton = v.findViewById(R.id.saveButton);
+        noPlayersText = v.findViewById(R.id.noPlayersText);
+        playersList = v.findViewById(R.id.playersList);
 
         ArrayList<String> roleTitles = new ArrayList<>();
         roleTitles.add(getString(R.string.admin));
         roleTitles.add(getString(R.string.player));
         Helper.setSpinnerAdapter(roleSpinner, roleTitles);
 
+        // Set holder views
+        ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
+        playersList.removeAllViewsInLayout();
+        LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
+        holders = new HashMap<>();
+        for(final Player player : players) {
+            View view = inf.inflate(R.layout.list_item_player, playersList, false);
+            final PlayerHolder holder = new PlayerHolder(view);
+            holders.put(player.getPlayerId(), holder);
+            if (player.getPicture() != null) {
+                holder.pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
+            }
+
+            holder.nameNumberShootsText.setText(player.getNameWithNumber(false));
+            holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
+
+            holder.playerContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (holder.isSelected()) {
+                        holder.setSelected(false);
+                        selectedPlayerId = null;
+                    } else {
+                        for(Map.Entry<String, PlayerHolder> entry : holders.entrySet()) {
+                            PlayerHolder holder = entry.getValue();
+                            holder.setSelected(false);
+                        }
+                        holder.setSelected(true);
+                        selectedPlayerId = player.getPlayerId();
+                    }
+                }
+            });
+            playersList.addView(view);
+        }
+
         // Initialize
+        setPlayerListVisibility(false);
         setEditTextValue(emailText, "");
         setSpinnerSelection(roleSpinner, 0);
         roleInfoText.setText(getString(R.string.add_user_connection_info_admin));
         emailText.setEnabled(true);
         saveButton.setText(getString(R.string.save));
+        selectedPlayerId = null;
 
-        if(userConnection != null) {
-            setEditTextValue(emailText, userConnection.getEmail());
+        if(oldUserConnection != null) {
+            setEditTextValue(emailText, oldUserConnection.getEmail());
             emailText.setEnabled(false);
-            UserConnection.Role role = UserConnection.Role.fromDatabaseName(userConnection.getRole());
+            UserConnection.Role role = UserConnection.Role.fromDatabaseName(oldUserConnection.getRole());
             if(role == UserConnection.Role.PLAYER) {
                 setSpinnerSelection(roleSpinner, 1);
                 roleInfoText.setText(getString(R.string.add_user_connection_info_player));
             }
-            UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnection.getStatus());
+            UserConnection.Status status = UserConnection.Status.fromDatabaseName(oldUserConnection.getStatus());
             if(status == UserConnection.Status.DENY) {
                 saveButton.setText(getString(R.string.add_user_connection_invite_again));
+            }
+            String playerId = oldUserConnection.getPlayerId();
+            if(playerId != null) {
+                PlayerHolder holder = holders.get(playerId);
+                if(holder != null) {
+                    selectedPlayerId = playerId;
+                    holder.setSelected(true);
+                }
             }
         }
 
@@ -103,8 +156,10 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position == 0) {
                     roleInfoText.setText(getString(R.string.add_user_connection_info_admin));
+                    setPlayerListVisibility(false);
                 } else if(position == 1) {
                     roleInfoText.setText(getString(R.string.add_user_connection_info_player));
+                    setPlayerListVisibility(true);
                 }
             }
 
@@ -119,6 +174,22 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             }
         });
         return v;
+    }
+
+    public void setPlayerListVisibility(boolean visible) {
+        if(visible) {
+            ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
+            if(!players.isEmpty()) {
+                playersList.setVisibility(View.VISIBLE);
+                noPlayersText.setVisibility(View.GONE);
+            } else {
+                playersList.setVisibility(View.GONE);
+                noPlayersText.setVisibility(View.VISIBLE);
+            }
+        } else {
+            playersList.setVisibility(View.GONE);
+            noPlayersText.setVisibility(View.GONE);
+        }
     }
 
     private void saveUserConnection() {
@@ -136,85 +207,85 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             return;
         }
 
+        if((role == UserConnection.Role.PLAYER && selectedPlayerId == null)
+        || (role == UserConnection.Role.ADMIN && selectedPlayerId != null)) {
+            Logger.toast(getString(R.string.add_user_connection_player_not_selected));
+            return;
+        }
+
         if(AppRes.getInstance().getUser().getEmail().equalsIgnoreCase(email)) {
             Logger.toast(getString(R.string.add_user_connection_email_self));
             return;
         }
 
-        if(userConnection != null && !email.equalsIgnoreCase(userConnection.getEmail())) {
+        if(oldUserConnection != null && !email.equalsIgnoreCase(oldUserConnection.getEmail())) {
             Logger.toast(getString(R.string.add_user_connection_email_changed_error));
             return;
         }
 
-        for(UserConnection userConnection : AppRes.getInstance().getUserConnections().values()) {
-            if(userConnection.getEmail().equalsIgnoreCase(email)) {
-                Logger.toast(getString(R.string.add_user_connection_email_already_added));
-                return;
+        if(oldUserConnection == null) {
+            for(UserConnection userConnection : AppRes.getInstance().getUserConnections().values()) {
+                if(userConnection.getEmail().equalsIgnoreCase(email)) {
+                    Logger.toast(getString(R.string.add_user_connection_email_already_added));
+                    return;
+                }
             }
         }
 
-        if(userConnection != null) {
-            final UserConnection userConnectionToSave = userConnection.clone();
+        // Collect data from view
+        if(oldUserConnection != null) {
+            final UserConnection userConnectionToSave = oldUserConnection.clone();
+            userConnectionToSave.setEmail(email);
             userConnectionToSave.setRole(role.toDatabaseName());
-            final UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnectionToSave.getStatus());
-            // Set status back to pending
-            if(status != UserConnection.Status.CONNECTED) {
+            UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnectionToSave.getStatus());
+            // Set status back to pending from deny
+            if(status == UserConnection.Status.DENY) {
                 userConnectionToSave.setStatus(UserConnection.Status.PENDING.toDatabaseName());
             }
+            userConnectionToSave.setPlayerId(selectedPlayerId);
+
             UserConnectionsResource.getInstance().editUserConnection(userConnectionToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
                 @Override
                 public void onEditDataSuccess() {
                     AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
-                    // Send or update invitation
+                    UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnectionToSave.getStatus());
+                    // Send user invitation again
                     if(status != UserConnection.Status.CONNECTED) {
-                        final UserInvitation userInvitation = new UserInvitation();
-                        userInvitation.setUserConnectionId(userConnectionToSave.getUserConnectionId());
-                        userInvitation.setTeamId(AppRes.getInstance().getSelectedTeam().getTeamId());
-                        userInvitation.setEmail(userConnectionToSave.getEmail());
-                        userInvitation.setRole(userConnectionToSave.getRole());
-                        UserInvitationsResource.getInstance().sendUserInvitation(userInvitation, new FirebaseDatabaseService.EditDataSuccessListener() {
-                            @Override
-                            public void onEditDataSuccess() {
-                                mListener.onUserConnectionEdited(userConnectionToSave);
-                            }
-                        });
+                        sendUserInvitation(userConnectionToSave);
                     } else {
                         mListener.onUserConnectionEdited(userConnectionToSave);
                     }
                 }
             });
         } else {
-            // Check if user exists
-            UsersResource.getInstance().getUserByEmail(email, new GetUserHandler() {
+            final UserConnection userConnectionToSave = new UserConnection();
+            userConnectionToSave.setEmail(email);
+            userConnectionToSave.setRole(role.toDatabaseName());
+            userConnectionToSave.setStatus(UserConnection.Status.PENDING.toDatabaseName());
+            userConnectionToSave.setPlayerId(selectedPlayerId);
+
+            UserConnectionsResource.getInstance().addUserConnection(userConnectionToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
                 @Override
-                public void onUserLoaded(final User user) {
-                    final UserConnection userConnectionToSave = new UserConnection();
-                    userConnectionToSave.setEmail(email);
-                    userConnectionToSave.setUserId(user != null ? user.getUserId() : null);
-                    userConnectionToSave.setRole(role.toDatabaseName());
-                    userConnectionToSave.setStatus(UserConnection.Status.PENDING.toDatabaseName());
-
-                    UserConnectionsResource.getInstance().addUserConnection(userConnectionToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
-                        @Override
-                        public void onAddDataSuccess(String id) {
-                            userConnectionToSave.setUserConnectionId(id);
-                            AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
-
-                            final UserInvitation userInvitation = new UserInvitation();
-                            userInvitation.setUserConnectionId(userConnectionToSave.getUserConnectionId());
-                            userInvitation.setTeamId(AppRes.getInstance().getSelectedTeam().getTeamId());
-                            userInvitation.setEmail(userConnectionToSave.getEmail());
-                            userInvitation.setRole(userConnectionToSave.getRole());
-                            UserInvitationsResource.getInstance().sendUserInvitation(userInvitation, new FirebaseDatabaseService.EditDataSuccessListener() {
-                                @Override
-                                public void onEditDataSuccess() {
-                                    mListener.onUserConnectionEdited(userConnectionToSave);
-                                }
-                            });
-                        }
-                    });
+                public void onAddDataSuccess(String id) {
+                    userConnectionToSave.setUserConnectionId(id);
+                    AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
+                    sendUserInvitation(userConnectionToSave);
                 }
             });
         }
+    }
+
+    private void sendUserInvitation(final UserConnection userConnection) {
+        final UserInvitation userInvitation = new UserInvitation();
+        userInvitation.setUserConnectionId(userConnection.getUserConnectionId());
+        userInvitation.setTeamId(AppRes.getInstance().getSelectedTeam().getTeamId());
+        userInvitation.setEmail(userConnection.getEmail());
+        userInvitation.setRole(userConnection.getRole());
+        UserInvitationsResource.getInstance().sendUserInvitation(userInvitation, new FirebaseDatabaseService.EditDataSuccessListener() {
+            @Override
+            public void onEditDataSuccess() {
+                mListener.onUserConnectionEdited(userConnection);
+            }
+        });
     }
 }

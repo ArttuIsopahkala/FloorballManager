@@ -51,6 +51,27 @@ public class GamesResource extends FirebaseDatabaseService {
     }
 
     /**
+     * Get all games of all season indexed by gameId
+     */
+    public void getAllGames(final GetGamesHandler handler) {
+        getData(database, new GetDataSuccessListener() {
+            @Override
+            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                final Map<String, Game> games = new HashMap<>();
+                for(DataSnapshot season : dataSnapshot.getChildren()) {
+                    for(DataSnapshot snapshot : season.getChildren()) {
+                        final Game game = snapshot.getValue(Game.class);
+                        if(game != null) {
+                            games.put(game.getGameId(), game);
+                        }
+                    }
+                    handler.onGamesLoaded(games);
+                }
+            }
+        });
+    }
+
+    /**
      * Get games of season indexed by gameId
      */
     public void getGames(String seasonId, final GetGamesHandler handler) {

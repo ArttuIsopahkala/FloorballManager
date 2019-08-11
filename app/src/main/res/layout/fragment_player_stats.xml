@@ -171,7 +171,8 @@
                     android:text="@string/season"
                     android:layout_marginEnd="10dp"
                     android:textColor="@color/color_text_light"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/noSeasonsText"
                     android:layout_width="wrap_content"
@@ -204,7 +205,8 @@
                         android:layout_alignParentBottom="true"
                         android:text="@string/stats_games"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/gamesText"
                         android:layout_width="wrap_content"
@@ -240,7 +242,8 @@
                         android:layout_alignParentBottom="true"
                         android:text="@string/stats_points"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/pointsText"
                         android:layout_width="wrap_content"
@@ -365,7 +368,8 @@
                         android:layout_alignParentBottom="true"
                         android:text="@string/stats_goals"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/goalsText"
                         android:layout_width="wrap_content"
@@ -489,7 +493,8 @@
                         android:layout_alignParentBottom="true"
                         android:text="@string/stats_assists"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/assistsText"
                         android:layout_width="wrap_content"
@@ -699,6 +704,7 @@
                         android:id="@+id/bestScorerText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="Mikki Leppä, 5 maalia"
                         android:textColor="@color/color_text_light"
                         android:textSize="18sp"/>

@@ -1,10 +1,10 @@
-package com.ardeapps.floorballcoach.objects;
+package com.ardeapps.floorballcoach.viewObjects;
 
 import android.util.Pair;
 
 import java.util.ArrayList;
 
-public class PlayerStatsObject {
+public class PlayerStatsData {
 
     public int gamesCount;
     public int points;
@@ -28,7 +28,7 @@ public class PlayerStatsObject {
     public Pair<ArrayList<String>, Integer> bestScorers;
     public Pair<ArrayList<String>, Integer> bestLineMates;
 
-    public PlayerStatsObject() {
+    public PlayerStatsData() {
     }
 
 }

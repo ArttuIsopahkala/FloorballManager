@@ -1,9 +1,10 @@
 package com.ardeapps.floorballcoach.resources;
 
 import com.ardeapps.floorballcoach.AppRes;
+import com.ardeapps.floorballcoach.handlers.GetGameGoalsHandler;
 import com.ardeapps.floorballcoach.handlers.GetGoalsHandler;
-import com.ardeapps.floorballcoach.handlers.GetTeamGoalsHandler;
 import com.ardeapps.floorballcoach.objects.Goal;
+import com.ardeapps.floorballcoach.objects.Season;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +27,10 @@ public class GoalsResource extends FirebaseDatabaseService {
             instance = new GoalsResource();
         }
         String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
-        seasonId = AppRes.getInstance().getSelectedSeason().getSeasonId();
+        Season season = AppRes.getInstance().getSelectedSeason();
+        if(season != null) {
+            seasonId = season.getSeasonId();
+        }
         database = getDatabase().child(TEAMS_SEASONS_GAMES_GOALS).child(teamId);
         return instance;
     }
@@ -44,6 +48,10 @@ public class GoalsResource extends FirebaseDatabaseService {
         deleteData(database.child(seasonId).child(gameId).child(goalId), handler);
     }
 
+    public void removeGoals(String gameId, final DeleteDataSuccessListener handler) {
+        deleteData(database.child(seasonId).child(gameId), handler);
+    }
+
     public void removeAllGoals(final DeleteDataSuccessListener handler) {
         deleteData(database, handler);
     }
@@ -51,7 +59,7 @@ public class GoalsResource extends FirebaseDatabaseService {
     /**
      * Get goals of all seasons indexed by gameId
      */
-    public void getAllGoals(final GetTeamGoalsHandler handler) {
+    public void getAllGoals(final GetGoalsHandler handler) {
         getData(database, new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
@@ -71,7 +79,7 @@ public class GoalsResource extends FirebaseDatabaseService {
                         }
                     }
                 }
-                handler.onTeamGoalsLoaded(goalsMap);
+                handler.onGoalsLoaded(goalsMap);
             }
         });
     }
@@ -79,7 +87,7 @@ public class GoalsResource extends FirebaseDatabaseService {
     /**
      * Get goals of season indexed by gameId
      */
-    public void getGoals(String seasonId, final GetTeamGoalsHandler handler) {
+    public void getGoals(String seasonId, final GetGoalsHandler handler) {
         getData(database.child(seasonId), new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
@@ -97,7 +105,7 @@ public class GoalsResource extends FirebaseDatabaseService {
                         goalsMap.put(gameId, goals);
                     }
                 }
-                handler.onTeamGoalsLoaded(goalsMap);
+                handler.onGoalsLoaded(goalsMap);
             }
         });
     }
@@ -105,7 +113,7 @@ public class GoalsResource extends FirebaseDatabaseService {
     /**
      * Get goals of game indexed by goalId
      */
-    public void getGoals(String gameId, final GetGoalsHandler handler) {
+    public void getGoals(String gameId, final GetGameGoalsHandler handler) {
         getData(database.child(seasonId).child(gameId), new GetDataSuccessListener() {
             @Override
             public void onGetDataSuccess(DataSnapshot dataSnapshot) {
