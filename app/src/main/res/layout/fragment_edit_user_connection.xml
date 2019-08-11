@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="40dp"
             android:layout_gravity="center"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/save"
             android:textColor="@color/color_text_light" />
     </LinearLayout>

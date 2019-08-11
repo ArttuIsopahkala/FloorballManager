@@ -79,7 +79,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
                 android:text="@string/icon_key"
                 app:iconFont="@string/icon_solid"
                 app:iconSize="16sp" />
@@ -100,7 +99,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/login_login"
             android:textColor="@color/color_text_light" />
         <TextView

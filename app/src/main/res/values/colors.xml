@@ -6,6 +6,10 @@
     <item name="color_background_fourth" type="color">#333333</item>
     <item name="color_background_text" type="color">#9AC4C3B6</item>
 
+    <item name="color_button" type="color">#3E3E3E</item>
+    <item name="color_button_selected" type="color">#3E3E3E</item>
+    <item name="color_shadow" type="color">#242424</item>
+
     <item name="color_menu" type="color">#242425</item>
 
     <item name="color_text_light" type="color">#E4E3DD</item>
@@ -42,5 +46,4 @@
 
     <item name="color_player_selected" type="color">#70c225</item>
 
-    <item name="color_item_pressed" type="color">#242424</item>
 </resources>

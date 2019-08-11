@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:layout_centerHorizontal="true"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/save"
             android:textColor="@color/color_text_light" />
     </RelativeLayout>

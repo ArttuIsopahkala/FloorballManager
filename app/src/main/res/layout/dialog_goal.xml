@@ -45,7 +45,7 @@
             android:id="@+id/previousButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/previous"
             android:textColor="@color/color_text_light" />
         <Button
@@ -53,7 +53,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/next"
             android:textColor="@color/color_text_light" />
     </RelativeLayout>

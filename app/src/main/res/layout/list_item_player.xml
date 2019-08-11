@@ -50,6 +50,16 @@
             android:textColor="@color/color_text_light_secondary"
             android:textSize="18sp"/>
     </RelativeLayout>
+    <com.ardeapps.floorballcoach.views.IconView
+        android:id="@+id/selectIcon"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:text="@string/icon_arrow_right"
+        app:iconFont="@string/icon_solid"
+        app:iconSize="30sp" />
     <RelativeLayout
         android:id="@+id/disableOverlay"
         android:layout_width="match_parent"

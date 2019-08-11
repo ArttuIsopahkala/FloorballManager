@@ -17,20 +17,23 @@ public class PlayerHolder {
     public TextView nameNumberShootsText;
     public TextView positionText;
     public IconView arrowIcon;
+    public IconView selectIcon;
 
     private boolean isSelected;
     private boolean isDisabled;
     private int selectColor;
     private int deselectColor;
 
-    public PlayerHolder(View v) {
+    public PlayerHolder(View v, boolean showSelectIcon) {
         playerContainer = v.findViewById(R.id.playerContainer);
         disableOverlay = v.findViewById(R.id.disableOverlay);
         pictureImage = v.findViewById(R.id.pictureImage);
         nameNumberShootsText = v.findViewById(R.id.nameNumberShootsText);
         positionText = v.findViewById(R.id.positionText);
         arrowIcon = v.findViewById(R.id.arrowIcon);
+        selectIcon = v.findViewById(R.id.selectIcon);
 
+        selectIcon.setVisibility(showSelectIcon ? View.VISIBLE : View.GONE);
         selectColor = ContextCompat.getColor(AppRes.getContext(), R.color.color_player_selected);
         deselectColor = ContextCompat.getColor(AppRes.getContext(), R.color.color_background_fourth);
         pictureImage.setBackgroundColor(deselectColor);

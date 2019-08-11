@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:layout_margin="5dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/lineup_analyze"
             android:textColor="@color/color_text_light"/>
         <Button
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:layout_margin="5dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/lineup_best_lines"
             android:textColor="@color/color_text_light" />
     </LinearLayout>

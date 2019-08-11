@@ -52,7 +52,7 @@ public class PlayerListAdapter extends BaseAdapter {
         if (v == null) {
             v = inflater.inflate(R.layout.list_item_player, null);
         }
-        final PlayerHolder holder = new PlayerHolder(v);
+        final PlayerHolder holder = new PlayerHolder(v, true);
 
         final Player player = players.get(position);
 

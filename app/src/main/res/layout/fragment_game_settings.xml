@@ -59,10 +59,13 @@
                 android:textStyle="bold" />
             <com.ardeapps.floorballcoach.views.IconView
                 android:id="@+id/changeIcon"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:padding="10dp"
+                android:background="@drawable/button_background"
                 android:text="@string/icon_change"
                 app:iconFont="@string/icon_solid"
                 app:iconSize="20sp" />
@@ -167,7 +170,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="40dp"
-                android:background="@color/color_background_second"
+                android:background="@drawable/button_background"
                 android:text="@string/save"
                 android:textColor="@color/color_text_light" />
         </LinearLayout>

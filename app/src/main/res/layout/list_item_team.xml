@@ -32,7 +32,6 @@
         android:textSize="25sp"
         android:textStyle="bold"/>
     <com.ardeapps.floorballcoach.views.IconView
-        android:id="@+id/selectIcon"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"

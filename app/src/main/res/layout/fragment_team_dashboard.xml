@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/team_dashboard_games"
             android:textColor="@color/color_text_light" />
         <Button
@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/team_dashboard_own_stats"
             android:textColor="@color/color_text_light" />
         <Button
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/team_dashboard_lines"
             android:textColor="@color/color_text_light" />
         <Button
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/team_dashboard_players"
             android:textColor="@color/color_text_light" />
         <Button
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/team_dashboard_team_stats"
             android:textColor="@color/color_text_light" />
         <Button
@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/color_background_second"
+            android:background="@drawable/button_background"
             android:text="@string/team_dashboard_settings"
             android:textColor="@color/color_text_light" />
     </RelativeLayout>

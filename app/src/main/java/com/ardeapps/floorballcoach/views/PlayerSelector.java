@@ -132,7 +132,7 @@ public class PlayerSelector extends LinearLayout {
                 final Player player = AppRes.getInstance().getPlayers().get(playerId);
 
                 View v = inf.inflate(R.layout.list_item_player, playersList, false);
-                final PlayerHolder holder = new PlayerHolder(v);
+                final PlayerHolder holder = new PlayerHolder(v, false);
                 holders.put(playerId, holder);
 
                 if(player == null) {

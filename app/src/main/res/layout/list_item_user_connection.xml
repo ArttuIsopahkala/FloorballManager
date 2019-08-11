@@ -44,7 +44,7 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
-            android:background="@color/color_background"
+            android:background="@drawable/button_background"
             android:text="@string/icon_remove"
             app:iconFont="@string/icon_solid"
             app:iconSize="16sp" />
@@ -53,7 +53,7 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
-            android:background="@color/color_background"
+            android:background="@drawable/button_background"
             android:text="@string/icon_edit"
             app:iconFont="@string/icon_solid"
             app:iconSize="16sp" />
