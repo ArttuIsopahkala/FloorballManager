@@ -34,6 +34,8 @@ public class PlayerHolder {
         selectIcon = v.findViewById(R.id.selectIcon);
 
         selectIcon.setVisibility(showSelectIcon ? View.VISIBLE : View.GONE);
+        arrowIcon.setVisibility(showSelectIcon ? View.GONE : View.VISIBLE);
+
         selectColor = ContextCompat.getColor(AppRes.getContext(), R.color.color_player_selected);
         deselectColor = ContextCompat.getColor(AppRes.getContext(), R.color.color_background_fourth);
         pictureImage.setBackgroundColor(deselectColor);
@@ -42,7 +44,6 @@ public class PlayerHolder {
         pictureImage.setVisibility(View.VISIBLE);
         nameNumberShootsText.setVisibility(View.VISIBLE);
         positionText.setVisibility(View.VISIBLE);
-        arrowIcon.setVisibility(View.VISIBLE);
     }
 
     public void setSelected(boolean selected) {

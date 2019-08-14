@@ -60,13 +60,6 @@
     <string name="stats_av_abbr">AV</string>
     <string name="stats_rl_abbr">RL</string>
     <string name="stats_goals_abbr">M</string>
-    <string name="stats_team_wins">Voitot</string>
-    <string name="stats_team_loses">Tappiot</string>
-    <string name="stats_team_draws">Tasapelit</string>
-    <string name="stats_team_plus_goals">Tehdyt maalit</string>
-    <string name="stats_team_minus_goals">Päästetyt maalit</string>
-    <string name="stats_team_plus_goals_period">Tehtyjen maalien jakauma</string>
-    <string name="stats_team_minus_goals_period">Päästettyjen maalien jakauma</string>
 
     <string name="select_picture_load_url">Lataa</string>
     <string name="select_picture_from_gallery">Valitse galleriasta</string>
@@ -268,6 +261,20 @@
     <string name="player_stats_best_same_line">Paras ketjukaveri</string>
     <string name="player_stats_together_score">maali yhdessä</string>
     <string name="player_stats_together_scores">maalia yhdessä</string>
+
+    <string name="team_stats_wins">Voitot</string>
+    <string name="team_stats_loses">Tappiot</string>
+    <string name="team_stats_draws">Tasapelit</string>
+    <string name="team_stats_plus_goals">Tehdyt maalit</string>
+    <string name="team_stats_minus_goals">Päästetyt maalit</string>
+    <string name="team_stats_plus_goals_period">Tehtyjen maalien jakauma</string>
+    <string name="team_stats_minus_goals_period">Päästettyjen maalien jakauma</string>
+    <string name="team_stats_biggest_win">Suurin voitto</string>
+    <string name="team_stats_biggest_lose">Suurin tappio</string>
+    <string name="team_stats_longest_win">Pisin voittoputki</string>
+    <string name="team_stats_longest_not_lose">Pisin tappioton putki</string>
+    <string name="team_stats_trending">Tehokkaimmat pelaajat</string>
+    <string name="team_stats_trending_info">Kolme viimeisintä ottelua</string>
 
     <string name="error_invalid_value">Virheellinen arvo.</string>
     <string name="error_empty">Täytä kaikki kentät.</string>
