@@ -41,11 +41,8 @@ public class Loader {
         loaderContainer.setVisibility(View.VISIBLE);
         loader_spinner.setVisibility(View.VISIBLE);
         loader_spinner.startAnimation(rotation);
-        loaderContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Do nothing
-            }
+        loaderContainer.setOnClickListener(v -> {
+            // Do nothing
         });
     }
 

@@ -68,12 +68,7 @@ public class EditSeasonDialogFragment extends DialogFragment {
             Helper.setEditTextValue(seasonEditText, season.getName());
         }
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveSeason();
-            }
-        });
+        saveButton.setOnClickListener(v1 -> saveSeason());
 
         return v;
     }
@@ -100,21 +95,15 @@ public class EditSeasonDialogFragment extends DialogFragment {
         seasonToSave.setName(seasonName);
 
         if(season != null) {
-            SeasonsResource.getInstance().editSeason(seasonToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                @Override
-                public void onEditDataSuccess() {
-                    AppRes.getInstance().setSeason(seasonToSave.getSeasonId(), seasonToSave);
-                    mListener.onSeasonSaved(seasonToSave);
-                }
+            SeasonsResource.getInstance().editSeason(seasonToSave, () -> {
+                AppRes.getInstance().setSeason(seasonToSave.getSeasonId(), seasonToSave);
+                mListener.onSeasonSaved(seasonToSave);
             });
         } else {
-            SeasonsResource.getInstance().addSeason(seasonToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
-                @Override
-                public void onAddDataSuccess(String id) {
-                    seasonToSave.setSeasonId(id);
-                    AppRes.getInstance().setSeason(seasonToSave.getSeasonId(), seasonToSave);
-                    mListener.onSeasonSaved(seasonToSave);
-                }
+            SeasonsResource.getInstance().addSeason(seasonToSave, id -> {
+                seasonToSave.setSeasonId(id);
+                AppRes.getInstance().setSeason(seasonToSave.getSeasonId(), seasonToSave);
+                mListener.onSeasonSaved(seasonToSave);
             });
         }
     }

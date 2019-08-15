@@ -17,14 +17,12 @@ import android.widget.TextView;
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.PrefRes;
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.handlers.SaveLinesHandler;
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Line;
 import com.ardeapps.floorballcoach.objects.Season;
-import com.ardeapps.floorballcoach.resources.GamesResource;
 import com.ardeapps.floorballcoach.resources.GameLinesResource;
+import com.ardeapps.floorballcoach.resources.GamesResource;
 import com.ardeapps.floorballcoach.resources.PlayerGamesResource;
-import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
@@ -155,20 +153,12 @@ public class GameSettingsFragment extends Fragment implements DataView {
 
         update();
 
-        changeIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isHomeGame = !isHomeGame;
-                setTeamSides(isHomeGame);
-            }
+        changeIcon.setOnClickListener(v12 -> {
+            isHomeGame = !isHomeGame;
+            setTeamSides(isHomeGame);
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveGame();
-            }
-        });
+        saveButton.setOnClickListener(v1 -> saveGame());
         return v;
     }
 
@@ -221,60 +211,45 @@ public class GameSettingsFragment extends Fragment implements DataView {
         gameToSave.setPeriodInMinutes(periodDuration);
 
         if(data.getGame() != null) {
-            GamesResource.getInstance().editGame(gameToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                @Override
-                public void onEditDataSuccess() {
-                    AppRes.getInstance().setGame(gameToSave.getGameId(), gameToSave);
-                    saveLinesAndPlayerGames(false, gameToSave, linesToSave);
-                }
+            GamesResource.getInstance().editGame(gameToSave, () -> {
+                AppRes.getInstance().setGame(gameToSave.getGameId(), gameToSave);
+                saveLinesAndPlayerGames(false, gameToSave, linesToSave);
             });
         } else {
-            GamesResource.getInstance().addGame(gameToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
-                @Override
-                public void onAddDataSuccess(String id) {
-                    gameToSave.setGameId(id);
-                    AppRes.getInstance().setGame(gameToSave.getGameId(), gameToSave);
-                    saveLinesAndPlayerGames(true, gameToSave, linesToSave);
-                }
+            GamesResource.getInstance().addGame(gameToSave, id -> {
+                gameToSave.setGameId(id);
+                AppRes.getInstance().setGame(gameToSave.getGameId(), gameToSave);
+                saveLinesAndPlayerGames(true, gameToSave, linesToSave);
             });
         }
     }
 
     private void saveLinesAndPlayerGames(final boolean gameCreated, final Game gameToSave, final Map<Integer, Line> linesToSave) {
-        GameLinesResource.getInstance().saveLines(gameToSave.getGameId(), linesToSave, new SaveLinesHandler() {
-            @Override
-            public void onLinesSaved(final Map<Integer, Line> lines) {
-                final Set<String> playerIdsInLines = new HashSet<>();
-                for(Line line : lines.values()) {
-                    playerIdsInLines.addAll(line.getPlayerIdMap().values());
+        GameLinesResource.getInstance().saveLines(gameToSave.getGameId(), linesToSave, lines -> {
+            final Set<String> playerIdsInLines = new HashSet<>();
+            for(Line line : lines.values()) {
+                playerIdsInLines.addAll(line.getPlayerIdMap().values());
+            }
+
+            Set<String> playerIdsInRemove = new HashSet<>();
+            for(String playerId : AppRes.getInstance().getPlayers().keySet()) {
+                if(!playerIdsInLines.contains(playerId)) {
+                    playerIdsInRemove.add(playerId);
                 }
+            }
 
-                Set<String> playerIdsInRemove = new HashSet<>();
-                for(String playerId : AppRes.getInstance().getPlayers().keySet()) {
-                    if(!playerIdsInLines.contains(playerId)) {
-                        playerIdsInRemove.add(playerId);
-                    }
-                }
+            // First remove existing games
+            PlayerGamesResource.getInstance().removeGame(playerIdsInRemove, gameToSave.getGameId(), () -> {
 
-                // First remove existing games
-                PlayerGamesResource.getInstance().removeGame(playerIdsInRemove, gameToSave.getGameId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                    @Override
-                    public void onDeleteDataSuccess() {
-
-                        // Add new games
-                        PlayerGamesResource.getInstance().editGame(playerIdsInLines, gameToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                            @Override
-                            public void onEditDataSuccess() {
-                                if(gameCreated) {
-                                    mListener.onGameCreated(gameToSave, lines);
-                                } else {
-                                    mListener.onGameEdited(gameToSave, lines);
-                                }
-                            }
-                        });
+                // Add new games
+                PlayerGamesResource.getInstance().editGame(playerIdsInLines, gameToSave, () -> {
+                    if (gameCreated) {
+                        mListener.onGameCreated(gameToSave, lines);
+                    } else {
+                        mListener.onGameEdited(gameToSave, lines);
                     }
                 });
-            }
+            });
         });
     }
 }

@@ -15,7 +15,6 @@ import com.ardeapps.floorballcoach.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class GameListAdapter extends BaseAdapter {
 
@@ -33,12 +32,7 @@ public class GameListAdapter extends BaseAdapter {
 
     public void setGames(ArrayList<Game> games) {
         this.games = games;
-        Collections.sort(games, new Comparator<Game>() {
-            @Override
-            public int compare(Game o1, Game o2) {
-                return Long.valueOf(o2.getDate()).compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(games, (o1, o2) -> Long.valueOf(o2.getDate()).compareTo(o1.getDate()));
     }
 
     @Override
@@ -93,12 +87,7 @@ public class GameListAdapter extends BaseAdapter {
         }
         holder.resultText.setText(result);
 
-        holder.gameContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onGameSelected(game);
-            }
-        });
+        holder.gameContainer.setOnClickListener(v1 -> mListener.onGameSelected(game));
 
         return v;
     }

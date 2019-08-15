@@ -69,12 +69,9 @@ public class InactivePlayersFragment extends Fragment implements PlayerListAdapt
                 dialog.dismiss();
                 // Palauta pelaajalistalle
                 player.setActive(true);
-                PlayersResource.getInstance().editPlayer(player, new FirebaseDatabaseService.EditDataSuccessListener() {
-                    @Override
-                    public void onEditDataSuccess() {
-                        AppRes.getInstance().setPlayer(player.getPlayerId(), player);
-                        update();
-                    }
+                PlayersResource.getInstance().editPlayer(player, () -> {
+                    AppRes.getInstance().setPlayer(player.getPlayerId(), player);
+                    update();
                 });
             }
 
@@ -83,28 +80,10 @@ public class InactivePlayersFragment extends Fragment implements PlayerListAdapt
                 dialog.dismiss();
                 ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.inactive_players_remove_player_confirmation));
                 dialogFragment.show(getChildFragmentManager(), "Poistetaanko pelaaja ja tilastot?");
-                dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                    @Override
-                    public void onDialogYesButtonClick() {
-                        PlayerStatsResource.getInstance().removeAllStats(player.getPlayerId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                            @Override
-                            public void onDeleteDataSuccess() {
-                                PlayerGamesResource.getInstance().removeAllGames(player.getPlayerId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                    @Override
-                                    public void onDeleteDataSuccess() {
-                                        PlayersResource.getInstance().removePlayer(player, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                            @Override
-                                            public void onDeleteDataSuccess() {
-                                                AppRes.getInstance().setPlayer(player.getPlayerId(), null);
-                                                update();
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                dialogFragment.setListener(() -> PlayerStatsResource.getInstance().removeAllStats(player.getPlayerId(), () -> PlayerGamesResource.getInstance().removeAllGames(player.getPlayerId(), () -> PlayersResource.getInstance().removePlayer(player, () -> {
+                    AppRes.getInstance().setPlayer(player.getPlayerId(), null);
+                    update();
+                }))));
             }
 
             @Override

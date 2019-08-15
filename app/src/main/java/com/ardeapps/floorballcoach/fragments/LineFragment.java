@@ -92,28 +92,25 @@ public class LineFragment extends Fragment implements DataView {
             setChemistryText(rd_rw_text, chemistryConnections.get(ChemistryConnection.RD_RW));
 
             // Set chemistry lines
-            chemistryLinesImageView.post(new Runnable() {
-                @Override
-                public void run() {
-                    int[] location = new int[2];
-                    chemistryLinesImageView.getLocationOnScreen(location);
-                    canvasTop = location[1] / 2 + 20;
+            chemistryLinesImageView.post(() -> {
+                int[] location = new int[2];
+                chemistryLinesImageView.getLocationOnScreen(location);
+                canvasTop = location[1] / 2 + 20;
 
-                    int width = chemistryLinesImageView.getWidth();
-                    int height = chemistryLinesImageView.getHeight();
-                    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(bitmap);
+                int width = chemistryLinesImageView.getWidth();
+                int height = chemistryLinesImageView.getHeight();
+                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
 
-                    drawChemistryLine(canvas, card_c, card_lw, ChemistryConnection.C_LW);
-                    drawChemistryLine(canvas, card_c, card_rw, ChemistryConnection.C_RW);
-                    drawChemistryLine(canvas, card_c, card_ld, ChemistryConnection.C_LD);
-                    drawChemistryLine(canvas, card_c, card_rd, ChemistryConnection.C_RD);
-                    drawChemistryLine(canvas, card_ld, card_rd, ChemistryConnection.LD_RD);
-                    drawChemistryLine(canvas, card_ld, card_lw, ChemistryConnection.LD_LW);
-                    drawChemistryLine(canvas, card_rd, card_rw, ChemistryConnection.RD_RW);
+                drawChemistryLine(canvas, card_c, card_lw, ChemistryConnection.C_LW);
+                drawChemistryLine(canvas, card_c, card_rw, ChemistryConnection.C_RW);
+                drawChemistryLine(canvas, card_c, card_ld, ChemistryConnection.C_LD);
+                drawChemistryLine(canvas, card_c, card_rd, ChemistryConnection.C_RD);
+                drawChemistryLine(canvas, card_ld, card_rd, ChemistryConnection.LD_RD);
+                drawChemistryLine(canvas, card_ld, card_lw, ChemistryConnection.LD_LW);
+                drawChemistryLine(canvas, card_rd, card_rw, ChemistryConnection.RD_RW);
 
-                    chemistryLinesImageView.setImageBitmap(bitmap);
-                }
+                chemistryLinesImageView.setImageBitmap(bitmap);
             });
         }
 
@@ -146,13 +143,15 @@ public class LineFragment extends Fragment implements DataView {
         card_rd = v.findViewById(R.id.card_rd);
 
         chemistryLinesImageView.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
-        c_lw_text.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
-        c_rw_text.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
-        c_ld_text.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
-        c_rd_text.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
-        ld_rd_text.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
-        ld_lw_text.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
-        rd_rw_text.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
+        // Show numbers only to admin for debug purposes
+        boolean isAdmin = AppRes.getInstance().getUser().isAdmin();
+        c_lw_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
+        c_rw_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
+        c_ld_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
+        c_rd_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
+        ld_rd_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
+        ld_lw_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
+        rd_rw_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
 
         update();
 
@@ -201,65 +200,62 @@ public class LineFragment extends Fragment implements DataView {
             }
         }
 
-        card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(AppRes.getInstance().getPlayers().isEmpty()) {
-                    Logger.toast(R.string.lineup_no_players);
-                    return;
+        card.setOnClickListener(v -> {
+            if(AppRes.getInstance().getPlayers().isEmpty()) {
+                Logger.toast(R.string.lineup_no_players);
+                return;
+            }
+
+            final SelectPlayerDialogFragment dialog = new SelectPlayerDialogFragment();
+            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Valitse pelaaja");
+            dialog.setListener(new SelectPlayerDialogFragment.SelectPlayerDialogListener() {
+                @Override
+                public void onPlayerSelected(Player player) {
+                    Line line1 = data.getLine();
+                    if(line1 == null) {
+                        line1 = new Line();
+                        line1.setLineNumber(data.getLineNumber());
+                    }
+
+                    String playerId = player.getPlayerId();
+                    // Remove existing player if he is in same line in different position
+                    Iterator<Map.Entry<String, String>> it = line1.getPlayerIdMap().entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry<String, String> entry = it.next();
+                        String position1 = entry.getKey();
+                        String id = entry.getValue();
+                        if(id.equals(playerId) && !pos.equals(position1)) {
+                            it.remove();
+                        }
+                    }
+
+                    line1.getPlayerIdMap().put(pos, playerId);
+                    data.setLine(line1);
+
+                    mListener.onLineChanged(line1, playerId);
                 }
 
-                final SelectPlayerDialogFragment dialog = new SelectPlayerDialogFragment();
-                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Valitse pelaaja");
-                dialog.setListener(new SelectPlayerDialogFragment.SelectPlayerDialogListener() {
-                    @Override
-                    public void onPlayerSelected(Player player) {
-                        Line line = data.getLine();
-                        if(line == null) {
-                            line = new Line();
-                            line.setLineNumber(data.getLineNumber());
-                        }
-
-                        String playerId = player.getPlayerId();
-                        // Remove existing player if he is in same line in different position
-                        Iterator<Map.Entry<String, String>> it = line.getPlayerIdMap().entrySet().iterator();
-                        while (it.hasNext()) {
-                            Map.Entry<String, String> entry = it.next();
-                            String position = entry.getKey();
-                            String id = entry.getValue();
-                            if(id.equals(playerId) && !pos.equals(position)) {
-                                it.remove();
-                            }
-                        }
-
-                        line.getPlayerIdMap().put(pos, playerId);
-                        data.setLine(line);
-
-                        mListener.onLineChanged(line, playerId);
+                @Override
+                public void onPlayerRemoved() {
+                    // No line created or player not selected and empty clicked
+                    Line line1 = data.getLine();
+                    if(line1 == null) {
+                        dialog.dismiss();
+                        return;
                     }
 
-                    @Override
-                    public void onPlayerRemoved() {
-                        // No line created or player not selected and empty clicked
-                        Line line = data.getLine();
-                        if(line == null) {
-                            dialog.dismiss();
-                            return;
-                        }
-
-                        String playerId = line.getPlayerIdMap().get(pos);
-                        if(playerId == null) {
-                            dialog.dismiss();
-                            return;
-                        }
-
-                        line.getPlayerIdMap().remove(pos);
-                        data.setLine(line);
-
-                        mListener.onLineChanged(line, null);
+                    String playerId = line1.getPlayerIdMap().get(pos);
+                    if(playerId == null) {
+                        dialog.dismiss();
+                        return;
                     }
-                });
-            }
+
+                    line1.getPlayerIdMap().remove(pos);
+                    data.setLine(line1);
+
+                    mListener.onLineChanged(line1, null);
+                }
+            });
         });
     }
 
@@ -299,6 +295,8 @@ public class LineFragment extends Fragment implements DataView {
 
         view.setColorFilter(color);
         avgPercentText.setText(percentText);
+        // Show numbers only to admin for debug purposes
+        avgPercentText.setVisibility(AppRes.getInstance().getUser().isAdmin() ? View.VISIBLE : View.GONE);
     }
 
     private Point getPosition(final RelativeLayout card) {

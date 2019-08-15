@@ -47,18 +47,15 @@ public class SeasonsResource extends FirebaseDatabaseService {
      * Get seasons indexed by seasonId
      */
     public void getSeasons(final GetSeasonsHandler handler) {
-        getData(database, new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, Season> seasons = new HashMap<>();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    final Season season = snapshot.getValue(Season.class);
-                    if(season != null) {
-                        seasons.put(season.getSeasonId(), season);
-                    }
+        getData(database, dataSnapshot -> {
+            final Map<String, Season> seasons = new HashMap<>();
+            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                final Season season = snapshot.getValue(Season.class);
+                if(season != null) {
+                    seasons.put(season.getSeasonId(), season);
                 }
-                handler.onSeasonsLoaded(seasons);
             }
+            handler.onSeasonsLoaded(seasons);
         });
     }
 }

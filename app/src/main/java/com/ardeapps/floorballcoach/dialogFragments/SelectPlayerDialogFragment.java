@@ -46,12 +46,9 @@ public class SelectPlayerDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new PlayerListAdapter(AppRes.getActivity());
-        adapter.setSelectListener(new PlayerListAdapter.PlayerListSelectListener() {
-            @Override
-            public void onPlayerSelected(Player player) {
-                dismiss();
-                mListener.onPlayerSelected(player);
-            }
+        adapter.setSelectListener(player -> {
+            dismiss();
+            mListener.onPlayerSelected(player);
         });
     }
 
@@ -72,20 +69,12 @@ public class SelectPlayerDialogFragment extends DialogFragment {
         adapter.setPlayers(players);
         adapter.notifyDataSetChanged();
 
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                mListener.onPlayerRemoved();
-            }
+        clearButton.setOnClickListener(v12 -> {
+            dismiss();
+            mListener.onPlayerRemoved();
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(v1 -> dismiss());
         return v;
     }
 }

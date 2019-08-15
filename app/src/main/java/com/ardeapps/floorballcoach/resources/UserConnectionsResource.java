@@ -45,18 +45,15 @@ public class UserConnectionsResource extends FirebaseDatabaseService {
     }
 
     public void getUserConnections(String teamId, final GetUserConnectionsHandler handler) {
-        getData(database.child(teamId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                Map<String, UserConnection> userConnections = new HashMap<>();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    UserConnection userConnection = snapshot.getValue(UserConnection.class);
-                    if(userConnection != null) {
-                        userConnections.put(userConnection.getUserConnectionId(), userConnection);
-                    }
+        getData(database.child(teamId), dataSnapshot -> {
+            Map<String, UserConnection> userConnections = new HashMap<>();
+            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                UserConnection userConnection = snapshot.getValue(UserConnection.class);
+                if(userConnection != null) {
+                    userConnections.put(userConnection.getUserConnectionId(), userConnection);
                 }
-                handler.onUserConnectionsLoaded(userConnections);
             }
+            handler.onUserConnectionsLoaded(userConnections);
         });
     }
 
@@ -64,15 +61,12 @@ public class UserConnectionsResource extends FirebaseDatabaseService {
     public void editUserConnectionAsInvited(UserInvitation userInvitation, final UserConnection.Status status, final String userId, final EditDataSuccessListener handler) {
         final String teamId = userInvitation.getTeamId();
         final String userConnectionId = userInvitation.getUserConnectionId();
-        getData(database.child(teamId).child(userConnectionId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                UserConnection userConnection = dataSnapshot.getValue(UserConnection.class);
-                if(userConnection != null) {
-                    userConnection.setStatus(status.toDatabaseName());
-                    userConnection.setUserId(userId);
-                    editData(database.child(teamId).child(userConnectionId), userConnection, handler);
-                }
+        getData(database.child(teamId).child(userConnectionId), dataSnapshot -> {
+            UserConnection userConnection = dataSnapshot.getValue(UserConnection.class);
+            if(userConnection != null) {
+                userConnection.setStatus(status.toDatabaseName());
+                userConnection.setUserId(userId);
+                editData(database.child(teamId).child(userConnectionId), userConnection, handler);
             }
         });
     }

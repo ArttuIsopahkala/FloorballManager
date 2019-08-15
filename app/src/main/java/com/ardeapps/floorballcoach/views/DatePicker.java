@@ -6,10 +6,8 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.utils.Helper;
@@ -48,28 +46,19 @@ public class DatePicker extends LinearLayout {
 
     private void setTextListeners() {
         // ON FOCUS CHANGE
-        dayText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    formatDayText();
-                }
+        dayText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                formatDayText();
             }
         });
-        monthText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    formatMonthText();
-                }
+        monthText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                formatMonthText();
             }
         });
-        yearText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    formatYearText();
-                }
+        yearText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                formatYearText();
             }
         });
         // ON TEXT CHANGE
@@ -116,65 +105,47 @@ public class DatePicker extends LinearLayout {
             }
         });
         // IME
-        dayText.setKeyImeChangeListener(new DateEditText.KeyImeChange() {
-            @Override
-            public void onKeyIme(int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    formatDayText();
-                    dayText.clearFocus();
-                    Helper.hideKeyBoard(dayText);
-                }
+        dayText.setKeyImeChangeListener((keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                formatDayText();
+                dayText.clearFocus();
+                Helper.hideKeyBoard(dayText);
             }
         });
-        monthText.setKeyImeChangeListener(new DateEditText.KeyImeChange() {
-            @Override
-            public void onKeyIme(int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    formatMonthText();
-                    monthText.clearFocus();
-                    Helper.hideKeyBoard(monthText);
-                }
+        monthText.setKeyImeChangeListener((keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                formatMonthText();
+                monthText.clearFocus();
+                Helper.hideKeyBoard(monthText);
             }
         });
-        yearText.setKeyImeChangeListener(new DateEditText.KeyImeChange() {
-            @Override
-            public void onKeyIme(int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    formatYearText();
-                    yearText.clearFocus();
-                    Helper.hideKeyBoard(yearText);
-                }
+        yearText.setKeyImeChangeListener((keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                formatYearText();
+                yearText.clearFocus();
+                Helper.hideKeyBoard(yearText);
             }
         });
         // EDITOR
-        dayText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    formatDayText();
-                }
-                return false;
+        dayText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                formatDayText();
             }
+            return false;
         });
-        monthText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    formatMonthText();
-                }
-                return false;
+        monthText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                formatMonthText();
             }
+            return false;
         });
-        yearText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    formatYearText();
-                    yearText.clearFocus();
-                    Helper.hideKeyBoard(yearText);
-                }
-                return false;
+        yearText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                formatYearText();
+                yearText.clearFocus();
+                Helper.hideKeyBoard(yearText);
             }
+            return false;
         });
 
     }

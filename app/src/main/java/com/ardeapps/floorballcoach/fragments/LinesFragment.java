@@ -50,48 +50,25 @@ public class LinesFragment extends Fragment {
         lineUpSelector.createView(this, true);
         final Map<Integer, Line> lines = AppRes.getInstance().getLines();
         lineUpSelector.setLines(lines);
-        lineUpSelector.setListener(new LineUpSelector.Listener() {
-
-            @Override
-            public void onLinesChanged() {
-                Map<Integer, Line> linesToSave = lineUpSelector.getLines();
-                LinesResource.getInstance().saveLines(linesToSave, new SaveLinesHandler() {
-                    @Override
-                    public void onLinesSaved(Map<Integer, Line> lines) {
-                        AppRes.getInstance().setLines(lines);
-                        lineUpSelector.setLines(lines);
-                        refreshTeamChemistry();
-                    }
-                });
-            }
+        lineUpSelector.setListener(() -> {
+            Map<Integer, Line> linesToSave = lineUpSelector.getLines();
+            LinesResource.getInstance().saveLines(linesToSave, lines12 -> {
+                AppRes.getInstance().setLines(lines12);
+                lineUpSelector.setLines(lines12);
+                refreshTeamChemistry();
+            });
         });
 
-        analyzeChemistryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoalsResource.getInstance().getAllGoals(new GetGoalsHandler() {
-                    @Override
-                    public void onGoalsLoaded(Map<String, ArrayList<Goal>> goals) {
-                        AppRes.getInstance().setGoalsByGame(goals);
-                        GameLinesResource.getInstance().getLines(new GetTeamLinesHandler() {
-                            @Override
-                            public void onTeamLinesLoaded(Map<String, ArrayList<Line>> lines) {
-                                AppRes.getInstance().setLinesByGame(lines);
-                                lineUpSelector.updateLineFragments();
-                                refreshTeamChemistry();
-                            }
-                        });
-                    }
-                });
-            }
-        });
+        analyzeChemistryButton.setOnClickListener(v12 -> GoalsResource.getInstance().getAllGoals(goals -> {
+            AppRes.getInstance().setGoalsByGame(goals);
+            GameLinesResource.getInstance().getLines(lines1 -> {
+                AppRes.getInstance().setLinesByGame(lines1);
+                lineUpSelector.updateLineFragments();
+                refreshTeamChemistry();
+            });
+        }));
 
-        getBestLinesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Logger.toast("Hae parhaat kentät");
-            }
-        });
+        getBestLinesButton.setOnClickListener(v1 -> Logger.toast("Hae parhaat kentät"));
 
         return v;
     }

@@ -105,43 +105,20 @@ public class SelectPictureDialogFragment extends DialogFragment {
         cancelButton = v.findViewById(R.id.cancelButton);
         uploadButton = v.findViewById(R.id.uploadButton);
 
-        galleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGalleryWithPermissionChecks();
+        galleryButton.setOnClickListener(v15 -> openGalleryWithPermissionChecks());
+
+        defaultButton.setOnClickListener(v14 -> mListener.onDefaultSelected());
+
+        cameraButton.setOnClickListener(v13 -> startCameraWithPermissionChecks());
+
+        uploadButton.setOnClickListener(v12 -> {
+            String url = urlText.getText().toString();
+            if(!StringUtils.isEmptyString(url)) {
+                new DownloadImageTask().execute(url);
             }
         });
 
-        defaultButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               mListener.onDefaultSelected();
-            }
-        });
-
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startCameraWithPermissionChecks();
-            }
-        });
-
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = urlText.getText().toString();
-                if(!StringUtils.isEmptyString(url)) {
-                    new DownloadImageTask().execute(url);
-                }
-            }
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onCancelClick();
-            }
-        });
+        cancelButton.setOnClickListener(v1 -> mListener.onCancelClick());
 
         return v;
     }

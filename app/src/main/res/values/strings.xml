@@ -208,7 +208,7 @@
     <string name="add_user_connection_invite_again">Tallenna ja lähetä kutsu uudelleen</string>
 
     <string name="lineup_no_players">Joukkueessa ei ole pelaajia.</string>
-    <string name="lineup_title">Oletuskentällisiä ehdotetaan uuden pelin luonnissa.</string>
+    <string name="lineup_title">Oletuskentällisiä ehdotetaan uuden ottelun luonnissa.</string>
     <string name="lineup_analyze">Analysoi pelaajakemiat</string>
     <string name="lineup_best_lines">Hae parhaat kentälliset</string>
     <string name="lineup_lines_saved">Kentälliset tallennettu</string>

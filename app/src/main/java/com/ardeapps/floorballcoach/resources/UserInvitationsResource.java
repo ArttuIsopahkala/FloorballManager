@@ -42,13 +42,10 @@ public class UserInvitationsResource extends FirebaseDatabaseService {
         if(!userConnectionIds.isEmpty()) {
             final ArrayList<String> removedUserConnections = new ArrayList<>();
             for(final String userConnectionId : userConnectionIds)  {
-                deleteData(database.child(userConnectionId), new DeleteDataSuccessListener() {
-                    @Override
-                    public void onDeleteDataSuccess() {
-                        removedUserConnections.add(userConnectionId);
-                        if(removedUserConnections.size() == userConnectionIds.size()) {
-                            handler.onDeleteDataSuccess();
-                        }
+                deleteData(database.child(userConnectionId), () -> {
+                    removedUserConnections.add(userConnectionId);
+                    if(removedUserConnections.size() == userConnectionIds.size()) {
+                        handler.onDeleteDataSuccess();
                     }
                 });
             }
@@ -61,41 +58,35 @@ public class UserInvitationsResource extends FirebaseDatabaseService {
      * Get user invitations which has same email than caller user, indexed by userConnectionId.
      */
     public void getUserInvitations(final GetUserInvitationsHandler handler) {
-        getData(database, new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, UserInvitation> userInvitations = new HashMap<>();
-                final ArrayList<UserInvitation> foundUserInvitations = new ArrayList<>();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    final UserInvitation userInvitation = snapshot.getValue(UserInvitation.class);
-                    if(userInvitation != null) {
-                        // If emails matches
-                        String email = AppRes.getInstance().getUser().getEmail();
-                        String invitationEmail = userInvitation.getEmail();
-                        if(email.equalsIgnoreCase(invitationEmail)) {
-                            foundUserInvitations.add(userInvitation);
-                        }
+        getData(database, dataSnapshot -> {
+            final Map<String, UserInvitation> userInvitations = new HashMap<>();
+            final ArrayList<UserInvitation> foundUserInvitations = new ArrayList<>();
+            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                final UserInvitation userInvitation = snapshot.getValue(UserInvitation.class);
+                if(userInvitation != null) {
+                    // If emails matches
+                    String email = AppRes.getInstance().getUser().getEmail();
+                    String invitationEmail = userInvitation.getEmail();
+                    if(email.equalsIgnoreCase(invitationEmail)) {
+                        foundUserInvitations.add(userInvitation);
                     }
                 }
+            }
 
-                if(foundUserInvitations.isEmpty()) {
-                    handler.onUserInvitationsLoaded(userInvitations);
-                    return;
-                }
+            if(foundUserInvitations.isEmpty()) {
+                handler.onUserInvitationsLoaded(userInvitations);
+                return;
+            }
 
-                for(final UserInvitation userInvitation : foundUserInvitations) {
-                    TeamsResource.getInstance().getTeam(userInvitation.getTeamId(), true, new GetTeamHandler() {
-                        @Override
-                        public void onTeamLoaded(Team team) {
-                            userInvitation.setTeam(team);
-                            userInvitations.put(userInvitation.getUserConnectionId(), userInvitation);
+            for(final UserInvitation userInvitation : foundUserInvitations) {
+                TeamsResource.getInstance().getTeam(userInvitation.getTeamId(), true, team -> {
+                    userInvitation.setTeam(team);
+                    userInvitations.put(userInvitation.getUserConnectionId(), userInvitation);
 
-                            if(userInvitations.size() == foundUserInvitations.size()) {
-                                handler.onUserInvitationsLoaded(userInvitations);
-                            }
-                        }
-                    });
-                }
+                    if (userInvitations.size() == foundUserInvitations.size()) {
+                        handler.onUserInvitationsLoaded(userInvitations);
+                    }
+                });
             }
         });
     }

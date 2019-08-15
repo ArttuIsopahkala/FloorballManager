@@ -84,19 +84,9 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         position = 0;
         changePage(position);
 
-        previousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handlePreviousClick();
-            }
-        });
+        previousButton.setOnClickListener(v12 -> handlePreviousClick());
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleNextClick();
-            }
-        });
+        nextButton.setOnClickListener(v1 -> handleNextClick());
         return v;
     }
 

@@ -98,26 +98,11 @@ public class BluetoothFragment extends Fragment {
 
         bluetooth = BluetoothAdapter.getDefaultAdapter();
 
-        discoverButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkBluetoothAvailable();
-            }
-        });
+        discoverButton.setOnClickListener(v13 -> checkBluetoothAvailable());
 
-        btnDiscoverable_on_off.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnEnableDisable_Discoverable();
-            }
-        });
+        btnDiscoverable_on_off.setOnClickListener(v12 -> btnEnableDisable_Discoverable());
 
-        btnFindUnpairedDevices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getAvailableDevices();
-            }
-        });
+        btnFindUnpairedDevices.setOnClickListener(v1 -> getAvailableDevices());
 
         return v;
     }

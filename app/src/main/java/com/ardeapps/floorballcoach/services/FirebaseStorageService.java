@@ -89,15 +89,12 @@ public class FirebaseStorageService {
             bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
             byte[] data = baos.toByteArray();
             UploadTask uploadTask = storage.putBytes(data);
-            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    Loader.hide();
-                    if(task.isSuccessful()) {
-                        handler.onAddBitmapSuccess();
-                    } else {
-                        Logger.toast(R.string.error_service_action);
-                    }
+            uploadTask.addOnCompleteListener(task -> {
+                Loader.hide();
+                if(task.isSuccessful()) {
+                    handler.onAddBitmapSuccess();
+                } else {
+                    Logger.toast(R.string.error_service_action);
                 }
             });
         } else onNetworkError();
@@ -107,19 +104,16 @@ public class FirebaseStorageService {
         logAction();
         if (isNetworkAvailable()) {
             Loader.show();
-            storage.getBytes(ONE_MEGABYTE).addOnCompleteListener(new OnCompleteListener<byte[]>() {
-                @Override
-                public void onComplete(@NonNull Task<byte[]> task) {
-                    Loader.hide();
-                    Bitmap bitmap = null;
-                    if(task.isSuccessful()) {
-                        byte[] bytes = task.getResult();
-                        if(bytes != null) {
-                            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        }
+            storage.getBytes(ONE_MEGABYTE).addOnCompleteListener(task -> {
+                Loader.hide();
+                Bitmap bitmap = null;
+                if(task.isSuccessful()) {
+                    byte[] bytes = task.getResult();
+                    if(bytes != null) {
+                        bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     }
-                    handler.onGetBitmapSuccess(bitmap);
                 }
+                handler.onGetBitmapSuccess(bitmap);
             });
         } else onNetworkError();
     }
@@ -130,21 +124,18 @@ public class FirebaseStorageService {
         if(ids.size() > 0) {
             Loader.show();
             for (final String id : ids) {
-                storage.child(id).getBytes(ONE_MEGABYTE).addOnCompleteListener(new OnCompleteListener<byte[]>() {
-                    @Override
-                    public void onComplete(@NonNull Task<byte[]> task) {
-                        Bitmap bitmap = null;
-                        if(task.isSuccessful()) {
-                            byte[] bytes = task.getResult();
-                            if(bytes != null) {
-                                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            }
+                storage.child(id).getBytes(ONE_MEGABYTE).addOnCompleteListener(task -> {
+                    Bitmap bitmap = null;
+                    if(task.isSuccessful()) {
+                        byte[] bytes = task.getResult();
+                        if(bytes != null) {
+                            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         }
-                        bitmaps.put(id, bitmap);
-                        if (bitmaps.size() == ids.size()) {
-                            Loader.hide();
-                            handler.onGetBitmapsSuccess(bitmaps);
-                        }
+                    }
+                    bitmaps.put(id, bitmap);
+                    if (bitmaps.size() == ids.size()) {
+                        Loader.hide();
+                        handler.onGetBitmapsSuccess(bitmaps);
                     }
                 });
             }
@@ -157,15 +148,12 @@ public class FirebaseStorageService {
         logAction();
         if (isNetworkAvailable()) {
             Loader.show();
-            storage.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    Loader.hide();
-                    if(task.isSuccessful()) {
-                        handler.onDeleteBitmapSuccess();
-                    } else {
-                        Logger.toast(R.string.error_service_action);
-                    }
+            storage.delete().addOnCompleteListener(task -> {
+                Loader.hide();
+                if(task.isSuccessful()) {
+                    handler.onDeleteBitmapSuccess();
+                } else {
+                    Logger.toast(R.string.error_service_action);
                 }
             });
         } else onNetworkError();

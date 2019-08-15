@@ -93,26 +93,23 @@ public class PlayerSelector extends LinearLayout {
 
             if(multiSelect) {
                 selectAllRadioButton.setVisibility(View.VISIBLE);
-                selectAllRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            // Unselect other radiobuttons
-                            for (RadioButton radioButton : selectAllRadioButtons.values()){
-                                if (radioButton != buttonView ) radioButton.setChecked(false);
-                            }
-
-                            // Add all line and disabled players
-                            selectedPlayerIds.clear();
-                            selectedPlayerIds.addAll(disabledPlayerIds);
-                            for(String playerId : line.getPlayerIdMap().values()) {
-                                if(!selectedPlayerIds.contains(playerId)) {
-                                    selectedPlayerIds.add(playerId);
-                                }
-                            }
-
-                            setSelections();
+                selectAllRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        // Unselect other radiobuttons
+                        for (RadioButton radioButton : selectAllRadioButtons.values()){
+                            if (radioButton != buttonView ) radioButton.setChecked(false);
                         }
+
+                        // Add all line and disabled players
+                        selectedPlayerIds.clear();
+                        selectedPlayerIds.addAll(disabledPlayerIds);
+                        for(String playerId : line.getPlayerIdMap().values()) {
+                            if(!selectedPlayerIds.contains(playerId)) {
+                                selectedPlayerIds.add(playerId);
+                            }
+                        }
+
+                        setSelections();
                     }
                 });
             } else {
@@ -149,28 +146,25 @@ public class PlayerSelector extends LinearLayout {
                     holder.positionText.setText(Player.getPositionText(position, false));
                 }
 
-                holder.playerContainer.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(multiSelect) {
-                            if(holder.isSelected()) {
-                                selectedPlayerIds.remove(playerId);
-                            } else {
-                                selectedPlayerIds.add(playerId);
-                            }
+                holder.playerContainer.setOnClickListener(v1 -> {
+                    if(multiSelect) {
+                        if(holder.isSelected()) {
+                            selectedPlayerIds.remove(playerId);
                         } else {
-                            if(holder.isSelected()) {
-                                selectedPlayerIds.remove(playerId);
-                                mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
-                            } else {
-                                // Clear other and add new selection
-                                selectedPlayerIds.clear();
-                                selectedPlayerIds.add(playerId);
-                                mListener.onPlayerSelected(line.getLineNumber(), playerId);
-                            }
+                            selectedPlayerIds.add(playerId);
                         }
-                        setSelections();
+                    } else {
+                        if(holder.isSelected()) {
+                            selectedPlayerIds.remove(playerId);
+                            mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
+                        } else {
+                            // Clear other and add new selection
+                            selectedPlayerIds.clear();
+                            selectedPlayerIds.add(playerId);
+                            mListener.onPlayerSelected(line.getLineNumber(), playerId);
+                        }
                     }
+                    setSelections();
                 });
 
                 playersList.addView(v);

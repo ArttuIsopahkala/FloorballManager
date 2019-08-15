@@ -3,7 +3,6 @@ package com.ardeapps.floorballcoach.resources;
 import com.ardeapps.floorballcoach.handlers.GetAppDataHandler;
 import com.ardeapps.floorballcoach.objects.AppData;
 import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 /**
@@ -23,13 +22,10 @@ public class AppDataResource extends FirebaseDatabaseService {
     }
 
     public void getAppData(final GetAppDataHandler handler) {
-        getData(database, new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                AppData.PRIVACY_POLICY_URL = (String)dataSnapshot.child("PRIVACY_POLICY_URL").getValue();
-                AppData.NEWEST_VERSION_CODE = (long)dataSnapshot.child("NEWEST_VERSION_CODE").getValue();
-                handler.onAppDataLoaded();
-            }
+        getData(database, dataSnapshot -> {
+            AppData.PRIVACY_POLICY_URL = (String)dataSnapshot.child("PRIVACY_POLICY_URL").getValue();
+            AppData.NEWEST_VERSION_CODE = (long)dataSnapshot.child("NEWEST_VERSION_CODE").getValue();
+            handler.onAppDataLoaded();
         });
     }
 }

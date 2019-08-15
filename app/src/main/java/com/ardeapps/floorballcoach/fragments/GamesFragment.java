@@ -17,7 +17,6 @@ import com.ardeapps.floorballcoach.PrefRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.adapters.GameListAdapter;
 import com.ardeapps.floorballcoach.dialogFragments.EditSeasonDialogFragment;
-import com.ardeapps.floorballcoach.handlers.GetGamesHandler;
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Season;
 import com.ardeapps.floorballcoach.objects.UserConnection;
@@ -87,44 +86,32 @@ public class GamesFragment extends Fragment implements GameListAdapter.Listener 
             Helper.setSpinnerSelection(seasonSpinner, seasonPosition > -1 ? seasonPosition : 0);
         }
 
-        addSeasonIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final EditSeasonDialogFragment dialog = new EditSeasonDialogFragment();
-                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Lisää tunniste");
-                dialog.setListener(new EditSeasonDialogFragment.EditSeasonDialogCloseListener() {
-                    @Override
-                    public void onSeasonSaved(Season season) {
-                        AppRes.getInstance().setSeason(season.getSeasonId(), season);
-                        setSeasonSpinner();
-                        loadGames(season.getSeasonId());
-                    }
-                });
-            }
+        addSeasonIcon.setOnClickListener(v12 -> {
+            final EditSeasonDialogFragment dialog = new EditSeasonDialogFragment();
+            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Lisää tunniste");
+            dialog.setListener(season -> {
+                AppRes.getInstance().setSeason(season.getSeasonId(), season);
+                setSeasonSpinner();
+                loadGames(season.getSeasonId());
+            });
         });
 
-        newGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Force user to add season before add game
-                if(AppRes.getInstance().getSeasons().isEmpty()) {
-                    final EditSeasonDialogFragment dialog = new EditSeasonDialogFragment();
-                    dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Lisää tunniste");
-                    dialog.setListener(new EditSeasonDialogFragment.EditSeasonDialogCloseListener() {
-                        @Override
-                        public void onSeasonSaved(Season season) {
-                            AppRes.getInstance().setSeason(season.getSeasonId(), season);
-                            setSeasonSpinner();
-                            loadGames(season.getSeasonId());
-                            FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(new GameSettingsFragmentData());
-                        }
-                    });
-                } else {
+        newGameButton.setOnClickListener(v1 -> {
+            // Force user to add season before add game
+            if(AppRes.getInstance().getSeasons().isEmpty()) {
+                final EditSeasonDialogFragment dialog = new EditSeasonDialogFragment();
+                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Lisää tunniste");
+                dialog.setListener(season -> {
+                    AppRes.getInstance().setSeason(season.getSeasonId(), season);
+                    setSeasonSpinner();
+                    loadGames(season.getSeasonId());
                     FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(new GameSettingsFragmentData());
-                }
-
-
+                });
+            } else {
+                FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(new GameSettingsFragmentData());
             }
+
+
         });
         return v;
     }
@@ -161,19 +148,16 @@ public class GamesFragment extends Fragment implements GameListAdapter.Listener 
 
     private void loadGames(final String seasonId) {
         if(seasonId == null) {
-            AppRes.getInstance().setGames(new HashMap<String, Game>());
+            AppRes.getInstance().setGames(new HashMap<>());
             refreshGames();
         } else {
             Map<String, Season> seasons = AppRes.getInstance().getSeasons();
             Season selectedSeason = seasons.get(seasonId);
             PrefRes.setSelectedSeasonId(AppRes.getInstance().getSelectedTeam().getTeamId(), seasonId);
             AppRes.getInstance().setSelectedSeason(selectedSeason);
-            GamesResource.getInstance().getGames(seasonId, new GetGamesHandler() {
-                @Override
-                public void onGamesLoaded(Map<String, Game> games) {
-                    AppRes.getInstance().setGames(games);
-                    refreshGames();
-                }
+            GamesResource.getInstance().getGames(seasonId, games -> {
+                AppRes.getInstance().setGames(games);
+                refreshGames();
             });
         }
     }

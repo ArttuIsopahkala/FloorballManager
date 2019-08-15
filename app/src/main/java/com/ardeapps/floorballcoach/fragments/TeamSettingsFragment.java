@@ -15,28 +15,24 @@ import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballcoach.dialogFragments.InfoDialogFragment;
-import com.ardeapps.floorballcoach.handlers.GetUserConnectionsHandler;
-import com.ardeapps.floorballcoach.handlers.GetUserHandler;
 import com.ardeapps.floorballcoach.objects.Team;
 import com.ardeapps.floorballcoach.objects.User;
 import com.ardeapps.floorballcoach.objects.UserConnection;
 import com.ardeapps.floorballcoach.resources.GameLinesResource;
-import com.ardeapps.floorballcoach.resources.GoalsResource;
 import com.ardeapps.floorballcoach.resources.GamesResource;
+import com.ardeapps.floorballcoach.resources.GoalsResource;
 import com.ardeapps.floorballcoach.resources.LinesResource;
 import com.ardeapps.floorballcoach.resources.SeasonsResource;
 import com.ardeapps.floorballcoach.resources.TeamsResource;
 import com.ardeapps.floorballcoach.resources.UserConnectionsResource;
 import com.ardeapps.floorballcoach.resources.UserInvitationsResource;
 import com.ardeapps.floorballcoach.resources.UsersResource;
-import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,18 +66,15 @@ public class TeamSettingsFragment extends Fragment {
 
 
         ArrayList<UserConnection> userConnectionsList = new ArrayList<>(userConnections.values());
-        Collections.sort(userConnectionsList, new Comparator<UserConnection>() {
-            @Override
-            public int compare(UserConnection o1, UserConnection o2) {
-                UserConnection.Role role1 = UserConnection.Role.fromDatabaseName(o1.getRole());
-                UserConnection.Role role2 = UserConnection.Role.fromDatabaseName(o2.getRole());
-                if(role1 == role2) {
-                    return 0;
-                } else if(role1 == UserConnection.Role.ADMIN) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+        Collections.sort(userConnectionsList, (o1, o2) -> {
+            UserConnection.Role role1 = UserConnection.Role.fromDatabaseName(o1.getRole());
+            UserConnection.Role role2 = UserConnection.Role.fromDatabaseName(o2.getRole());
+            if(role1 == role2) {
+                return 0;
+            } else if(role1 == UserConnection.Role.ADMIN) {
+                return -1;
+            } else {
+                return 1;
             }
         });
 
@@ -120,49 +113,29 @@ public class TeamSettingsFragment extends Fragment {
                 holder.editUserConnectionIcon.setVisibility(View.VISIBLE);
             }
 
-            holder.removeUserConnectionIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.team_settings_remove_confirmation));
-                    dialogFragment.show(getChildFragmentManager(), "Poistetaanko linkitys käyttäjään?");
-                    dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                        @Override
-                        public void onDialogYesButtonClick() {
-                            final String userConnectionId = userConnection.getUserConnectionId();
-                            UserConnectionsResource.getInstance().removeUserConnection(userConnectionId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                @Override
-                                public void onDeleteDataSuccess() {
-                                    userConnections.remove(userConnectionId);
-                                    UserInvitationsResource.getInstance().removeUserInvitation(userConnectionId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                        @Override
-                                        public void onDeleteDataSuccess() {
-                                            // Remove connection from user
-                                            if(userConnection.getUserId() != null) {
-                                                UsersResource.getInstance().getUser(userConnection.getUserId(), new GetUserHandler() {
-                                                    @Override
-                                                    public void onUserLoaded(User user) {
-                                                        user.getTeamIds().remove(AppRes.getInstance().getSelectedTeam().getTeamId());
-                                                        UsersResource.getInstance().editUser(user);
-                                                        update();
-                                                    }
-                                                });
-                                            } else {
-                                                update();
-                                            }
-                                        }
-                                    });
-                                }
-                            });
-                        }
+            holder.removeUserConnectionIcon.setOnClickListener(v -> {
+                ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.team_settings_remove_confirmation));
+                dialogFragment.show(getChildFragmentManager(), "Poistetaanko linkitys käyttäjään?");
+                dialogFragment.setListener(() -> {
+                    final String userConnectionId = userConnection.getUserConnectionId();
+                    UserConnectionsResource.getInstance().removeUserConnection(userConnectionId, () -> {
+                        userConnections.remove(userConnectionId);
+                        UserInvitationsResource.getInstance().removeUserInvitation(userConnectionId, () -> {
+                            // Remove connection from user
+                            if (userConnection.getUserId() != null) {
+                                UsersResource.getInstance().getUser(userConnection.getUserId(), user -> {
+                                    user.getTeamIds().remove(AppRes.getInstance().getSelectedTeam().getTeamId());
+                                    UsersResource.getInstance().editUser(user);
+                                    update();
+                                });
+                            } else {
+                                update();
+                            }
+                        });
                     });
-                }
+                });
             });
-            holder.editUserConnectionIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentListeners.getInstance().getFragmentChangeListener().goToEditUserConnectionFragment(userConnection);
-                }
-            });
+            holder.editUserConnectionIcon.setOnClickListener(v -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditUserConnectionFragment(userConnection));
 
             userConnectionsContainer.addView(cv);
         }
@@ -182,47 +155,26 @@ public class TeamSettingsFragment extends Fragment {
 
         update();
 
-        editTeamButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Team team = AppRes.getInstance().getSelectedTeam();
-                FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(team);
-            }
+        editTeamButton.setOnClickListener(v14 -> {
+            Team team = AppRes.getInstance().getSelectedTeam();
+            FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(team);
         });
 
-        addUserConnectionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToEditUserConnectionFragment(null);
+        addUserConnectionButton.setOnClickListener(v13 -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditUserConnectionFragment(null));
+
+        inactivePlayersButton.setOnClickListener(v12 -> FragmentListeners.getInstance().getFragmentChangeListener().goToInactivePlayersFragment());
+
+        removeTeamButton.setOnClickListener(v1 -> {
+            if(!AppRes.getInstance().getPlayers().isEmpty()) {
+                InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.team_settings_remove_players_first));
+                dialog.show(getChildFragmentManager(), "Poista ensin pelaajat");
+                return;
             }
-        });
 
-        inactivePlayersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToInactivePlayersFragment();
-            }
-        });
+            ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.team_settings_remove_team_confirmation));
+            dialogFragment.show(getChildFragmentManager(), "Poistetaanko joukkue ja data?");
+            dialogFragment.setListener(this::deleteAllTeamData);
 
-        removeTeamButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!AppRes.getInstance().getPlayers().isEmpty()) {
-                    InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.team_settings_remove_players_first));
-                    dialog.show(getChildFragmentManager(), "Poista ensin pelaajat");
-                    return;
-                }
-
-                ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.team_settings_remove_team_confirmation));
-                dialogFragment.show(getChildFragmentManager(), "Poistetaanko joukkue ja data?");
-                dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                    @Override
-                    public void onDialogYesButtonClick() {
-                        deleteAllTeamData();
-                    }
-                });
-
-            }
         });
 
         return v;
@@ -231,72 +183,26 @@ public class TeamSettingsFragment extends Fragment {
     private void deleteAllTeamData() {
         // Delete all team data
         final Team team = AppRes.getInstance().getSelectedTeam();
-        UserConnectionsResource.getInstance().getUserConnections(team.getTeamId(), new GetUserConnectionsHandler() {
-            @Override
-            public void onUserConnectionsLoaded(final Map<String, UserConnection> userConnections) {
-                UserInvitationsResource.getInstance().removeUserInvitations(userConnections.keySet(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                    @Override
-                    public void onDeleteDataSuccess() {
-                        UserConnectionsResource.getInstance().removeUserConnections(team.getTeamId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                            @Override
-                            public void onDeleteDataSuccess() {
-                                LinesResource.getInstance().removeAllLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                    @Override
-                                    public void onDeleteDataSuccess() {
-                                        GameLinesResource.getInstance().removeAllLines(new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                            @Override
-                                            public void onDeleteDataSuccess() {
-                                                GoalsResource.getInstance().removeAllGoals(new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                                    @Override
-                                                    public void onDeleteDataSuccess() {
-                                                        GamesResource.getInstance().removeAllGames(new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                                            @Override
-                                                            public void onDeleteDataSuccess() {
-                                                                TeamsResource.getInstance().removeTeam(team, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                                                    @Override
-                                                                    public void onDeleteDataSuccess() {
-                                                                        SeasonsResource.getInstance().removeAllSeasons(new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                                                            @Override
-                                                                            public void onDeleteDataSuccess() {
-                                                                                User user = AppRes.getInstance().getUser();
-                                                                                user.getTeamIds().remove(team.getTeamId());
-                                                                                UsersResource.getInstance().editUser(user, new FirebaseDatabaseService.EditDataSuccessListener() {
-                                                                                    @Override
-                                                                                    public void onEditDataSuccess() {
-                                                                                        AppRes.getInstance().setSeasons(null);
-                                                                                        AppRes.getInstance().setUserConnections(null);
-                                                                                        AppRes.getInstance().setLines(null);
-                                                                                        AppRes.getInstance().setLinesByGame(null);
-                                                                                        AppRes.getInstance().setGoalsByGame(null);
-                                                                                        AppRes.getInstance().setGames(null);
-                                                                                        AppRes.getInstance().setTeam(team.getTeamId(), null);
-                                                                                        AppRes.getInstance().setSelectedTeam(null);
+        UserConnectionsResource.getInstance().getUserConnections(team.getTeamId(), userConnections -> UserInvitationsResource.getInstance().removeUserInvitations(userConnections.keySet(), () -> UserConnectionsResource.getInstance().removeUserConnections(team.getTeamId(), () -> LinesResource.getInstance().removeAllLines(() -> GameLinesResource.getInstance().removeAllLines(() -> GoalsResource.getInstance().removeAllGoals(() -> GamesResource.getInstance().removeAllGames(() -> TeamsResource.getInstance().removeTeam(team, () -> SeasonsResource.getInstance().removeAllSeasons(() -> {
+            User user = AppRes.getInstance().getUser();
+            user.getTeamIds().remove(team.getTeamId());
+            UsersResource.getInstance().editUser(user, () -> {
+                AppRes.getInstance().setSeasons(null);
+                AppRes.getInstance().setUserConnections(null);
+                AppRes.getInstance().setLines(null);
+                AppRes.getInstance().setLinesByGame(null);
+                AppRes.getInstance().setGoalsByGame(null);
+                AppRes.getInstance().setGames(null);
+                AppRes.getInstance().setTeam(team.getTeamId(), null);
+                AppRes.getInstance().setSelectedTeam(null);
 
-                                                                                        // Reset common user data
-                                                                                        for(String userConnectionId : userConnections.keySet()) {
-                                                                                            AppRes.getInstance().setUserInvitation(userConnectionId, null);
-                                                                                        }
-                                                                                        Logger.toast(R.string.team_settings_remove_team_successful);
-                                                                                        AppRes.getActivity().finish();
-                                                                                    }
-                                                                                });
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                });
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        });
+                // Reset common user data
+                for (String userConnectionId : userConnections.keySet()) {
+                    AppRes.getInstance().setUserInvitation(userConnectionId, null);
+                }
+                Logger.toast(R.string.team_settings_remove_team_successful);
+                AppRes.getActivity().finish();
+            });
+        })))))))));
     }
 }

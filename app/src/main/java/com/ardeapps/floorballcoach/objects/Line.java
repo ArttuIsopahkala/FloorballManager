@@ -2,7 +2,6 @@ package com.ardeapps.floorballcoach.objects;
 
 import com.google.firebase.database.Exclude;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -73,22 +72,19 @@ public class Line {
 
     @Exclude
     public Map<String, String> getSortedPlayers() {
-        TreeMap<String, String> sorted = new TreeMap<>(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                Player.Position pos1 = Player.Position.valueOf(o1);
-                Player.Position pos2 = Player.Position.valueOf(o2);
-                if(pos1 == Player.Position.LW) {
-                    return -1;
-                } else if (pos1 == Player.Position.C && pos2 != Player.Position.LW) {
-                    return -1;
-                } else if (pos1 == Player.Position.RW && (pos2 != Player.Position.C && pos2 != Player.Position.LW)) {
-                    return -1;
-                } else if (pos1 == Player.Position.LD && (pos2 != Player.Position.C && pos2 != Player.Position.LW && pos2 == Player.Position.RW)) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+        TreeMap<String, String> sorted = new TreeMap<>((o1, o2) -> {
+            Player.Position pos1 = Player.Position.valueOf(o1);
+            Player.Position pos2 = Player.Position.valueOf(o2);
+            if(pos1 == Player.Position.LW) {
+                return -1;
+            } else if (pos1 == Player.Position.C && pos2 != Player.Position.LW) {
+                return -1;
+            } else if (pos1 == Player.Position.RW && (pos2 != Player.Position.C && pos2 != Player.Position.LW)) {
+                return -1;
+            } else if (pos1 == Player.Position.LD && (pos2 != Player.Position.C && pos2 != Player.Position.LW && pos2 == Player.Position.RW)) {
+                return -1;
+            } else {
+                return 1;
             }
         });
         sorted.putAll(getPlayerIdMap());

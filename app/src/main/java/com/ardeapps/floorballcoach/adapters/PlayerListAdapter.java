@@ -67,12 +67,7 @@ public class PlayerListAdapter extends BaseAdapter {
         holder.nameNumberShootsText.setText(player.getNameWithNumber(false) + " | " + shootsText);
         holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
 
-        holder.playerContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectListener.onPlayerSelected(player);
-            }
-        });
+        holder.playerContainer.setOnClickListener(v1 -> selectListener.onPlayerSelected(player));
 
         return v;
     }

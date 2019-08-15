@@ -70,19 +70,11 @@ public class FirebaseAuthService {
     }
 
     public void sendPasswordResetEmail(final String email, final ResetPasswordHandler handler) {
-        FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                handler.onEmailSentSuccess();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (e instanceof FirebaseAuthInvalidUserException) {
-                    Logger.toast(AppRes.getContext().getString(R.string.login_error_user_not_found));
-                } else {
-                    onUserNotFoundError();
-                }
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnSuccessListener(aVoid -> handler.onEmailSentSuccess()).addOnFailureListener(e -> {
+            if (e instanceof FirebaseAuthInvalidUserException) {
+                Logger.toast(AppRes.getContext().getString(R.string.login_error_user_not_found));
+            } else {
+                onUserNotFoundError();
             }
         });
     }
@@ -95,31 +87,25 @@ public class FirebaseAuthService {
         if (isNetworkAvailable()) {
             Loader.show();
             final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            mAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    Loader.hide();
-                    final FirebaseUser user = mAuth.getCurrentUser();
-                    if (user != null) {
-                        Logger.log("Tunnistautuminen Sähköposti/Salasanalla. userId: " + user.getUid());
-                        // Save credentials
-                        PrefRes.putString(EMAIL, email);
-                        handler.onEmailPasswordLoginSuccess(user.getUid());
-                    } else {
-                        onAuthenticationError();
-                    }
+            mAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+                Loader.hide();
+                final FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    Logger.log("Tunnistautuminen Sähköposti/Salasanalla. userId: " + user.getUid());
+                    // Save credentials
+                    PrefRes.putString(EMAIL, email);
+                    handler.onEmailPasswordLoginSuccess(user.getUid());
+                } else {
+                    onAuthenticationError();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Loader.hide();
-                    if (e instanceof FirebaseAuthInvalidUserException) {
-                        Logger.toast(AppRes.getContext().getString(R.string.login_error_user_not_found));
-                    } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                        Logger.toast(AppRes.getContext().getString(R.string.login_error_invalid_credentials));
-                    } else {
-                        onAuthenticationError();
-                    }
+            }).addOnFailureListener(e -> {
+                Loader.hide();
+                if (e instanceof FirebaseAuthInvalidUserException) {
+                    Logger.toast(AppRes.getContext().getString(R.string.login_error_user_not_found));
+                } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                    Logger.toast(AppRes.getContext().getString(R.string.login_error_invalid_credentials));
+                } else {
+                    onAuthenticationError();
                 }
             });
         } else onNetworkError();
@@ -130,33 +116,27 @@ public class FirebaseAuthService {
         if (isNetworkAvailable()) {
             Loader.show();
             final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            mAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    Loader.hide();
-                    final FirebaseUser user = mAuth.getCurrentUser();
-                    if (user != null) {
-                        Logger.log("Tunnistautuminen Sähköposti/Salasanalla. userId: " + user.getUid());
-                        // Save credentials
-                        PrefRes.putString(EMAIL, email);
-                        handler.onEmailPasswordLoginSuccess(user.getUid());
-                    } else {
-                        onAuthenticationError();
-                    }
+            mAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+                Loader.hide();
+                final FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    Logger.log("Tunnistautuminen Sähköposti/Salasanalla. userId: " + user.getUid());
+                    // Save credentials
+                    PrefRes.putString(EMAIL, email);
+                    handler.onEmailPasswordLoginSuccess(user.getUid());
+                } else {
+                    onAuthenticationError();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Loader.hide();
-                    if (e instanceof FirebaseAuthWeakPasswordException) {
-                        Logger.toast(AppRes.getContext().getString(R.string.login_error_password));
-                    } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                        Logger.toast(AppRes.getContext().getString(R.string.login_error_email));
-                    } else if (e instanceof FirebaseAuthUserCollisionException) {
-                        Logger.toast(AppRes.getContext().getString(R.string.login_error_email_in_use));
-                    } else {
-                        onAuthenticationError();
-                    }
+            }).addOnFailureListener(e -> {
+                Loader.hide();
+                if (e instanceof FirebaseAuthWeakPasswordException) {
+                    Logger.toast(AppRes.getContext().getString(R.string.login_error_password));
+                } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                    Logger.toast(AppRes.getContext().getString(R.string.login_error_email));
+                } else if (e instanceof FirebaseAuthUserCollisionException) {
+                    Logger.toast(AppRes.getContext().getString(R.string.login_error_email_in_use));
+                } else {
+                    onAuthenticationError();
                 }
             });
         } else onNetworkError();

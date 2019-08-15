@@ -78,12 +78,7 @@ public class TeamListAdapter extends BaseAdapter {
 
         holder.nameText.setText(team.getName());
 
-        holder.teamContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onTeamSelected(team);
-            }
-        });
+        holder.teamContainer.setOnClickListener(v1 -> mListener.onTeamSelected(team));
 
         return v;
     }

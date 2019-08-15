@@ -143,36 +143,31 @@ public class LineUpSelector extends LinearLayout {
         data.setLineNumber(lineNumber);
         data.setShowChemistry(showChemistry);
         lineFragment.setData(data);
-        lineFragment.setListener(new LineFragment.Listener() {
-
-            @Override
-            public void onLineChanged(Line line, String playerId) {
-                // Remove old player if he is in other lines
-                if(playerId != null) {
-                    for (final Line existingLine : lines.values()) {
-                        if (lineNumber != existingLine.getLineNumber()) {
-                            Iterator<Map.Entry<String, String>> it = existingLine.getPlayerIdMap().entrySet().iterator();
-                            while (it.hasNext()) {
-                                String existingPlayerId = it.next().getValue();
-                                if (existingPlayerId.equals(playerId)) {
-                                    it.remove();
-                                    linesAdapter.updateLineFragment(existingLine);
-                                }
+        lineFragment.setListener((line, playerId) -> {
+            // Remove old player if he is in other lines
+            if(playerId != null) {
+                for (final Line existingLine : lines.values()) {
+                    if (lineNumber != existingLine.getLineNumber()) {
+                        Iterator<Map.Entry<String, String>> it = existingLine.getPlayerIdMap().entrySet().iterator();
+                        while (it.hasNext()) {
+                            String existingPlayerId = it.next().getValue();
+                            if (existingPlayerId.equals(playerId)) {
+                                it.remove();
+                                linesAdapter.updateLineFragment(existingLine);
                             }
                         }
                     }
                 }
-                // Refresh state of lines
-                lines.put(lineNumber, line);
-
-                refreshLineChemistry();
-                linesAdapter.updateLineFragment(line);
-
-                if(mListener != null) {
-                    mListener.onLinesChanged();
-                }
             }
+            // Refresh state of lines
+            lines.put(lineNumber, line);
 
+            refreshLineChemistry();
+            linesAdapter.updateLineFragment(line);
+
+            if(mListener != null) {
+                mListener.onLinesChanged();
+            }
         });
 
         return lineFragment;

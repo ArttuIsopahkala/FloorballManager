@@ -177,82 +177,41 @@ public class GameFragment extends Fragment implements DataView {
 
         update();
 
-        settingsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
-                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
-                dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
-                    @Override
-                    public void onEditItem() {
-                        dialog.dismiss();
-                        GameSettingsFragmentData gameSettingsFragmentData = new GameSettingsFragmentData();
-                        gameSettingsFragmentData.setGame(data.getGame());
-                        gameSettingsFragmentData.setLines(data.getLines());
-                        FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(gameSettingsFragmentData);
-                    }
+        settingsIcon.setOnClickListener(v13 -> {
+            final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
+            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
+            dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
+                @Override
+                public void onEditItem() {
+                    dialog.dismiss();
+                    GameSettingsFragmentData gameSettingsFragmentData = new GameSettingsFragmentData();
+                    gameSettingsFragmentData.setGame(data.getGame());
+                    gameSettingsFragmentData.setLines(data.getLines());
+                    FragmentListeners.getInstance().getFragmentChangeListener().goToGameSettingsFragment(gameSettingsFragmentData);
+                }
 
-                    @Override
-                    public void onRemoveItem() {
-                        dialog.dismiss();
-                        ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.game_remove_confirmation));
-                        dialogFragment.show(getChildFragmentManager(), "Poistetaanko ottelu?");
-                        dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                            @Override
-                            public void onDialogYesButtonClick() {
-                                final String gameId = data.getGame().getGameId();
-                                final Set<String> playerIds = AppRes.getInstance().getPlayers().keySet();
-                                PlayerStatsResource.getInstance().removeStats(playerIds, gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                    @Override
-                                    public void onDeleteDataSuccess() {
-                                        PlayerGamesResource.getInstance().removeGame(playerIds, gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                            @Override
-                                            public void onDeleteDataSuccess() {
-                                                GoalsResource.getInstance().removeGoals(gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                                    @Override
-                                                    public void onDeleteDataSuccess() {
-                                                        GameLinesResource.getInstance().removeLines(gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                                            @Override
-                                                            public void onDeleteDataSuccess() {
-                                                                GamesResource.getInstance().removeGame(gameId, new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                                                    @Override
-                                                                    public void onDeleteDataSuccess() {
-                                                                        AppRes.getActivity().onBackPressed();
-                                                                    }
-                                                                });
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
+                @Override
+                public void onRemoveItem() {
+                    dialog.dismiss();
+                    ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.game_remove_confirmation));
+                    dialogFragment.show(getChildFragmentManager(), "Poistetaanko ottelu?");
+                    dialogFragment.setListener(() -> {
+                        final String gameId = data.getGame().getGameId();
+                        final Set<String> playerIds = AppRes.getInstance().getPlayers().keySet();
+                        PlayerStatsResource.getInstance().removeStats(playerIds, gameId, () -> PlayerGamesResource.getInstance().removeGame(playerIds, gameId, () -> GoalsResource.getInstance().removeGoals(gameId, () -> GameLinesResource.getInstance().removeLines(gameId, () -> GamesResource.getInstance().removeGame(gameId, () -> AppRes.getActivity().onBackPressed())))));
+                    });
+                }
 
-                    @Override
-                    public void onCancel() {
-                        dialog.dismiss();
-                    }
-                });
-            }
+                @Override
+                public void onCancel() {
+                    dialog.dismiss();
+                }
+            });
         });
 
-        homeGoalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGoalWizardDialog(null, true);
-            }
-        });
+        homeGoalButton.setOnClickListener(v12 -> openGoalWizardDialog(null, true));
 
-        awayGoalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGoalWizardDialog(null, false);
-            }
-        });
+        awayGoalButton.setOnClickListener(v1 -> openGoalWizardDialog(null, false));
 
         return v;
     }
@@ -288,12 +247,7 @@ public class GameFragment extends Fragment implements DataView {
         LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
         GoalHolder holder = new GoalHolder();
 
-        Collections.sort(goals, new Comparator<Goal>() {
-            @Override
-            public int compare(Goal o1, Goal o2) {
-                return Long.valueOf(o1.getTime()).compareTo(o2.getTime());
-            }
-        });
+        Collections.sort(goals, (o1, o2) -> Long.valueOf(o1.getTime()).compareTo(o2.getTime()));
         for(final Goal goal : goals) {
             View cv = inf.inflate(R.layout.list_item_goal, goalList, false);
             holder.homeGoalMenuIcon = cv.findViewById(R.id.editHomeGoalIcon);
@@ -402,43 +356,32 @@ public class GameFragment extends Fragment implements DataView {
     }
 
     private void setGoalMenuIconListener(IconView icon, final Goal goal, final boolean isHomeGoal) {
-        icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
-                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
-                dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
-                    @Override
-                    public void onEditItem() {
-                        dialog.dismiss();
-                        openGoalWizardDialog(goal, isHomeGoal);
-                    }
+        icon.setOnClickListener(v -> {
+            final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
+            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
+            dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
+                @Override
+                public void onEditItem() {
+                    dialog.dismiss();
+                    openGoalWizardDialog(goal, isHomeGoal);
+                }
 
-                    @Override
-                    public void onRemoveItem() {
-                        dialog.dismiss();
-                        ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_event_remove_confirmation));
-                        dialogFragment.show(getChildFragmentManager(), "Poistetaanko maali?");
-                        dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                            @Override
-                            public void onDialogYesButtonClick() {
-                                GoalsResourceWrapper.getInstance(data).removeGoal(goal, isHomeGoal, new GoalsResourceWrapper.RemoveGoalListener() {
-                                    @Override
-                                    public void onGoalRemoved(GameFragmentData data) {
-                                        GameFragment.this.data = data;
-                                        update();
-                                    }
-                                });
-                            }
-                        });
-                    }
+                @Override
+                public void onRemoveItem() {
+                    dialog.dismiss();
+                    ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_event_remove_confirmation));
+                    dialogFragment.show(getChildFragmentManager(), "Poistetaanko maali?");
+                    dialogFragment.setListener(() -> GoalsResourceWrapper.getInstance(data).removeGoal(goal, isHomeGoal, data -> {
+                        GameFragment.this.data = data;
+                        update();
+                    }));
+                }
 
-                    @Override
-                    public void onCancel() {
-                        dialog.dismiss();
-                    }
-                });
-            }
+                @Override
+                public void onCancel() {
+                    dialog.dismiss();
+                }
+            });
         });
     }
 
@@ -454,18 +397,12 @@ public class GameFragment extends Fragment implements DataView {
         dialogData.setOpponentGoal(opponentGoal);
         dialog.setData(dialogData);
 
-        dialog.setListener(new GoalWizardDialogFragment.GoalWizardListener() {
-            @Override
-            public void onGoalSaved(final Goal goalToSave) {
-                dialog.dismiss();
-                GoalsResourceWrapper.getInstance(data).editGoal(goal, goalToSave, opponentGoal, new GoalsResourceWrapper.EditGoalListener() {
-                    @Override
-                    public void onGoalEdited(GameFragmentData data) {
-                        GameFragment.this.data = data;
-                        update();
-                    }
-                });
-            }
+        dialog.setListener(goalToSave -> {
+            dialog.dismiss();
+            GoalsResourceWrapper.getInstance(data).editGoal(goal, goalToSave, opponentGoal, data -> {
+                GameFragment.this.data = data;
+                update();
+            });
         });
     }
 

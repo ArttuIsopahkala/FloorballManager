@@ -79,53 +79,26 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
                 holder.roleText.setText(roleText);
                 holder.nameText.setText(userInvitation.getTeam().getName());
 
-                holder.removeIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.DENY, null, new FirebaseDatabaseService.EditDataSuccessListener() {
-                            @Override
-                            public void onEditDataSuccess() {
-                                UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                    @Override
-                                    public void onDeleteDataSuccess() {
-                                        AppRes.getInstance().setUserInvitation(userInvitation.getUserConnectionId(), null);
-                                        update();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                holder.removeIcon.setOnClickListener(v -> UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.DENY, null, () -> UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), () -> {
+                    AppRes.getInstance().setUserInvitation(userInvitation.getUserConnectionId(), null);
+                    update();
+                })));
 
-                holder.acceptIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Add team to user
-                        final User userToSave = AppRes.getInstance().getUser();
-                        userToSave.getTeamIds().add(userInvitation.getTeamId());
-                        UsersResource.getInstance().editUser(userToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                            @Override
-                            public void onEditDataSuccess() {
-                                AppRes.getInstance().setUser(userToSave);
-                                // Add team to AppRes. Team is loaded when invitations are shown.
-                                AppRes.getInstance().getTeams().put(userInvitation.getTeamId(), userInvitation.getTeam());
-                                // Remove invitation
-                                UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), new FirebaseDatabaseService.DeleteDataSuccessListener() {
-                                    @Override
-                                    public void onDeleteDataSuccess() {
-                                        AppRes.getInstance().setUserInvitation(userInvitation.getUserConnectionId(), null);
-                                        // Set user connection as connected
-                                        UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.CONNECTED, userToSave.getUserId(), new FirebaseDatabaseService.EditDataSuccessListener() {
-                                            @Override
-                                            public void onEditDataSuccess() {
-                                                update();
-                                            }
-                                        });
-                                    }
-                                });
-                            }
+                holder.acceptIcon.setOnClickListener(v -> {
+                    // Add team to user
+                    final User userToSave = AppRes.getInstance().getUser();
+                    userToSave.getTeamIds().add(userInvitation.getTeamId());
+                    UsersResource.getInstance().editUser(userToSave, () -> {
+                        AppRes.getInstance().setUser(userToSave);
+                        // Add team to AppRes. Team is loaded when invitations are shown.
+                        AppRes.getInstance().getTeams().put(userInvitation.getTeamId(), userInvitation.getTeam());
+                        // Remove invitation
+                        UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), () -> {
+                            AppRes.getInstance().setUserInvitation(userInvitation.getUserConnectionId(), null);
+                            // Set user connection as connected
+                            UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.CONNECTED, userToSave.getUserId(), this::update);
                         });
-                    }
+                    });
                 });
 
                 userInvitationsContainer.addView(cv);
@@ -155,18 +128,8 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
 
         update();
 
-        addTeamButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(null);
-            }
-        });
-        bluetoothButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToBluetoothFragment();
-            }
-        });
+        addTeamButton.setOnClickListener(v12 -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(null));
+        bluetoothButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToBluetoothFragment());
         return v;
     }
 

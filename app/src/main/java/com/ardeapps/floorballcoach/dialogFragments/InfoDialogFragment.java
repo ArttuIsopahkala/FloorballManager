@@ -74,12 +74,7 @@ public class InfoDialogFragment extends DialogFragment {
         description.setText(desc_text);
 
         ok_button = v.findViewById(R.id.btn_ok);
-        ok_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        ok_button.setOnClickListener(v1 -> dismiss());
 
         return v;
     }

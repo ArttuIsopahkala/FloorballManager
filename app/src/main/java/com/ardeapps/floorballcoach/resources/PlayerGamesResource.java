@@ -39,13 +39,10 @@ public class PlayerGamesResource extends FirebaseDatabaseService {
         if(!playerIds.isEmpty()) {
             final ArrayList<String> playerIdsEdited = new ArrayList<>();
             for(final String playerId : playerIds) {
-                editData(database.child(playerId).child(seasonId).child(game.getGameId()), game, new EditDataSuccessListener() {
-                    @Override
-                    public void onEditDataSuccess() {
-                        playerIdsEdited.add(playerId);
-                        if(playerIds.size() == playerIdsEdited.size()) {
-                            handler.onEditDataSuccess();
-                        }
+                editData(database.child(playerId).child(seasonId).child(game.getGameId()), game, () -> {
+                    playerIdsEdited.add(playerId);
+                    if(playerIds.size() == playerIdsEdited.size()) {
+                        handler.onEditDataSuccess();
                     }
                 });
             }
@@ -58,13 +55,10 @@ public class PlayerGamesResource extends FirebaseDatabaseService {
         if(!playerIds.isEmpty()) {
             final ArrayList<String> playerIdsRemoved = new ArrayList<>();
             for(final String playerId : playerIds) {
-                deleteData(database.child(playerId).child(seasonId).child(gameId), new DeleteDataSuccessListener() {
-                    @Override
-                    public void onDeleteDataSuccess() {
-                        playerIdsRemoved.add(playerId);
-                        if(playerIds.size() == playerIdsRemoved.size()) {
-                            handler.onDeleteDataSuccess();
-                        }
+                deleteData(database.child(playerId).child(seasonId).child(gameId), () -> {
+                    playerIdsRemoved.add(playerId);
+                    if(playerIds.size() == playerIdsRemoved.size()) {
+                        handler.onDeleteDataSuccess();
                     }
                 });
             }
@@ -81,18 +75,15 @@ public class PlayerGamesResource extends FirebaseDatabaseService {
      * Get games where player has been played indexed by gameId
      */
     public void getGames(String playerId, String seasonId, final GetGamesHandler handler) {
-        getData(database.child(playerId).child(seasonId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, Game> games = new HashMap<>();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    final Game game = snapshot.getValue(Game.class);
-                    if(game != null) {
-                        games.put(game.getGameId(), game);
-                    }
+        getData(database.child(playerId).child(seasonId), dataSnapshot -> {
+            final Map<String, Game> games = new HashMap<>();
+            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                final Game game = snapshot.getValue(Game.class);
+                if(game != null) {
+                    games.put(game.getGameId(), game);
                 }
-                handler.onGamesLoaded(games);
             }
+            handler.onGamesLoaded(games);
         });
     }
 
@@ -100,20 +91,17 @@ public class PlayerGamesResource extends FirebaseDatabaseService {
      * Get all games of seasons where player has been played indexed by gameId
      */
     public void getAllGames(String playerId, final GetGamesHandler handler) {
-        getData(database.child(playerId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, Game> games = new HashMap<>();
-                for(DataSnapshot season : dataSnapshot.getChildren()) {
-                    for(DataSnapshot snapshot : season.getChildren()) {
-                        final Game game = snapshot.getValue(Game.class);
-                        if(game != null) {
-                            games.put(game.getGameId(), game);
-                        }
+        getData(database.child(playerId), dataSnapshot -> {
+            final Map<String, Game> games = new HashMap<>();
+            for(DataSnapshot season : dataSnapshot.getChildren()) {
+                for(DataSnapshot snapshot : season.getChildren()) {
+                    final Game game = snapshot.getValue(Game.class);
+                    if(game != null) {
+                        games.put(game.getGameId(), game);
                     }
                 }
-                handler.onGamesLoaded(games);
             }
+            handler.onGamesLoaded(games);
         });
     }
 

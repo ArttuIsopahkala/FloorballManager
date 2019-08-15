@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
-import com.ardeapps.floorballcoach.handlers.GetGamesHandler;
 import com.ardeapps.floorballcoach.handlers.GetGoalsHandler;
 import com.ardeapps.floorballcoach.objects.Game;
 import com.ardeapps.floorballcoach.objects.Goal;
@@ -32,7 +31,6 @@ import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.services.StatsHelper;
 import com.ardeapps.floorballcoach.utils.Helper;
 import com.ardeapps.floorballcoach.utils.ImageUtil;
-import com.ardeapps.floorballcoach.utils.Logger;
 import com.ardeapps.floorballcoach.utils.StringUtils;
 import com.ardeapps.floorballcoach.viewObjects.PlayerPointsData;
 import com.ardeapps.floorballcoach.viewObjects.TeamGameData;
@@ -41,7 +39,6 @@ import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -223,12 +220,7 @@ public class TeamStatsFragment extends Fragment {
             }
         });
 
-        editIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(team);
-            }
-        });
+        editIcon.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(team));
         return v;
     }
 
@@ -273,33 +265,17 @@ public class TeamStatsFragment extends Fragment {
     }
     private void loadStats(final String seasonId) {
         if(seasonId == null) {
-            GoalsResource.getInstance().getAllGoals(new GetGoalsHandler() {
-                @Override
-                public void onGoalsLoaded(final Map<String, ArrayList<Goal>> goals) {
-                    GamesResource.getInstance().getAllGames(new GetGamesHandler() {
-                        @Override
-                        public void onGamesLoaded(Map<String, Game> games) {
-                            TeamStatsFragment.this.stats = goals;
-                            TeamStatsFragment.this.games = games;
-                            updateStats(null);
-                        }
-                    });
-                }
-            });
+            GoalsResource.getInstance().getAllGoals(goals -> GamesResource.getInstance().getAllGames(games -> {
+                TeamStatsFragment.this.stats = goals;
+                TeamStatsFragment.this.games = games;
+                updateStats(null);
+            }));
         } else {
-            GoalsResource.getInstance().getGoals(seasonId, new GetGoalsHandler() {
-                @Override
-                public void onGoalsLoaded(final Map<String, ArrayList<Goal>> goals) {
-                    GamesResource.getInstance().getGames(seasonId, new GetGamesHandler() {
-                        @Override
-                        public void onGamesLoaded(Map<String, Game> games) {
-                            TeamStatsFragment.this.stats = goals;
-                            TeamStatsFragment.this.games = games;
-                            updateStats(seasonId);
-                        }
-                    });
-                }
-            });
+            GoalsResource.getInstance().getGoals(seasonId, (GetGoalsHandler) goals -> GamesResource.getInstance().getGames(seasonId, games -> {
+                TeamStatsFragment.this.stats = goals;
+                TeamStatsFragment.this.games = games;
+                updateStats(seasonId);
+            }));
         }
     }
 
@@ -308,12 +284,7 @@ public class TeamStatsFragment extends Fragment {
 
         // Set games sorted by date
         sortedGames = new ArrayList<>(games.values());
-        Collections.sort(sortedGames, new Comparator<Game>() {
-            @Override
-            public int compare(Game o1, Game o2) {
-                return Long.valueOf(o2.getDate()).compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(sortedGames, (o1, o2) -> Long.valueOf(o2.getDate()).compareTo(o1.getDate()));
 
         ArrayList<String> gameTitles = new ArrayList<>();
         gameTitles.add(getString(R.string.player_stats_all_games));
@@ -376,7 +347,6 @@ public class TeamStatsFragment extends Fragment {
         longestNotLoseText.setText(getLongestStatsText(stats.longestNotLose));
 
         ArrayList<PlayerPointsData> playerPoints = StatsHelper.getSortedTrendingPlayers(goalsInThreeLastGames);
-        Logger.toast("" + playerPoints.size());
         final PlayerStatsHolder holder = new PlayerStatsHolder();
         LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
         trendingContainer.removeAllViews();

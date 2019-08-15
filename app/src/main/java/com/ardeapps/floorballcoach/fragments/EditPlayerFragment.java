@@ -196,100 +196,86 @@ public class EditPlayerFragment extends Fragment implements DataView {
             }
         }
 
-        selectPictureIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final SelectPictureDialogFragment dialog = new SelectPictureDialogFragment();
-                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Vaihda kuva");
-                dialog.setListener(new SelectPictureDialogFragment.SelectPictureDialogCloseListener() {
-                    @Override
-                    public void onPictureSelected(Bitmap logo) {
-                        refreshPicture(logo);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onDefaultSelected() {
-                        refreshPicture(null);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelClick() {
-                        dialog.dismiss();
-                    }
-                });
-            }
-        });
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = nameText.getText().toString();
-                String numberString = numberText.getText().toString();
-
-                if (StringUtils.isEmptyString(name)) {
-                    Logger.toast(getString(R.string.error_empty));
-                    return;
+        selectPictureIcon.setOnClickListener(v12 -> {
+            final SelectPictureDialogFragment dialog = new SelectPictureDialogFragment();
+            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Vaihda kuva");
+            dialog.setListener(new SelectPictureDialogFragment.SelectPictureDialogCloseListener() {
+                @Override
+                public void onPictureSelected(Bitmap logo) {
+                    refreshPicture(logo);
+                    dialog.dismiss();
                 }
-                Long number = null;
-                if (!StringUtils.isEmptyString(numberString)) {
-                    try {
-                        number = Long.parseLong(numberString);
-                        if (number < 1 || number > 99) {
-                            Logger.toast(getString(R.string.error_invalid_value));
-                            return;
-                        }
-                    } catch (NumberFormatException nfe) {
+
+                @Override
+                public void onDefaultSelected() {
+                    refreshPicture(null);
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onCancelClick() {
+                    dialog.dismiss();
+                }
+            });
+        });
+        saveButton.setOnClickListener(v1 -> {
+            String name = nameText.getText().toString();
+            String numberString = numberText.getText().toString();
+
+            if (StringUtils.isEmptyString(name)) {
+                Logger.toast(getString(R.string.error_empty));
+                return;
+            }
+            Long number = null;
+            if (!StringUtils.isEmptyString(numberString)) {
+                try {
+                    number = Long.parseLong(numberString);
+                    if (number < 1 || number > 99) {
                         Logger.toast(getString(R.string.error_invalid_value));
                         return;
                     }
-                }
-                // Collect strengths
-                ArrayList<String> strengths = new ArrayList<>();
-                for(CheckBox checkBox : strengthCheckBoxes) {
-                    Player.Skill skill = (Player.Skill)checkBox.getTag();
-                    if(checkBox.isChecked()) {
-                        strengths.add(skill.toDatabaseName());
-                    }
-                }
-                if(strengths.size() > 3) {
-                    Logger.toast(getString(R.string.strengths_too_many_error));
+                } catch (NumberFormatException nfe) {
+                    Logger.toast(getString(R.string.error_invalid_value));
                     return;
                 }
-
-                int positionSpinnerPosition = positionSpinner.getSelectedItemPosition();
-                String position = positionTypes.get(positionSpinnerPosition).toDatabaseName();
-                String shoots = leftRadioButton.isChecked() ? Player.Shoots.LEFT.toDatabaseName() : Player.Shoots.RIGHT.toDatabaseName();
-
-                final Player playerToSave = player != null ? player.clone() : new Player();
-                playerToSave.setTeamId(AppRes.getInstance().getSelectedTeam().getTeamId());
-                playerToSave.setName(name);
-                playerToSave.setShoots(shoots);
-                if(number != null) {
-                    playerToSave.setNumber(number);
-                }
-                playerToSave.setPosition(position);
-                playerToSave.setStrengths(strengths);
-
-                if (player != null) {
-                    PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                        @Override
-                        public void onEditDataSuccess() {
-                            handlePictureAndSave(playerToSave);
-                        }
-                    });
-                } else {
-                    playerToSave.setActive(true);
-                    PlayersResource.getInstance().addPlayer(playerToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
-                        @Override
-                        public void onAddDataSuccess(String id) {
-                            playerToSave.setPlayerId(id);
-                            handlePictureAndSave(playerToSave);
-                        }
-                    });
-                }
-
             }
+            // Collect strengths
+            ArrayList<String> strengths = new ArrayList<>();
+            for(CheckBox checkBox : strengthCheckBoxes) {
+                Player.Skill skill = (Player.Skill)checkBox.getTag();
+                if(checkBox.isChecked()) {
+                    strengths.add(skill.toDatabaseName());
+                }
+            }
+            if(strengths.size() > 3) {
+                Logger.toast(getString(R.string.strengths_too_many_error));
+                return;
+            }
+
+            int positionSpinnerPosition = positionSpinner.getSelectedItemPosition();
+            String position = positionTypes.get(positionSpinnerPosition).toDatabaseName();
+            String shoots = leftRadioButton.isChecked() ? Player.Shoots.LEFT.toDatabaseName() : Player.Shoots.RIGHT.toDatabaseName();
+
+            final Player playerToSave = player != null ? player.clone() : new Player();
+            playerToSave.setTeamId(AppRes.getInstance().getSelectedTeam().getTeamId());
+            playerToSave.setName(name);
+            playerToSave.setShoots(shoots);
+            if(number != null) {
+                playerToSave.setNumber(number);
+            }
+            playerToSave.setPosition(position);
+            playerToSave.setStrengths(strengths);
+
+            if (player != null) {
+                PlayersResource.getInstance().editPlayer(playerToSave, () -> handlePictureAndSave(playerToSave));
+            } else {
+                playerToSave.setActive(true);
+                PlayersResource.getInstance().addPlayer(playerToSave, id -> {
+                    playerToSave.setPlayerId(id);
+                    handlePictureAndSave(playerToSave);
+                });
+            }
+
         });
 
         return v;
@@ -299,60 +285,39 @@ public class EditPlayerFragment extends Fragment implements DataView {
         if(player == null) {
             // Is picture added or changed?
             if(selectedPicture != null) {
-                PictureResource.getInstance().addPicture(playerToSave.getPlayerId(), selectedPicture, new FirebaseStorageService.AddBitmapListener() {
-                    @Override
-                    public void onAddBitmapSuccess() {
-                        playerToSave.setPictureUploaded(true);
-                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                            @Override
-                            public void onEditDataSuccess() {
-                                playerToSave.setPicture(selectedPicture);
-                                mListener.onPlayerEdited(playerToSave);
-                            }
-                        });
-                    }
+                PictureResource.getInstance().addPicture(playerToSave.getPlayerId(), selectedPicture, () -> {
+                    playerToSave.setPictureUploaded(true);
+                    PlayersResource.getInstance().editPlayer(playerToSave, () -> {
+                        playerToSave.setPicture(selectedPicture);
+                        mListener.onPlayerEdited(playerToSave);
+                    });
                 });
             } else {
                 // Picture not changed
                 playerToSave.setPictureUploaded(false);
-                PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                    @Override
-                    public void onEditDataSuccess() {
-                        playerToSave.setPicture(null);
-                        mListener.onPlayerEdited(playerToSave);
-                    }
+                PlayersResource.getInstance().editPlayer(playerToSave, () -> {
+                    playerToSave.setPicture(null);
+                    mListener.onPlayerEdited(playerToSave);
                 });
             }
         } else {
             // Is picture added or changed?
             if(selectedPicture != null && !selectedPicture.sameAs(player.getPicture())) {
-                PictureResource.getInstance().addPicture(playerToSave.getPlayerId(), selectedPicture, new FirebaseStorageService.AddBitmapListener() {
-                    @Override
-                    public void onAddBitmapSuccess() {
-                        playerToSave.setPictureUploaded(true);
-                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                            @Override
-                            public void onEditDataSuccess() {
-                                playerToSave.setPicture(selectedPicture);
-                                mListener.onPlayerEdited(playerToSave);
-                            }
-                        });
-                    }
+                PictureResource.getInstance().addPicture(playerToSave.getPlayerId(), selectedPicture, () -> {
+                    playerToSave.setPictureUploaded(true);
+                    PlayersResource.getInstance().editPlayer(playerToSave, () -> {
+                        playerToSave.setPicture(selectedPicture);
+                        mListener.onPlayerEdited(playerToSave);
+                    });
                 });
                 // Is picture removed?
             } else if(selectedPicture == null && player.getPicture() != null){
-                PictureResource.getInstance().removePicture(playerToSave.getPlayerId(), new FirebaseStorageService.DeleteBitmapSuccessListener() {
-                    @Override
-                    public void onDeleteBitmapSuccess() {
-                        playerToSave.setPictureUploaded(false);
-                        PlayersResource.getInstance().editPlayer(playerToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                            @Override
-                            public void onEditDataSuccess() {
-                                playerToSave.setPicture(null);
-                                mListener.onPlayerEdited(playerToSave);
-                            }
-                        });
-                    }
+                PictureResource.getInstance().removePicture(playerToSave.getPlayerId(), () -> {
+                    playerToSave.setPictureUploaded(false);
+                    PlayersResource.getInstance().editPlayer(playerToSave, () -> {
+                        playerToSave.setPicture(null);
+                        mListener.onPlayerEdited(playerToSave);
+                    });
                 });
             } else {
                 // Picture not changed -> set old image

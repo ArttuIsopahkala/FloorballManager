@@ -43,20 +43,14 @@ public class TimePicker extends LinearLayout {
 
     private void setTextListeners() {
         // ON FOCUS CHANGE
-        minutesText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    formatMinutesText();
-                }
+        minutesText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                formatMinutesText();
             }
         });
-        secondsText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    formatSecondsText();
-                }
+        secondsText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                formatSecondsText();
             }
         });
         // ON TEXT CHANGE
@@ -95,46 +89,34 @@ public class TimePicker extends LinearLayout {
             }
         });
         // IME
-        minutesText.setKeyImeChangeListener(new TimeEditText.KeyImeChange() {
-            @Override
-            public void onKeyIme(int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    formatMinutesText();
-                    minutesText.clearFocus();
-                    Helper.hideKeyBoard(minutesText);
-                }
+        minutesText.setKeyImeChangeListener((keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                formatMinutesText();
+                minutesText.clearFocus();
+                Helper.hideKeyBoard(minutesText);
             }
         });
-        secondsText.setKeyImeChangeListener(new TimeEditText.KeyImeChange() {
-            @Override
-            public void onKeyIme(int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    formatSecondsText();
-                    secondsText.clearFocus();
-                    Helper.hideKeyBoard(secondsText);
-                }
+        secondsText.setKeyImeChangeListener((keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                formatSecondsText();
+                secondsText.clearFocus();
+                Helper.hideKeyBoard(secondsText);
             }
         });
         // EDITOR
-        minutesText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    formatMinutesText();
-                    minutesText.clearFocus();
-                    Helper.hideKeyBoard(minutesText);
-                }
-                return false;
+        minutesText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                formatMinutesText();
+                minutesText.clearFocus();
+                Helper.hideKeyBoard(minutesText);
             }
+            return false;
         });
-        secondsText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    formatSecondsText();
-                }
-                return false;
+        secondsText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                formatSecondsText();
             }
+            return false;
         });
 
     }

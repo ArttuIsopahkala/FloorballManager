@@ -82,36 +82,24 @@ public class GoalDetailsFragment extends Fragment implements DataView {
             Helper.setRadioButtonChecked(rlRadioButton, true);
         }
 
-        fullRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    mListener.onFullRadioButtonChecked();
-                }
+        fullRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                mListener.onFullRadioButtonChecked();
             }
         });
-        yvRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    mListener.onYvRadioButtonChecked();
-                }
+        yvRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                mListener.onYvRadioButtonChecked();
             }
         });
-        avRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    mListener.onAvRadioButtonChecked();
-                }
+        avRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                mListener.onAvRadioButtonChecked();
             }
         });
-        rlRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    mListener.onRlRadioButtonChecked();
-                }
+        rlRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                mListener.onRlRadioButtonChecked();
             }
         });
         return v;

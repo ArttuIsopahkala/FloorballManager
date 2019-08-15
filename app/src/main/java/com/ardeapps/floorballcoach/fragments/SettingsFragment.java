@@ -54,61 +54,27 @@ public class SettingsFragment extends Fragment {
         moreText.setText(Html.fromHtml("<u>" + getString(R.string.settings_link_more) + "</u>"));
         privacyPolicyText.setText(Html.fromHtml("<u>" + getString(R.string.settings_link_privacy) + "</u>"));
 
-        inviteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppInviteService.openChooser();
-            }
+        inviteButton.setOnClickListener(v16 -> AppInviteService.openChooser());
+
+        changePasswordButton.setOnClickListener(v15 -> {
+            ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.settings_change_password_confirm));
+            dialogFragment.show(getChildFragmentManager(), "Lähetetäänkö salasananvaihtolinkki?");
+            dialogFragment.setListener(() -> FirebaseAuthService.getInstance().sendPasswordResetEmail(AppRes.getInstance().getUser().getEmail(), () -> {
+                InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.login_forgot_password_sent));
+                dialog.show(getChildFragmentManager(), "Salasanan vaihtolinkki lähetettiin");
+            }));
         });
 
-        changePasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.settings_change_password_confirm));
-                dialogFragment.show(getChildFragmentManager(), "Lähetetäänkö salasananvaihtolinkki?");
-                dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                    @Override
-                    public void onDialogYesButtonClick() {
-                        FirebaseAuthService.getInstance().sendPasswordResetEmail(AppRes.getInstance().getUser().getEmail(), new FirebaseAuthService.ResetPasswordHandler() {
-                            @Override
-                            public void onEmailSentSuccess() {
-                                InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.login_forgot_password_sent));
-                                dialog.show(getChildFragmentManager(), "Salasanan vaihtolinkki lähetettiin");
-                            }
-                        });
-                    }
-                });
-            }
+        logOutButton.setOnClickListener(v14 -> {
+            FirebaseAuth.getInstance().signOut();
+            FragmentListeners.getInstance().getFragmentChangeListener().goToLoginFragment();
         });
 
-        logOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                FragmentListeners.getInstance().getFragmentChangeListener().goToLoginFragment();
-            }
-        });
+        rateText.setOnClickListener(v13 -> openUrl(getString(R.string.google_play_app_url)));
 
-        rateText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUrl(getString(R.string.google_play_app_url));
-            }
-        });
+        moreText.setOnClickListener(v12 -> openUrl(getString(R.string.google_play_developer_url)));
 
-        moreText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUrl(getString(R.string.google_play_developer_url));
-            }
-        });
-
-        privacyPolicyText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUrl(AppData.PRIVACY_POLICY_URL);
-            }
-        });
+        privacyPolicyText.setOnClickListener(v1 -> openUrl(AppData.PRIVACY_POLICY_URL));
 
         return v;
     }

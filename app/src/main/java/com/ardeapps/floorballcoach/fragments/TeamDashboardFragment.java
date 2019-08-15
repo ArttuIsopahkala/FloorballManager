@@ -65,46 +65,18 @@ public class TeamDashboardFragment extends Fragment {
             ownStatsButton.setVisibility(View.GONE);
         }
 
-        ownStatsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String selectedPlayerId = AppRes.getInstance().getSelectedPlayerId();
-                Player player = AppRes.getInstance().getPlayers().get(selectedPlayerId);
-                if(player != null) {
-                    FragmentListeners.getInstance().getFragmentChangeListener().goToPlayerStatsFragment(player);
-                }
+        ownStatsButton.setOnClickListener(v16 -> {
+            String selectedPlayerId = AppRes.getInstance().getSelectedPlayerId();
+            Player player = AppRes.getInstance().getPlayers().get(selectedPlayerId);
+            if(player != null) {
+                FragmentListeners.getInstance().getFragmentChangeListener().goToPlayerStatsFragment(player);
             }
         });
-        gamesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToGamesFragment();
-            }
-        });
-        linesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToLinesFragment();
-            }
-        });
-        playersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToPlayersFragment();
-            }
-        });
-        teamStatsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToTeamStatsFragment();
-            }
-        });
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToTeamSettingsFragment();
-            }
-        });
+        gamesButton.setOnClickListener(v15 -> FragmentListeners.getInstance().getFragmentChangeListener().goToGamesFragment());
+        linesButton.setOnClickListener(v14 -> FragmentListeners.getInstance().getFragmentChangeListener().goToLinesFragment());
+        playersButton.setOnClickListener(v13 -> FragmentListeners.getInstance().getFragmentChangeListener().goToPlayersFragment());
+        teamStatsButton.setOnClickListener(v12 -> FragmentListeners.getInstance().getFragmentChangeListener().goToTeamStatsFragment());
+        settingsButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToTeamSettingsFragment());
         return v;
     }
 

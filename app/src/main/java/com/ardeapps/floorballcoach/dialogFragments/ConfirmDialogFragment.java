@@ -76,27 +76,21 @@ public class ConfirmDialogFragment extends DialogFragment {
         desc_text.setText(desc);
 
         no_button = v.findViewById(R.id.btn_no);
-        no_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                if(yesNoListener != null) {
-                    yesNoListener.onDialogNoButtonClick();
-                }
+        no_button.setOnClickListener(v12 -> {
+            dismiss();
+            if(yesNoListener != null) {
+                yesNoListener.onDialogNoButtonClick();
             }
         });
 
         yes_button = v.findViewById(R.id.btn_yes);
-        yes_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                if(mListener != null) {
-                    mListener.onDialogYesButtonClick();
-                }
-                if(yesNoListener != null) {
-                    yesNoListener.onDialogYesButtonClick();
-                }
+        yes_button.setOnClickListener(v1 -> {
+            dismiss();
+            if(mListener != null) {
+                mListener.onDialogYesButtonClick();
+            }
+            if(yesNoListener != null) {
+                yesNoListener.onDialogYesButtonClick();
             }
         });
 

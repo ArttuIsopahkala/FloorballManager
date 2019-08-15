@@ -121,47 +121,22 @@ public class Helper {
     }
 
     public static void setSpinnerSelection(final Spinner spinner, final int position) {
-        spinner.post(new Runnable() {
-            @Override
-            public void run() {
-                spinner.setSelection(position);
-            }
-        });
+        spinner.post(() -> spinner.setSelection(position));
     }
 
     public static void setEditTextValue(final EditText editText, final String value) {
-        editText.post(new Runnable() {
-            @Override
-            public void run() {
-                editText.setText(value);
-            }
-        });
+        editText.post(() -> editText.setText(value));
     }
 
     public static void setRadioButtonChecked(final RadioButton radioButton, final boolean checked) {
-        radioButton.post(new Runnable() {
-            @Override
-            public void run() {
-                radioButton.setChecked(checked);
-            }
-        });
+        radioButton.post(() -> radioButton.setChecked(checked));
     }
 
     public static void setCheckBoxChecked(final CheckBox checkBox, final boolean checked) {
-        checkBox.post(new Runnable() {
-            @Override
-            public void run() {
-                checkBox.setChecked(checked);
-            }
-        });
+        checkBox.post(() -> checkBox.setChecked(checked));
     }
 
     public static void setDatePickerValue(final DatePicker datePicker, final Calendar calendar) {
-        datePicker.post(new Runnable() {
-            @Override
-            public void run() {
-                datePicker.setDate(calendar);
-            }
-        });
+        datePicker.post(() -> datePicker.setDate(calendar));
     }
 }

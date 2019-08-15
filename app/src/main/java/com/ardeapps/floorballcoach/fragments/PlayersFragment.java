@@ -67,12 +67,7 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
 
         update();
 
-        createPlayerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentListeners.getInstance().getFragmentChangeListener().goToEditPlayerFragment(null);
-            }
-        });
+        createPlayerButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditPlayerFragment(null));
 
         return v;
     }

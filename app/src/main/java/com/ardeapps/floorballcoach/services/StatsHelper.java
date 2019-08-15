@@ -405,16 +405,13 @@ public class StatsHelper extends AnalyzerService {
             }
         }
         ArrayList<PlayerPointsData> playerPoints = new ArrayList<>(playerPointsMap.values());
-        Collections.sort(playerPoints, new Comparator<PlayerPointsData>() {
-            @Override
-            public int compare(PlayerPointsData o1, PlayerPointsData o2) {
-                int points1 = o1.goals + o1.assists;
-                int points2 = o2.goals + o2.assists;
-                if(points1 == points2) {
-                    return o2.goals - o1.goals;
-                } else {
-                    return points2 - points1;
-                }
+        Collections.sort(playerPoints, (o1, o2) -> {
+            int points1 = o1.goals + o1.assists;
+            int points2 = o2.goals + o2.assists;
+            if(points1 == points2) {
+                return o2.goals - o1.goals;
+            } else {
+                return points2 - points1;
             }
         });
         return playerPoints;

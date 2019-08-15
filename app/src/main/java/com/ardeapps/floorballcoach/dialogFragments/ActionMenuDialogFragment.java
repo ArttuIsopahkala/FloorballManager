@@ -68,26 +68,11 @@ public class ActionMenuDialogFragment extends DialogFragment {
 
         editButton.setText(editText);
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               mListener.onEditItem();
-            }
-        });
+        editButton.setOnClickListener(v13 -> mListener.onEditItem());
 
-        removeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onRemoveItem();
-            }
-        });
+        removeButton.setOnClickListener(v12 -> mListener.onRemoveItem());
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onCancel();
-            }
-        });
+        cancelButton.setOnClickListener(v1 -> mListener.onCancel());
 
         return v;
     }

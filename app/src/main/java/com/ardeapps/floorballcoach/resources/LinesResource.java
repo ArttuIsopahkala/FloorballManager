@@ -38,38 +38,29 @@ public class LinesResource extends FirebaseDatabaseService {
 
             // Add, edit or remove line
             if(StringUtils.isEmptyString(line.getLineId())) {
-                addLine(line, new FirebaseDatabaseService.AddDataSuccessListener() {
-                    @Override
-                    public void onAddDataSuccess(String id) {
-                        line.setLineId(id);
-                        savedLines.put(line.getLineNumber(), line);
+                addLine(line, id -> {
+                    line.setLineId(id);
+                    savedLines.put(line.getLineNumber(), line);
 
-                        linesHandled.add(line);
-                        if(linesHandled.size() == lines.size()) {
-                            handler.onLinesSaved(savedLines);
-                        }
+                    linesHandled.add(line);
+                    if(linesHandled.size() == lines.size()) {
+                        handler.onLinesSaved(savedLines);
                     }
                 });
             } else {
                 if(line.getPlayerIdMap() == null || line.getPlayerIdMap().isEmpty()) {
-                    removeLine(line.getLineId(), new DeleteDataSuccessListener() {
-                        @Override
-                        public void onDeleteDataSuccess() {
-                            linesHandled.add(line);
-                            if(linesHandled.size() == lines.size()) {
-                                handler.onLinesSaved(savedLines);
-                            }
+                    removeLine(line.getLineId(), () -> {
+                        linesHandled.add(line);
+                        if(linesHandled.size() == lines.size()) {
+                            handler.onLinesSaved(savedLines);
                         }
                     });
                 } else {
-                    editLine(line, new FirebaseDatabaseService.EditDataSuccessListener() {
-                        @Override
-                        public void onEditDataSuccess() {
-                            savedLines.put(line.getLineNumber(), line);
-                            linesHandled.add(line);
-                            if(linesHandled.size() == lines.size()) {
-                                handler.onLinesSaved(savedLines);
-                            }
+                    editLine(line, () -> {
+                        savedLines.put(line.getLineNumber(), line);
+                        linesHandled.add(line);
+                        if(linesHandled.size() == lines.size()) {
+                            handler.onLinesSaved(savedLines);
                         }
                     });
                 }
@@ -98,18 +89,15 @@ public class LinesResource extends FirebaseDatabaseService {
      * Get lines indexed by line number
      */
     public void getLines(final GetLinesHandler handler) {
-        getData(database, new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                Map<Integer, Line> lines = new HashMap<>();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Line line = snapshot.getValue(Line.class);
-                    if(line != null) {
-                        lines.put(line.getLineNumber(), line);
-                    }
+        getData(database, dataSnapshot -> {
+            Map<Integer, Line> lines = new HashMap<>();
+            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                Line line = snapshot.getValue(Line.class);
+                if(line != null) {
+                    lines.put(line.getLineNumber(), line);
                 }
-                handler.onLinesLoaded(lines);
             }
+            handler.onLinesLoaded(lines);
         });
     }
 }

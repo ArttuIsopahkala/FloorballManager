@@ -48,13 +48,10 @@ public class PlayerStatsResource extends FirebaseDatabaseService {
         if(!playerIds.isEmpty()) {
             final ArrayList<String> removedStats = new ArrayList<>();
             for(final String playerId : playerIds) {
-                deleteData(database.child(playerId).child(seasonId).child(gameId), new DeleteDataSuccessListener() {
-                    @Override
-                    public void onDeleteDataSuccess() {
-                        removedStats.add(playerId);
-                        if(playerIds.size() == removedStats.size()) {
-                            handler.onDeleteDataSuccess();
-                        }
+                deleteData(database.child(playerId).child(seasonId).child(gameId), () -> {
+                    removedStats.add(playerId);
+                    if(playerIds.size() == removedStats.size()) {
+                        handler.onDeleteDataSuccess();
                     }
                 });
             }
@@ -71,11 +68,33 @@ public class PlayerStatsResource extends FirebaseDatabaseService {
      * Get stats by player in season indexed by gameId
      */
     public void getStats(String playerId, String seasonId, final GetStatsHandler handler) {
-        getData(database.child(playerId).child(seasonId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, ArrayList<Goal>> stats = new HashMap<>();
-                for(DataSnapshot game : dataSnapshot.getChildren()) {
+        getData(database.child(playerId).child(seasonId), dataSnapshot -> {
+            final Map<String, ArrayList<Goal>> stats = new HashMap<>();
+            for(DataSnapshot game : dataSnapshot.getChildren()) {
+                String gameId = game.getKey();
+                if(gameId != null) {
+                    ArrayList<Goal> goals = new ArrayList<>();
+                    for(DataSnapshot snapshot : game.getChildren()) {
+                        final Goal goal = snapshot.getValue(Goal.class);
+                        if(goal != null) {
+                            goals.add(goal);
+                        }
+                    }
+                    stats.put(gameId, goals);
+                }
+            }
+            handler.onStatsLoaded(stats);
+        });
+    }
+
+    /**
+     * Get all stats by player indexed by gameId
+     */
+    public void getAllStats(String playerId, final GetStatsHandler handler) {
+        getData(database.child(playerId), dataSnapshot -> {
+            final Map<String, ArrayList<Goal>> stats = new HashMap<>();
+            for(DataSnapshot season : dataSnapshot.getChildren()) {
+                for(DataSnapshot game : season.getChildren()) {
                     String gameId = game.getKey();
                     if(gameId != null) {
                         ArrayList<Goal> goals = new ArrayList<>();
@@ -88,36 +107,8 @@ public class PlayerStatsResource extends FirebaseDatabaseService {
                         stats.put(gameId, goals);
                     }
                 }
-                handler.onStatsLoaded(stats);
             }
-        });
-    }
-
-    /**
-     * Get all stats by player indexed by gameId
-     */
-    public void getAllStats(String playerId, final GetStatsHandler handler) {
-        getData(database.child(playerId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, ArrayList<Goal>> stats = new HashMap<>();
-                for(DataSnapshot season : dataSnapshot.getChildren()) {
-                    for(DataSnapshot game : season.getChildren()) {
-                        String gameId = game.getKey();
-                        if(gameId != null) {
-                            ArrayList<Goal> goals = new ArrayList<>();
-                            for(DataSnapshot snapshot : game.getChildren()) {
-                                final Goal goal = snapshot.getValue(Goal.class);
-                                if(goal != null) {
-                                    goals.add(goal);
-                                }
-                            }
-                            stats.put(gameId, goals);
-                        }
-                    }
-                }
-                handler.onStatsLoaded(stats);
-            }
+            handler.onStatsLoaded(stats);
         });
     }
 }

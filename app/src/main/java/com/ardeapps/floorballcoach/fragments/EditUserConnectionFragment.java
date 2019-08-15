@@ -101,20 +101,17 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             holder.nameNumberShootsText.setText(player.getNameWithNumber(false));
             holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
 
-            holder.playerContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (holder.isSelected()) {
-                        holder.setSelected(false);
-                        selectedPlayerId = null;
-                    } else {
-                        for(Map.Entry<String, PlayerHolder> entry : holders.entrySet()) {
-                            PlayerHolder holder = entry.getValue();
-                            holder.setSelected(false);
-                        }
-                        holder.setSelected(true);
-                        selectedPlayerId = player.getPlayerId();
+            holder.playerContainer.setOnClickListener(v12 -> {
+                if (holder.isSelected()) {
+                    holder.setSelected(false);
+                    selectedPlayerId = null;
+                } else {
+                    for(Map.Entry<String, PlayerHolder> entry : holders.entrySet()) {
+                        PlayerHolder holder1 = entry.getValue();
+                        holder1.setSelected(false);
                     }
+                    holder.setSelected(true);
+                    selectedPlayerId = player.getPlayerId();
                 }
             });
             playersList.addView(view);
@@ -167,12 +164,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveUserConnection();
-            }
-        });
+        saveButton.setOnClickListener(v1 -> saveUserConnection());
         return v;
     }
 
@@ -244,17 +236,14 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             }
             userConnectionToSave.setPlayerId(selectedPlayerId);
 
-            UserConnectionsResource.getInstance().editUserConnection(userConnectionToSave, new FirebaseDatabaseService.EditDataSuccessListener() {
-                @Override
-                public void onEditDataSuccess() {
-                    AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
-                    UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnectionToSave.getStatus());
-                    // Send user invitation again
-                    if(status != UserConnection.Status.CONNECTED) {
-                        sendUserInvitation(userConnectionToSave);
-                    } else {
-                        mListener.onUserConnectionEdited(userConnectionToSave);
-                    }
+            UserConnectionsResource.getInstance().editUserConnection(userConnectionToSave, () -> {
+                AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
+                UserConnection.Status status1 = UserConnection.Status.fromDatabaseName(userConnectionToSave.getStatus());
+                // Send user invitation again
+                if(status1 != UserConnection.Status.CONNECTED) {
+                    sendUserInvitation(userConnectionToSave);
+                } else {
+                    mListener.onUserConnectionEdited(userConnectionToSave);
                 }
             });
         } else {
@@ -264,13 +253,10 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             userConnectionToSave.setStatus(UserConnection.Status.PENDING.toDatabaseName());
             userConnectionToSave.setPlayerId(selectedPlayerId);
 
-            UserConnectionsResource.getInstance().addUserConnection(userConnectionToSave, new FirebaseDatabaseService.AddDataSuccessListener() {
-                @Override
-                public void onAddDataSuccess(String id) {
-                    userConnectionToSave.setUserConnectionId(id);
-                    AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
-                    sendUserInvitation(userConnectionToSave);
-                }
+            UserConnectionsResource.getInstance().addUserConnection(userConnectionToSave, id -> {
+                userConnectionToSave.setUserConnectionId(id);
+                AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
+                sendUserInvitation(userConnectionToSave);
             });
         }
     }
@@ -281,11 +267,6 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
         userInvitation.setTeamId(AppRes.getInstance().getSelectedTeam().getTeamId());
         userInvitation.setEmail(userConnection.getEmail());
         userInvitation.setRole(userConnection.getRole());
-        UserInvitationsResource.getInstance().sendUserInvitation(userInvitation, new FirebaseDatabaseService.EditDataSuccessListener() {
-            @Override
-            public void onEditDataSuccess() {
-                mListener.onUserConnectionEdited(userConnection);
-            }
-        });
+        UserInvitationsResource.getInstance().sendUserInvitation(userInvitation, () -> mListener.onUserConnectionEdited(userConnection));
     }
 }

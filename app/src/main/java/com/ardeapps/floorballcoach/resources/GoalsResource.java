@@ -60,39 +60,10 @@ public class GoalsResource extends FirebaseDatabaseService {
      * Get goals of all seasons indexed by gameId
      */
     public void getAllGoals(final GetGoalsHandler handler) {
-        getData(database, new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, ArrayList<Goal>> goalsMap = new HashMap<>();
-                for(DataSnapshot season : dataSnapshot.getChildren()) {
-                    for(DataSnapshot game : season.getChildren()) {
-                        String gameId = game.getKey();
-                        if(gameId != null) {
-                            ArrayList<Goal> goals = new ArrayList<>();
-                            for(DataSnapshot snapshot : game.getChildren()) {
-                                final Goal goal = snapshot.getValue(Goal.class);
-                                if(goal != null) {
-                                    goals.add(goal);
-                                }
-                            }
-                            goalsMap.put(gameId, goals);
-                        }
-                    }
-                }
-                handler.onGoalsLoaded(goalsMap);
-            }
-        });
-    }
-
-    /**
-     * Get goals of season indexed by gameId
-     */
-    public void getGoals(String seasonId, final GetGoalsHandler handler) {
-        getData(database.child(seasonId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, ArrayList<Goal>> goalsMap = new HashMap<>();
-                for(DataSnapshot game : dataSnapshot.getChildren()) {
+        getData(database, dataSnapshot -> {
+            final Map<String, ArrayList<Goal>> goalsMap = new HashMap<>();
+            for(DataSnapshot season : dataSnapshot.getChildren()) {
+                for(DataSnapshot game : season.getChildren()) {
                     String gameId = game.getKey();
                     if(gameId != null) {
                         ArrayList<Goal> goals = new ArrayList<>();
@@ -105,8 +76,31 @@ public class GoalsResource extends FirebaseDatabaseService {
                         goalsMap.put(gameId, goals);
                     }
                 }
-                handler.onGoalsLoaded(goalsMap);
             }
+            handler.onGoalsLoaded(goalsMap);
+        });
+    }
+
+    /**
+     * Get goals of season indexed by gameId
+     */
+    public void getGoals(String seasonId, final GetGoalsHandler handler) {
+        getData(database.child(seasonId), dataSnapshot -> {
+            final Map<String, ArrayList<Goal>> goalsMap = new HashMap<>();
+            for(DataSnapshot game : dataSnapshot.getChildren()) {
+                String gameId = game.getKey();
+                if(gameId != null) {
+                    ArrayList<Goal> goals = new ArrayList<>();
+                    for(DataSnapshot snapshot : game.getChildren()) {
+                        final Goal goal = snapshot.getValue(Goal.class);
+                        if(goal != null) {
+                            goals.add(goal);
+                        }
+                    }
+                    goalsMap.put(gameId, goals);
+                }
+            }
+            handler.onGoalsLoaded(goalsMap);
         });
     }
 
@@ -114,18 +108,15 @@ public class GoalsResource extends FirebaseDatabaseService {
      * Get goals of game indexed by goalId
      */
     public void getGoals(String gameId, final GetGameGoalsHandler handler) {
-        getData(database.child(seasonId).child(gameId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, Goal> goals = new HashMap<>();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    final Goal goal = snapshot.getValue(Goal.class);
-                    if(goal != null) {
-                        goals.put(goal.getGoalId(), goal);
-                    }
+        getData(database.child(seasonId).child(gameId), dataSnapshot -> {
+            final Map<String, Goal> goals = new HashMap<>();
+            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                final Goal goal = snapshot.getValue(Goal.class);
+                if(goal != null) {
+                    goals.put(goal.getGoalId(), goal);
                 }
-                handler.onGoalsLoaded(goals);
             }
+            handler.onGoalsLoaded(goals);
         });
     }
 }

@@ -41,40 +41,26 @@ public class TeamsResource extends FirebaseDatabaseService {
     }
 
     public void removeTeam(final Team team, final DeleteDataSuccessListener handler) {
-        deleteData(database.child(team.getTeamId()), new DeleteDataSuccessListener() {
-            @Override
-            public void onDeleteDataSuccess() {
-                if(team.isLogoUploaded()) {
-                    LogoResource.getInstance().removeLogo(team.getTeamId(), new FirebaseStorageService.DeleteBitmapSuccessListener() {
-                        @Override
-                        public void onDeleteBitmapSuccess() {
-                            handler.onDeleteDataSuccess();
-                        }
-                    });
-                } else {
-                    handler.onDeleteDataSuccess();
-                }
+        deleteData(database.child(team.getTeamId()), () -> {
+            if(team.isLogoUploaded()) {
+                LogoResource.getInstance().removeLogo(team.getTeamId(), handler::onDeleteDataSuccess);
+            } else {
+                handler.onDeleteDataSuccess();
             }
         });
     }
 
     public void getTeam(String teamId, final boolean withLogo, final GetTeamHandler handler) {
-        getData(database.child(teamId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot snapshot) {
-                final Team team = snapshot.getValue(Team.class);
-                if(team != null) {
-                    if(withLogo && team.isLogoUploaded()) {
-                        LogoResource.getInstance().getLogo(team.getTeamId(), new FirebaseStorageService.GetBitmapSuccessListener() {
-                            @Override
-                            public void onGetBitmapSuccess(Bitmap bitmap) {
-                                team.setLogo(bitmap);
-                                handler.onTeamLoaded(team);
-                            }
-                        });
-                    } else {
+        getData(database.child(teamId), snapshot -> {
+            final Team team = snapshot.getValue(Team.class);
+            if(team != null) {
+                if(withLogo && team.isLogoUploaded()) {
+                    LogoResource.getInstance().getLogo(team.getTeamId(), bitmap -> {
+                        team.setLogo(bitmap);
                         handler.onTeamLoaded(team);
-                    }
+                    });
+                } else {
+                    handler.onTeamLoaded(team);
                 }
             }
         });
@@ -84,34 +70,28 @@ public class TeamsResource extends FirebaseDatabaseService {
      * Get teams and their logos indexed by teamId
      */
     public void getTeams(final List<String> teamIds, final GetTeamsHandler handler) {
-        getTeamsData(teamIds, new GetTeamsHandler() {
-            @Override
-            public void onTeamsLoaded(final Map<String, Team> teams) {
-                final ArrayList<String> teamIdsWithLogo = new ArrayList<>();
-                for (final Team team : teams.values()) {
-                    if(team.isLogoUploaded()) {
-                        teamIdsWithLogo.add(team.getTeamId());
-                    }
+        getTeamsData(teamIds, teams -> {
+            final ArrayList<String> teamIdsWithLogo = new ArrayList<>();
+            for (final Team team : teams.values()) {
+                if(team.isLogoUploaded()) {
+                    teamIdsWithLogo.add(team.getTeamId());
                 }
-                // Get logos
-                if(!teamIdsWithLogo.isEmpty()) {
-                    LogoResource.getInstance().getLogos(teamIdsWithLogo, new FirebaseStorageService.GetBitmapsSuccessListener() {
-                        @Override
-                        public void onGetBitmapsSuccess(Map<String, Bitmap> bitmaps) {
-                            for(Map.Entry<String, Bitmap> entry : bitmaps.entrySet()) {
-                                String teamId = entry.getKey();
-                                Bitmap bitmap = entry.getValue();
-                                Team team = teams.get(teamId);
-                                if(team != null) {
-                                    team.setLogo(bitmap);
-                                }
-                            }
-                            handler.onTeamsLoaded(teams);
+            }
+            // Get logos
+            if(!teamIdsWithLogo.isEmpty()) {
+                LogoResource.getInstance().getLogos(teamIdsWithLogo, bitmaps -> {
+                    for (Map.Entry<String, Bitmap> entry : bitmaps.entrySet()) {
+                        String teamId = entry.getKey();
+                        Bitmap bitmap = entry.getValue();
+                        Team team = teams.get(teamId);
+                        if (team != null) {
+                            team.setLogo(bitmap);
                         }
-                    });
-                } else {
+                    }
                     handler.onTeamsLoaded(teams);
-                }
+                });
+            } else {
+                handler.onTeamsLoaded(teams);
             }
         });
     }
@@ -119,15 +99,12 @@ public class TeamsResource extends FirebaseDatabaseService {
     private void getTeamsData(final List<String> teamIds, final GetTeamsHandler handler) {
         final Map<String, Team> teams = new HashMap<>();
         for (final String teamId : teamIds) {
-            getData(database.child(teamId), new GetDataSuccessListener() {
-                @Override
-                public void onGetDataSuccess(DataSnapshot snapshot) {
-                    final Team team = snapshot.getValue(Team.class);
-                    if (team != null) {
-                        teams.put(team.getTeamId(), team);
-                        if(teams.size() == teamIds.size()) {
-                            handler.onTeamsLoaded(teams);
-                        }
+            getData(database.child(teamId), snapshot -> {
+                final Team team = snapshot.getValue(Team.class);
+                if (team != null) {
+                    teams.put(team.getTeamId(), team);
+                    if(teams.size() == teamIds.size()) {
+                        handler.onTeamsLoaded(teams);
                     }
                 }
             });

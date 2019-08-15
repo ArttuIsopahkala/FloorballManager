@@ -63,38 +63,29 @@ public class LoginFragment extends Fragment {
             emailText.setText(email);
         }
 
-        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(type == LoginType.FORGOT_PASSWORD) {
-                    setView(LoginType.LOGIN);
-                } else {
-                    setView(LoginType.FORGOT_PASSWORD);
-                }
+        forgotPasswordText.setOnClickListener(v13 -> {
+            if(type == LoginType.FORGOT_PASSWORD) {
+                setView(LoginType.LOGIN);
+            } else {
+                setView(LoginType.FORGOT_PASSWORD);
             }
         });
 
-        changeLoginTypeText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userRegister = !userRegister;
-                if(type == LoginType.LOGIN) {
-                    setView(LoginType.REGISTER);
-                } else {
-                    setView(LoginType.LOGIN);
-                }
+        changeLoginTypeText.setOnClickListener(v12 -> {
+            userRegister = !userRegister;
+            if(type == LoginType.LOGIN) {
+                setView(LoginType.REGISTER);
+            } else {
+                setView(LoginType.LOGIN);
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.hideKeyBoard(emailText);
-                if(type == LoginType.FORGOT_PASSWORD) {
-                    resetPassword();
-                } else {
-                    validateAndSave();
-                }
+        loginButton.setOnClickListener(v1 -> {
+            Helper.hideKeyBoard(emailText);
+            if(type == LoginType.FORGOT_PASSWORD) {
+                resetPassword();
+            } else {
+                validateAndSave();
             }
         });
 
@@ -146,13 +137,10 @@ public class LoginFragment extends Fragment {
             Logger.toast(getString(R.string.login_error_email));
             return;
         }
-        FirebaseAuthService.getInstance().sendPasswordResetEmail(email, new FirebaseAuthService.ResetPasswordHandler() {
-            @Override
-            public void onEmailSentSuccess() {
-                setView(LoginType.LOGIN);
-                InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.login_forgot_password_sent));
-                dialog.show(getChildFragmentManager(), "Salasanan vaihtolinkki lähetettiin");
-            }
+        FirebaseAuthService.getInstance().sendPasswordResetEmail(email, () -> {
+            setView(LoginType.LOGIN);
+            InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.login_forgot_password_sent));
+            dialog.show(getChildFragmentManager(), "Salasanan vaihtolinkki lähetettiin");
         });
     }
 
@@ -177,30 +165,17 @@ public class LoginFragment extends Fragment {
         }
 
         if(type == LoginType.REGISTER) {
-            FirebaseAuthService.getInstance().registerByEmailPassword(email, password, new FirebaseAuthService.EmailPasswordLoginHandler() {
-                @Override
-                public void onEmailPasswordLoginSuccess(String userId) {
-                    long now = System.currentTimeMillis();
-                    final User user = new User();
-                    user.setUserId(userId);
-                    user.setEmail(email);
-                    user.setCreationTime(now);
-                    user.setLastLoginTime(now);
-                    UsersResource.getInstance().editUser(user, new FirebaseDatabaseService.EditDataSuccessListener() {
-                        @Override
-                        public void onEditDataSuccess() {
-                            mListener.onLogIn(user.getUserId());
-                        }
-                    });
-                }
+            FirebaseAuthService.getInstance().registerByEmailPassword(email, password, userId -> {
+                long now = System.currentTimeMillis();
+                final User user = new User();
+                user.setUserId(userId);
+                user.setEmail(email);
+                user.setCreationTime(now);
+                user.setLastLoginTime(now);
+                UsersResource.getInstance().editUser(user, () -> mListener.onLogIn(user.getUserId()));
             });
         } else {
-            FirebaseAuthService.getInstance().logInByEmailPassword(email, password, new FirebaseAuthService.EmailPasswordLoginHandler() {
-                @Override
-                public void onEmailPasswordLoginSuccess(String userId) {
-                    mListener.onLogIn(userId);
-                }
-            });
+            FirebaseAuthService.getInstance().logInByEmailPassword(email, password, userId -> mListener.onLogIn(userId));
         }
     }
 

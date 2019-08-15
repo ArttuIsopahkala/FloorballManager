@@ -83,16 +83,13 @@ public class GoalPositionFragment extends Fragment implements DataView {
             }
         });
 
-        shootmapImage.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    positionX = (double) event.getX();
-                    positionY = (double) event.getY();
-                    drawShootPoint(positionX, positionY);
-                }
-                return true;
+        shootmapImage.setOnTouchListener((v1, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                positionX = (double) event.getX();
+                positionY = (double) event.getY();
+                drawShootPoint(positionX, positionY);
             }
+            return true;
         });
 
         return v;

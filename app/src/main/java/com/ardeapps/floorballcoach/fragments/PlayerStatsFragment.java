@@ -270,44 +270,35 @@ public class PlayerStatsFragment extends Fragment implements DataView {
             }
         });
 
-        editIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
-                dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
-                dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
-                    @Override
-                    public void onEditItem() {
-                        dialog.dismiss();
-                        FragmentListeners.getInstance().getFragmentChangeListener().goToEditPlayerFragment(player);
-                    }
+        editIcon.setOnClickListener(v1 -> {
+            final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
+            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
+            dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
+                @Override
+                public void onEditItem() {
+                    dialog.dismiss();
+                    FragmentListeners.getInstance().getFragmentChangeListener().goToEditPlayerFragment(player);
+                }
 
-                    @Override
-                    public void onRemoveItem() {
-                        dialog.dismiss();
-                        ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_player_remove_confirmation));
-                        dialogFragment.show(getChildFragmentManager(), "Siirretäänkö pelaaja poistettujen listalle?");
-                        dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogCloseListener() {
-                            @Override
-                            public void onDialogYesButtonClick() {
-                                player.setActive(false);
-                                PlayersResource.getInstance().editPlayer(player, new FirebaseDatabaseService.EditDataSuccessListener() {
-                                    @Override
-                                    public void onEditDataSuccess() {
-                                        AppRes.getInstance().setPlayer(player.getPlayerId(), player);
-                                        AppRes.getActivity().onBackPressed();
-                                    }
-                                });
-                            }
+                @Override
+                public void onRemoveItem() {
+                    dialog.dismiss();
+                    ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_player_remove_confirmation));
+                    dialogFragment.show(getChildFragmentManager(), "Siirretäänkö pelaaja poistettujen listalle?");
+                    dialogFragment.setListener(() -> {
+                        player.setActive(false);
+                        PlayersResource.getInstance().editPlayer(player, () -> {
+                            AppRes.getInstance().setPlayer(player.getPlayerId(), player);
+                            AppRes.getActivity().onBackPressed();
                         });
-                    }
+                    });
+                }
 
-                    @Override
-                    public void onCancel() {
-                        dialog.dismiss();
-                    }
-                });
-            }
+                @Override
+                public void onCancel() {
+                    dialog.dismiss();
+                }
+            });
         });
 
         return v;
@@ -356,33 +347,17 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     private void loadStats(final String seasonId) {
         final String playerId = player.getPlayerId();
         if(seasonId == null) {
-            PlayerStatsResource.getInstance().getAllStats(playerId, new GetStatsHandler() {
-                @Override
-                public void onStatsLoaded(final Map<String, ArrayList<Goal>> stats) {
-                    PlayerGamesResource.getInstance().getAllGames(playerId, new GetGamesHandler() {
-                        @Override
-                        public void onGamesLoaded(Map<String, Game> games) {
-                            PlayerStatsFragment.this.stats = stats;
-                            PlayerStatsFragment.this.games = games;
-                            updateStats(null);
-                        }
-                    });
-                }
-            });
+            PlayerStatsResource.getInstance().getAllStats(playerId, stats -> PlayerGamesResource.getInstance().getAllGames(playerId, games -> {
+                PlayerStatsFragment.this.stats = stats;
+                PlayerStatsFragment.this.games = games;
+                updateStats(null);
+            }));
         } else {
-            PlayerStatsResource.getInstance().getStats(playerId, seasonId, new GetStatsHandler() {
-                @Override
-                public void onStatsLoaded(final Map<String, ArrayList<Goal>> stats) {
-                    PlayerGamesResource.getInstance().getGames(playerId, seasonId, new GetGamesHandler() {
-                        @Override
-                        public void onGamesLoaded(Map<String, Game> games) {
-                            PlayerStatsFragment.this.stats = stats;
-                            PlayerStatsFragment.this.games = games;
-                            updateStats(seasonId);
-                        }
-                    });
-                }
-            });
+            PlayerStatsResource.getInstance().getStats(playerId, seasonId, stats -> PlayerGamesResource.getInstance().getGames(playerId, seasonId, games -> {
+                PlayerStatsFragment.this.stats = stats;
+                PlayerStatsFragment.this.games = games;
+                updateStats(seasonId);
+            }));
         }
     }
 
@@ -391,12 +366,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
 
         // Set games sorted by date
         sortedGames = new ArrayList<>(games.values());
-        Collections.sort(sortedGames, new Comparator<Game>() {
-            @Override
-            public int compare(Game o1, Game o2) {
-                return Long.valueOf(o2.getDate()).compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(sortedGames, (o1, o2) -> Long.valueOf(o2.getDate()).compareTo(o1.getDate()));
 
         ArrayList<String> gameTitles = new ArrayList<>();
         gameTitles.add(getString(R.string.player_stats_all_games));

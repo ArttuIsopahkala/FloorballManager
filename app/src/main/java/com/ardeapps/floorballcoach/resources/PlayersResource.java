@@ -42,30 +42,19 @@ public class PlayersResource extends FirebaseDatabaseService {
     }
 
     public void removePlayer(final Player player, final DeleteDataSuccessListener handler) {
-        deleteData(database.child(player.getPlayerId()), new DeleteDataSuccessListener() {
-            @Override
-            public void onDeleteDataSuccess() {
-                if(player.isPictureUploaded()) {
-                    PictureResource.getInstance().removePicture(player.getPlayerId(), new FirebaseStorageService.DeleteBitmapSuccessListener() {
-                        @Override
-                        public void onDeleteBitmapSuccess() {
-                            handler.onDeleteDataSuccess();
-                        }
-                    });
-                } else {
-                    handler.onDeleteDataSuccess();
-                }
+        deleteData(database.child(player.getPlayerId()), () -> {
+            if(player.isPictureUploaded()) {
+                PictureResource.getInstance().removePicture(player.getPlayerId(), handler::onDeleteDataSuccess);
+            } else {
+                handler.onDeleteDataSuccess();
             }
         });
     }
 
     public void getPlayer(String playerId, final GetPlayerHandler handler) {
-        getData(database.child(playerId), new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot snapshot) {
-                Player player = snapshot.getValue(Player.class);
-                handler.onPlayerLoaded(player);
-            }
+        getData(database.child(playerId), snapshot -> {
+            Player player = snapshot.getValue(Player.class);
+            handler.onPlayerLoaded(player);
         });
     }
 
@@ -73,41 +62,35 @@ public class PlayersResource extends FirebaseDatabaseService {
      * Get players and their pictures indexed by playerId
      */
     public void getPlayers(final GetPlayersHandler handler) {
-        getData(database, new GetDataSuccessListener() {
-            @Override
-            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
-                final Map<String, Player> players = new HashMap<>();
-                List<String> playersWithImages = new ArrayList<>();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    final Player player = snapshot.getValue(Player.class);
-                    if(player != null) {
-                        players.put(player.getPlayerId(), player);
-                        if(player.isPictureUploaded()) {
-                            playersWithImages.add(player.getPlayerId());
-                        }
+        getData(database, dataSnapshot -> {
+            final Map<String, Player> players = new HashMap<>();
+            List<String> playersWithImages = new ArrayList<>();
+            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                final Player player = snapshot.getValue(Player.class);
+                if(player != null) {
+                    players.put(player.getPlayerId(), player);
+                    if(player.isPictureUploaded()) {
+                        playersWithImages.add(player.getPlayerId());
                     }
                 }
-
-                if(!playersWithImages.isEmpty()) {
-                    PictureResource.getInstance().getPictures(playersWithImages, new FirebaseStorageService.GetBitmapsSuccessListener() {
-                        @Override
-                        public void onGetBitmapsSuccess(Map<String, Bitmap> bitmaps) {
-                            for(Map.Entry<String, Bitmap> entry : bitmaps.entrySet()) {
-                                String playerId = entry.getKey();
-                                Bitmap bitmap = entry.getValue();
-                                Player player = players.get(playerId);
-                                if(player != null) {
-                                    player.setPicture(bitmap);
-                                }
-                            }
-                            handler.onPlayersLoaded(players);
-                        }
-                    });
-                } else {
-                    handler.onPlayersLoaded(players);
-                }
-
             }
+
+            if(!playersWithImages.isEmpty()) {
+                PictureResource.getInstance().getPictures(playersWithImages, bitmaps -> {
+                    for (Map.Entry<String, Bitmap> entry : bitmaps.entrySet()) {
+                        String playerId = entry.getKey();
+                        Bitmap bitmap = entry.getValue();
+                        Player player = players.get(playerId);
+                        if (player != null) {
+                            player.setPicture(bitmap);
+                        }
+                    }
+                    handler.onPlayersLoaded(players);
+                });
+            } else {
+                handler.onPlayersLoaded(players);
+            }
+
         });
     }
 }
