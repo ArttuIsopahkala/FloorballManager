@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -46,7 +47,7 @@ public class LineUpSelector extends LinearLayout {
 
     Map<Integer, Line> lines = new HashMap<>();
     List<LineFragment> lineFragments = new ArrayList<>();
-    boolean showChemistry;
+    boolean showChemistry = false;
 
     public void setListener(Listener listener) {
         this.mListener = listener;
@@ -60,8 +61,8 @@ public class LineUpSelector extends LinearLayout {
         super(context, attrs);
     }
 
-    public void createView(Fragment parent, boolean showChemistry) {
-        this.showChemistry = showChemistry;
+    public void createView(Fragment parent, boolean enableChemistry) {
+        showChemistry = false;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         inflater.inflate(R.layout.container_line_up, this);
         linesPager = findViewById(R.id.linesPager);
@@ -71,7 +72,9 @@ public class LineUpSelector extends LinearLayout {
         lineChemistryBar = findViewById(R.id.lineChemistryBar);
 
         // Show line chemistry bar
-        lineChemistryContainer.setVisibility(showChemistry ? View.VISIBLE : View.GONE);
+        lineChemistryContainer.setVisibility(enableChemistry ? View.VISIBLE : View.GONE);
+        lineChemistryValueText.setText("-");
+        lineChemistryBar.setProgress(0);
 
         lineFragments = new ArrayList<>();
         lineFragments.add(createLineFragment(1));
@@ -80,42 +83,94 @@ public class LineUpSelector extends LinearLayout {
         lineFragments.add(createLineFragment(4));
 
         linesAdapter = new LinesPagerAdapter(parent.getFragmentManager(), lineFragments);
-
         linesPager.setOffscreenPageLimit(linesAdapter.getCount());
         linesPager.setAdapter(linesAdapter);
         tabLayout.setupWithViewPager(linesPager);
-        linesPager.setCurrentItem(0);
+        linesPager.post(() -> linesPager.setCurrentItem(0));
 
         linesPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override
             public void onPageSelected(final int position) {
-                refreshLineChemistry();
+                refreshChemistry();
             }
         });
     }
 
-    // Päivitetään kun pelaaja vaihtuu, pelaajakemiat analysoidaan tai kentällinen vaihdetaan
-    private void refreshLineChemistry() {
-        int position = linesPager.getCurrentItem();
-        LineFragmentData data = lineFragments.get(position).getData();
-        Line line = data.getLine();
-        int percent = AnalyzerService.getInstance().getLineChemistryPercent(line);
-        lineChemistryValueText.setText(String.valueOf(percent));
-        lineChemistryBar.setProgress(percent);
+    // Päivitetään kun pelaaja vaihtuu, pelaajakemiat analysoidaan tai kentällinen vaihtuu
+    private void refreshChemistry() {
+        if(showChemistry) {
+            int position = linesPager.getCurrentItem();
+            LineFragmentData data = lineFragments.get(position).getData();
+            Line line = data.getLine();
+            int percent = AnalyzerService.getInstance().getLineChemistryPercent(line);
+            lineChemistryValueText.setText(String.valueOf(percent));
+            lineChemistryBar.setProgress(percent);
+
+            if(mListener != null) {
+                mListener.onLinesChanged();
+            }
+        }
     }
 
-    public void setLines(Map<Integer, Line> lines) {
-        this.lines = lines;
+    public void showLineChemistry() {
+        showChemistry = true;
+        for(LineFragment lineFragment : lineFragments) {
+            lineFragment.update(true);
+        }
+        refreshChemistry();
+    }
 
+    private LineFragment createLineFragment(final int lineNumber) {
+        LineFragment lineFragment = new LineFragment();
+        LineFragmentData data = new LineFragmentData();
+        data.setLineNumber(lineNumber);
+        lineFragment.setData(data);
+        lineFragment.setListener((line, playerId) -> {
+            // Remove old player if he is in other lines
+            if(playerId != null) {
+                for (final Line existingLine : lines.values()) {
+                    if (lineNumber != existingLine.getLineNumber()) {
+                        Iterator<Map.Entry<String, String>> it = existingLine.getPlayerIdMap().entrySet().iterator();
+                        while (it.hasNext()) {
+                            String existingPlayerId = it.next().getValue();
+                            if (existingPlayerId.equals(playerId)) {
+                                it.remove();
+                                updateLineFragment(existingLine);
+                            }
+                        }
+                    }
+                }
+            }
+            // Refresh state of lines
+            lines.put(lineNumber, line);
+            updateLineFragment(line);
+
+            refreshChemistry();
+        });
+
+        return lineFragment;
+    }
+
+    private void updateLineFragment(Line line) {
+        LineFragment lineFragment = lineFragments.get(line.getLineNumber() - 1);
+        LineFragmentData data = lineFragment.getData();
+        data.setLine(line);
+        data.setLineNumber(line.getLineNumber());
+        lineFragment.setData(data);
+        lineFragment.update(showChemistry);
+        linesAdapter.notifyDataSetChanged();
+    }
+
+    public void setLines(Map<Integer, Line> newLines) {
+        Map<Integer, Line> lines = new HashMap<>(newLines);
+        this.lines = lines;
         for(LineFragment lineFragment : lineFragments) {
             LineFragmentData data = lineFragment.getData();
             Line line = lines.get(data.getLineNumber());
             data.setLine(line);
             lineFragment.setData(data);
         }
-
-        refreshLineChemistry();
     }
 
     public Map<Integer, Line> getLines() {
@@ -128,49 +183,6 @@ public class LineUpSelector extends LinearLayout {
             }
         }
         return lines;
-    }
-
-    public void updateLineFragments() {
-        for(LineFragment lineFragment : lineFragments) {
-            lineFragment.update();
-        }
-        refreshLineChemistry();
-    }
-
-    private LineFragment createLineFragment(final int lineNumber) {
-        LineFragment lineFragment = new LineFragment();
-        LineFragmentData data = new LineFragmentData();
-        data.setLineNumber(lineNumber);
-        data.setShowChemistry(showChemistry);
-        lineFragment.setData(data);
-        lineFragment.setListener((line, playerId) -> {
-            // Remove old player if he is in other lines
-            if(playerId != null) {
-                for (final Line existingLine : lines.values()) {
-                    if (lineNumber != existingLine.getLineNumber()) {
-                        Iterator<Map.Entry<String, String>> it = existingLine.getPlayerIdMap().entrySet().iterator();
-                        while (it.hasNext()) {
-                            String existingPlayerId = it.next().getValue();
-                            if (existingPlayerId.equals(playerId)) {
-                                it.remove();
-                                linesAdapter.updateLineFragment(existingLine);
-                            }
-                        }
-                    }
-                }
-            }
-            // Refresh state of lines
-            lines.put(lineNumber, line);
-
-            refreshLineChemistry();
-            linesAdapter.updateLineFragment(line);
-
-            if(mListener != null) {
-                mListener.onLinesChanged();
-            }
-        });
-
-        return lineFragment;
     }
 
 }

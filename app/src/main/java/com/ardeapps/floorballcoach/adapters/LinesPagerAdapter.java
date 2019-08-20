@@ -8,8 +8,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.ardeapps.floorballcoach.AppRes;
 import com.ardeapps.floorballcoach.R;
 import com.ardeapps.floorballcoach.fragments.LineFragment;
-import com.ardeapps.floorballcoach.objects.Line;
-import com.ardeapps.floorballcoach.viewObjects.LineFragmentData;
 
 import java.util.List;
 
@@ -52,15 +50,6 @@ public class LinesPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return (position + 1) + ". " + AppRes.getContext().getString(R.string.line);
-    }
-
-    public void updateLineFragment(Line line) {
-        LineFragment lineFragment = lineFragments.get(line.getLineNumber() - 1);
-        LineFragmentData data = lineFragment.getData();
-        data.setLine(line);
-        data.setLineNumber(line.getLineNumber());
-        lineFragment.setData(data);
-        lineFragment.update();
     }
 
 }

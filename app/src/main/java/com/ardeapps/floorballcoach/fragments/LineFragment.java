@@ -64,6 +64,7 @@ public class LineFragment extends Fragment implements DataView {
     Map<Position, Integer> closestChemistries = new HashMap<>();
     Map<ChemistryConnection, Integer> chemistryConnections = new HashMap<>();
     int canvasTop = 0;
+    boolean showChemistry = false;
 
     @Override
     public void setData(Object viewData) {
@@ -75,8 +76,20 @@ public class LineFragment extends Fragment implements DataView {
         return data;
     }
 
-    public void update() {
-        if(data.isShowChemistry()) {
+    public void update(boolean showChemistry) {
+        this.showChemistry = showChemistry;
+        if(showChemistry) {
+            chemistryLinesImageView.setVisibility(View.VISIBLE);
+            // Show numbers only to admin for debug purposes
+            boolean isAdmin = AppRes.getInstance().getUser().isAdmin();
+            c_lw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+            c_rw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+            c_ld_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+            c_rd_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+            ld_rd_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+            ld_lw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+            rd_rw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+
             // Get data
             Line line = data.getLine();
             closestChemistries = AnalyzerService.getInstance().getClosestChemistryPercentsForPosition(line);
@@ -142,18 +155,17 @@ public class LineFragment extends Fragment implements DataView {
         card_ld = v.findViewById(R.id.card_ld);
         card_rd = v.findViewById(R.id.card_rd);
 
-        chemistryLinesImageView.setVisibility(data.isShowChemistry() ? View.VISIBLE : View.GONE);
-        // Show numbers only to admin for debug purposes
-        boolean isAdmin = AppRes.getInstance().getUser().isAdmin();
-        c_lw_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
-        c_rw_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
-        c_ld_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
-        c_rd_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
-        ld_rd_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
-        ld_lw_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
-        rd_rw_text.setVisibility(data.isShowChemistry() && isAdmin ? View.VISIBLE : View.GONE);
+        // Hide chemistry as default
+        chemistryLinesImageView.setVisibility(View.GONE);
+        c_lw_text.setVisibility(View.GONE);
+        c_rw_text.setVisibility(View.GONE);
+        c_ld_text.setVisibility(View.GONE);
+        c_rd_text.setVisibility(View.GONE);
+        ld_rd_text.setVisibility(View.GONE);
+        ld_lw_text.setVisibility(View.GONE);
+        rd_rw_text.setVisibility(View.GONE);
 
-        update();
+        update(false);
 
         return v;
     }
@@ -282,10 +294,10 @@ public class LineFragment extends Fragment implements DataView {
      * @param view border ImageView
      */
     private void setChemistryColorBorder(TextView avgPercentText, ImageView view, Position position) {
-        int color = R.color.color_background; // Default color
+        int color = R.color.color_background_third; // Default color
         String percentText = "";
 
-        if (data.isShowChemistry()) {
+        if (showChemistry) {
             Integer percent = closestChemistries.get(position);
             if (percent != null) {
                 percentText = String.valueOf(percent);
