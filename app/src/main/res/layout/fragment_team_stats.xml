@@ -846,14 +846,21 @@
                 android:id="@+id/gameSpinner"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.5"
+                android:layout_weight="0.333"
                 android:layout_gravity="center"
                 android:textColor="@color/color_text_light" />
             <Spinner
                 android:id="@+id/gameModeSpinner"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.5"
+                android:layout_weight="0.333"
+                android:layout_gravity="center"
+                android:textColor="@color/color_text_light" />
+            <Spinner
+                android:id="@+id/goalTypeSpinner"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="0.333"
                 android:layout_gravity="center"
                 android:textColor="@color/color_text_light" />
         </LinearLayout>

@@ -45,14 +45,6 @@ public class Chemistry {
         this.comparePlayerId = comparePlayerId;
     }
 
-    public int getChemistryPoints() {
-        return chemistryPoints;
-    }
-
-    public void setChemistryPoints(int chemistryPoints) {
-        this.chemistryPoints = chemistryPoints;
-    }
-
     public int getChemistryPercent() {
         return chemistryPercent;
     }

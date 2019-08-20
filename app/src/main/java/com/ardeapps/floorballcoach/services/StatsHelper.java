@@ -11,7 +11,6 @@ import com.ardeapps.floorballcoach.viewObjects.TeamStatsData;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -274,9 +273,9 @@ public class StatsHelper extends AnalyzerService {
                     // MINUS GOALS
                     if(goal.getTime() < firstPeriodEnd) {
                         minusGoalsPeriod1++;
-                    } else if (goal.getTime() > firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
+                    } else if (goal.getTime() >= firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
                         minusGoalsPeriod2++;
-                    } else if (goal.getTime() > secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
+                    } else if (goal.getTime() >= secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
                         minusGoalsPeriod3++;
                     } else {
                         minusGoalsPeriodJA++;
@@ -295,9 +294,9 @@ public class StatsHelper extends AnalyzerService {
                     // PLUS GOALS
                     if(goal.getTime() < firstPeriodEnd) {
                         plusGoalsPeriod1++;
-                    } else if (goal.getTime() > firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
+                    } else if (goal.getTime() >= firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
                         plusGoalsPeriod2++;
-                    } else if (goal.getTime() > secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
+                    } else if (goal.getTime() >= secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
                         plusGoalsPeriod3++;
                     } else {
                         plusGoalsPeriodJA++;

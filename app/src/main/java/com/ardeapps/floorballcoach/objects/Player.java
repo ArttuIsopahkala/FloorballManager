@@ -180,6 +180,17 @@ public class Player {
         return name;
     }
 
+    @Exclude
+    public boolean hasSomeOfSkills(ArrayList<Skill> skills) {
+        for(String strength : getStrengths()) {
+            Player.Skill skill = Player.Skill.fromDatabaseName(strength);
+            if(skills.contains(skill)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getPlayerId() {
         return playerId;
     }

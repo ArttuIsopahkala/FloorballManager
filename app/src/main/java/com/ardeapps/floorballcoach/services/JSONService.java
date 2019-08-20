@@ -25,12 +25,14 @@ public class JSONService extends FirebaseDatabaseService {
 
     private final static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/java/com/ardeapps/floorballcoach/json-dump.json";
 
+    private static String DATABASE_ROOT = "RELEASE";
+    
     public static Line getLine(String teamId, String lineId) {
         Line line = new Line();
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
-            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject root = getJSONObject(json, DATABASE_ROOT);
             JSONObject linesObj = getJSONObject(root, TEAMS_LINES);
 
             Iterator<String> teams = linesObj.keys();
@@ -60,7 +62,7 @@ public class JSONService extends FirebaseDatabaseService {
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
-            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject root = getJSONObject(json, DATABASE_ROOT);
             JSONObject linesObj = getJSONObject(root, TEAMS_LINES);
 
             Iterator<String> teams = linesObj.keys();
@@ -92,7 +94,7 @@ public class JSONService extends FirebaseDatabaseService {
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
-            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject root = getJSONObject(json, DATABASE_ROOT);
             JSONObject teamsSeasonsGamesLines = getJSONObject(root, TEAMS_SEASONS_GAMES_LINES);
 
             Iterator<String> teams = teamsSeasonsGamesLines.keys();
@@ -136,7 +138,7 @@ public class JSONService extends FirebaseDatabaseService {
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
-            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject root = getJSONObject(json, DATABASE_ROOT);
             JSONObject teamsNode = getJSONObject(root, TEAMS_PLAYERS);
 
             Iterator<String> teams = teamsNode.keys();
@@ -160,12 +162,12 @@ public class JSONService extends FirebaseDatabaseService {
         return playerList;
     }
 
-    public static ArrayList<Player> getPlayers(String teamId) {
-        ArrayList<Player> playerList = new ArrayList<>();
+    public static Map<String, Player> getPlayers(String teamId) {
+        Map<String, Player> playerList = new HashMap<>();
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
-            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject root = getJSONObject(json, DATABASE_ROOT);
             JSONObject teamsNode = getJSONObject(root, TEAMS_PLAYERS);
 
             Iterator<String> teams = teamsNode.keys();
@@ -180,7 +182,7 @@ public class JSONService extends FirebaseDatabaseService {
                         JSONObject value = getJSONObject(teamObj, playerKeyId);
                         try {
                             Player player = new ObjectMapper().readValue(value.toString(), Player.class);
-                            playerList.add(player);
+                            playerList.put(playerKeyId, player);
                         } catch (IOException e) {}
                     }
                     break;
@@ -195,7 +197,7 @@ public class JSONService extends FirebaseDatabaseService {
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
-            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject root = getJSONObject(json, DATABASE_ROOT);
             JSONObject teamsPlayersSeasonsGamesStats = getJSONObject(root, TEAMS_PLAYERS_SEASONS_GAMES_STATS);
 
             Iterator<String> teams = teamsPlayersSeasonsGamesStats.keys();
@@ -240,7 +242,7 @@ public class JSONService extends FirebaseDatabaseService {
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
-            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject root = getJSONObject(json, DATABASE_ROOT);
             JSONObject teamsSeasonsGamesGoals = getJSONObject(root, TEAMS_SEASONS_GAMES_GOALS);
 
             Iterator<String> teams = teamsSeasonsGamesGoals.keys();
@@ -279,7 +281,7 @@ public class JSONService extends FirebaseDatabaseService {
         String result = readFileContent();
         if(result != null) {
             JSONObject json = convertToJSONObject(result);
-            JSONObject root = getJSONObject(json, DEBUG);
+            JSONObject root = getJSONObject(json, DATABASE_ROOT);
             JSONObject teamsSeasonsGamesGoals = getJSONObject(root, TEAMS_SEASONS_GAMES_GOALS);
 
             Iterator<String> teams = teamsSeasonsGamesGoals.keys();

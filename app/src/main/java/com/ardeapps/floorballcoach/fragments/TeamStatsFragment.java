@@ -85,6 +85,7 @@ public class TeamStatsFragment extends Fragment {
     Spinner gameSpinner;
     Spinner gameModeSpinner;
     Spinner seasonSpinner;
+    Spinner goalTypeSpinner;
     LinearLayout trendingContainer;
     LinearLayout trendingContent;
 
@@ -95,6 +96,7 @@ public class TeamStatsFragment extends Fragment {
     private ArrayList<Goal.Mode> gameModes;
     int gameSpinnerPosition = 0;
     int gameModeSpinnerPosition = 0;
+    int goalTypeSpinnerPosition = 0;
 
     private Team team;
     private Map<String, ArrayList<Goal>> stats = new HashMap<>();
@@ -120,6 +122,7 @@ public class TeamStatsFragment extends Fragment {
         noSeasonsText = v.findViewById(R.id.noSeasonsText);
         shootmapImage = v.findViewById(R.id.shootmapImage);
         shootmapPointsContainer = v.findViewById(R.id.shootmapPointsContainer);
+        goalTypeSpinner = v.findViewById(R.id.goalTypeSpinner);
         gameSpinner = v.findViewById(R.id.gameSpinner);
         gameModeSpinner = v.findViewById(R.id.gameModeSpinner);
         gamesText = v.findViewById(R.id.gamesText);
@@ -180,6 +183,22 @@ public class TeamStatsFragment extends Fragment {
         ArrayList<String> gameModeTitles = new ArrayList<>(gameModeMap.values());
         gameModes = new ArrayList<>(gameModeMap.keySet());
         Helper.setSpinnerAdapter(gameModeSpinner, gameModeTitles);
+
+        ArrayList<String> goalTypeTitles = new ArrayList<>();
+        goalTypeTitles.add(getString(R.string.team_stats_plus_goals));
+        goalTypeTitles.add(getString(R.string.team_stats_minus_goals));
+        Helper.setSpinnerAdapter(goalTypeSpinner, goalTypeTitles);
+
+        goalTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                goalTypeSpinnerPosition = position;
+                drawShootPoints();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
 
         gameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -408,6 +427,7 @@ public class TeamStatsFragment extends Fragment {
 
         ArrayList<Goal> filteredGoals = getFilteredGameGoals(gameSpinnerPosition);
         filteredGoals = getFilteredGameModeGoals(gameModeSpinnerPosition, filteredGoals);
+        filteredGoals = getFilteredGoalTypeGoals(goalTypeSpinnerPosition, filteredGoals);
 
         for(Goal goal : filteredGoals) {
             if(goal.getPositionPercentX() != null && goal.getPositionPercentY() != null) {
@@ -419,6 +439,22 @@ public class TeamStatsFragment extends Fragment {
                 drawShootPoint(x, y);
             }
         }
+    }
+
+    private ArrayList<Goal> getFilteredGoalTypeGoals(int spinnerPosition, ArrayList<Goal> goals) {
+        ArrayList<Goal> filteredGoals = new ArrayList<>();
+        for(Goal goal : goals) {
+            if(spinnerPosition == 0) {
+                if(!goal.isOpponentGoal()) {
+                    filteredGoals.add(goal);
+                }
+            } else {
+                if(goal.isOpponentGoal()) {
+                    filteredGoals.add(goal);
+                }
+            }
+        }
+        return filteredGoals;
     }
 
     private ArrayList<Goal> getFilteredGameGoals(int spinnerPosition) {

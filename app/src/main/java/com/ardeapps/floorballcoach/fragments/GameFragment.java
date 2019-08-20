@@ -27,7 +27,6 @@ import com.ardeapps.floorballcoach.resources.GoalsResource;
 import com.ardeapps.floorballcoach.resources.GoalsResourceWrapper;
 import com.ardeapps.floorballcoach.resources.PlayerGamesResource;
 import com.ardeapps.floorballcoach.resources.PlayerStatsResource;
-import com.ardeapps.floorballcoach.services.FirebaseDatabaseService;
 import com.ardeapps.floorballcoach.services.FragmentListeners;
 import com.ardeapps.floorballcoach.utils.StringUtils;
 import com.ardeapps.floorballcoach.viewObjects.DataView;
@@ -38,7 +37,6 @@ import com.ardeapps.floorballcoach.views.IconView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,9 +120,9 @@ public class GameFragment extends Fragment implements DataView {
         for(Goal goal : data.getGoals().values()) {
             if(goal.getTime() < firstPeriodEnd) {
                 goalsPeriod1.add(goal);
-            } else if (goal.getTime() > firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
+            } else if (goal.getTime() >= firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
                 goalsPeriod2.add(goal);
-            } else if (goal.getTime() > secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
+            } else if (goal.getTime() >= secondPeriodEnd && goal.getTime() < thirdPeriodEnd) {
                 goalsPeriod3.add(goal);
             } else {
                 goalsPeriodJA.add(goal);
