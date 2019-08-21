@@ -19,6 +19,7 @@
                 android:id="@+id/logoImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@null"
                 android:src="@drawable/default_logo"/>
             <RelativeLayout
                 android:layout_width="50dp"
@@ -28,8 +29,10 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@null"
                     android:src="@drawable/circle"/>
-                <com.ardeapps.floorballcoach.views.IconView
+
+                <com.ardeapps.floorballmanager.views.IconView
                     android:id="@+id/selectLogoIcon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

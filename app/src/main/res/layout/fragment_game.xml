@@ -79,7 +79,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"/>
         </LinearLayout>
-        <com.ardeapps.floorballcoach.views.IconView
+
+        <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/settingsIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"

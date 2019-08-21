@@ -12,8 +12,7 @@
         android:background="@color/color_menu"
         android:orientation="horizontal">
 
-        <com.ardeapps.floorballcoach.views.IconView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/backIcon"
             android:layout_width="50dp"
             android:layout_height="match_parent"
@@ -30,7 +29,8 @@
             android:textColor="@color/color_text_light"
             android:textSize="18sp"
             android:textStyle="bold" />
-        <com.ardeapps.floorballcoach.views.IconView
+
+        <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/settingsIcon"
             android:layout_width="50dp"
             android:layout_height="match_parent"
@@ -61,12 +61,14 @@
             android:layout_height="150dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:contentDescription="@null"
             android:src="@drawable/loader_loader" />
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:contentDescription="@null"
             android:src="@drawable/logo" />
     </RelativeLayout>
 </RelativeLayout>

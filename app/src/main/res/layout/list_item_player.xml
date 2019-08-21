@@ -14,8 +14,10 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:src="@drawable/default_picture"
-        android:background="@color/color_background_fourth"/>
-    <com.ardeapps.floorballcoach.views.IconView
+        android:background="@color/color_background_fourth"
+        android:contentDescription="@null" />
+
+    <com.ardeapps.floorballmanager.views.IconView
         android:id="@+id/arrowIcon"
         android:layout_toEndOf="@id/pictureImage"
         android:layout_width="wrap_content"
@@ -51,7 +53,8 @@
             android:textColor="@color/color_text_light_secondary"
             android:textSize="18sp"/>
     </RelativeLayout>
-    <com.ardeapps.floorballcoach.views.IconView
+
+    <com.ardeapps.floorballmanager.views.IconView
         android:id="@+id/selectIcon"
         android:layout_width="50dp"
         android:layout_height="match_parent"

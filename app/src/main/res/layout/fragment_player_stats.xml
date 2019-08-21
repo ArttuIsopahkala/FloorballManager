@@ -24,6 +24,7 @@
                     android:id="@+id/pictureImage"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/default_picture"/>
                 <TextView
                     android:id="@+id/nameText"
@@ -36,7 +37,8 @@
                     android:textColor="@color/color_text_light"
                     android:textSize="25sp"
                     android:textStyle="bold"/>
-                <com.ardeapps.floorballcoach.views.IconView
+
+                <com.ardeapps.floorballmanager.views.IconView
                     android:id="@+id/editIcon"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -228,7 +230,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:baselineAligned="false">
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -713,33 +716,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:gravity="center"
+                android:orientation="vertical"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:baselineAligned="false">
-                <LinearLayout
-                    android:layout_width="0dp"
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/player_stats_best_same_line"
-                        android:gravity="center"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/bestSameLineText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Sampsa Huoponen: 10 maalia yhdessä"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
+                    android:gravity="center"
+                    android:text="@string/player_stats_best_same_line"
+                    android:textColor="@color/color_text_light"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/bestSameLineText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Sampsa Huoponen: 10 maalia yhdessä"
+                    android:textColor="@color/color_text_light"
+                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -783,7 +782,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/floorball_field_half"
                 android:scaleType="fitCenter"
-                android:adjustViewBounds="true"/>
+                android:adjustViewBounds="true"
+                android:contentDescription="@null" />
             <RelativeLayout
                 android:id="@+id/shootmapPointsContainer"
                 android:layout_width="match_parent"

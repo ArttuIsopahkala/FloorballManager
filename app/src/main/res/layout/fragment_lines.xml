@@ -77,7 +77,8 @@
             android:max="100"
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>
-    <com.ardeapps.floorballcoach.views.LineUpSelector
+
+    <com.ardeapps.floorballmanager.views.LineUpSelector
         android:id="@+id/lineUpSelector"
         android:layout_below="@+id/teamChemistryContainer"
         android:layout_width="match_parent"

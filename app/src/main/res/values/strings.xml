@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Floorball Coach</string>
+    <string name="app_name">Floorball Manager</string>
 
     <string name="update_new_version">Sovelluksen uusi versio on julkaistu. Nykyinen versiosi on vanhentunut ja se voi aiheuttaa epävakautta tai kaatuilua. Ladataanko uusi versio?</string>
 
@@ -235,8 +235,8 @@
     <string name="settings_change_password_confirm">Haluatko lähettää sähköpostiisi tiedot salasanan vaihtamiseen?</string>
     <string name="settings_link_privacy">Tietosuojakäytäntö</string>
     <string name="settings_link_privacy_url">www.google.com</string>
-    <string name="settings_invite_message">Hei! Tämä on automaattisesti luotu kutsu Android-sovellukseen FloorballCoach. https://play.google.com/store/apps/details?id=com.ardeapps.floorballcoach</string>
-    <string name="settings_invite_email_subject">Kutsu sovellukseen FloorballCoach</string>
+    <string name="settings_invite_message">Hei! Tämä on automaattisesti luotu kutsu Android-sovellukseen Floorball Manager. https://play.google.com/store/apps/details?id=com.ardeapps.floorballmanager</string>
+    <string name="settings_invite_email_subject">Kutsu sovellukseen Floorball Manager</string>
     <string name="settings_invite_title">Kuinka haluat kutsua käyttäjiä?</string>
     <string name="settings_logged_user">Kirjauduttu käyttäjänä</string>
 
@@ -287,7 +287,7 @@
     <string name="error_authentication">Virhe tunnistautumisessa!</string>
     <string name="error_service_action">Tapahtui virhe! Toimintaa ei suoritettu!</string>
 
-    <string name="google_play_app_url">http://play.google.com/store/apps/details?id=com.ardeapps.floorballcoach</string>
+    <string name="google_play_app_url">http://play.google.com/store/apps/details?id=com.ardeapps.floorballmanager</string>
     <string name="google_play_developer_url">http://play.google.com/store/apps/developer?id=Arde+Apps</string>
 
     <string name="icon_light">fa-regular.ttf</string>

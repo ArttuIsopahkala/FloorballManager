@@ -59,7 +59,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="5dp">
-            <com.ardeapps.floorballcoach.views.IconView
+
+            <com.ardeapps.floorballmanager.views.IconView
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:text="@string/icon_check"
@@ -78,7 +79,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="5dp">
-            <com.ardeapps.floorballcoach.views.IconView
+
+            <com.ardeapps.floorballmanager.views.IconView
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:text="@string/icon_clock"
@@ -97,7 +99,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="5dp">
-            <com.ardeapps.floorballcoach.views.IconView
+
+            <com.ardeapps.floorballmanager.views.IconView
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:text="@string/icon_close"

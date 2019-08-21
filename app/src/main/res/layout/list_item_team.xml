@@ -15,23 +15,23 @@
         android:id="@+id/logoImage"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
+        android:contentDescription="@null"
         android:src="@drawable/default_logo"/>
     <TextView
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/logoImage"
-        android:layout_toRightOf="@id/logoImage"
         android:layout_centerVertical="true"
         android:text="O2 Miehet 2"
         android:textColor="@color/color_text_light"
         android:textSize="25sp"
         android:textStyle="bold"/>
-    <com.ardeapps.floorballcoach.views.IconView
+
+    <com.ardeapps.floorballmanager.views.IconView
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"

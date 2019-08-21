@@ -19,7 +19,8 @@
         android:textColor="@color/color_text_light"
         android:textSize="16sp"
         android:textStyle="bold" />
-    <com.ardeapps.floorballcoach.views.TimePicker
+
+    <com.ardeapps.floorballmanager.views.TimePicker
         android:id="@+id/timePicker"
         android:layout_below="@+id/timeText"
         android:layout_width="wrap_content"

@@ -32,14 +32,16 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_alignParentEnd="true">
-        <com.ardeapps.floorballcoach.views.IconView
+
+        <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/statusUserConnectionIcon"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:text="@string/icon_check"
             app:iconFont="@string/icon_solid"
             app:iconSize="20sp" />
-        <com.ardeapps.floorballcoach.views.IconView
+
+        <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/removeUserConnectionIcon"
             android:layout_width="50dp"
             android:layout_height="match_parent"
@@ -48,7 +50,8 @@
             android:text="@string/icon_remove"
             app:iconFont="@string/icon_solid"
             app:iconSize="16sp" />
-        <com.ardeapps.floorballcoach.views.IconView
+
+        <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/editUserConnectionIcon"
             android:layout_width="50dp"
             android:layout_height="match_parent"

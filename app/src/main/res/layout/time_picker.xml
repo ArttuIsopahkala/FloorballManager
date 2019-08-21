@@ -10,7 +10,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"/>
 
-    <com.ardeapps.floorballcoach.views.TimeEditText
+    <com.ardeapps.floorballmanager.views.TimeEditText
         android:id="@+id/minutesText"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         android:text=":"
         android:textColor="@color/color_text_light_secondary" />
 
-    <com.ardeapps.floorballcoach.views.TimeEditText
+    <com.ardeapps.floorballmanager.views.TimeEditText
         android:id="@+id/secondsText"
         android:layout_width="80dp"
         android:layout_height="wrap_content"

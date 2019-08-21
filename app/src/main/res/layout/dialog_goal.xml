@@ -29,7 +29,8 @@
         android:text="@string/add_event_scorer"
         android:textColor="@color/color_text_light"
         android:textSize="15sp" />
-    <com.ardeapps.floorballcoach.views.NoSwipeViewPager
+
+    <com.ardeapps.floorballmanager.views.NoSwipeViewPager
         android:id="@+id/eventPager"
         android:layout_below="@+id/infoText"
         android:layout_above="@+id/actionButtons"

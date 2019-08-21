@@ -43,7 +43,8 @@
         android:text="3 - 4"
         android:textColor="@color/color_text_light"
         android:textSize="22sp"/>
-    <com.ardeapps.floorballcoach.views.IconView
+
+    <com.ardeapps.floorballmanager.views.IconView
         android:id="@+id/selectIcon"
         android:layout_width="50dp"
         android:layout_height="match_parent"
