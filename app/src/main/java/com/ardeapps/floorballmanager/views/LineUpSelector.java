@@ -67,7 +67,7 @@ public class LineUpSelector extends LinearLayout {
         // Show line chemistry bar
         lineChemistryContainer.setVisibility(enableChemistry ? View.VISIBLE : View.GONE);
         lineChemistryValueText.setText("-");
-        lineChemistryBar.setProgress(0);
+        lineChemistryBar.post(() -> lineChemistryBar.setProgress(0));
 
         lineFragments = new ArrayList<>();
         lineFragments.add(createLineFragment(1));
@@ -96,7 +96,7 @@ public class LineUpSelector extends LinearLayout {
             int position = linesPager.getCurrentItem();
             LineFragmentData data = lineFragments.get(position).getData();
             Line line = data.getLine();
-            int percent = AnalyzerService.getInstance().getLineChemistryPercent(line);
+            int percent = AnalyzerService.getInstance().getLineChemistryPercentForLine(line);
             lineChemistryValueText.setText(String.valueOf(percent));
             lineChemistryBar.setProgress(percent);
 

@@ -91,7 +91,4 @@ public class Line {
         return sorted;
     }
 
-    public boolean isSame(Line line) {
-        return line.getLineNumber() == getLineNumber() && line.getPlayerIdMap().equals(getPlayerIdMap());
-    }
 }

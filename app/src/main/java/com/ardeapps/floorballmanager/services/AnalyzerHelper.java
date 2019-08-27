@@ -2,77 +2,82 @@ package com.ardeapps.floorballmanager.services;
 
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
+import com.ardeapps.floorballmanager.objects.Player;
+import com.ardeapps.floorballmanager.objects.Player.Position;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AnalyzerHelper extends AnalyzerService {
 
     /**
-     * Get goals where given players have been in the same line.
-     *
-     * @param playerId        player 1
-     * @param comparePlayerId player 2
-     * @return list of goals
-     */
-    public static ArrayList<Goal> getGoalsWherePlayersInSameLine(String playerId, String comparePlayerId) {
-        ArrayList<String> gameIds = getGameIdsWherePlayersInSameLine(playerId, comparePlayerId);
-        return getGoalsOfGames(gameIds);
-    }
-
-    /**
-     * Get gameIds where given players are in the same line.
+     * Get game count where given players are in the same line.
      *
      * @param playerId         player 1
      * @param comparedPlayerId player 2
      * @return gameIds list
      */
-    public static ArrayList<String> getGameIdsWherePlayersInSameLine(String playerId, String comparedPlayerId) {
+    public static int getGameCountWherePlayersInSameLine(String playerId, String comparedPlayerId) {
+        int gameCount = 0;
         List<String> comparePlayers = Arrays.asList(playerId, comparedPlayerId);
-        ArrayList<String> gameIds = new ArrayList<>();
-        for (Map.Entry<String, ArrayList<Line>> entry : linesInGames.entrySet()) {
-            final String gameId = entry.getKey();
-            final ArrayList<Line> lines = entry.getValue();
+        for (ArrayList<Line> lines : linesInGames.values()) {
             for (Line line : lines) {
                 if (line.getPlayerIdMap() != null && line.getPlayerIdMap().values().containsAll(comparePlayers)) {
-                    gameIds.add(gameId);
+                    gameCount++;
                 }
             }
         }
-        return gameIds;
+        return gameCount;
     }
 
     /**
-     * Get goals where given player have been in the line.
+     * Get goals where both players have been on field.
      *
-     * @param playerId player 1
-     * @return list of goals
+     * @param playerId1 player1
+     * @param playerId2 player2
+     * @return goals
      */
-    public static ArrayList<Goal> getGoalsWherePlayerInLine(String playerId) {
-        ArrayList<String> gameIds = getGameIdsWherePlayerInLine(playerId);
-        return getGoalsOfGames(gameIds);
-    }
-
-    /**
-     * Get gameIds where given player are in the line.
-     *
-     * @param playerId player 1
-     * @return gameIds list
-     */
-    public static ArrayList<String> getGameIdsWherePlayerInLine(String playerId) {
-        ArrayList<String> gameIds = new ArrayList<>();
-        for (Map.Entry<String, ArrayList<Line>> entry : linesInGames.entrySet()) {
-            final String gameId = entry.getKey();
-            final ArrayList<Line> lines = entry.getValue();
-            for (Line line : lines) {
-                if (line.getPlayerIdMap() != null && line.getPlayerIdMap().values().contains(playerId)) {
-                    gameIds.add(gameId);
-                }
+    public static ArrayList<Goal> getCommonGoals(String playerId1, String playerId2) {
+        ArrayList<Goal> allGoals = new ArrayList<>();
+        for(ArrayList<Goal> goalsInGame : goalsInGames.values()) {
+            allGoals.addAll(goalsInGame);
+        }
+        ArrayList<Goal> commonGoals = new ArrayList<>();
+        for (Goal goal : allGoals) {
+            List<String> comparePlayers = Arrays.asList(playerId1, playerId2);
+            boolean bothPlayersOnField = goal.getPlayerIds() != null && goal.getPlayerIds().containsAll(comparePlayers);
+            if (bothPlayersOnField) {
+                commonGoals.add(goal);
             }
         }
-        return gameIds;
+        return commonGoals;
+    }
+
+    public static Position getBestPositionFromGoals(Player player) {
+        double maxGoalPercent = 0;
+        Position bestPosition = null;
+        Map<Position, ArrayList<String>> gameIdsInPositions = getGamesByPositionWherePlayerInLine(player);
+        for (Map.Entry<Position, ArrayList<String>> entry : gameIdsInPositions.entrySet()) {
+            Position position = entry.getKey();
+            ArrayList<String> gameIds = entry.getValue();
+            ArrayList<Goal> goals = getGoalsOfGames(gameIds);
+            int goalPoints = ChemistryPointsAnalyzer.getGoalPointsForPlayer(player.getPlayerId(), goals);
+            int goalPercent = 0;
+            if(goalPoints > 0) {
+                goalPercent = goalPoints / gameIds.size();
+            }
+            if(goalPoints > maxGoalPercent) {
+                bestPosition = position;
+                maxGoalPercent = goalPercent;
+            }
+        }
+        if(bestPosition == null) {
+            bestPosition = Position.fromDatabaseName(player.getPosition());
+        }
+        return bestPosition;
     }
 
     /**
@@ -90,5 +95,31 @@ public class AnalyzerHelper extends AnalyzerService {
             }
         }
         return goalsList;
+    }
+
+    private static Map<Position, ArrayList<String>> getGamesByPositionWherePlayerInLine(Player player) {
+        Map<Position, ArrayList<String>> gamesByPosition = new HashMap<>();
+        for (Map.Entry<String, ArrayList<Line>> entry : linesInGames.entrySet()) {
+            final String gameId = entry.getKey();
+            final ArrayList<Line> lines = entry.getValue();
+            for (Line line : lines) {
+                Map<String, String> playerIdMap = line.getPlayerIdMap();
+                if (playerIdMap != null) {
+                    for (Map.Entry<String, String> playerEntry : playerIdMap.entrySet()) {
+                        Position position = Position.fromDatabaseName(playerEntry.getKey());
+                        String playerId = playerEntry.getValue();
+                        if(player.getPlayerId().equals(playerId)) {
+                            ArrayList<String> gameIds = gamesByPosition.get(position);
+                            if(gameIds == null) {
+                                gameIds = new ArrayList<>();
+                            }
+                            gameIds.add(gameId);
+                            gamesByPosition.put(position, gameIds);
+                        }
+                    }
+                }
+            }
+        }
+        return gamesByPosition;
     }
 }

@@ -15,6 +15,7 @@ import com.ardeapps.floorballmanager.objects.UserConnection;
 import com.ardeapps.floorballmanager.objects.UserInvitation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -218,13 +219,14 @@ public class AppRes extends MultiDexApplication {
         if (players == null) {
             players = new HashMap<>();
         }
-        ArrayList<Player> activePlayers = new ArrayList<>();
+        ArrayList<Player> inActivePlayers = new ArrayList<>();
         for (Player player : players.values()) {
             if (!player.isActive()) {
-                activePlayers.add(player);
+                inActivePlayers.add(player);
             }
         }
-        return activePlayers;
+        Collections.sort(inActivePlayers, (player1, player2) -> player1.getName().compareTo(player2.getName()));
+        return inActivePlayers;
     }
 
     public ArrayList<Player> getActivePlayers() {
@@ -235,6 +237,20 @@ public class AppRes extends MultiDexApplication {
         for (Player player : players.values()) {
             if (player.isActive()) {
                 activePlayers.add(player);
+            }
+        }
+        Collections.sort(activePlayers, (player1, player2) -> player1.getName().compareTo(player2.getName()));
+        return activePlayers;
+    }
+
+    public Map<String, Player> getActivePlayersMap() {
+        if (players == null) {
+            players = new HashMap<>();
+        }
+        Map<String, Player> activePlayers = new HashMap<>();
+        for (Player player : players.values()) {
+            if (player.isActive()) {
+                activePlayers.put(player.getPlayerId(), player);
             }
         }
         return activePlayers;

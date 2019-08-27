@@ -215,6 +215,7 @@
     <string name="lineup_lines_changed">Kentälliset muuttuivat. Tallennetaanko?</string>
     <string name="lineup_line_chemistry">Kentän kemia</string>
     <string name="lineup_team_chemistry">Joukkueen kemia</string>
+    <string name="lineup_too_few_players">Joukkueessa on oltava vähintään 5 pelaajaa.</string>
 
     <string name="games_no_games">Ei lisättyjä otteluita.</string>
     <string name="games_new_game">Uusi ottelu</string>

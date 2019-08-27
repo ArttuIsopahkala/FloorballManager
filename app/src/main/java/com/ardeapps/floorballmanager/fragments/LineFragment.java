@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.dialogFragments.SelectPlayerDialogFragment;
-import com.ardeapps.floorballmanager.objects.Chemistry.ChemistryConnection;
+import com.ardeapps.floorballmanager.objects.ChemistryConnection;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
@@ -32,6 +32,8 @@ import com.ardeapps.floorballmanager.views.IconView;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+;
 
 
 public class LineFragment extends Fragment implements DataView {
@@ -51,7 +53,7 @@ public class LineFragment extends Fragment implements DataView {
     RelativeLayout card_rd;
     ImageView chemistryLinesImageView;
     Map<Position, Integer> closestChemistries = new HashMap<>();
-    Map<ChemistryConnection, Integer> chemistryConnections = new HashMap<>();
+    Map<ChemistryConnection, Integer> chemistryConnectionPercents = new HashMap<>();
     int canvasTop = 0;
     boolean showChemistry = false;
     private LineFragmentData data;
@@ -87,16 +89,16 @@ public class LineFragment extends Fragment implements DataView {
             // Get data
             Line line = data.getLine();
             closestChemistries = AnalyzerService.getInstance().getClosestChemistryPercentsForPosition(line);
-            chemistryConnections = AnalyzerService.getInstance().getChemistryConnections(line);
+            chemistryConnectionPercents = AnalyzerService.getInstance().getChemistryConnectionPercentsForLine(line);
 
             // Set chemistry texts
-            setChemistryText(c_lw_text, chemistryConnections.get(ChemistryConnection.C_LW));
-            setChemistryText(c_rw_text, chemistryConnections.get(ChemistryConnection.C_RW));
-            setChemistryText(c_ld_text, chemistryConnections.get(ChemistryConnection.C_LD));
-            setChemistryText(c_rd_text, chemistryConnections.get(ChemistryConnection.C_RD));
-            setChemistryText(ld_rd_text, chemistryConnections.get(ChemistryConnection.LD_RD));
-            setChemistryText(ld_lw_text, chemistryConnections.get(ChemistryConnection.LD_LW));
-            setChemistryText(rd_rw_text, chemistryConnections.get(ChemistryConnection.RD_RW));
+            setChemistryText(c_lw_text, chemistryConnectionPercents.get(ChemistryConnection.C_LW));
+            setChemistryText(c_rw_text, chemistryConnectionPercents.get(ChemistryConnection.C_RW));
+            setChemistryText(c_ld_text, chemistryConnectionPercents.get(ChemistryConnection.C_LD));
+            setChemistryText(c_rd_text, chemistryConnectionPercents.get(ChemistryConnection.C_RD));
+            setChemistryText(ld_rd_text, chemistryConnectionPercents.get(ChemistryConnection.LD_RD));
+            setChemistryText(ld_lw_text, chemistryConnectionPercents.get(ChemistryConnection.LD_LW));
+            setChemistryText(rd_rw_text, chemistryConnectionPercents.get(ChemistryConnection.RD_RW));
 
             // Set chemistry lines
             chemistryLinesImageView.post(() -> {
@@ -266,7 +268,7 @@ public class LineFragment extends Fragment implements DataView {
     }
 
     private void drawChemistryLine(Canvas canvas, RelativeLayout fromView, RelativeLayout toView, ChemistryConnection connection) {
-        Integer percent = chemistryConnections.get(connection);
+        Integer percent = chemistryConnectionPercents.get(connection);
         if (percent != null) {
             Point from = getPosition(fromView);
             Point to = getPosition(toView);

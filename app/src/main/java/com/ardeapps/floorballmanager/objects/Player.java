@@ -8,6 +8,7 @@ import com.ardeapps.floorballmanager.R;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -274,5 +275,34 @@ public class Player {
         public String toDatabaseName() {
             return this.name();
         }
+    }
+
+    public static Map<Position, ArrayList<Position>> getClosestPositions() {
+        Map<Position, ArrayList<Position>> closestPositions = new HashMap<>();
+        ArrayList<Position> positions = new ArrayList<>();
+        positions.add(Position.C);
+        positions.add(Position.LD);
+        closestPositions.put(Position.LW, positions);
+        positions = new ArrayList<>();
+        positions.add(Position.LW);
+        positions.add(Position.RW);
+        positions.add(Position.RD);
+        positions.add(Position.LD);
+        closestPositions.put(Position.C, positions);
+        positions = new ArrayList<>();
+        positions.add(Position.RD);
+        positions.add(Position.C);
+        closestPositions.put(Position.RW, positions);
+        positions = new ArrayList<>();
+        positions.add(Position.LW);
+        positions.add(Position.C);
+        positions.add(Position.RD);
+        closestPositions.put(Position.LD, positions);
+        positions = new ArrayList<>();
+        positions.add(Position.RW);
+        positions.add(Position.C);
+        positions.add(Position.LD);
+        closestPositions.put(Position.RD, positions);
+        return closestPositions;
     }
 }

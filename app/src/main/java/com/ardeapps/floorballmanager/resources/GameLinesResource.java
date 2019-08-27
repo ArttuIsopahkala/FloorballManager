@@ -39,7 +39,7 @@ public class GameLinesResource extends FirebaseDatabaseService {
         final Map<Integer, Line> savedLines = new HashMap<>();
         final ArrayList<Line> linesHandled = new ArrayList<>();
         for (Map.Entry<Integer, Line> entry : lines.entrySet()) {
-            final Line line = entry.getValue();
+            Line line = entry.getValue();
             // Add, edit or remove line
             if (StringUtils.isEmptyString(line.getLineId())) {
                 addLine(gameId, line, id -> {

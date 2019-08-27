@@ -5,8 +5,7 @@ public class Chemistry {
     private String playerId;
     private Player.Position comparePosition;
     private String comparePlayerId;
-    private int chemistryPoints;
-    private int chemistryPercent;
+    private double chemistryPercent;
 
     public Chemistry() {
     }
@@ -35,21 +34,11 @@ public class Chemistry {
         this.comparePlayerId = comparePlayerId;
     }
 
-    public int getChemistryPercent() {
+    public double getChemistryPercent() {
         return chemistryPercent;
     }
 
-    public void setChemistryPercent(int chemistryPercent) {
+    public void setChemistryPercent(double chemistryPercent) {
         this.chemistryPercent = chemistryPercent;
-    }
-
-    public enum ChemistryConnection {
-        C_LW,
-        C_RW,
-        C_LD,
-        C_RD,
-        LD_RD,
-        LD_LW,
-        RD_RW
     }
 }

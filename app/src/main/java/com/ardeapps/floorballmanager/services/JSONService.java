@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class JSONService extends FirebaseDatabaseService {
 
-    private final static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/java/com/ardeapps/floorballcoach/json-dump.json";
+    private final static String PATH_TO_DB = System.getProperty("user.dir") + "/src/main/assets/json-dump.json";
 
     private static String DATABASE_ROOT = "RELEASE";
     private static String TAG = "JSONService";

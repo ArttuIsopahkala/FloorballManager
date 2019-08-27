@@ -53,23 +53,52 @@ public class LinesFragment extends Fragment {
         }
 
         teamChemistryValueText.setText("-");
-        teamChemistryBar.setProgress(0);
+        teamChemistryBar.post(() -> teamChemistryBar.setProgress(0));
 
         lineUpSelector.createView(this, true);
         final Map<Integer, Line> lines = AppRes.getInstance().getLines();
         lineUpSelector.setLines(lines);
         lineUpSelector.setListener(this::refreshTeamChemistry);
 
-        analyzeChemistryButton.setOnClickListener(button -> GoalsResource.getInstance().getAllGoals(goals -> {
-            AppRes.getInstance().setGoalsByGame(goals);
-            GameLinesResource.getInstance().getLines(lines1 -> {
-                AppRes.getInstance().setLinesByGame(lines1);
+        analyzeChemistryButton.setOnClickListener(button -> {
+            if(AppRes.getInstance().getGoalsByGame().isEmpty()) {
+                GoalsResource.getInstance().getAllGoals(goals -> {
+                    AppRes.getInstance().setGoalsByGame(goals);
+                    GameLinesResource.getInstance().getLines(lines1 -> {
+                        AppRes.getInstance().setLinesByGame(lines1);
+                        lineUpSelector.showLineChemistry();
+                        refreshTeamChemistry();
+                    });
+                });
+            } else {
                 lineUpSelector.showLineChemistry();
                 refreshTeamChemistry();
-            });
-        }));
+            }
+        });
 
-        getBestLinesButton.setOnClickListener(button -> Logger.toast("Hae parhaat kentät"));
+        getBestLinesButton.setOnClickListener(button -> {
+            if(AppRes.getInstance().getActivePlayers().size() < 5) {
+                Logger.toast(AppRes.getContext().getString(R.string.lineup_too_few_players));
+                return;
+            }
+            if(AppRes.getInstance().getGoalsByGame().isEmpty()) {
+                GoalsResource.getInstance().getAllGoals(goals -> {
+                    AppRes.getInstance().setGoalsByGame(goals);
+                    GameLinesResource.getInstance().getLines(lines1 -> {
+                        AppRes.getInstance().setLinesByGame(lines1);
+                        Map<Integer, Line> bestLines = AnalyzerService.getInstance().getBestLines();
+                        lineUpSelector.setLines(bestLines);
+                        lineUpSelector.showLineChemistry();
+                        refreshTeamChemistry();
+                    });
+                });
+            } else {
+                Map<Integer, Line> bestLines = AnalyzerService.getInstance().getBestLines();
+                lineUpSelector.setLines(bestLines);
+                lineUpSelector.showLineChemistry();
+                refreshTeamChemistry();
+            }
+        });
 
         saveButton.setOnClickListener(button -> {
             Map<Integer, Line> linesToSave = lineUpSelector.getLines();
