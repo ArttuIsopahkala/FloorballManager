@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.services;
+package com.ardeapps.floorballmanager.analyzer;
 
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AnalyzerHelper extends AnalyzerService {
+class AnalyzerDataCollector extends AnalyzerService {
 
     /**
      * Get game count where given players are in the same line.
@@ -86,7 +86,7 @@ public class AnalyzerHelper extends AnalyzerService {
      * @param gameIds games
      * @return goals from requested games
      */
-    public static ArrayList<Goal> getGoalsOfGames(ArrayList<String> gameIds) {
+    private static ArrayList<Goal> getGoalsOfGames(ArrayList<String> gameIds) {
         ArrayList<Goal> goalsList = new ArrayList<>();
         for (String gameId : gameIds) {
             ArrayList<Goal> foundGoals = goalsInGames.get(gameId);

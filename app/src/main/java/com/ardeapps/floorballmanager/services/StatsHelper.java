@@ -2,6 +2,7 @@ package com.ardeapps.floorballmanager.services;
 
 import android.util.Pair;
 
+import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.viewObjects.PlayerPointsData;

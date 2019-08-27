@@ -7,8 +7,8 @@ import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
-import com.ardeapps.floorballmanager.services.AnalyzerWrapper;
-import com.ardeapps.floorballmanager.services.AnalyzerService;
+import com.ardeapps.floorballmanager.analyzer.AnalyzerWrapper;
+import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.services.JSONService;
 
 import org.junit.Before;

@@ -12,12 +12,14 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.analyzer.AllowedPlayerPosition;
+import com.ardeapps.floorballmanager.analyzer.BestLineType;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.UserConnection;
 import com.ardeapps.floorballmanager.resources.GameLinesResource;
 import com.ardeapps.floorballmanager.resources.GoalsResource;
 import com.ardeapps.floorballmanager.resources.LinesResource;
-import com.ardeapps.floorballmanager.services.AnalyzerService;
+import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.views.LineUpSelector;
 
@@ -86,14 +88,14 @@ public class LinesFragment extends Fragment {
                     AppRes.getInstance().setGoalsByGame(goals);
                     GameLinesResource.getInstance().getLines(lines1 -> {
                         AppRes.getInstance().setLinesByGame(lines1);
-                        Map<Integer, Line> bestLines = AnalyzerService.getInstance().getBestLines();
+                        Map<Integer, Line> bestLines = AnalyzerService.getInstance().getBestLines(AllowedPlayerPosition.MOST_GOALS_IN_POSITION, BestLineType.BEST_TEAM_CHEMISTRY);
                         lineUpSelector.setLines(bestLines);
                         lineUpSelector.showLineChemistry();
                         refreshTeamChemistry();
                     });
                 });
             } else {
-                Map<Integer, Line> bestLines = AnalyzerService.getInstance().getBestLines();
+                Map<Integer, Line> bestLines = AnalyzerService.getInstance().getBestLines(AllowedPlayerPosition.MOST_GOALS_IN_POSITION, BestLineType.BEST_TEAM_CHEMISTRY);
                 lineUpSelector.setLines(bestLines);
                 lineUpSelector.showLineChemistry();
                 refreshTeamChemistry();

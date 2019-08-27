@@ -16,7 +16,7 @@ import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.adapters.LinesPagerAdapter;
 import com.ardeapps.floorballmanager.fragments.LineFragment;
 import com.ardeapps.floorballmanager.objects.Line;
-import com.ardeapps.floorballmanager.services.AnalyzerService;
+import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.viewObjects.LineFragmentData;
 
 import java.util.ArrayList;

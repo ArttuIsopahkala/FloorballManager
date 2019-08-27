@@ -1,6 +1,4 @@
-package com.ardeapps.floorballmanager.services;
-
-import android.util.Pair;
+package com.ardeapps.floorballmanager.analyzer;
 
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Player;
@@ -11,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChemistryPointsAnalyzer extends AnalyzerService {
+public class ChemistryPointsAnalyzer {
 
     private static final ArrayList<Player.Skill> attackSkills1 = new ArrayList<>(Arrays.asList(Player.Skill.PASSING, Player.Skill.GAME_SENSE));
     private static final ArrayList<Player.Skill> attackSkills2 = new ArrayList<>(Arrays.asList(Player.Skill.SHOOTING, Player.Skill.BALL_HANDLING));
@@ -24,46 +22,36 @@ public class ChemistryPointsAnalyzer extends AnalyzerService {
     /**
      * Get chemistry points of two players based on all abilities
      *
-     * @param player1 playerId and position to compare
-     * @param player2 playerId and position to compare against
+     * @param playerPos        player position to compare
+     * @param player         player to compare against
+     * @param comparePlayerPos player position to compare against
+     * @param comparePlayer player to compare
      * @return count of chemistry points
      */
-    protected static double getChemistryPoints(Pair<Position, String> player1, Pair<Position, String> player2) {
-        Position playerPos = player1.first;
-        String playerId = player1.second;
-        Position comparePlayerPos = player2.first;
-        String comparePlayerId = player2.second;
-        
+    static double getChemistryPoints(Position playerPos, Player player, Position comparePlayerPos, Player comparePlayer) {
         double chemistryPoints = 0.0;
-        Player player = playersInTeam.get(playerId);
-        Player comparePlayer = playersInTeam.get(comparePlayerId);
         if (player != null && comparePlayer != null) {
-            int gameCount = AnalyzerHelper.getGameCountWherePlayersInSameLine(playerId, comparePlayerId);
+            String playerId = player.getPlayerId();
+            String comparePlayerId = comparePlayer.getPlayerId();
+            int gameCount = AnalyzerDataCollector.getGameCountWherePlayersInSameLine(playerId, comparePlayerId);
             // Divide by games to get relative points. (More points in a few games -> higher chemistry)
             int goalChemistry = 0;
             if(gameCount > 0) {
-                ArrayList<Goal> commonGoals = AnalyzerHelper.getCommonGoals(playerId, comparePlayerId);
+                ArrayList<Goal> commonGoals = AnalyzerDataCollector.getCommonGoals(playerId, comparePlayerId);
                 goalChemistry = getGoalsChemistry(playerId, comparePlayerId, commonGoals) / gameCount;
             }
 
             Shoots playerShoots = Shoots.fromDatabaseName(player.getShoots());
             Shoots comparePlayerShoots = Shoots.fromDatabaseName(comparePlayer.getShoots());
-            Pair<Position, Shoots> shootsPlayer = new Pair<>(playerPos, playerShoots);
-            Pair<Position, Shoots> shootsComparePlayer = new Pair<>(comparePlayerPos, comparePlayerShoots);
-            int shootsChemistry = getShootsChemistry(shootsPlayer, shootsComparePlayer);
-            shootsChemistry += getShootsChemistry(shootsComparePlayer, shootsPlayer);
+            int shootsChemistry = getShootsChemistry(playerPos, playerShoots, comparePlayerPos, comparePlayerShoots);
+            shootsChemistry += getShootsChemistry(comparePlayerPos, comparePlayerShoots, playerPos, playerShoots);
 
-            Pair<Position, Player> strengthsPlayer = new Pair<>(playerPos, player);
-            Pair<Position, Player> strengthsComparePlayer = new Pair<>(playerPos, player);
-            int strengthsChemistry = getStrengthsChemistry(strengthsPlayer, strengthsComparePlayer);
-            strengthsChemistry += getStrengthsChemistry(strengthsComparePlayer, strengthsPlayer);
+            int strengthsChemistry = getStrengthsChemistry(playerPos, player, comparePlayerPos, comparePlayer);
+            strengthsChemistry += getStrengthsChemistry(comparePlayerPos, comparePlayer, playerPos, player);
 
             chemistryPoints = getWeightedChemistryPoints(goalChemistry, shootsChemistry, strengthsChemistry);
         }
 
-        if(chemistryPoints < 0) {
-            chemistryPoints = 0;
-        }
         return chemistryPoints;
     }
 
@@ -119,19 +107,12 @@ public class ChemistryPointsAnalyzer extends AnalyzerService {
                 } else if (!goal.isOpponentGoal()) {
                     chemistryPoints++;
                 }
-                // TODO lokita kuinka Kustilla on niin  isot pisteet? bugi?
-                /*if(playerId1.equals("-LlhMkH_blh3-pxXf_7N") && playerId2.equals("-LlgUzUYqGM-mCnwn7NP")) {
-                    Logger.log("Kustin ja Mikin maalit: " + chemistryPoints);
-                }
-                if(playerId2.equals("-LlhMkH_blh3-pxXf_7N") && playerId1.equals("-LlgUzUYqGM-mCnwn7NP")) {
-                    Logger.log("Kustin ja Mikin maalit: " + chemistryPoints);
-                }*/
             }
         }
         return chemistryPoints;
     }
 
-    protected static int getGoalPointsForPlayer(String playerId, ArrayList<Goal> goals) {
+    static int getGoalPointsForPlayer(String playerId, ArrayList<Goal> goals) {
         int chemistryPoints = 0;
         for (Goal goal : goals) {
             boolean playerOnField = goal.getPlayerIds().contains(playerId);
@@ -154,16 +135,13 @@ public class ChemistryPointsAnalyzer extends AnalyzerService {
     /**
      * Get chemistry based on player shoots (left or right)
      *
-     * @param player1 player position and shoot to compare
-     * @param player2 player position and shoot to compare against
+     * @param playerPos           player position to compare
+     * @param playerShoots        player shoots
+     * @param comparePlayerPos    player position to compare against
+     * @param comparePlayerShoots compare player shoots
      * @return chemistry count
      */
-    protected static int getShootsChemistry(Pair<Position, Shoots> player1, Pair<Position, Shoots> player2) {
-        Position playerPos = player1.first;
-        Shoots playerShoots = player1.second;
-        Position comparePlayerPos = player2.first;
-        Shoots comparePlayerShoots = player2.second;
-        
+    protected static int getShootsChemistry(Position playerPos, Player.Shoots playerShoots, Position comparePlayerPos, Player.Shoots comparePlayerShoots) {
         int chemistryPoints = 0;
         // VASEN HYÖKKÄÄJÄ
         if (playerPos == Position.LW && playerShoots == Shoots.LEFT) {
@@ -235,16 +213,13 @@ public class ChemistryPointsAnalyzer extends AnalyzerService {
     /**
      * Get chemistry based on player strengths
      *
-     * @param player1 player and position to compare
-     * @param player2 player and position to compare against
+     * @param playerPos        player position to compare
+     * @param player           player to compare
+     * @param comparePlayerPos player position to compare against
+     * @param comparePlayer    player to compare against
      * @return chemistry count
      */
-    protected static int getStrengthsChemistry(Pair<Position, Player> player1, Pair<Position, Player> player2) {
-        Position playerPos = player1.first;
-        Player player = player1.second;
-        Position comparePlayerPos = player2.first;
-        Player comparePlayer = player2.second;
-        
+    protected static int getStrengthsChemistry(Position playerPos, Player player, Position comparePlayerPos, Player comparePlayer) {
         int chemistryPoints = 0;
         Shoots playerShoots = Shoots.fromDatabaseName(player.getShoots());
 

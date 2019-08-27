@@ -22,7 +22,7 @@ import com.ardeapps.floorballmanager.objects.ChemistryConnection;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
-import com.ardeapps.floorballmanager.services.AnalyzerService;
+import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
 import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
@@ -88,8 +88,12 @@ public class LineFragment extends Fragment implements DataView {
 
             // Get data
             Line line = data.getLine();
-            closestChemistries = AnalyzerService.getInstance().getClosestChemistryPercentsForPosition(line);
-            chemistryConnectionPercents = AnalyzerService.getInstance().getChemistryConnectionPercentsForLine(line);
+            closestChemistries = new HashMap<>();
+            chemistryConnectionPercents = new HashMap<>();
+            if(line != null) {
+                closestChemistries = AnalyzerService.getInstance().getClosestChemistryPercentsForPosition(line.getPlayerIdMap());
+                chemistryConnectionPercents = AnalyzerService.getInstance().getChemistryConnectionPercents(line.getPlayerIdMap());
+            }
 
             // Set chemistry texts
             setChemistryText(c_lw_text, chemistryConnectionPercents.get(ChemistryConnection.C_LW));
