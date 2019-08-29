@@ -96,7 +96,7 @@ public class LineUpSelector extends LinearLayout {
             int position = linesPager.getCurrentItem();
             LineFragmentData data = lineFragments.get(position).getData();
             Line line = data.getLine();
-            int percent = AnalyzerService.getInstance().getLineChemistryPercentForLine(line);
+            int percent = AnalyzerService.getInstance().getLineChemistryPercent(line);
             lineChemistryValueText.setText(String.valueOf(percent));
             lineChemistryBar.setProgress(percent);
 

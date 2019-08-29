@@ -3,6 +3,8 @@ package com.ardeapps.floorballmanager.analyzer;
 import android.util.Pair;
 
 import com.ardeapps.floorballmanager.objects.Chemistry;
+import com.ardeapps.floorballmanager.objects.Connection;
+import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
 
 import java.util.ArrayList;
@@ -15,6 +17,60 @@ import java.util.Set;
  * THIS IS ONLY CLASS CHEMISTRY PERCENTS ARE CALLED
  */
 public class AnalyzerWrapper {
+
+    public static double getPlayerChemistryPercent(Position position, Player player) {
+        ArrayList<Connection> connections = Connection.getClosestChemistryConnections(position);
+        int connectionCount = connections.size();
+        int percent = 0;
+        if(connectionCount > 0) {
+            double percentSum = 0;
+            for (Connection connection : connections) {
+                percentSum += ChemistryPercentAnalyzer.getConnectionChemistryPercent(position, player, connection);
+            }
+            percent = (int) Math.round(percentSum / connectionCount);
+        }
+        return percent;
+    }
+
+    /**
+     * Get chemistries of players in line indexed by position.
+     * Chemistries are calculated from one line's position to other positions.
+     *
+     * @param playersMap chemistries from this players are calculated
+     * @return chemistries list indexed by playerId
+     */
+    public static Map<Position, ArrayList<Chemistry>> getChemistriesInLineForPositions(Map<String, String> playersMap) {
+        Map<Position, ArrayList<Chemistry>> chemistryMap = new HashMap<>();
+
+        for (Map.Entry<String, String> playerEntry : playersMap.entrySet()) {
+            final Position position = Position.fromDatabaseName(playerEntry.getKey());
+            String playerId = playerEntry.getValue();
+            final Player player = AnalyzerService.playersInTeam.get(playerId);
+            if(player != null) {
+                ArrayList<Chemistry> chemistries = new ArrayList<>();
+                for (Map.Entry<String, String> comparePlayerEntry : playersMap.entrySet()) {
+                    Position comparePosition = Position.fromDatabaseName(comparePlayerEntry.getKey());
+                    String comparePlayerId = comparePlayerEntry.getValue();
+                    final Player comparePlayer = AnalyzerService.playersInTeam.get(comparePlayerId);
+                    if(comparePlayer != null) {
+                        if (!playerId.equals(comparePlayerId)) {
+                            Chemistry chemistry = new Chemistry();
+                            chemistry.setPlayerId(playerId);
+                            chemistry.setComparePlayerId(comparePlayerId);
+                            chemistry.setComparePosition(comparePosition);
+                            double chemistryPercent = ChemistryPercentAnalyzer.getConnectionChemistryPercent(position, player, comparePosition, comparePlayer);
+                            chemistry.setChemistryPercent(chemistryPercent);
+                            // TODO jatka, pitäisi olla OK
+                            chemistries.add(chemistry);
+                        }
+                    }
+                }
+                chemistryMap.put(position, chemistries);
+            }
+        }
+
+        return chemistryMap;
+    }
 
     public static void addChemistryToLine(Map<String, String> playersInLine, ArrayList<Pair<Map<String, String>, Integer>> playersInLines) {
         Set<String> set = new HashSet<>(playersInLine.keySet());
@@ -36,43 +92,6 @@ public class AnalyzerWrapper {
             }
             playersInLines.add(new Pair<>(playersInLine, chemistryForLine));
         }
-    }
-
-    /**
-     * Get chemistries of players in line indexed by position.
-     * Chemistries are calculated from one line's position to other positions.
-     *
-     * @param playersMap chemistries from this players are calculated
-     * @return chemistries list indexed by playerId
-     */
-    public static Map<Position, ArrayList<Chemistry>> getChemistriesInLineForPositions(Map<String, String> playersMap) {
-        Map<Position, ArrayList<Chemistry>> chemistryMap = new HashMap<>();
-
-        for (Map.Entry<String, String> player : playersMap.entrySet()) {
-            final Position position = Position.fromDatabaseName(player.getKey());
-            final String playerId = player.getValue();
-            ArrayList<Chemistry> chemistries = new ArrayList<>();
-
-            for (Map.Entry<String, String> comparePlayer : playersMap.entrySet()) {
-                Position comparePosition = Position.fromDatabaseName(comparePlayer.getKey());
-                String comparePlayerId = comparePlayer.getValue();
-
-                if (!playerId.equals(comparePlayerId)) {
-                    Chemistry chemistry = new Chemistry();
-                    chemistry.setPlayerId(playerId);
-                    chemistry.setComparePlayerId(comparePlayerId);
-                    chemistry.setComparePosition(comparePosition);
-                    double chemistryPercent = ChemistryPercentAnalyzer.getChemistryPercent(position, AnalyzerService.playersInTeam.get(playerId), comparePosition, AnalyzerService.playersInTeam.get(comparePlayerId));
-                    chemistry.setChemistryPercent(chemistryPercent);
-
-                    chemistries.add(chemistry);
-                }
-            }
-
-            chemistryMap.put(position, chemistries);
-        }
-
-        return chemistryMap;
     }
 
     /**

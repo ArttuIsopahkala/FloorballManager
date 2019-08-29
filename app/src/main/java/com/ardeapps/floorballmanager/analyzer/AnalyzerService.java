@@ -4,7 +4,7 @@ import android.util.Pair;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.objects.Chemistry;
-import com.ardeapps.floorballmanager.objects.ChemistryConnection;
+import com.ardeapps.floorballmanager.objects.Connection;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.Player;
@@ -318,16 +318,18 @@ public class AnalyzerService {
             currentAllowedPlayerPosition = AllowedPlayerPosition.PLAYERS_OWN_POSITION;
             ChemistryPercentAnalyzer.initialize(new ArrayList<>(playersInTeam.values()), currentAllowedPlayerPosition);
         }
-        double percentSize = lines.size();
-        if (percentSize == 0) {
-            return 0;
+        int percent = 0;
+        double lineCount = lines.size();
+        if (lineCount > 0) {
+            double percentSum = 0;
+            for (Map.Entry<Integer, Line> entry : lines.entrySet()) {
+                Line line = entry.getValue();
+                percentSum += getLineChemistryPercent(line);
+            }
+            percent = (int) Math.round(percentSum / lineCount);
         }
-        double percentCount = 0;
-        for (Map.Entry<Integer, Line> entry : lines.entrySet()) {
-            Line line = entry.getValue();
-            percentCount += getLineChemistryPercentForLine(line);
-        }
-        return (int) Math.round(percentCount / percentSize);
+
+        return percent;
     }
 
     /**
@@ -338,25 +340,31 @@ public class AnalyzerService {
      * @param line which players are calculated
      * @return chemistry percent for line
      */
-    public int getLineChemistryPercentForLine(Line line) {
+    public int getLineChemistryPercent(Line line) {
         if(currentAllowedPlayerPosition != AllowedPlayerPosition.PLAYERS_OWN_POSITION) {
             currentAllowedPlayerPosition = AllowedPlayerPosition.PLAYERS_OWN_POSITION;
             ChemistryPercentAnalyzer.initialize(new ArrayList<>(playersInTeam.values()), currentAllowedPlayerPosition);
         }
         int percent = 0;
-        if(line != null) {
-            Map<ChemistryConnection, Integer> chemistryConnections = getChemistryConnectionPercents(line.getPlayerIdMap());
-            double percentSize = chemistryConnections.size();
-            if (percentSize == 0) {
-                return 0;
+        if(line != null && line.getPlayerIdMap() != null) {
+            Map<Position, Player> playersInLine = new HashMap<>();
+            for (Map.Entry<String, String> entry : line.getPlayerIdMap().entrySet()) {
+                Position position = Position.fromDatabaseName(entry.getKey());
+                Player player = playersInTeam.get(entry.getValue());
+                if(player != null) {
+                    playersInLine.put(position, player);
+                }
             }
-            double percentCount = 0;
-            for (Map.Entry<ChemistryConnection, Integer> entry : chemistryConnections.entrySet()) {
-                Integer chemistryConnectionPercent = entry.getValue();
-                percentCount += chemistryConnectionPercent == null ? 0 : chemistryConnectionPercent;
+            if(playersInLine.size() > 0) {
+                int playerCount = playersInLine.size();
+                double percentSum = 0;
+                for (Map.Entry<Position, Player> entry : playersInLine.entrySet()) {
+                    Position position = entry.getKey();
+                    Player player = entry.getValue();
+                    percentSum += AnalyzerWrapper.getPlayerChemistryPercent(position, player);
+                }
+                percent = (int) Math.round(percentSum / playerCount);
             }
-
-            percent = (int) Math.round(percentCount / percentSize);
         }
         return percent;
     }
@@ -369,47 +377,47 @@ public class AnalyzerService {
      * @param playersMap which players are calculated
      * @return chemistry percent for chemistry connection lines and texts in UI
      */
-    public Map<ChemistryConnection, Integer> getChemistryConnectionPercents(Map<String, String> playersMap) {
+    public Map<Connection, Integer> getChemistryConnectionPercents(Map<String, String> playersMap) {
         if(currentAllowedPlayerPosition != AllowedPlayerPosition.PLAYERS_OWN_POSITION) {
             currentAllowedPlayerPosition = AllowedPlayerPosition.PLAYERS_OWN_POSITION;
             ChemistryPercentAnalyzer.initialize(new ArrayList<>(playersInTeam.values()), currentAllowedPlayerPosition);
         }
-        Map<ChemistryConnection, Integer> chemistryConnectionPercents = new HashMap<>();
+        Map<Connection, Integer> chemistryConnectionPercents = new HashMap<>();
         if(playersMap != null) {
             Map<Position, ArrayList<Chemistry>> chemistryMap = AnalyzerWrapper.getChemistriesInLineForPositions(playersMap);
             // Center
             Map<Position, Double> compareChemistryPercentMap = AnalyzerHelper.getConvertCompareChemistryPercentsForPosition(Position.C, chemistryMap);
             Double chemistryPercent = compareChemistryPercentMap.get(Position.LW);
             if (chemistryPercent != null) {
-                chemistryConnectionPercents.put(ChemistryConnection.C_LW, (int) Math.round(chemistryPercent));
+                chemistryConnectionPercents.put(Connection.C_LW, (int) Math.round(chemistryPercent));
             }
             chemistryPercent = compareChemistryPercentMap.get(Position.RW);
             if (chemistryPercent != null) {
-                chemistryConnectionPercents.put(ChemistryConnection.C_RW, (int) Math.round(chemistryPercent));
+                chemistryConnectionPercents.put(Connection.C_RW, (int) Math.round(chemistryPercent));
             }
             chemistryPercent = compareChemistryPercentMap.get(Position.LD);
             if (chemistryPercent != null) {
-                chemistryConnectionPercents.put(ChemistryConnection.C_LD, (int) Math.round(chemistryPercent));
+                chemistryConnectionPercents.put(Connection.C_LD, (int) Math.round(chemistryPercent));
             }
             chemistryPercent = compareChemistryPercentMap.get(Position.RD);
             if (chemistryPercent != null) {
-                chemistryConnectionPercents.put(ChemistryConnection.C_RD, (int) Math.round(chemistryPercent));
+                chemistryConnectionPercents.put(Connection.C_RD, (int) Math.round(chemistryPercent));
             }
             // Left defender
             compareChemistryPercentMap = AnalyzerHelper.getConvertCompareChemistryPercentsForPosition(Position.LD, chemistryMap);
             chemistryPercent = compareChemistryPercentMap.get(Position.RD);
             if (chemistryPercent != null) {
-                chemistryConnectionPercents.put(ChemistryConnection.LD_RD, (int) Math.round(chemistryPercent));
+                chemistryConnectionPercents.put(Connection.LD_RD, (int) Math.round(chemistryPercent));
             }
             chemistryPercent = compareChemistryPercentMap.get(Position.LW);
             if (chemistryPercent != null) {
-                chemistryConnectionPercents.put(ChemistryConnection.LD_LW, (int) Math.round(chemistryPercent));
+                chemistryConnectionPercents.put(Connection.LD_LW, (int) Math.round(chemistryPercent));
             }
             // Right defender
             compareChemistryPercentMap = AnalyzerHelper.getConvertCompareChemistryPercentsForPosition(Position.RD, chemistryMap);
             chemistryPercent = compareChemistryPercentMap.get(Position.RW);
             if (chemistryPercent != null) {
-                chemistryConnectionPercents.put(ChemistryConnection.RD_RW, (int) Math.round(chemistryPercent));
+                chemistryConnectionPercents.put(Connection.RD_RW, (int) Math.round(chemistryPercent));
             }
         }
         return chemistryConnectionPercents;

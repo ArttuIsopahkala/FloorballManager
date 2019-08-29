@@ -42,7 +42,7 @@ public class AnalyzerServiceTests extends JSONService {
     @Test
     public void testGetLineChemistryPercent() {
         Line line = getLine(teamId, lineId);
-        int percent = AnalyzerService.getInstance().getLineChemistryPercentForLine(line);
+        int percent = AnalyzerService.getInstance().getLineChemistryPercent(line);
         System.out.println("Percent: " + percent);
     }
 
