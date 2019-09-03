@@ -7,6 +7,7 @@ import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,24 +16,11 @@ import java.util.Map;
  */
 class ChemistryPercentAnalyzer {
 
-
-    private static Map<Connection, Double> minPointsForChemistryConnections = new HashMap<>();
-    private static Map<Connection, Double> maxPointsForChemistryConnections = new HashMap<>();
     private static AllowedPlayerPosition currentAllowedPlayerPosition;
     private static ArrayList<Player> players;
 
-    private static Map<OneToOther, PointLimits> oneToOtherPointLimits = new HashMap<>();
+    private static Map<Pair<Position, Connection>, PointLimits> oneToOtherPointLimits = new HashMap<>();
     private static Map<Connection, PointLimits> connectionPointLimits = new HashMap<>();
-
-    private static class OneToOther {
-        Position position;
-        Connection connection;
-
-        public OneToOther(Position position, Connection connection) {
-            this.position = position;
-            this.connection = connection;
-        }
-    }
 
     private static class PointLimits {
         double minPoints;
@@ -42,7 +30,7 @@ class ChemistryPercentAnalyzer {
     public static ArrayList<Player> getAllowedComparePlayers(Position position) {
         // Jos käytetään useampaa pelaajaa niin laskenta hidastuu dramaattisesti
         ArrayList<Player> allowedComparePlayers = new ArrayList<>();
-        if(currentAllowedPlayerPosition == AllowedPlayerPosition.MOST_GOALS_IN_POSITION) {
+        if(currentAllowedPlayerPosition == AllowedPlayerPosition.BEST_POSITION) {
             for (Player player : players) {
                 Position comparePosition = AnalyzerDataCollector.getBestPositionFromGoals(player);
                 if(position == comparePosition) {
@@ -53,6 +41,20 @@ class ChemistryPercentAnalyzer {
             for (Player player : players) {
                 Position comparePosition = Position.fromDatabaseName(player.getPosition());
                 if(position == comparePosition) {
+                    allowedComparePlayers.add(player);
+                }
+            }
+        } else if(currentAllowedPlayerPosition == AllowedPlayerPosition.ANY_POSITION) {
+            allowedComparePlayers = players;
+        } else if(currentAllowedPlayerPosition == AllowedPlayerPosition.SIDES_POSITION) {
+            ArrayList<Position> attackerPositions = new ArrayList<>(Arrays.asList(Position.LW, Position.C, Position.RW));
+            ArrayList<Position> defenderPositions = new ArrayList<>(Arrays.asList(Position.LD, Position.RD));
+            for (Player player : players) {
+                Position comparePosition = Position.fromDatabaseName(player.getPosition());
+                if(attackerPositions.contains(position) && attackerPositions.contains(comparePosition)) {
+                    allowedComparePlayers.add(player);
+                }
+                if(defenderPositions.contains(position) && defenderPositions.contains(comparePosition)) {
                     allowedComparePlayers.add(player);
                 }
             }
@@ -75,10 +77,10 @@ class ChemistryPercentAnalyzer {
                 Position position1 = positions.first;
                 Position position2 = positions.second;
                 PointLimits pointLimits = getConnectionChemistryLimitsOneToOther(position1, connection);
-                oneToOtherPointLimits.put(new OneToOther(position1, connection), pointLimits);
+                oneToOtherPointLimits.put(new Pair<>(position1, connection), pointLimits);
 
                 pointLimits = getConnectionChemistryLimitsOneToOther(position2, connection);
-                oneToOtherPointLimits.put(new OneToOther(position2, connection), pointLimits);
+                oneToOtherPointLimits.put(new Pair<>(position2, connection), pointLimits);
             }
             // ONE_TO_ONE
             PointLimits pointLimits = getConnectionChemistryLimitsOneToOne(connection);
@@ -147,7 +149,7 @@ class ChemistryPercentAnalyzer {
     }
 
     // ONE_TO_ONE
-    public static double getConnectionChemistryPercent(Position position, Player player, Position comparePosition, Player comparePlayer) {
+    static double getConnectionChemistryPercentOneToOne(Position position, Player player, Position comparePosition, Player comparePlayer) {
         Connection connection = Connection.getChemistryConnection(position, comparePosition);
 
         double chemistrySum = ChemistryPointsAnalyzer.getChemistryPoints(position, player, comparePosition, comparePlayer);
@@ -164,9 +166,9 @@ class ChemistryPercentAnalyzer {
     }
 
     // ONE_TO_OTHER
-    public static double getConnectionChemistryPercent(Position position, Player player, Connection connection) {
+    static double getConnectionChemistryPercentOneToOther(Position position, Player player, Connection connection) {
         double playerConnectionChemistryPoints = getPlayerConnectionChemistryPoints(position, player, connection);
-        PointLimits pointLimits = oneToOtherPointLimits.get(new OneToOther(position, connection));
+        PointLimits pointLimits = oneToOtherPointLimits.get(new Pair<>(position, connection));
         if(pointLimits != null) {
             double division = pointLimits.maxPoints - pointLimits.minPoints;
             if (division > 0) {
@@ -188,48 +190,4 @@ class ChemistryPercentAnalyzer {
         }
         return bestChemistryPoints;
     }
-
-    // TODO update docs
-    /**
-     * Calculates chemistry as percent between two players.
-     * This is how percent is calculated:
-     * 1. Get all chemistry points from all players.
-     * 2. Get minimum and maximum chemistries from those.
-     * 3. Get chemistry between two compared players.
-     * 4. Calculate percent where that chemistry takes place between min and max points.
-     * Note: Percent is calculated from games where both compared players have been set in the same line.
-     *
-     * @param position1 player to compare against
-     * @param position2 player to compare
-     * @return average chemistry points as percent (0-100)
-     */
-    @Deprecated
-    private static double getChemistryPercent(Position position1, Position position2, double chemistryPoints) {
-        Connection connection = Connection.getChemistryConnection(position1, position2);
-        double minChemistryPoints = 0.0;
-        double maxChemistryPoints = 0.0;
-        if (connection != null) {
-            Double minPoints = minPointsForChemistryConnections.get(connection);
-            Double maxPoints = maxPointsForChemistryConnections.get(connection);
-            if (minPoints != null) {
-                minChemistryPoints = minPoints;
-            }
-            if (maxPoints != null) {
-                maxChemistryPoints = maxPoints;
-            }
-        }
-        double division = maxChemistryPoints - minChemistryPoints;
-        if (division > 0) {
-            return chemistryPoints / (maxChemistryPoints - minChemistryPoints) * 100;
-        } else {
-            return 0;
-        }
-    }
-
-    @Deprecated
-    public static double getChemistryPercent(Position playerPos, Player player, Position comparePlayerPos, Player comparePlayer) {
-        double chemistryPoints = ChemistryPointsAnalyzer.getChemistryPoints(playerPos, player, comparePlayerPos, comparePlayer);
-        return getChemistryPercent(playerPos, comparePlayerPos, chemistryPoints);
-    }
-
 }

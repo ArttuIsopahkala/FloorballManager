@@ -5,10 +5,46 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true">
+    <RelativeLayout
+        android:id="@+id/teamChemistryContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/color_background">
+        <TextView
+            android:id="@+id/teamChemistryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/lines_team_chemistry"
+            android:textColor="@color/color_text_light"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/teamChemistryValueText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/teamChemistryBar"
+            android:layout_marginEnd="20dp"
+            android:text="0"
+            android:textColor="@color/color_text_light"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:id="@+id/teamChemistryBar"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/custom_progressbar"
+            android:layout_centerVertical="true"
+            android:max="100"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/teamChemistryContainer"
         android:background="@color/color_menu"
         app:tabTextColor="@color/color_text_light"
         app:tabIndicatorColor="@color/color_text_light"
@@ -23,11 +59,10 @@
         android:padding="10dp"
         android:background="@color/color_background">
         <TextView
-            android:id="@+id/teamChemistryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="@string/lineup_line_chemistry"
+            android:text="@string/lines_line_chemistry"
             android:textColor="@color/color_text_light"
             android:textSize="18sp" />
         <TextView
@@ -67,4 +102,40 @@
         android:layout_centerHorizontal="true"
         android:layout_width="600dp"
         android:layout_height="400dp"/>
+    <RelativeLayout
+        android:id="@+id/switchLinesContainer"
+        android:layout_below="@+id/linesPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="@color/color_background">
+        <TextView
+            android:id="@+id/fromLineText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/switchLinesIcon"
+            android:text="@string/line"
+            android:textColor="@color/color_text_light"
+            android:textSize="16sp" />
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/switchLinesIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:background="@drawable/button_background"
+            android:text="@string/icon_change"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="20sp" />
+        <Spinner
+            android:id="@+id/toLineSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/switchLinesIcon"
+            android:textColor="@color/color_text_light" />
+    </RelativeLayout>
 </RelativeLayout>

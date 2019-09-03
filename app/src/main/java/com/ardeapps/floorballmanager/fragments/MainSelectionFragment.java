@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.SkuDetails;
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.adapters.TeamListAdapter;
@@ -21,10 +23,12 @@ import com.ardeapps.floorballmanager.objects.UserInvitation;
 import com.ardeapps.floorballmanager.resources.UserConnectionsResource;
 import com.ardeapps.floorballmanager.resources.UserInvitationsResource;
 import com.ardeapps.floorballmanager.resources.UsersResource;
+import com.ardeapps.floorballmanager.services.BillingService;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.views.IconView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -36,6 +40,12 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
     TextView userInvitationInfoText;
     LinearLayout userInvitationsContainer;
     TeamListAdapter adapter;
+
+    TextView productIdTextView;
+    Button buyButton;
+    Button detailsButton;
+
+    BillingClient billingClient;
 
     public void update() {
         //bluetooth.refreshData();
@@ -116,12 +126,37 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
         userInvitationsContainer = v.findViewById(R.id.userInvitationsContainer);
         userInvitationInfoText = v.findViewById(R.id.userInvitationInfoText);
 
+        productIdTextView = v.findViewById(R.id.productIdTextView);
+        buyButton = v.findViewById(R.id.buyButton);
+        detailsButton = v.findViewById(R.id.detailsButton);
+
         teamList.setAdapter(adapter);
 
         update();
 
         addTeamButton.setOnClickListener(v12 -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(null));
         bluetoothButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToBluetoothFragment());
+
+        // TODO
+        final BillingService billingService = new BillingService();
+        billingService.initialize();
+        buyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                billingService.startBillingFlow();
+            }
+        });
+        detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                billingService.loadProduct(new BillingService.LoadProductListener() {
+                    @Override
+                    public void onProductsLoaded(List<SkuDetails> skuDetailsList) {
+                        productIdTextView.setText(skuDetailsList.get(0).getTitle());
+                    }
+                });
+            }
+        });
         return v;
     }
 

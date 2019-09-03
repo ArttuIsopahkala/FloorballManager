@@ -29,6 +29,7 @@
     <string name="clear">Tyhjennä</string>
     <string name="period">erä</string>
     <string name="line">kenttä</string>
+    <string name="line_number">Kenttä %1$s</string>
     <string name="goal">maali</string>
     <string name="home">Koti</string>
     <string name="away">Vieras</string>
@@ -207,15 +208,30 @@
     <string name="add_user_connection_player_not_exists">Sähköpostilla ei löydetty käyttäjää. Haluatko lähettää kutsun joukkueeseen?</string>
     <string name="add_user_connection_invite_again">Tallenna ja lähetä kutsu uudelleen</string>
 
-    <string name="lineup_no_players">Joukkueessa ei ole pelaajia.</string>
-    <string name="lineup_title">Oletuskentällisiä ehdotetaan uuden ottelun luonnissa.</string>
-    <string name="lineup_analyze">Analysoi pelaajakemiat</string>
-    <string name="lineup_best_lines">Hae parhaat kentälliset</string>
-    <string name="lineup_lines_saved">Kentälliset tallennettu</string>
-    <string name="lineup_lines_changed">Kentälliset muuttuivat. Tallennetaanko?</string>
-    <string name="lineup_line_chemistry">Kentän kemia</string>
-    <string name="lineup_team_chemistry">Joukkueen kemia</string>
-    <string name="lineup_too_few_players">Joukkueessa on oltava vähintään 5 pelaajaa.</string>
+    <string name="lines_no_players">Joukkueessa ei ole pelaajia.</string>
+    <string name="lines_title">Oletuskentällisiä ehdotetaan uuden ottelun luonnissa.</string>
+    <string name="lines_analyze">Analysoi pelaajakemiat</string>
+    <string name="lines_best_lines">Hae parhaat kentälliset</string>
+    <string name="lines_saved">Kentälliset tallennettu</string>
+    <string name="lines_changed">Kentälliset muuttuivat. Tallennetaanko?</string>
+    <string name="lines_line_chemistry">Kentän kemia</string>
+    <string name="lines_team_chemistry">Joukkueen kemia</string>
+    <string name="lines_too_few_players">Joukkueessa on oltava vähintään 5 pelaajaa.</string>
+    <string name="lines_analyzing">Analysoidaan&#8230;</string>
+
+    <string name="best_lines_title">Parhaat kentälliset</string>
+    <string name="best_lines_position_title">Pelaajan sallittu pelipaikka</string>
+    <string name="best_lines_position_any">Mikä tahansa pelipaikka</string>
+    <string name="best_lines_position_sides">Hyökkääjät ja puolustajat</string>
+    <string name="best_lines_position_own">Pelaajalle merkattu pelipaikka</string>
+    <string name="best_lines_position_best">Laskettu paras pelipaikka</string>
+    <string name="best_lines_chemistry_title">Kentällisten jaottelu</string>
+    <string name="best_lines_chemistry_best_line">Paremmuusjärjestys</string>
+    <string name="best_lines_chemistry_best_team">Paras joukkueen kemia</string>
+    <string name="best_lines_games_title">Otanta</string>
+    <string name="best_lines_games_last_games">%1$s viimeisintä ottelua</string>
+    <string name="best_lines_games_all">Kaikki ottelut</string>
+    <string name="best_lines_analyze">Analysoi</string>
 
     <string name="games_no_games">Ei lisättyjä otteluita.</string>
     <string name="games_new_game">Uusi ottelu</string>

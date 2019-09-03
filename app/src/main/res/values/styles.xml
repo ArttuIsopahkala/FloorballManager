@@ -7,6 +7,7 @@
         <item name="colorControlHighlight">@color/color_text_light_secondary</item>
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
         <item name="android:spinnerItemStyle">@style/mySpinnerText</item>
+        <item name="android:radioButtonStyle">@style/myRadioButtonStyle</item>
     </style>
 
     <style name="myTextView" parent="@android:style/TextAppearance">
@@ -28,6 +29,10 @@
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/color_text_light</item>
         <item name="android:background">@color/color_background_fourth</item>
+    </style>
+    <style name="myRadioButtonStyle" parent="@style/Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:textColor">@color/color_text_light</item>
+        <item name="colorAccent">@color/color_text_light</item>
     </style>
     <style name="mySpinnerText" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/color_text_light</item>

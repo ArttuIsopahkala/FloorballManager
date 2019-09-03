@@ -51,10 +51,16 @@ public class LineFragment extends Fragment implements DataView {
     RelativeLayout card_rw;
     RelativeLayout card_ld;
     RelativeLayout card_rd;
+    RelativeLayout container_lw;
+    RelativeLayout container_c;
+    RelativeLayout container_rw;
+    RelativeLayout container_ld;
+    RelativeLayout container_rd;
     ImageView chemistryLinesImageView;
     Map<Position, Integer> closestChemistries = new HashMap<>();
     Map<Connection, Integer> chemistryConnectionPercents = new HashMap<>();
     int canvasTop = 0;
+    int canvasLeft = 0;
     boolean showChemistry = false;
     private LineFragmentData data;
 
@@ -91,7 +97,7 @@ public class LineFragment extends Fragment implements DataView {
             closestChemistries = new HashMap<>();
             chemistryConnectionPercents = new HashMap<>();
             if(line != null) {
-                closestChemistries = AnalyzerService.getInstance().getClosestChemistryPercentsForPosition(line.getPlayerIdMap());
+                closestChemistries = AnalyzerService.getInstance().getAverageChemistryPercentForPositions(line.getPlayerIdMap());
                 chemistryConnectionPercents = AnalyzerService.getInstance().getChemistryConnectionPercents(line.getPlayerIdMap());
             }
 
@@ -108,20 +114,19 @@ public class LineFragment extends Fragment implements DataView {
             chemistryLinesImageView.post(() -> {
                 int[] location = new int[2];
                 chemistryLinesImageView.getLocationOnScreen(location);
-                canvasTop = location[1] / 2 + 20;
-
+                canvasLeft = location[0];
+                canvasTop = location[1] / 2;
                 int width = chemistryLinesImageView.getWidth();
                 int height = chemistryLinesImageView.getHeight();
                 Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bitmap);
-
-                drawChemistryLine(canvas, card_c, card_lw, Connection.C_LW);
-                drawChemistryLine(canvas, card_c, card_rw, Connection.C_RW);
-                drawChemistryLine(canvas, card_c, card_ld, Connection.C_LD);
-                drawChemistryLine(canvas, card_c, card_rd, Connection.C_RD);
-                drawChemistryLine(canvas, card_ld, card_rd, Connection.LD_RD);
-                drawChemistryLine(canvas, card_ld, card_lw, Connection.LD_LW);
-                drawChemistryLine(canvas, card_rd, card_rw, Connection.RD_RW);
+                drawChemistryLine(canvas, container_c, container_lw, Connection.C_LW);
+                drawChemistryLine(canvas, container_c, container_rw, Connection.C_RW);
+                drawChemistryLine(canvas, container_c, container_ld, Connection.C_LD);
+                drawChemistryLine(canvas, container_c, container_rd, Connection.C_RD);
+                drawChemistryLine(canvas, container_ld, container_rd, Connection.LD_RD);
+                drawChemistryLine(canvas, container_ld, container_lw, Connection.LD_LW);
+                drawChemistryLine(canvas, container_rd, container_rw, Connection.RD_RW);
 
                 chemistryLinesImageView.setImageBitmap(bitmap);
             });
@@ -154,6 +159,11 @@ public class LineFragment extends Fragment implements DataView {
         card_rw = v.findViewById(R.id.card_rw);
         card_ld = v.findViewById(R.id.card_ld);
         card_rd = v.findViewById(R.id.card_rd);
+        container_lw = card_lw.findViewById(R.id.container);
+        container_c = card_c.findViewById(R.id.container);
+        container_rw = card_rw.findViewById(R.id.container);
+        container_ld = card_ld.findViewById(R.id.container);
+        container_rd = card_rd.findViewById(R.id.container);
 
         // Hide chemistry as default
         chemistryLinesImageView.setVisibility(View.GONE);
@@ -214,7 +224,7 @@ public class LineFragment extends Fragment implements DataView {
 
         card.setOnClickListener(v -> {
             if (AppRes.getInstance().getPlayers().isEmpty()) {
-                Logger.toast(R.string.lineup_no_players);
+                Logger.toast(R.string.lines_no_players);
                 return;
             }
 
@@ -317,9 +327,8 @@ public class LineFragment extends Fragment implements DataView {
         card.getLocationOnScreen(location);
         int x = location[0];
         int y = location[1];
-
-        double positionX = x + card.getWidth() / 2.0;
-        double positionY = y - canvasTop - card.getHeight() / 2.0;
+        double positionX = x - canvasLeft + card.getWidth() / 2.0;
+        double positionY = y - canvasTop - card.getHeight();
         return new Point((int) positionX, (int) positionY);
     }
 

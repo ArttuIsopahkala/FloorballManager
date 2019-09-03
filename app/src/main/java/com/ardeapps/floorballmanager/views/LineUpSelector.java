@@ -10,13 +10,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.adapters.LinesPagerAdapter;
+import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.fragments.LineFragment;
 import com.ardeapps.floorballmanager.objects.Line;
-import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
+import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.viewObjects.LineFragmentData;
 
 import java.util.ArrayList;
@@ -37,10 +40,16 @@ public class LineUpSelector extends LinearLayout {
     TextView lineChemistryValueText;
     ProgressBar lineChemistryBar;
     RelativeLayout lineChemistryContainer;
+    TextView fromLineText;
+    Spinner toLineSpinner;
+    IconView switchLinesIcon;
+    RelativeLayout teamChemistryContainer;
+    TextView teamChemistryValueText;
+    ProgressBar teamChemistryBar;
+
     Map<Integer, Line> lines = new HashMap<>();
     List<LineFragment> lineFragments = new ArrayList<>();
     boolean showChemistry = false;
-    private Listener mListener = null;
 
     public LineUpSelector(Context context) {
         super(context);
@@ -48,10 +57,6 @@ public class LineUpSelector extends LinearLayout {
 
     public LineUpSelector(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public void setListener(Listener listener) {
-        this.mListener = listener;
     }
 
     public void createView(Fragment parent, boolean enableChemistry) {
@@ -63,11 +68,20 @@ public class LineUpSelector extends LinearLayout {
         lineChemistryValueText = findViewById(R.id.lineChemistryValueText);
         lineChemistryContainer = findViewById(R.id.lineChemistryContainer);
         lineChemistryBar = findViewById(R.id.lineChemistryBar);
+        fromLineText = findViewById(R.id.fromLineText);
+        toLineSpinner = findViewById(R.id.toLineSpinner);
+        switchLinesIcon = findViewById(R.id.switchLinesIcon);
+        teamChemistryValueText = findViewById(R.id.teamChemistryValueText);
+        teamChemistryBar = findViewById(R.id.teamChemistryBar);
+        teamChemistryContainer = findViewById(R.id.teamChemistryContainer);
 
-        // Show line chemistry bar
+        // Show chemistry bars
         lineChemistryContainer.setVisibility(enableChemistry ? View.VISIBLE : View.GONE);
         lineChemistryValueText.setText("-");
         lineChemistryBar.post(() -> lineChemistryBar.setProgress(0));
+        teamChemistryContainer.setVisibility(enableChemistry ? View.VISIBLE : View.GONE);
+        teamChemistryValueText.setText("-");
+        teamChemistryBar.post(() -> teamChemistryBar.setProgress(0));
 
         lineFragments = new ArrayList<>();
         lineFragments.add(createLineFragment(1));
@@ -75,16 +89,53 @@ public class LineUpSelector extends LinearLayout {
         lineFragments.add(createLineFragment(3));
         lineFragments.add(createLineFragment(4));
 
-        linesAdapter = new LinesPagerAdapter(parent.getFragmentManager(), lineFragments);
+        linesAdapter = new LinesPagerAdapter(parent.getChildFragmentManager(), lineFragments);
         linesPager.setOffscreenPageLimit(linesAdapter.getCount());
         linesPager.setAdapter(linesAdapter);
         tabLayout.setupWithViewPager(linesPager);
         linesPager.post(() -> linesPager.setCurrentItem(0));
 
+        ArrayList<String> lineTitles = new ArrayList<>();
+        lineTitles.add(AppRes.getContext().getString(R.string.line_number, "1"));
+        lineTitles.add(AppRes.getContext().getString(R.string.line_number, "2"));
+        lineTitles.add(AppRes.getContext().getString(R.string.line_number, "3"));
+        lineTitles.add(AppRes.getContext().getString(R.string.line_number, "4"));
+
+        Helper.setSpinnerAdapter(toLineSpinner, lineTitles);
+        fromLineText.post(() -> fromLineText.setText(lineTitles.get(0)));
+        Helper.setSpinnerSelection(toLineSpinner, 1);
+
+        switchLinesIcon.setOnClickListener(v1 -> {
+            int fromLineNumber = linesPager.getCurrentItem() + 1;
+            int toLineNumber = toLineSpinner.getSelectedItemPosition() + 1;
+            if(fromLineNumber != toLineNumber) {
+                Map<Integer, Line> newLines = getLines();
+                Line fromLine = newLines.get(fromLineNumber);
+                Line toLine = newLines.get(toLineNumber);
+                if(fromLine == null) {
+                    fromLine = new Line();
+                }
+                fromLine.setLineNumber(toLineNumber);
+                if(toLine == null) {
+                    toLine = new Line();
+                }
+                toLine.setLineNumber(fromLineNumber);
+                newLines.put(toLineNumber, fromLine);
+                newLines.put(fromLineNumber, toLine);
+                setLines(newLines);
+                refreshLines(showChemistry);
+                refreshChemistry();
+            }
+        });
+
         linesPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override
             public void onPageSelected(final int position) {
+                fromLineText.setText(lineTitles.get(position));
+                if(position < 4) {
+                    Helper.setSpinnerSelection(toLineSpinner, position + 1);
+                }
                 refreshChemistry();
             }
         });
@@ -96,20 +147,21 @@ public class LineUpSelector extends LinearLayout {
             int position = linesPager.getCurrentItem();
             LineFragmentData data = lineFragments.get(position).getData();
             Line line = data.getLine();
-            int percent = AnalyzerService.getInstance().getLineChemistryPercent(line);
-            lineChemistryValueText.setText(String.valueOf(percent));
-            lineChemistryBar.setProgress(percent);
+            int lineChemistryPercent = AnalyzerService.getInstance().getLineChemistryPercent(line);
+            lineChemistryValueText.setText(String.valueOf(lineChemistryPercent));
+            lineChemistryBar.setProgress(lineChemistryPercent);
 
-            if (mListener != null) {
-                mListener.onLinesChanged();
-            }
+            Map<Integer, Line> lines = AppRes.getInstance().getLines();
+            int teamChemistryPercent = AnalyzerService.getInstance().getTeamChemistryPercent(lines);
+            teamChemistryValueText.setText(String.valueOf(teamChemistryPercent));
+            teamChemistryBar.setProgress(teamChemistryPercent);
         }
     }
 
-    public void showLineChemistry() {
-        showChemistry = true;
+    public void refreshLines(boolean showChemistry) {
+        this.showChemistry = showChemistry;
         for (LineFragment lineFragment : lineFragments) {
-            lineFragment.update(true);
+            lineFragment.update(showChemistry);
         }
         refreshChemistry();
     }
@@ -176,10 +228,6 @@ public class LineUpSelector extends LinearLayout {
             data.setLine(line);
             lineFragment.setData(data);
         }
-    }
-
-    public interface Listener {
-        void onLinesChanged();
     }
 
 }

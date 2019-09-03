@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:gravity="center_horizontal">
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/best_lines_title"
+        android:textColor="@color/color_text_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/best_lines_position_title"
+        android:textColor="@color/color_text_light"
+        android:textSize="15sp"/>
+    <RadioGroup
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/bestPositionRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/best_lines_position_best"
+            android:textColor="@color/color_text_light" />
+        <RadioButton
+            android:id="@+id/ownPositionRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/best_lines_position_own"
+            android:textColor="@color/color_text_light" />
+        <RadioButton
+            android:id="@+id/anyPositionRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/best_lines_position_any"
+            android:textColor="@color/color_text_light" />
+        <RadioButton
+            android:id="@+id/sidesPositionRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/best_lines_position_sides"
+            android:textColor="@color/color_text_light" />
+    </RadioGroup>
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/best_lines_chemistry_title"
+        android:textColor="@color/color_text_light"
+        android:textSize="15sp"/>
+    <RadioGroup
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/bestTeamChemistryRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/best_lines_chemistry_best_team"
+            android:textColor="@color/color_text_light" />
+        <RadioButton
+            android:id="@+id/bestLineChemistryRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/best_lines_chemistry_best_line"
+            android:textColor="@color/color_text_light" />
+    </RadioGroup>
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/best_lines_games_title"
+        android:textColor="@color/color_text_light"
+        android:textSize="15sp"/>
+    <Spinner
+        android:id="@+id/gamesSpinner"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_text_light" />
+    <Button
+        android:id="@+id/analyzeButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:background="@drawable/button_background"
+        android:text="@string/best_lines_analyze"
+        android:textColor="@color/color_text_light" />
+</LinearLayout>

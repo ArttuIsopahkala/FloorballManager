@@ -2,13 +2,11 @@ package com.ardeapps.floorballmanager;
 
 import android.util.Pair;
 
-import com.ardeapps.floorballmanager.objects.Chemistry;
+import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
-import com.ardeapps.floorballmanager.analyzer.AnalyzerWrapper;
-import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.services.JSONService;
 
 import org.junit.Before;
@@ -71,21 +69,6 @@ public class AnalyzerServiceTests extends JSONService {
         // TODO testaa
         ArrayList<Player> players = getPlayers(Arrays.asList("-LZf45PcYqU3sb7p5GFr", "-LZf423Q01lgFW8yD5Dl"));
 
-    }
-
-    @Test
-    public void testGetLineChemistry() {
-        Line line = getLine(teamId, lineId);
-        if(line != null && line.getPlayerIdMap() != null) {
-            Map<Position, ArrayList<Chemistry>> lineChemistry = AnalyzerWrapper.getChemistriesInLineForPositions(line.getPlayerIdMap());
-            for (Map.Entry<Position, ArrayList<Chemistry>> chemistry : lineChemistry.entrySet()) {
-                Position position = chemistry.getKey();
-                ArrayList<Chemistry> chemistries = chemistry.getValue();
-                for (Chemistry chem : chemistries) {
-                    System.out.println(position.toDatabaseName() + " -> " + chem.getComparePosition());
-                }
-            }
-        }
     }
 
     @Test
