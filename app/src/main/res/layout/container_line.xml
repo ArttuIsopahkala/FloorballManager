@@ -1,35 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_background"
     android:minWidth="300dp"
-    android:background="@color/color_background">
+    android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/headerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@color/color_background_second">
+        android:background="@color/color_background_second"
+        android:padding="10dp">
+
         <RadioButton
             android:id="@+id/selectAllRadioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="false"/>
+            android:checked="false"
+            android:textColor="@color/color_text_light" />
+
         <TextView
             android:id="@+id/lineText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:text="66. kenttä"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
-            android:layout_centerInParent="true"/>
+            android:textSize="20sp" />
     </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/playersList"
-        android:layout_below="@id/headerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:layout_below="@id/headerContainer"
+        android:orientation="vertical" />
 </RelativeLayout>

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
@@ -17,10 +16,12 @@ import java.util.ArrayList;
 public class PlayerListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
-    public PlayerListSelectListener selectListener = null;
+    private PlayerListSelectListener selectListener = null;
     private ArrayList<Player> players = new ArrayList<>();
+    private boolean showNumber;
 
-    public PlayerListAdapter(Context ctx) { // Activity
+    public PlayerListAdapter(Context ctx, boolean showNumber) {
+        this.showNumber = showNumber;
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -52,7 +53,7 @@ public class PlayerListAdapter extends BaseAdapter {
         if (v == null) {
             v = inflater.inflate(R.layout.list_item_player, null);
         }
-        final PlayerHolder holder = new PlayerHolder(v, true);
+        final PlayerHolder holder = new PlayerHolder(v, true, true);
 
         final Player player = players.get(position);
 
@@ -62,9 +63,7 @@ public class PlayerListAdapter extends BaseAdapter {
             holder.pictureImage.setImageResource(R.drawable.default_picture);
         }
 
-        Player.Shoots shoots = Player.Shoots.fromDatabaseName(player.getShoots());
-        String shootsText = AppRes.getContext().getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
-        holder.nameNumberShootsText.setText(player.getNameWithNumber(false) + " | " + shootsText);
+        holder.nameNumberShootsText.setText(player.getNameWithInfo(showNumber));
         holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
 
         holder.playerContainer.setOnClickListener(v1 -> selectListener.onPlayerSelected(player));

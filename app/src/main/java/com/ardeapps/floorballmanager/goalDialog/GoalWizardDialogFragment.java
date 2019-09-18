@@ -23,6 +23,10 @@ import com.ardeapps.floorballmanager.viewObjects.GoalWizardDialogData;
 
 public class GoalWizardDialogFragment extends DialogFragment implements DataView {
 
+    public void setListener(GoalWizardListener l) {
+        mListener = l;
+    }
+
     GoalWizardListener mListener = null;
     TextView infoText;
     Button previousButton;
@@ -34,25 +38,9 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
     int scorerFragmentPosition = 1;
     int position = 0;
 
-    public void setListener(GoalWizardListener l) {
-        mListener = l;
-    }
-
-    @Override
-    public GoalWizardDialogData getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(Object viewData) {
-        data = (GoalWizardDialogData) viewData;
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.dialog_goal, container);
-
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        View v = inflater.inflate(R.layout.dialog_goal, container, false);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         infoText = v.findViewById(R.id.infoText);
@@ -83,11 +71,22 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         return v;
     }
 
+    @Override
+    public GoalWizardDialogData getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(Object viewData) {
+        data = (GoalWizardDialogData) viewData;
+    }
+
     private void handlePreviousClick() {
         if (position == 0) {
             dismiss();
         } else {
-            if (goalAdapter.isPenaltyShot() && position == goalAdapter.getCount()) {
+            int max = goalAdapter.getCount() - 1;
+            if (goalAdapter.isPenaltyShot() && position == max) {
                 position = data.isOpponentGoal() ? 0 : 1;
             } else {
                 position--;
@@ -107,13 +106,26 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
                 goalToSave.setOpponentGoal(data.isOpponentGoal());
                 mListener.onGoalSaved(goalToSave);
             } else {
-                if (goalAdapter.isPenaltyShot() && !data.isOpponentGoal() && position == scorerFragmentPosition) {
+                if (goalAdapter.isPenaltyShot() && (data.isOpponentGoal() || position == scorerFragmentPosition)) {
                     position = max;
                 } else {
                     position++;
                 }
                 changePage(position);
             }
+        }
+    }
+
+    // This sets dialog full screen
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            window.setLayout(width, height);
         }
     }
 

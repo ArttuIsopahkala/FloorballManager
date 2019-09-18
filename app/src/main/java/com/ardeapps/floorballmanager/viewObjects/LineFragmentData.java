@@ -6,6 +6,7 @@ public class LineFragmentData {
 
     private Line line;
     private int lineNumber;
+    private int fieldHeight;
 
     public LineFragmentData() {
     }
@@ -26,4 +27,11 @@ public class LineFragmentData {
         this.lineNumber = lineNumber;
     }
 
+    public int getFieldHeight() {
+        return fieldHeight;
+    }
+
+    public void setFieldHeight(int fieldHeight) {
+        this.fieldHeight = fieldHeight;
+    }
 }

@@ -6,75 +6,83 @@
     android:background="@color/color_background"
     android:clickable="true"
     android:focusable="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RelativeLayout
             android:id="@+id/logoContainer"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp">
+
             <ImageView
                 android:id="@+id/pictureImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@null"
-                android:src="@drawable/default_picture"/>
+                android:src="@drawable/default_picture" />
+
             <RelativeLayout
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true">
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@null"
-                    android:src="@drawable/circle"/>
+                    android:src="@drawable/circle" />
 
                 <com.ardeapps.floorballmanager.views.IconView
                     android:id="@+id/selectPictureIcon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
                     android:text="@string/icon_edit"
                     app:iconFont="@string/icon_solid"
                     app:iconSize="16sp" />
             </RelativeLayout>
         </RelativeLayout>
+
         <LinearLayout
-            android:layout_below="@+id/logoContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
+            android:layout_below="@+id/logoContainer"
             android:layout_marginTop="20dp"
-            android:focusable="true"
+            android:background="@color/color_background"
             android:clickable="true"
-            android:background="@color/color_background">
+            android:focusable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
             <EditText
                 android:id="@+id/nameText"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:hint="@string/add_player_name"
                 android:focusableInTouchMode="true"
+                android:hint="@string/add_player_name"
+                android:inputType="textCapWords"
                 android:maxLength="250"
                 android:nextFocusRight="@+id/numberText"
-                android:inputType="textCapWords"
                 android:textColor="@color/color_text_light"
                 android:textColorHint="@color/color_text_hint" />
+
             <EditText
                 android:id="@+id/numberText"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:hint="@string/add_player_number"
                 android:focusableInTouchMode="true"
-                android:maxLength="250"
+                android:hint="@string/add_player_number"
                 android:inputType="number"
+                android:maxLength="250"
                 android:textColor="@color/color_text_light"
                 android:textColorHint="@color/color_text_hint" />
+
             <LinearLayout
                 android:id="@+id/shootsContent"
                 android:layout_width="300dp"
@@ -82,6 +90,7 @@
                 android:layout_marginBottom="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,10 +99,12 @@
                     android:textColor="@color/color_text_light"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
+
                     <RadioButton
                         android:id="@+id/leftRadioButton"
                         android:layout_width="wrap_content"
@@ -101,14 +112,16 @@
                         android:checked="true"
                         android:text="@string/left"
                         android:textColor="@color/color_text_light" />
+
                     <RadioButton
                         android:id="@+id/rightRadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/right"
-                        android:textColor="@color/color_text_light"/>
+                        android:textColor="@color/color_text_light" />
                 </RadioGroup>
             </LinearLayout>
+
             <TextView
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -117,17 +130,20 @@
                 android:textColor="@color/color_text_light"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
             <Spinner
                 android:id="@+id/positionSpinner"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
-                android:textColor="@color/color_text_light"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/color_text_light" />
+
             <LinearLayout
                 android:id="@+id/strengthsContent"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,19 +152,22 @@
                     android:textColor="@color/color_text_light"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/strengths_desc"
                     android:textColor="@color/color_text_light_secondary"
                     android:textSize="14sp" />
+
                 <LinearLayout
                     android:id="@+id/strengthsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical" />
             </LinearLayout>
+
             <Button
                 android:id="@+id/saveButton"
                 android:layout_width="200dp"

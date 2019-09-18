@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_menu"
     android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/menuTop"
         android:layout_width="match_parent"
@@ -19,6 +20,7 @@
             android:text="@string/icon_back"
             app:iconFont="@string/icon_solid"
             app:iconSize="18sp" />
+
         <TextView
             android:id="@+id/titleText"
             android:layout_width="wrap_content"
@@ -37,15 +39,14 @@
             android:layout_alignParentEnd="true"
             android:text="@string/icon_user"
             app:iconFont="@string/icon_solid"
-            app:iconSize="18sp"/>
+            app:iconSize="18sp" />
     </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/fragmentContainer"
-        android:layout_below="@+id/menuTop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/menuTop" />
 
     <RelativeLayout
         android:id="@+id/loader"
@@ -55,6 +56,7 @@
         android:clickable="false"
         android:orientation="horizontal"
         android:visibility="invisible">
+
         <ImageView
             android:id="@+id/loaderSpinner"
             android:layout_width="150dp"
@@ -63,6 +65,7 @@
             android:layout_centerVertical="true"
             android:contentDescription="@null"
             android:src="@drawable/loader_loader" />
+
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"

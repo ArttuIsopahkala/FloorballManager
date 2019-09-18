@@ -1,6 +1,7 @@
 package com.ardeapps.floorballmanager.views;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,48 +115,48 @@ public class PlayerSelector extends LinearLayout {
             LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
 
             for (Map.Entry<String, String> entry : line.getSortedPlayers().entrySet()) {
-                final String position = entry.getKey();
                 final String playerId = entry.getValue();
 
                 final Player player = AppRes.getInstance().getPlayers().get(playerId);
 
                 View v = inf.inflate(R.layout.list_item_player, playersList, false);
-                final PlayerHolder holder = new PlayerHolder(v, false);
+                final PlayerHolder holder = new PlayerHolder(v, false, false);
                 holders.put(playerId, holder);
 
                 if (player == null) {
                     // Poistettu pelaaja
-                    holder.nameNumberShootsText.setText("");
+                    holder.nameNumberShootsText.setText(AppRes.getContext().getString(R.string.removed_player));
+                    holder.nameNumberShootsText.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_text_light_secondary));
                     holder.pictureImage.setImageResource(R.drawable.default_picture);
-                    holder.positionText.setText(AppRes.getContext().getString(R.string.removed_player));
                 } else {
                     if (player.getPicture() != null) {
                         holder.pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
                     }
-
-                    holder.nameNumberShootsText.setText(player.getNameWithNumber(false));
-                    holder.positionText.setText(Player.getPositionText(position, false));
+                    holder.nameNumberShootsText.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_text_light));
+                    holder.nameNumberShootsText.setText(player.getName());
                 }
 
                 holder.playerContainer.setOnClickListener(v1 -> {
-                    if (multiSelect) {
-                        if (holder.isSelected()) {
-                            selectedPlayerIds.remove(playerId);
+                    if (!holder.isDisabled()) {
+                        if (multiSelect) {
+                            if (holder.isSelected()) {
+                                selectedPlayerIds.remove(playerId);
+                            } else {
+                                selectedPlayerIds.add(playerId);
+                            }
                         } else {
-                            selectedPlayerIds.add(playerId);
+                            if (holder.isSelected()) {
+                                selectedPlayerIds.remove(playerId);
+                                mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
+                            } else {
+                                // Clear other and add new selection
+                                selectedPlayerIds.clear();
+                                selectedPlayerIds.add(playerId);
+                                mListener.onPlayerSelected(line.getLineNumber(), playerId);
+                            }
                         }
-                    } else {
-                        if (holder.isSelected()) {
-                            selectedPlayerIds.remove(playerId);
-                            mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
-                        } else {
-                            // Clear other and add new selection
-                            selectedPlayerIds.clear();
-                            selectedPlayerIds.add(playerId);
-                            mListener.onPlayerSelected(line.getLineNumber(), playerId);
-                        }
+                        setSelections();
                     }
-                    setSelections();
                 });
 
                 playersList.addView(v);

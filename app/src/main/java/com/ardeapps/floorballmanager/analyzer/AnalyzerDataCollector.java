@@ -40,6 +40,7 @@ class AnalyzerDataCollector extends AnalyzerService {
      * @param playerId2 player2
      * @return goals
      */
+    // TODO lisää myös position ja hae maalit vain kyseisiltä pelipaikoilta
     public static ArrayList<Goal> getCommonGoals(String playerId1, String playerId2) {
         ArrayList<Goal> allGoals = new ArrayList<>();
         for(ArrayList<Goal> goalsInGame : goalsInGames.values()) {
@@ -56,6 +57,7 @@ class AnalyzerDataCollector extends AnalyzerService {
         return commonGoals;
     }
 
+    @Deprecated
     public static Position getBestPositionFromGoals(Player player) {
         double maxGoalPercent = 0;
         Position bestPosition = null;
@@ -86,7 +88,7 @@ class AnalyzerDataCollector extends AnalyzerService {
      * @param gameIds games
      * @return goals from requested games
      */
-    private static ArrayList<Goal> getGoalsOfGames(ArrayList<String> gameIds) {
+    public static ArrayList<Goal> getGoalsOfGames(ArrayList<String> gameIds) {
         ArrayList<Goal> goalsList = new ArrayList<>();
         for (String gameId : gameIds) {
             ArrayList<Goal> foundGoals = goalsInGames.get(gameId);
@@ -95,6 +97,24 @@ class AnalyzerDataCollector extends AnalyzerService {
             }
         }
         return goalsList;
+    }
+
+    public static ArrayList<String> getGamesByPlayerPosition(Position position, String playerId) {
+        ArrayList<String> gameIds = new ArrayList<>();
+        for (Map.Entry<String, ArrayList<Line>> entry : linesInGames.entrySet()) {
+            final String gameId = entry.getKey();
+            final ArrayList<Line> lines = entry.getValue();
+            for (Line line : lines) {
+                Map<String, String> playerIdMap = line.getPlayerIdMap();
+                if (playerIdMap != null) {
+                    if (playerId.equals(playerIdMap.get(position.toDatabaseName()))) {
+                        gameIds.add(gameId);
+                        break;
+                    }
+                }
+            }
+        }
+        return gameIds;
     }
 
     private static Map<Position, ArrayList<String>> getGamesByPositionWherePlayerInLine(Player player) {

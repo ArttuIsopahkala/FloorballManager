@@ -57,6 +57,7 @@ import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.utils.Logger;
+import com.ardeapps.floorballmanager.utils.StringUtils;
 import com.ardeapps.floorballmanager.viewObjects.GameFragmentData;
 import com.ardeapps.floorballmanager.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballmanager.views.IconView;
@@ -260,6 +261,9 @@ public class MainActivity extends AppCompatActivity {
                                 AppRes.getInstance().setSeasons(seasons);
                                 // Set selected season from preferences
                                 String seasonId = PrefRes.getSelectedSeasonId(team.getTeamId());
+                                if (StringUtils.isEmptyString(seasonId) && !seasons.isEmpty()) {
+                                    seasonId = seasons.values().iterator().next().getSeasonId();
+                                }
                                 Season selectedSeason = seasons.get(seasonId);
                                 AppRes.getInstance().setSelectedSeason(selectedSeason);
 

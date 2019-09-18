@@ -7,12 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.SkuDetails;
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.adapters.TeamListAdapter;
@@ -25,10 +25,10 @@ import com.ardeapps.floorballmanager.resources.UserInvitationsResource;
 import com.ardeapps.floorballmanager.resources.UsersResource;
 import com.ardeapps.floorballmanager.services.BillingService;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
+import com.ardeapps.floorballmanager.utils.ImageUtil;
 import com.ardeapps.floorballmanager.views.IconView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 
@@ -70,6 +70,14 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
                 holder.nameText = cv.findViewById(R.id.nameText);
                 holder.removeIcon = cv.findViewById(R.id.removeIcon);
                 holder.acceptIcon = cv.findViewById(R.id.acceptIcon);
+                holder.logoImage = cv.findViewById(R.id.logoImage);
+
+                final Team team = userInvitation.getTeam();
+                if (team.getLogo() != null) {
+                    holder.logoImage.setImageBitmap(ImageUtil.getSquarePicture(team.getLogo()));
+                } else {
+                    holder.logoImage.setImageResource(R.drawable.default_logo);
+                }
 
                 String roleText;
                 UserConnection.Role role = UserConnection.Role.fromDatabaseName(userInvitation.getRole());
@@ -135,12 +143,12 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
         update();
 
         addTeamButton.setOnClickListener(v12 -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(null));
-        bluetoothButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToBluetoothFragment());
+        //bluetoothButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToBluetoothFragment());
 
         // TODO
         final BillingService billingService = new BillingService();
-        billingService.initialize();
-        buyButton.setOnClickListener(new View.OnClickListener() {
+        //billingService.initialize();
+       /* buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 billingService.startBillingFlow();
@@ -156,7 +164,7 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
                     }
                 });
             }
-        });
+        });*/
         return v;
     }
 
@@ -166,6 +174,7 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
     }
 
     private class UserInvitationHolder {
+        ImageView logoImage;
         TextView roleText;
         TextView nameText;
         IconView removeIcon;

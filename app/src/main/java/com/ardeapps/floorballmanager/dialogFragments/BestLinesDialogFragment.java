@@ -27,8 +27,6 @@ public class BestLinesDialogFragment extends DialogFragment {
     BestLinesDialogCloseListener mListener = null;
     RadioButton bestPositionRadioButton;
     RadioButton ownPositionRadioButton;
-    RadioButton anyPositionRadioButton;
-    RadioButton sidesPositionRadioButton;
     RadioButton bestTeamChemistryRadioButton;
     RadioButton bestLineChemistryRadioButton;
     Spinner gamesSpinner;
@@ -47,8 +45,6 @@ public class BestLinesDialogFragment extends DialogFragment {
 
         bestPositionRadioButton = v.findViewById(R.id.bestPositionRadioButton);
         ownPositionRadioButton = v.findViewById(R.id.ownPositionRadioButton);
-        anyPositionRadioButton = v.findViewById(R.id.anyPositionRadioButton);
-        sidesPositionRadioButton = v.findViewById(R.id.sidesPositionRadioButton);
         bestTeamChemistryRadioButton = v.findViewById(R.id.bestTeamChemistryRadioButton);
         bestLineChemistryRadioButton = v.findViewById(R.id.bestLineChemistryRadioButton);
         gamesSpinner = v.findViewById(R.id.gamesSpinner);
@@ -73,19 +69,18 @@ public class BestLinesDialogFragment extends DialogFragment {
             AllowedPlayerPosition allowedPlayerPosition;
             if(bestPositionRadioButton.isChecked()) {
                 allowedPlayerPosition = AllowedPlayerPosition.BEST_POSITION;
-            } else if(ownPositionRadioButton.isChecked()) {
-                allowedPlayerPosition = AllowedPlayerPosition.PLAYERS_OWN_POSITION;
-            } else if(anyPositionRadioButton.isChecked()) {
-                allowedPlayerPosition = AllowedPlayerPosition.ANY_POSITION;
             } else {
-                allowedPlayerPosition = AllowedPlayerPosition.SIDES_POSITION;
+                allowedPlayerPosition = AllowedPlayerPosition.PLAYERS_OWN_POSITION;
             }
+
             BestLineType bestLineType;
-            if(bestTeamChemistryRadioButton.isChecked()) {
+            // default in version 1
+            bestLineType = BestLineType.BEST_LINE_CHEMISTRY;
+            /*if(bestTeamChemistryRadioButton.isChecked()) {
                 bestLineType = BestLineType.BEST_TEAM_CHEMISTRY;
             } else {
                 bestLineType = BestLineType.BEST_LINE_CHEMISTRY;
-            }
+            }*/
             int spinnerPos = gamesSpinner.getSelectedItemPosition();
             Integer gameCount = gameCounts.get(spinnerPos);
 

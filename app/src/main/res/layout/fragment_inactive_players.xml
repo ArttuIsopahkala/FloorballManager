@@ -6,6 +6,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/noPlayersText"
         android:layout_width="match_parent"
@@ -15,12 +16,13 @@
         android:padding="15dp"
         android:text="@string/inactive_players_no_players"
         android:textColor="@color/color_text_light"
-        android:textSize="15sp"/>
+        android:textSize="15sp" />
+
     <ListView
         android:id="@+id/playerList"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:divider="@null"
         android:dividerHeight="3dp" />
 </RelativeLayout>

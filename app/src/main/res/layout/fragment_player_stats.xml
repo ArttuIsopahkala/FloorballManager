@@ -3,178 +3,202 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_background"
+    android:background="@color/color_background_third"
     android:clickable="true"
     android:focusable="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:id="@+id/infoContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_background_third"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:id="@+id/pictureImage"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/default_picture"/>
+                    android:src="@drawable/default_picture" />
+
                 <TextView
                     android:id="@+id/nameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/pictureImage"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/pictureImage"
                     android:text="Arttu Isopahkala"
                     android:textColor="@color/color_text_light"
-                    android:textSize="25sp"
-                    android:textStyle="bold"/>
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <com.ardeapps.floorballmanager.views.IconView
                     android:id="@+id/editIcon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
-                    android:padding="10dp"
                     android:background="@drawable/button_background"
+                    android:padding="10dp"
                     android:text="@string/icon_dots"
                     app:iconFont="@string/icon_solid"
                     app:iconSize="16sp" />
             </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.33"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/add_player_position"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/positionText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Keskushyökkääjä"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.33"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/add_player_number"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/numberText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.33"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/add_player_shoots"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/shootsText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Vasen"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/strengthsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_marginTop="10dp"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/strengths_title"
                     android:textColor="@color/color_text_light"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/strengthsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Syöttäminen, Laukominen, Fyysisyys"
                     android:textColor="@color/color_text_light"
-                    android:textSize="18sp"/>
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
+
         <TextView
             android:id="@+id/filterText"
-            android:layout_below="@+id/infoContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/stats"
+            android:layout_below="@+id/infoContainer"
+            android:background="@color/color_menu"
             android:gravity="center"
             android:padding="10dp"
+            android:text="@string/stats"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:id="@+id/statsContainer"
-            android:layout_below="@+id/filterText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_background_third"
+            android:layout_below="@+id/filterText"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
                 android:orientation="horizontal"
                 android:padding="10dp">
+
                 <TextView
                     android:id="@+id/seasonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/season"
                     android:layout_marginEnd="10dp"
+                    android:text="@string/season"
                     android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/noSeasonsText"
                     android:layout_width="wrap_content"
@@ -182,97 +206,114 @@
                     android:text="@string/team_settings_no_seasons"
                     android:textColor="@color/color_text_light_secondary"
                     android:textSize="16sp"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic" />
+
                 <Spinner
                     android:id="@+id/seasonSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_text_light" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:padding="10dp">
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginStart="10dp"
+                        android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
+                        android:layout_toStartOf="@+id/gamesText"
                         android:text="@string/stats_games"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/gamesText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:layout_weight="0.8" />
+                    android:layout_weight="0.6" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:baselineAligned="false">
+                android:padding="10dp">
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginStart="10dp"
+                        android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
+                        android:layout_toStartOf="@+id/pointsText"
                         android:text="@string/stats_points"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/pointsText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_points_per_game"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/pointsPerGameText"
                         android:layout_width="wrap_content"
@@ -280,22 +321,25 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_plus"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/plusText"
                         android:layout_width="wrap_content"
@@ -303,22 +347,25 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_minus"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/minusText"
                         android:layout_width="wrap_content"
@@ -326,22 +373,25 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_plus_minus"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/plusMinusText"
                         android:layout_width="wrap_content"
@@ -349,56 +399,65 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:baselineAligned="false">
+                android:padding="10dp">
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginStart="10dp"
+                        android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
+                        android:layout_toStartOf="@+id/goalsText"
                         android:text="@string/stats_goals"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/goalsText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_goals_per_game"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/goalsPerGameText"
                         android:layout_width="wrap_content"
@@ -406,22 +465,25 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_yv_abbr"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/goalsYvText"
                         android:layout_width="wrap_content"
@@ -429,22 +491,25 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_av_abbr"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/goalsAvText"
                         android:layout_width="wrap_content"
@@ -452,22 +517,25 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_rl_abbr"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/goalsRlText"
                         android:layout_width="wrap_content"
@@ -475,55 +543,65 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:padding="10dp">
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginStart="10dp"
+                        android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
+                        android:layout_toStartOf="@+id/assistsText"
                         android:text="@string/stats_assists"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/assistsText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_assists_per_game"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/assistsPerGameText"
                         android:layout_width="wrap_content"
@@ -531,22 +609,25 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_yv_abbr"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/assistsYvText"
                         android:layout_width="wrap_content"
@@ -554,22 +635,25 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_av_abbr"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/assistsAvText"
                         android:layout_width="wrap_content"
@@ -577,33 +661,38 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"/>
+                    android:layout_weight="0.15" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/player_stats_best_stats"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/bestStatsText"
                         android:layout_width="wrap_content"
@@ -611,22 +700,25 @@
                         android:gravity="center"
                         android:text="3 + 4"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/player_stats_longest_stat"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/longestStatsText"
                         android:layout_width="wrap_content"
@@ -634,22 +726,25 @@
                         android:gravity="center"
                         android:text="2 ottelua"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/player_stats_best_plus_minus"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/bestPlusMinusText"
                         android:layout_width="wrap_content"
@@ -657,29 +752,33 @@
                         android:gravity="center"
                         android:text="5"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/player_stats_best_assistant"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/bestAssistantText"
                         android:layout_width="wrap_content"
@@ -687,22 +786,25 @@
                         android:gravity="center"
                         android:text="Jussi Kemppi, 2 syöttöä"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/player_stats_best_scorer"
                         android:gravity="center"
+                        android:text="@string/player_stats_best_scorer"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/bestScorerText"
                         android:layout_width="wrap_content"
@@ -710,17 +812,18 @@
                         android:gravity="center"
                         android:text="Mikki Leppä, 5 maalia"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -728,7 +831,7 @@
                     android:gravity="center"
                     android:text="@string/player_stats_best_same_line"
                     android:textColor="@color/color_text_light"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -738,56 +841,63 @@
                     android:gravity="center"
                     android:text="Sampsa Huoponen: 10 maalia yhdessä"
                     android:textColor="@color/color_text_light"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/filtersContainer"
-            android:layout_below="@+id/statsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/statsContainer"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
+
             <Spinner
                 android:id="@+id/gameSpinner"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.333"
                 android:layout_gravity="center"
+                android:layout_weight="0.333"
                 android:textColor="@color/color_text_light" />
+
             <Spinner
                 android:id="@+id/gameModeSpinner"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.333"
                 android:layout_gravity="center"
+                android:layout_weight="0.333"
                 android:textColor="@color/color_text_light" />
+
             <Spinner
                 android:id="@+id/typeSpinner"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.333"
                 android:layout_gravity="center"
+                android:layout_weight="0.333"
                 android:textColor="@color/color_text_light" />
         </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/shootmapContainer"
-            android:layout_below="@+id/filtersContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/filtersContainer"
             android:layout_centerInParent="true">
+
             <ImageView
                 android:id="@+id/shootmapImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/floorball_field_half"
-                android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/floorball_field_half" />
+
             <RelativeLayout
                 android:id="@+id/shootmapPointsContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

@@ -3,49 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/userConnectionContainer"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:padding="10dp"
-    android:background="@color/color_background_third">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@color/color_background_third"
+    android:minHeight="70dp"
+    android:padding="10dp">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/rightContainer"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/emailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="arttu.isopahkala@hotmail.com"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
-            android:gravity="center"
+            android:textSize="16sp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/roleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pelaaja: Arttu Isopahkala"
             android:textColor="@color/color_text_light"
-            android:textSize="18sp"/>
+            android:textSize="14sp" />
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/rightContainer"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_alignParentEnd="true">
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
 
         <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/statusUserConnectionIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:text="@string/icon_check"
             app:iconFont="@string/icon_solid"
             app:iconSize="20sp" />
 
         <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/removeUserConnectionIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/button_background"
             android:text="@string/icon_remove"
             app:iconFont="@string/icon_solid"
@@ -53,9 +62,9 @@
 
         <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/editUserConnectionIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/button_background"
             android:text="@string/icon_edit"
             app:iconFont="@string/icon_solid"

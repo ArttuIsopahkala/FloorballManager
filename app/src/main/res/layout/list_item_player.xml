@@ -3,72 +3,80 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/playerContainer"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:background="@color/color_background_third"
-    android:baselineAligned="false">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@color/color_background_third">
+
     <ImageView
         android:id="@+id/pictureImage"
-        android:layout_width="70dp"
-        android:layout_height="100dp"
-        android:padding="10dp"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/default_picture"
         android:background="@color/color_background_fourth"
-        android:contentDescription="@null" />
+        android:contentDescription="@null"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/default_picture" />
 
     <com.ardeapps.floorballmanager.views.IconView
         android:id="@+id/arrowIcon"
-        android:layout_toEndOf="@id/pictureImage"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="-4dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="-3dp"
+        android:layout_toEndOf="@id/pictureImage"
         android:text="@string/icon_arrow_right_full"
         app:iconFont="@string/icon_solid"
-        app:iconSize="50sp"/>
+        app:iconSize="40sp" />
+
     <RelativeLayout
-        android:layout_toEndOf="@id/pictureImage"
-        android:layout_toStartOf="@+id/selectIcon"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:minHeight="90dp"
-        android:padding="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/selectIcon"
+        android:layout_toEndOf="@id/pictureImage"
         android:orientation="vertical"
-        android:gravity="center_vertical">
+        android:padding="10dp">
+
         <TextView
             android:id="@+id/nameNumberShootsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Arttu Isopahkala | #11 | R"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/positionText"
-            android:layout_below="@+id/nameNumberShootsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/nameNumberShootsText"
             android:text="Keskushyökkääjä"
             android:textColor="@color/color_text_light_secondary"
-            android:textSize="18sp"/>
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <com.ardeapps.floorballmanager.views.IconView
         android:id="@+id/selectIcon"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:text="@string/icon_arrow_right"
         app:iconFont="@string/icon_solid"
-        app:iconSize="30sp" />
+        app:iconSize="25sp" />
+
     <RelativeLayout
         android:id="@+id/disableOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:alpha="0.3"
+        android:background="@color/color_text_light_secondary"
         android:clickable="true"
         android:focusable="true"
-        android:background="@color/color_text_light_secondary"
-        android:alpha="0.3"/>
+        android:minHeight="60dp" />
 </RelativeLayout>

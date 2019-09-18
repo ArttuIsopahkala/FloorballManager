@@ -2,7 +2,6 @@ package com.ardeapps.floorballmanager.analyzer;
 
 import android.util.Pair;
 
-import com.ardeapps.floorballmanager.objects.Connection;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
 
@@ -13,20 +12,7 @@ import java.util.Set;
 
 public class AnalyzerWrapper {
 
-    public static double getPlayerChemistryPercent(Position position, Player player) {
-        ArrayList<Connection> connections = Connection.getClosestChemistryConnections(position);
-        int connectionCount = connections.size();
-        int percent = 0;
-        if(connectionCount > 0) {
-            double percentSum = 0;
-            for (Connection connection : connections) {
-                percentSum += ChemistryPercentAnalyzer.getConnectionChemistryPercentOneToOther(position, player, connection);
-            }
-            percent = (int) Math.round(percentSum / connectionCount);
-        }
-        return percent;
-    }
-
+    // TODO
     public static void addChemistryToLine(Map<String, String> playersInLine, ArrayList<Pair<Map<String, String>, Integer>> playersInLines) {
         Set<String> set = new HashSet<>(playersInLine.keySet());
         boolean duplicatePlayers = set.size() < playersInLine.size();
@@ -42,8 +28,8 @@ public class AnalyzerWrapper {
                     String comparePlayerId = compareEntry.getValue();
                     Player comparePlayer = AnalyzerService.playersInTeam.get(comparePlayerId);
                     if(!playerId.equals(comparePlayerId)) {
-                        double chemistryPercent = ChemistryPercentAnalyzer.getConnectionChemistryPercentOneToOne(position, player, comparePosition, comparePlayer);
-                        chemistryForLine += chemistryPercent;
+                        /*double chemistryPercent = ChemistryPercentAnalyzer.getConnectionChemistryPercentOneToOne(position, player, comparePosition, comparePlayer);
+                        chemistryForLine += chemistryPercent;*/
                     }
                 }
             }

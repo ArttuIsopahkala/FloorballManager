@@ -50,7 +50,12 @@ public class GoalSelectLineFragment extends Fragment implements DataView {
 
     public boolean validate() {
         if (playerSelector.getSelectedPlayerIds().size() > data.getMaxSelectPlayers()) {
-            Logger.toast(R.string.add_event_error_line);
+            Logger.toast(R.string.add_event_error_line_less);
+            return false;
+        }
+
+        if (playerSelector.getSelectedPlayerIds().size() < data.getMinSelectPlayers()) {
+            Logger.toast(R.string.add_event_error_line_more);
             return false;
         }
 

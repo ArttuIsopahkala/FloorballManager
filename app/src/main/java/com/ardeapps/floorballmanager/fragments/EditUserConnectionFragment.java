@@ -86,13 +86,13 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
         holders = new HashMap<>();
         for (final Player player : players) {
             View view = inf.inflate(R.layout.list_item_player, playersList, false);
-            final PlayerHolder holder = new PlayerHolder(view, false);
+            final PlayerHolder holder = new PlayerHolder(view, false, false);
             holders.put(player.getPlayerId(), holder);
             if (player.getPicture() != null) {
                 holder.pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
             }
 
-            holder.nameNumberShootsText.setText(player.getNameWithNumber(false));
+            holder.nameNumberShootsText.setText(player.getName());
             holder.positionText.setText(Player.getPositionText(player.getPosition(), false));
 
             holder.playerContainer.setOnClickListener(v12 -> {

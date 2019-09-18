@@ -43,6 +43,7 @@
     <string name="remove">Poista</string>
     <string name="admin">Admin</string>
     <string name="player">Pelaaja</string>
+    <string name="founder">Perustaja</string>
     <string name="season">Tunniste</string>
     <string name="nothing">Ei mikään</string>
     <string name="overtime">Jatkoaika</string>
@@ -126,16 +127,23 @@
     <string name="add_event_assistant">Syöttäjä</string>
     <string name="add_event_position">Laukauksen lähtöpaikka</string>
     <string name="add_event_line">Kentällä olleet pelaajat</string>
+    <string name="add_event_plus_players">Plussapelaajat</string>
+    <string name="add_event_minus_players">Miinuspelaajat</string>
     <string name="add_event_full">Tasakentät</string>
-    <string name="add_event_yv">YV</string>
-    <string name="add_event_av">AV</string>
-    <string name="add_event_rl">RL</string>
+    <string name="add_event_av">(AV) Alivoima</string>
+    <string name="add_event_yv">(YV) Ylivoima</string>
+    <string name="add_event_sr">(SR) Siirretty rangaistus</string>
+    <string name="add_event_im">(IM) Ilman maalivahtia</string>
+    <string name="add_event_tm">(TM) Tyhjä maali</string>
+    <string name="add_event_rl">(RL) Rangaistuslaukaus</string>
+    <string name="add_event_om">(OM) Oma maali</string>
     <string name="add_event_mode">Pelimuoto</string>
     <string name="add_event_time">Aika</string>
     <string name="add_event_error_time">Aseta aika.</string>
     <string name="add_event_error_mode">Aseta pelimuoto.</string>
     <string name="add_event_error_scorer">Valitse maalintekijä.</string>
-    <string name="add_event_error_line">Valitse vähemmän pelaajia.</string>
+    <string name="add_event_error_line_less">Valitse vähemmän pelaajia.</string>
+    <string name="add_event_error_line_more">Valitse enemmän pelaajia.</string>
     <string name="add_event_remove_confirmation">Haluatko varmasti poistaa tämän maalin?</string>
     <string name="add_event_other">Joku muu</string>
 

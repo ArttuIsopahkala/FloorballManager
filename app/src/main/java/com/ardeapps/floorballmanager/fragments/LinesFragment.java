@@ -47,9 +47,11 @@ public class LinesFragment extends Fragment {
             saveButton.setVisibility(View.VISIBLE);
         }
 
-        lineUpSelector.createView(this, true);
-        final Map<Integer, Line> lines = AppRes.getInstance().getLines();
-        lineUpSelector.setLines(lines);
+        lineUpSelector.createView(this, true, () -> {
+            final Map<Integer, Line> lines = AppRes.getInstance().getLines();
+            lineUpSelector.setLines(lines);
+            lineUpSelector.refreshLines(false);
+        });
 
         analyzeChemistryButton.setOnClickListener(button -> {
             if(AppRes.getInstance().getGoalsByGame().isEmpty()) {

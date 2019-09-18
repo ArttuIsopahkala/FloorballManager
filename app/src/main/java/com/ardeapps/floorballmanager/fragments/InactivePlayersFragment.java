@@ -38,7 +38,7 @@ public class InactivePlayersFragment extends Fragment implements PlayerListAdapt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new PlayerListAdapter(AppRes.getActivity());
+        adapter = new PlayerListAdapter(AppRes.getActivity(), true);
         adapter.setSelectListener(this);
     }
 

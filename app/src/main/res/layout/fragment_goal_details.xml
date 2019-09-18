@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="300dp"
-    android:background="@color/color_background"
-    android:padding="20dp"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="20dp"
-    android:gravity="center">
+    android:background="@color/color_background"
+    android:gravity="center"
+    android:minWidth="300dp"
+    android:orientation="vertical"
+    android:padding="20dp">
+
     <TextView
         android:id="@+id/timeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:text="@string/add_event_time"
         android:textColor="@color/color_text_light"
         android:textSize="16sp"
@@ -22,53 +23,30 @@
 
     <com.ardeapps.floorballmanager.views.TimePicker
         android:id="@+id/timePicker"
-        android:layout_below="@+id/timeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/timeText"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:id="@+id/modeText"
-        android:layout_below="@+id/timePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/timePicker"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="10dp"
-        android:layout_centerHorizontal="true"
         android:text="@string/add_event_mode"
         android:textColor="@color/color_text_light"
         android:textSize="16sp"
         android:textStyle="bold" />
-    <RadioGroup
-        android:id="@+id/detailRadioGroup"
-        android:layout_below="@+id/modeText"
+
+    <Spinner
+        android:id="@+id/gameModeSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true" >
-        <RadioButton
-            android:id="@+id/fullRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/add_event_full"
-            android:textColor="@color/color_text_light_secondary" />
-        <RadioButton
-            android:id="@+id/yvRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_event_yv"
-            android:textColor="@color/color_text_light_secondary"/>
-        <RadioButton
-            android:id="@+id/avRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_event_av"
-            android:textColor="@color/color_text_light_secondary" />
-        <RadioButton
-            android:id="@+id/rlRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_event_rl"
-            android:textColor="@color/color_text_light_secondary"/>
-    </RadioGroup>
+        android:layout_below="@+id/modeText"
+        android:layout_centerHorizontal="true"
+        android:minWidth="200dp"
+        android:textColor="@color/color_text_light" />
 </RelativeLayout>

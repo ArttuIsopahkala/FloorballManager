@@ -5,110 +5,127 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true">
+
     <RelativeLayout
         android:id="@+id/teamChemistryContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@color/color_background">
+        android:background="@color/color_background"
+        android:padding="10dp">
+
         <TextView
             android:id="@+id/teamChemistryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/teamChemistryValueText"
             android:text="@string/lines_team_chemistry"
             android:textColor="@color/color_text_light"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/teamChemistryValueText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/teamChemistryBar"
             android:layout_marginEnd="20dp"
+            android:layout_toStartOf="@+id/teamChemistryBar"
             android:text="0"
             android:textColor="@color/color_text_light"
-            android:textSize="22sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
             android:id="@+id/teamChemistryBar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:progressDrawable="@drawable/custom_progressbar"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:max="100"
-            android:layout_alignParentEnd="true"/>
+            android:progressDrawable="@drawable/custom_progressbar" />
     </RelativeLayout>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/teamChemistryContainer"
         android:background="@color/color_menu"
-        app:tabTextColor="@color/color_text_light"
-        app:tabIndicatorColor="@color/color_text_light"
-        app:tabSelectedTextColor="@color/color_text_light"
         app:tabGravity="fill"
-        app:tabMode="fixed" />
+        app:tabIndicatorColor="@color/color_text_light"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/color_text_light"
+        app:tabTextColor="@color/color_text_light" />
+
     <RelativeLayout
         android:id="@+id/lineChemistryContainer"
-        android:layout_below="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@color/color_background">
+        android:layout_below="@+id/tabLayout"
+        android:background="@color/color_background"
+        android:padding="10dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/lineChemistryValueText"
             android:text="@string/lines_line_chemistry"
             android:textColor="@color/color_text_light"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/lineChemistryValueText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/lineChemistryBar"
             android:layout_marginEnd="20dp"
+            android:layout_toStartOf="@+id/lineChemistryBar"
             android:text="87"
             android:textColor="@color/color_text_light"
-            android:textSize="22sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
             android:id="@+id/lineChemistryBar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:progressDrawable="@drawable/custom_progressbar"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:max="100"
-            android:layout_alignParentEnd="true"/>
+            android:progressDrawable="@drawable/custom_progressbar" />
     </RelativeLayout>
 
     <ImageView
-        android:layout_below="@+id/lineChemistryContainer"
-        android:layout_width="600dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/floorball_field_half"
-        android:rotation="180"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:layout_centerHorizontal="true"/>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/linesPager"
-        android:layout_below="@+id/lineChemistryContainer"
-        android:layout_centerHorizontal="true"
-        android:layout_width="600dp"
-        android:layout_height="400dp"/>
-    <RelativeLayout
-        android:id="@+id/switchLinesContainer"
-        android:layout_below="@+id/linesPager"
+        android:id="@+id/fieldPicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:background="@color/color_background">
+        android:layout_below="@+id/lineChemistryContainer"
+        android:adjustViewBounds="true"
+        android:rotation="180"
+        android:scaleType="fitCenter"
+        android:contentDescription="@null"
+        android:src="@drawable/floorball_field_half" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/linesPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lineChemistryContainer"
+        android:layout_centerHorizontal="true" />
+
+    <RelativeLayout
+        android:id="@+id/switchLinesContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linesPager"
+        android:background="@color/color_background"
+        android:padding="5dp">
+
         <TextView
             android:id="@+id/fromLineText"
             android:layout_width="wrap_content"
@@ -118,18 +135,20 @@
             android:text="@string/line"
             android:textColor="@color/color_text_light"
             android:textSize="16sp" />
+
         <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/switchLinesIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:padding="10dp"
             android:background="@drawable/button_background"
+            android:padding="10dp"
             android:text="@string/icon_change"
             app:iconFont="@string/icon_solid"
             app:iconSize="20sp" />
+
         <Spinner
             android:id="@+id/toLineSpinner"
             android:layout_width="wrap_content"

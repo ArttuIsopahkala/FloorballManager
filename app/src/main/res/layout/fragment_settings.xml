@@ -5,20 +5,22 @@
     android:background="@color/color_background"
     android:clickable="true"
     android:focusable="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp">
+
         <Button
             android:id="@+id/inviteButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/button_background"
             android:text="@string/settings_invite"
-            android:textColor="@color/color_text_light"
-            android:layout_marginBottom="30dp"/>
+            android:textColor="@color/color_text_light" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +29,8 @@
             android:text="@string/settings_logged_user"
             android:textColor="@color/color_text_light"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/emailText"
             android:layout_width="wrap_content"
@@ -36,24 +39,26 @@
             android:layout_marginBottom="10dp"
             android:text="arttu.isopahkala@hotmail.com"
             android:textColor="@color/color_text_light" />
+
         <Button
             android:id="@+id/changePasswordButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/button_background"
             android:text="@string/settings_change_password"
-            android:textColor="@color/color_text_light"
-            android:layout_marginBottom="20dp" />
+            android:textColor="@color/color_text_light" />
+
         <Button
             android:id="@+id/logOutButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/button_background"
             android:text="@string/settings_log_out"
-            android:textColor="@color/color_text_light"
-            android:layout_marginBottom="20dp" />
+            android:textColor="@color/color_text_light" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -63,10 +68,12 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="10dp">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:src="@drawable/google_play_icon" />
 
             <TextView
@@ -74,8 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginEnd="20dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/settings_link_rate"
                 android:textColor="@color/color_url_link"
                 android:textStyle="bold" />
@@ -96,6 +103,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp">
+
             <TextView
                 android:id="@+id/versionText"
                 android:layout_width="wrap_content"
@@ -110,6 +118,7 @@
                 android:layout_gravity="center"
                 android:text="@string/settings_copyright"
                 android:textColor="@color/color_text_light" />
+
             <TextView
                 android:id="@+id/privacyPolicyText"
                 android:layout_width="wrap_content"

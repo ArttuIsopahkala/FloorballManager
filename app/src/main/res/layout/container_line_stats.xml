@@ -5,18 +5,20 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/lineText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color_background_third"
         android:gravity="center"
         android:text="@string/line"
         android:textColor="@color/color_text_light"
-        android:textSize="16sp"
-        android:background="@color/color_background_third"/>
+        android:textSize="16sp" />
+
     <LinearLayout
         android:id="@+id/playersList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:orientation="vertical" />
 </LinearLayout>

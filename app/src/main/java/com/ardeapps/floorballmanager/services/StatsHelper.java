@@ -455,10 +455,10 @@ public class StatsHelper extends AnalyzerService {
 
     private static Pair<ArrayList<String>, Integer> getBestAssistants(ArrayList<Goal> goals, String playerId) {
         // Collect assists
-        HashMap<String, Integer> players = new HashMap<>();
+        Map<String, Integer> players = new HashMap<>();
         for (Goal goal : goals) {
-            if (playerId.equals(goal.getScorerId())) {
-                String assistantId = goal.getAssistantId();
+            String assistantId = goal.getAssistantId();
+            if (assistantId != null && playerId.equals(goal.getScorerId())) {
                 Integer assists = players.get(assistantId);
                 players.put(assistantId, assists != null ? ++assists : 1);
             }
@@ -488,10 +488,10 @@ public class StatsHelper extends AnalyzerService {
 
     private static Pair<ArrayList<String>, Integer> getBestScorers(ArrayList<Goal> goals, String playerId) {
         // Collect assists
-        HashMap<String, Integer> players = new HashMap<>();
+        Map<String, Integer> players = new HashMap<>();
         for (Goal goal : goals) {
-            if (playerId.equals(goal.getAssistantId())) {
-                String scorerId = goal.getScorerId();
+            String scorerId = goal.getScorerId();
+            if (scorerId != null && playerId.equals(goal.getAssistantId())) {
                 Integer scores = players.get(scorerId);
                 players.put(scorerId, scores != null ? ++scores : 1);
             }

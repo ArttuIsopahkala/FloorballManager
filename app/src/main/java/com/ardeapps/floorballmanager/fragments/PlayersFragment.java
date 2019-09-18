@@ -37,7 +37,7 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new PlayerListAdapter(AppRes.getActivity());
+        adapter = new PlayerListAdapter(AppRes.getActivity(), true);
         adapter.setSelectListener(this);
     }
 
@@ -60,10 +60,6 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
 
         playerList.setEmptyView(noPlayersText);
         playerList.setAdapter(adapter);
-
-        ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
-        adapter.setPlayers(players);
-        adapter.notifyDataSetChanged();
 
         update();
 

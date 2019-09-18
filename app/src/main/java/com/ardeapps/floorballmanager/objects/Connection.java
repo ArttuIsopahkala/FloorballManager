@@ -18,9 +18,33 @@ public enum Connection {
     LD_LW,
     RD_RW;
 
+    public static ArrayList<Position> getClosestPositions(Position position) {
+        ArrayList<Position> positions = new ArrayList<>();
+        if (position == Position.LW) {
+            positions.add(Position.C);
+            positions.add(Position.LD);
+        } else if (position == Position.C) {
+            positions.add(Position.LW);
+            positions.add(Position.RW);
+            positions.add(Position.RD);
+            positions.add(Position.LD);
+        } else if (position == Position.RW) {
+            positions.add(Position.RD);
+            positions.add(Position.C);
+        } else if (position == Position.LD) {
+            positions.add(Position.LW);
+            positions.add(Position.C);
+            positions.add(Position.RD);
+        } else if (position == Position.RD) {
+            positions.add(Position.RW);
+            positions.add(Position.C);
+            positions.add(Position.LD);
+        }
+        return positions;
+    }
+
     public static Position getComparePosition(Position position, Connection connection) {
-        Map<Connection, Pair<Player.Position, Player.Position>> positionsInChemistryConnectionsAsPairs = getPositionsInChemistryConnectionsAsPairs();
-        Pair<Position, Position> positions = positionsInChemistryConnectionsAsPairs.get(connection);
+        Pair<Position, Position> positions = getPositionsInConnection(connection);
         if(positions != null) {
             if(positions.first == position) {
                 return positions.second;
@@ -32,7 +56,7 @@ public enum Connection {
         return null;
     }
 
-    public static Map<Connection, Pair<Player.Position, Player.Position>> getPositionsInChemistryConnectionsAsPairs() {
+    public static Pair<Player.Position, Player.Position> getPositionsInConnection(Connection connection) {
         Map<Connection, Pair<Player.Position, Player.Position>> positionsInChemistryConnectionsAsPairs = new HashMap<>();
         positionsInChemistryConnectionsAsPairs.put(Connection.C_LW, new Pair<>(Position.C, Position.LW));
         positionsInChemistryConnectionsAsPairs.put(Connection.C_RW, new Pair<>(Position.C, Position.RW));
@@ -41,7 +65,7 @@ public enum Connection {
         positionsInChemistryConnectionsAsPairs.put(Connection.LD_RD, new Pair<>(Position.LD, Position.RD));
         positionsInChemistryConnectionsAsPairs.put(Connection.LD_LW, new Pair<>(Position.LD, Position.LW));
         positionsInChemistryConnectionsAsPairs.put(Connection.RD_RW, new Pair<>(Position.RD, Position.RW));
-        return positionsInChemistryConnectionsAsPairs;
+        return positionsInChemistryConnectionsAsPairs.get(connection);
     }
 
     public static Map<Connection, ArrayList<Position>> getPositionsInChemistryConnectionsAsList() {

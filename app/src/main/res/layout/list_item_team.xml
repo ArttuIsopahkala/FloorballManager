@@ -3,41 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/teamContainer"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="80dp"
     android:background="@color/color_background_third"
     android:baselineAligned="false"
-    android:orientation="horizontal"
     android:clickable="true"
     android:focusable="true"
+    android:orientation="horizontal"
     android:padding="10dp"
     android:weightSum="1">
+
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginEnd="10dp"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
         android:contentDescription="@null"
-        android:src="@drawable/default_logo"/>
+        android:scaleType="fitCenter"
+        android:src="@drawable/default_logo" />
+
     <TextView
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/logoImage"
         android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/selectIcon"
+        android:layout_toEndOf="@id/logoImage"
         android:text="O2 Miehet 2"
         android:textColor="@color/color_text_light"
-        android:textSize="25sp"
-        android:textStyle="bold"/>
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <com.ardeapps.floorballmanager.views.IconView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
+        android:id="@+id/selectIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:padding="10dp"
         android:text="@string/icon_arrow_right"
         app:iconFont="@string/icon_solid"
-        app:iconSize="30sp" />
+        app:iconSize="25sp" />
 </RelativeLayout>

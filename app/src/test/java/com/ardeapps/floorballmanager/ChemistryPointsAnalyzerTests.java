@@ -1,8 +1,8 @@
 package com.ardeapps.floorballmanager;
 
+import com.ardeapps.floorballmanager.analyzer.ChemistryPointsAnalyzer;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Player;
-import com.ardeapps.floorballmanager.analyzer.ChemistryPointsAnalyzer;
 
 import org.junit.Test;
 
@@ -22,20 +22,25 @@ public class ChemistryPointsAnalyzerTests extends ChemistryPointsAnalyzer {
 
     @Test
     public void testGetWeighedChemistryPoints() {
-        assertEquals(0.0, getWeightedChemistryPoints(0, 0, 0));
-        assertEquals(0.5, getWeightedChemistryPoints(0, 1, 0));
-        assertEquals(1.0, getWeightedChemistryPoints(0, 2, 0));
-        assertEquals(1.0, getWeightedChemistryPoints(0, 0, 1));
-        assertEquals(2.0, getWeightedChemistryPoints(0, 0, 2));
-        assertEquals(100.0, getWeightedChemistryPoints(100, 0, 0));
-        assertEquals(105.0, getWeightedChemistryPoints(100, 1, 0));
-        assertEquals(110.0, getWeightedChemistryPoints(100, 2, 0));
-        assertEquals(110.0, getWeightedChemistryPoints(100, 0, 1));
-        assertEquals(120.0, getWeightedChemistryPoints(100, 0, 2));
-        assertEquals(115.0, getWeightedChemistryPoints(100, 1, 1));
-        assertEquals(120.0, getWeightedChemistryPoints(100, 2, 1));
-        assertEquals(130.0, getWeightedChemistryPoints(100, 2, 2));
-        assertEquals(1300.0, getWeightedChemistryPoints(1000, 2, 2));
+        assertEquals(0.0, getWeightedChemistryPoints(0, 0, 0, 0));
+        assertEquals(0.5, getWeightedChemistryPoints(0, 1, 0, 0));
+        assertEquals(1.0, getWeightedChemistryPoints(0, 2, 0, 0));
+        assertEquals(1.0, getWeightedChemistryPoints(0, 0, 1, 0));
+        assertEquals(2.0, getWeightedChemistryPoints(0, 0, 2, 0));
+        assertEquals(0.75, getWeightedChemistryPoints(0, 0, 0, 1));
+        assertEquals(1.5, getWeightedChemistryPoints(0, 0, 0, 2));
+        assertEquals(2.25, getWeightedChemistryPoints(0, 0, 0, 3));
+        assertEquals(3.0, getWeightedChemistryPoints(0, 0, 0, 4));
+        assertEquals(100.0, getWeightedChemistryPoints(100, 0, 0, 0));
+        assertEquals(105.0, getWeightedChemistryPoints(100, 1, 0, 0));
+        assertEquals(110.0, getWeightedChemistryPoints(100, 2, 0, 0));
+        assertEquals(110.0, getWeightedChemistryPoints(100, 0, 1, 0));
+        assertEquals(120.0, getWeightedChemistryPoints(100, 0, 2, 0));
+        assertEquals(115.0, getWeightedChemistryPoints(100, 1, 1, 0));
+        assertEquals(120.0, getWeightedChemistryPoints(100, 2, 1, 0));
+        assertEquals(130.0, getWeightedChemistryPoints(100, 2, 2, 0));
+        assertEquals(1300.0, getWeightedChemistryPoints(1000, 2, 2, 0));
+        assertEquals(107.5, getWeightedChemistryPoints(100, 0, 0, 1));
     }
 
     @Test

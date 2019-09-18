@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_background"
+    android:background="@color/color_background_third"
     android:clickable="true"
     android:focusable="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -14,9 +15,8 @@
             android:id="@+id/infoContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_background_third"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <ImageView
                 android:id="@+id/logoImage"
@@ -34,13 +34,13 @@
                 android:layout_toEndOf="@+id/logoImage"
                 android:text="O2 Miehet 2"
                 android:textColor="@color/color_text_light"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.ardeapps.floorballmanager.views.IconView
                 android:id="@+id/editIcon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/button_background"
                 android:padding="10dp"
@@ -48,38 +48,45 @@
                 app:iconFont="@string/icon_solid"
                 app:iconSize="16sp" />
         </RelativeLayout>
+
         <TextView
             android:id="@+id/filterText"
-            android:layout_below="@+id/infoContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/stats"
+            android:layout_below="@+id/infoContainer"
+            android:background="@color/color_menu"
             android:gravity="center"
             android:padding="10dp"
+            android:text="@string/stats"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:id="@+id/statsContainer"
-            android:layout_below="@+id/filterText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_background_third"
+            android:layout_below="@+id/filterText"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
                 android:orientation="horizontal"
                 android:padding="10dp">
+
                 <TextView
                     android:id="@+id/seasonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/season"
                     android:layout_marginEnd="10dp"
+                    android:text="@string/season"
                     android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/noSeasonsText"
                     android:layout_width="wrap_content"
@@ -87,33 +94,40 @@
                     android:text="@string/team_settings_no_seasons"
                     android:textColor="@color/color_text_light_secondary"
                     android:textSize="16sp"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic" />
+
                 <Spinner
                     android:id="@+id/seasonSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_text_light" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:baselineAligned="false">
+                android:padding="10dp">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/stats_games"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/gamesText"
                         android:layout_width="wrap_content"
@@ -121,123 +135,136 @@
                         android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/team_stats_wins"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/winsText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_alignParentBottom="true"
                             android:text="-"
                             android:textColor="@color/color_text_light"
-                            android:textSize="18sp"/>
+                            android:textSize="16sp" />
+
                         <TextView
                             android:id="@+id/winPercentText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_toEndOf="@+id/winsText"
-                            android:layout_alignParentBottom="true"
                             android:text="(12%)"
                             android:textColor="@color/color_text_light_secondary"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp" />
                     </RelativeLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/team_stats_draws"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/drawsText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
                             android:text="5"
                             android:textColor="@color/color_text_light"
-                            android:textSize="18sp"/>
+                            android:textSize="16sp" />
+
                         <TextView
                             android:id="@+id/drawPercentText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
                             android:layout_marginStart="10dp"
                             android:layout_toEndOf="@+id/drawsText"
-                            android:layout_alignParentBottom="true"
                             android:text="(12%)"
                             android:textColor="@color/color_text_light_secondary"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp" />
                     </RelativeLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/team_stats_loses"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/losesText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
                             android:text="5"
                             android:textColor="@color/color_text_light"
-                            android:textSize="18sp"/>
+                            android:textSize="16sp" />
+
                         <TextView
                             android:id="@+id/losePercentText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
                             android:layout_marginStart="10dp"
                             android:layout_toEndOf="@+id/losesText"
-                            android:layout_alignParentBottom="true"
                             android:text="(12%)"
                             android:textColor="@color/color_text_light_secondary"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp" />
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -245,488 +272,560 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:baselineAligned="false">
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_alignParentBottom="true"
-                        android:text="@string/team_stats_plus_goals"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
-                </RelativeLayout>
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
+                android:orientation="vertical">
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_toStartOf="@+id/plusGoalsText"
+                            android:text="@string/team_stats_plus_goals"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="@string/stats_goals_per_game"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsPerGameText"
-                        android:layout_width="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/stats_goals_per_game"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsPerGameText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/stats_yv_abbr"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsYvText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/stats_av_abbr"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsAvText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/stats_rl_abbr"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsRlText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="@string/stats_yv_abbr"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsYvText"
-                        android:layout_width="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="1. erä"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsPeriod1Text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="2. erä"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsPeriod2Text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="@string/stats_av_abbr"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsAvText"
-                        android:layout_width="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="3. erä"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsPeriod3Text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/stats_rl_abbr"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsRlText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="JA"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/plusGoalsJAText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:baselineAligned="false">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:layout_marginStart="10dp"
-                    android:gravity="bottom"
-                    android:text="@string/team_stats_plus_goals_period"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="16sp"/>
+                android:layout_margin="5dp"
+                android:background="@drawable/stats_background"
+                android:orientation="vertical">
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_toStartOf="@+id/minusGoalsText"
+                            android:text="@string/team_stats_minus_goals"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="1. erä"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsPeriod1Text"
-                        android:layout_width="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/stats_goals_per_game"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsPerGameText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/stats_yv_abbr"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsYvText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/stats_av_abbr"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsAvText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/stats_rl_abbr"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsRlText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="2. erä"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsPeriod2Text"
-                        android:layout_width="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="1. erä"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsPeriod1Text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="2. erä"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsPeriod2Text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="3. erä"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsPeriod3Text"
-                        android:layout_width="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="3. erä"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsPeriod3Text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.175"
                         android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="JA"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/plusGoalsJAText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="JA"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/minusGoalsJAText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="16sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:baselineAligned="false">
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_alignParentBottom="true"
-                        android:text="@string/team_stats_minus_goals"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
-                </RelativeLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/stats_goals_per_game"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsPerGameText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/stats_yv_abbr"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsYvText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/stats_av_abbr"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsAvText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/stats_rl_abbr"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsRlText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="bottom"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/team_stats_minus_goals_period"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="16sp"/>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="1. erä"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsPeriod1Text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="2. erä"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsPeriod2Text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="3. erä"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsPeriod3Text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.175"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="JA"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/minusGoalsJAText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/team_stats_biggest_win"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/biggestWinText"
                         android:layout_width="wrap_content"
@@ -734,22 +833,25 @@
                         android:gravity="center"
                         android:text="3 - 13, Riemu"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/team_stats_biggest_lose"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/biggestLoseText"
                         android:layout_width="wrap_content"
@@ -757,22 +859,25 @@
                         android:gravity="center"
                         android:text="1 - 13, MSM"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/team_stats_longest_win"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/longestWinText"
                         android:layout_width="wrap_content"
@@ -780,22 +885,25 @@
                         android:gravity="center"
                         android:text="3 ottelua"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/team_stats_longest_not_lose"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/longestNotLoseText"
                         android:layout_width="wrap_content"
@@ -803,87 +911,98 @@
                         android:gravity="center"
                         android:text="5 ottelua"
                         android:textColor="@color/color_text_light"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/trendingContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/trendingText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/team_stats_trending"
                     android:gravity="center"
+                    android:text="@string/team_stats_trending"
                     android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/team_stats_trending_info"
                     android:gravity="center"
+                    android:text="@string/team_stats_trending_info"
                     android:textColor="@color/color_text_light_secondary"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
+
                 <LinearLayout
                     android:id="@+id/trendingContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:baselineAligned="false" />
+                    android:baselineAligned="false"
+                    android:orientation="horizontal" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/filtersContainer"
-            android:layout_below="@+id/statsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/statsContainer"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
+
             <Spinner
                 android:id="@+id/gameSpinner"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.333"
                 android:layout_gravity="center"
+                android:layout_weight="0.333"
                 android:textColor="@color/color_text_light" />
+
             <Spinner
                 android:id="@+id/gameModeSpinner"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.333"
                 android:layout_gravity="center"
+                android:layout_weight="0.333"
                 android:textColor="@color/color_text_light" />
+
             <Spinner
                 android:id="@+id/goalTypeSpinner"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.333"
                 android:layout_gravity="center"
+                android:layout_weight="0.333"
                 android:textColor="@color/color_text_light" />
         </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/shootmapContainer"
-            android:layout_below="@+id/filtersContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/filtersContainer"
             android:layout_centerInParent="true">
+
             <ImageView
                 android:id="@+id/shootmapImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/floorball_field_half"
-                android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/floorball_field_half" />
+
             <RelativeLayout
                 android:id="@+id/shootmapPointsContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

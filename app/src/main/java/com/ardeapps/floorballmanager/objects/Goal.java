@@ -131,10 +131,14 @@ public class Goal {
     }
 
     public enum Mode {
-        AV,
-        YV,
-        FULL,
-        RL;
+        FULL, // Tasakentät
+        AV, // (AV) Alivoima
+        YV, // (YV) Ylivoima
+        SR, // (SR) Siirretty rangaistus
+        IM, // (IM) Ilman maalivahtia
+        TM, // (TM) Tyhjään maaliin
+        RL, // (RL) Rangasituslaukaus
+        OM; // (OM) Oma maali
 
         public static Mode fromDatabaseName(String value) {
             return Enum.valueOf(Mode.class, value);

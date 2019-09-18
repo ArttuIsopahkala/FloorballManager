@@ -1,58 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/goalContainer"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
     android:clickable="true"
-    android:focusable="true"
-    android:weightSum="1"
-    android:background="@color/color_background_third">
+    android:focusable="true">
 
-    <com.ardeapps.floorballmanager.views.IconView
-        android:id="@+id/editHomeGoalIcon"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:text="@string/icon_bars"
-        app:iconFont="@string/icon_solid"
-        app:iconSize="16sp" />
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/homeContainer"
-        android:layout_toStartOf="@+id/timeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:gravity="end|center_vertical">
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/timeContainer"
+        android:background="@color/color_background_third"
+        android:gravity="end|center_vertical"
+        android:minHeight="60dp"
+        android:padding="10dp">
+
         <TextView
             android:id="@+id/homeScoreText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="#11 Arttu Isopahkala"
             android:gravity="end"
+            android:text="#11 Arttu Isopahkala"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/homeAssistText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="#88 Jussi Kemppi"
+            android:layout_below="@id/homeScoreText"
             android:gravity="end"
+            android:text="#88 Jussi Kemppi"
             android:textColor="@color/color_text_light_secondary"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:textSize="12sp" />
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/timeContainer"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:padding="10dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:background="@color/color_background_second"
         android:gravity="center"
-        android:background="@color/color_background_second">
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/timeText"
             android:layout_width="wrap_content"
@@ -60,48 +55,47 @@
             android:gravity="end"
             android:text="33:12"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/scoreText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:text="4 - 5"
-            android:textColor="@color/color_text_light_secondary"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textColor="@color/color_text_light"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
-    <LinearLayout
+
+    <RelativeLayout
         android:id="@+id/awayContainer"
-        android:layout_toEndOf="@+id/timeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:gravity="start|center_vertical">
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/timeContainer"
+        android:background="@color/color_background_third"
+        android:gravity="start|center_vertical"
+        android:minHeight="60dp"
+        android:padding="10dp">
+
         <TextView
             android:id="@+id/awayScoreText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="#11 Arttu Isopahkala"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/awayAssistText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/awayScoreText"
             android:text="#88 Jussi Kemppi"
             android:textColor="@color/color_text_light_secondary"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:textSize="12sp" />
+    </RelativeLayout>
 
-    <com.ardeapps.floorballmanager.views.IconView
-        android:id="@+id/editAwayGoalIcon"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:text="@string/icon_bars"
-        app:iconFont="@string/icon_solid"
-        app:iconSize="16sp" />
 </RelativeLayout>

@@ -5,9 +5,10 @@
     android:background="@color/color_background"
     android:clickable="true"
     android:focusable="true"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:gravity="center_horizontal">
+    android:padding="10dp">
+
     <TextView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -15,6 +16,7 @@
         android:textColor="@color/color_text_light"
         android:textSize="18sp"
         android:textStyle="bold" />
+
     <TextView
         android:id="@+id/seasonInfoText"
         android:layout_width="300dp"
@@ -22,18 +24,20 @@
         android:text="@string/team_settings_season_info"
         android:textColor="@color/color_text_light_secondary"
         android:textSize="15sp"
-        android:textStyle="italic"/>
+        android:textStyle="italic" />
+
     <EditText
         android:id="@+id/seasonEditText"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:focusableInTouchMode="true"
-        android:maxLength="250"
-        android:inputType="textCapWords"
         android:hint="@string/team_settings_season_hint"
+        android:inputType="textCapWords"
+        android:maxLength="250"
         android:textColor="@color/color_text_light"
         android:textColorHint="@color/color_text_hint" />
+
     <Button
         android:id="@+id/saveButton"
         android:layout_width="200dp"

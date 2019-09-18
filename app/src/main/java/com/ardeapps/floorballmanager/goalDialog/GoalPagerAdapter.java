@@ -64,35 +64,29 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     private void setGoalFragmentListeners() {
-        detailsFragment.setListener(new GoalDetailsFragment.Listener() {
-            @Override
-            public void onFullRadioButtonChecked() {
+        detailsFragment.setListener(gameMode -> {
+            if (gameMode == Goal.Mode.FULL) {
                 GoalSelectLineFragmentData data = selectLineFragment.getData();
                 data.setMaxSelectPlayers(6);
+                data.setMinSelectPlayers(3);
                 isPenaltyShot = false;
                 selectLineFragment.setData(data);
-            }
-
-            @Override
-            public void onAvRadioButtonChecked() {
-                GoalSelectLineFragmentData data = selectLineFragment.getData();
-                data.setMaxSelectPlayers(commonData.isOpponentGoal() ? 6 : 4);
-                isPenaltyShot = false;
-                selectLineFragment.setData(data);
-            }
-
-            @Override
-            public void onYvRadioButtonChecked() {
+            } else if (gameMode == Goal.Mode.YV) {
                 GoalSelectLineFragmentData data = selectLineFragment.getData();
                 data.setMaxSelectPlayers(commonData.isOpponentGoal() ? 4 : 6);
+                data.setMinSelectPlayers(commonData.isOpponentGoal() ? 3 : 4);
                 isPenaltyShot = false;
                 selectLineFragment.setData(data);
-            }
-
-            @Override
-            public void onRlRadioButtonChecked() {
+            } else if (gameMode == Goal.Mode.AV) {
                 GoalSelectLineFragmentData data = selectLineFragment.getData();
-                data.setMaxSelectPlayers(1);
+                data.setMaxSelectPlayers(commonData.isOpponentGoal() ? 6 : 4);
+                data.setMinSelectPlayers(commonData.isOpponentGoal() ? 4 : 3);
+                isPenaltyShot = false;
+                selectLineFragment.setData(data);
+            } else if (gameMode == Goal.Mode.RL) {
+                GoalSelectLineFragmentData data = selectLineFragment.getData();
+                data.setMaxSelectPlayers(0);
+                data.setMinSelectPlayers(0);
                 isPenaltyShot = true;
                 selectLineFragment.setData(data);
             }
@@ -260,6 +254,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         GoalSelectLineFragmentData selectLineFragmentData = new GoalSelectLineFragmentData();
         selectLineFragmentData.setLines(commonData.getLines());
         selectLineFragmentData.setMaxSelectPlayers(6);
+        selectLineFragmentData.setMinSelectPlayers(3);
         selectLineFragmentData.setSelectedPlayerIds(null);
         selectLineFragmentData.setDisabledPlayerIds(null);
         // Position

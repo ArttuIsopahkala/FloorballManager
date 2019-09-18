@@ -91,27 +91,29 @@ public class GameSettingsFragment extends Fragment implements DataView {
             seasonText.setText("-");
         }
 
-        lineUpSelector.createView(this, false);
+        lineUpSelector.createView(this, false, () -> {
+            resetField();
 
-        resetField();
+            Game game = data.getGame();
+            if (game != null) {
+                isHomeGame = game.isHomeGame();
+                setTeamSides(isHomeGame);
+                Helper.setEditTextValue(opponentEditText, game.getOpponentName());
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(game.getDate());
+                Helper.setDatePickerValue(datePicker, cal);
+                lineUpSelector.setLines(data.getLines());
+                Helper.setSpinnerSelection(periodSpinner, durations.indexOf(game.getPeriodInMinutes()));
+            }
 
-        Game game = data.getGame();
-        if (game != null) {
-            isHomeGame = game.isHomeGame();
-            setTeamSides(isHomeGame);
-            Helper.setEditTextValue(opponentEditText, game.getOpponentName());
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(game.getDate());
-            Helper.setDatePickerValue(datePicker, cal);
-            lineUpSelector.setLines(data.getLines());
-            Helper.setSpinnerSelection(periodSpinner, durations.indexOf(game.getPeriodInMinutes()));
-        }
+            lineUpSelector.refreshLines(false);
+        });
     }
 
     private void resetField() {
         isHomeGame = true;
-        setTeamSides(isHomeGame);
         lineUpSelector.setLines(AppRes.getInstance().getLines());
+        setTeamSides(isHomeGame);
         nameText.setText(AppRes.getInstance().getSelectedTeam().getName());
         Helper.setEditTextValue(opponentEditText, "");
         Helper.setDatePickerValue(datePicker, Calendar.getInstance());

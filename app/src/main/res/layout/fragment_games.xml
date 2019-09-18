@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_background"
     android:clickable="true"
     android:focusable="true"
@@ -42,31 +42,34 @@
             app:iconFont="@string/icon_solid"
             app:iconSize="18sp" />
     </LinearLayout>
+
     <Button
         android:id="@+id/newGameButton"
-        android:layout_below="@+id/seasonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/seasonContainer"
         android:layout_margin="10dp"
         android:background="@drawable/button_background"
         android:text="@string/games_new_game"
         android:textColor="@color/color_text_light" />
+
     <TextView
         android:id="@+id/noGamesText"
-        android:layout_below="@+id/newGameButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/newGameButton"
         android:background="@color/color_menu"
         android:gravity="center"
         android:padding="15dp"
         android:text="@string/games_no_games"
         android:textColor="@color/color_text_light"
-        android:textSize="15sp"/>
+        android:textSize="15sp" />
+
     <ListView
         android:id="@+id/gameList"
-        android:layout_below="@+id/newGameButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/newGameButton"
         android:divider="@null"
         android:dividerHeight="3dp" />
 </RelativeLayout>

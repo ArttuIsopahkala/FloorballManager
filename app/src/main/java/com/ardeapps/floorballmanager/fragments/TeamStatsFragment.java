@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 public class TeamStatsFragment extends Fragment {
@@ -165,14 +166,21 @@ public class TeamStatsFragment extends Fragment {
 
         setSeasonSpinner();
 
-        Map<Goal.Mode, String> gameModeMap = new HashMap<>();
-        gameModeMap.put(null, getString(R.string.player_stats_all_game_modes));
+        Map<Goal.Mode, String> gameModeMap = new TreeMap<>();
         gameModeMap.put(Goal.Mode.FULL, getString(R.string.add_event_full));
-        gameModeMap.put(Goal.Mode.YV, getString(R.string.add_event_yv));
         gameModeMap.put(Goal.Mode.AV, getString(R.string.add_event_av));
+        gameModeMap.put(Goal.Mode.YV, getString(R.string.add_event_yv));
+        gameModeMap.put(Goal.Mode.SR, getString(R.string.add_event_sr));
+        gameModeMap.put(Goal.Mode.IM, getString(R.string.add_event_im));
+        gameModeMap.put(Goal.Mode.TM, getString(R.string.add_event_tm));
+        gameModeMap.put(Goal.Mode.OM, getString(R.string.add_event_om));
         gameModeMap.put(Goal.Mode.RL, getString(R.string.add_event_rl));
-        ArrayList<String> gameModeTitles = new ArrayList<>(gameModeMap.values());
-        gameModes = new ArrayList<>(gameModeMap.keySet());
+        ArrayList<String> gameModeTitles = new ArrayList<>();
+        gameModeTitles.add(getString(R.string.player_stats_all_game_modes));
+        gameModeTitles.addAll(gameModeMap.values());
+        gameModes = new ArrayList<>();
+        gameModes.add(null);
+        gameModes.addAll(gameModeMap.keySet());
         Helper.setSpinnerAdapter(gameModeSpinner, gameModeTitles);
 
         ArrayList<String> goalTypeTitles = new ArrayList<>();
@@ -299,7 +307,7 @@ public class TeamStatsFragment extends Fragment {
 
         // Set games sorted by date
         sortedGames = new ArrayList<>(games.values());
-        Collections.sort(sortedGames, (o1, o2) -> Long.valueOf(o2.getDate()).compareTo(o1.getDate()));
+        Collections.sort(sortedGames, (o1, o2) -> Long.compare(o2.getDate(), o1.getDate()));
 
         ArrayList<String> gameTitles = new ArrayList<>();
         gameTitles.add(getString(R.string.player_stats_all_games));

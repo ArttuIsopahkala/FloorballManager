@@ -2,13 +2,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_background"
     android:clickable="true"
     android:focusable="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:id="@+id/titleContainer"
             android:layout_width="match_parent"
@@ -16,74 +17,83 @@
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/logoImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
+                android:contentDescription="@null"
                 android:src="@mipmap/ic_launcher"/>
         </LinearLayout>
+
         <TextView
             android:id="@+id/teamNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/titleContainer"
             android:layout_marginBottom="10dp"
-            android:gravity="center"
             android:background="@color/color_menu"
+            android:gravity="center"
             android:padding="15dp"
             android:textColor="@color/color_text_light"
             android:textSize="15sp" />
+
         <Button
             android:id="@+id/gamesButton"
-            android:layout_below="@+id/teamNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/teamNameText"
             android:layout_margin="10dp"
             android:background="@drawable/button_background"
             android:text="@string/team_dashboard_games"
             android:textColor="@color/color_text_light" />
+
         <Button
             android:id="@+id/ownStatsButton"
-            android:layout_below="@+id/gamesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/gamesButton"
             android:layout_margin="10dp"
             android:background="@drawable/button_background"
             android:text="@string/team_dashboard_own_stats"
             android:textColor="@color/color_text_light" />
+
         <Button
             android:id="@+id/linesButton"
-            android:layout_below="@+id/ownStatsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/ownStatsButton"
             android:layout_margin="10dp"
             android:background="@drawable/button_background"
             android:text="@string/team_dashboard_lines"
             android:textColor="@color/color_text_light" />
+
         <Button
             android:id="@+id/playersButton"
-            android:layout_below="@+id/linesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/linesButton"
             android:layout_margin="10dp"
             android:background="@drawable/button_background"
             android:text="@string/team_dashboard_players"
             android:textColor="@color/color_text_light" />
+
         <Button
             android:id="@+id/teamStatsButton"
-            android:layout_below="@+id/playersButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/playersButton"
             android:layout_margin="10dp"
             android:background="@drawable/button_background"
             android:text="@string/team_dashboard_team_stats"
             android:textColor="@color/color_text_light" />
+
         <Button
             android:id="@+id/settingsButton"
-            android:layout_below="@+id/teamStatsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/teamStatsButton"
             android:layout_margin="10dp"
             android:background="@drawable/button_background"
             android:text="@string/team_dashboard_settings"

@@ -1,230 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_background"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/settingsContainer"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:padding="10dp"
         android:background="@color/color_background_third"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:id="@+id/dateContainer"
-            android:layout_width="wrap_content"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
-            android:orientation="vertical">
-            <TextView
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/settingsIcon">
+
+            <LinearLayout
+                android:id="@+id/dateContainer"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/date"
-                android:textColor="@color/color_text_light"
-                android:textSize="16sp"/>
-            <TextView
-                android:id="@+id/dateText"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date"
+                    android:textColor="@color/color_text_light_secondary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/dateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:text="12.12.2020"
+                    android:textColor="@color/color_text_light"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/seasonContainer"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:text="12.12.2020"
-                android:textColor="@color/color_text_light"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/seasonContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toEndOf="@+id/dateContainer"
-            android:layout_marginEnd="10dp"
-            android:orientation="vertical">
-            <TextView
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@id/dateContainer"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/season"
+                    android:textColor="@color/color_text_light_secondary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/seasonText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="170dp"
+                    android:text="Kausi 2019-2020"
+                    android:textColor="@color/color_text_light"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/periodDurationContainer"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/season"
-                android:textColor="@color/color_text_light"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/seasonText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kausi 2019-2020"
-                android:textColor="@color/color_text_light"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
-            android:layout_toEndOf="@+id/seasonContainer"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/period_duration"
-                android:textColor="@color/color_text_light"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/periodDurationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="15min"
-                android:textColor="@color/color_text_light"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@id/seasonContainer"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/period_duration"
+                    android:textColor="@color/color_text_light_secondary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/periodDurationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15min"
+                    android:textColor="@color/color_text_light"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/settingsIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/button_background"
             android:text="@string/icon_dots"
             app:iconFont="@string/icon_solid"
             app:iconSize="20sp" />
     </RelativeLayout>
-    <LinearLayout
+
+    <RelativeLayout
         android:id="@+id/teamsContainer"
-        android:layout_below="@+id/settingsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:weightSum="1">
+        android:layout_below="@+id/settingsContainer"
+        android:padding="10dp">
+
         <TextView
             android:id="@+id/homeNameText"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:gravity="end"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/resultText"
+            android:gravity="center"
             android:text="O2 miehet 2"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.2"/>
+
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/color_background_second"
+            android:padding="10dp"
+            android:text="7 - 5"
+            android:textColor="@color/color_text_light"
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/awayNameText"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/resultText"
+            android:gravity="center"
             android:text="SBJ Vaajakoski"
             android:textColor="@color/color_text_light"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
-    </LinearLayout>
-    <TextView
-        android:id="@+id/resultText"
-        android:layout_below="@+id/teamsContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_centerHorizontal="true"
-        android:text="7 - 5"
-        android:textColor="@color/color_text_light"
-        android:textSize="30sp"
-        android:background="@color/color_background_second"/>
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/addGoalButtons"
-        android:layout_below="@+id/resultText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" >
+        android:layout_below="@+id/teamsContainer"
+        android:padding="10dp">
+
         <Button
             android:id="@+id/homeGoalButton"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_background"
             android:text="@string/game_add_goal"
             android:textColor="@color/color_text_light" />
+
         <Button
             android:id="@+id/awayGoalButton"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:background="@drawable/button_background"
             android:text="@string/game_add_goal"
             android:textColor="@color/color_text_light" />
     </RelativeLayout>
+
     <ScrollView
-        android:layout_below="@+id/addGoalButtons"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/addGoalButtons">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <include
                 android:id="@+id/periodLayout1"
-                layout="@layout/container_monitor_period"/>
+                layout="@layout/container_monitor_period" />
+
             <include
                 android:id="@+id/periodLayout2"
-                layout="@layout/container_monitor_period"/>
+                layout="@layout/container_monitor_period" />
+
             <include
                 android:id="@+id/periodLayout3"
-                layout="@layout/container_monitor_period"/>
+                layout="@layout/container_monitor_period" />
+
             <include
                 android:id="@+id/periodLayoutJA"
-                layout="@layout/container_monitor_period"/>
+                layout="@layout/container_monitor_period" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
+                android:background="@color/color_background_third"
                 android:gravity="center"
-                android:padding="5dp"
-                android:background="@color/color_background_third">
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <TextView
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:text="@string/stats"
                     android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:text="@string/game_stat_plus_minus"
                     android:textColor="@color/color_text_light"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
                     android:text="@string/game_stat_goal_abbr"
                     android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:layout_marginStart="30dp"/>
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/statsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
                     android:text="@string/game_stat_assist_abbr"
                     android:textColor="@color/color_text_light"
-                    android:textSize="20sp"
-                    android:layout_marginStart="15dp"/>
+                    android:textSize="18sp" />
             </LinearLayout>
+
             <include
                 android:id="@+id/lineStats1"
-                layout="@layout/container_line_stats"/>
+                layout="@layout/container_line_stats" />
+
             <include
                 android:id="@+id/lineStats2"
-                layout="@layout/container_line_stats"/>
+                layout="@layout/container_line_stats" />
+
             <include
                 android:id="@+id/lineStats3"
-                layout="@layout/container_line_stats"/>
+                layout="@layout/container_line_stats" />
+
             <include
                 android:id="@+id/lineStats4"
-                layout="@layout/container_line_stats"/>
+                layout="@layout/container_line_stats" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

@@ -136,6 +136,8 @@ public class EditTeamFragment extends Fragment implements DataView {
             } else {
                 teamToSave = new Team();
                 teamToSave.setName(name);
+                teamToSave.setCreationTime(System.currentTimeMillis());
+                teamToSave.setFounder(AppRes.getInstance().getUser().getUserId());
                 TeamsResource.getInstance().addTeam(teamToSave, id -> {
                     teamToSave.setTeamId(id);
                     AppRes.getInstance().setSelectedTeam(teamToSave);

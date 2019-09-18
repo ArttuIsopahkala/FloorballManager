@@ -56,13 +56,21 @@ public class TeamSettingsFragment extends Fragment {
         LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
         userConnectionsContainer.removeAllViews();
 
-
         ArrayList<UserConnection> userConnectionsList = new ArrayList<>(userConnections.values());
         Collections.sort(userConnectionsList, (o1, o2) -> {
+            String founder = AppRes.getInstance().getSelectedTeam().getFounder();
+            boolean isFounder1 = founder.equals(o1.getUserId());
+            boolean isFounder2 = founder.equals(o2.getUserId());
             UserConnection.Role role1 = UserConnection.Role.fromDatabaseName(o1.getRole());
             UserConnection.Role role2 = UserConnection.Role.fromDatabaseName(o2.getRole());
             if (role1 == role2) {
-                return 0;
+                if (isFounder1) {
+                    return -1;
+                } else if (isFounder2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             } else if (role1 == UserConnection.Role.ADMIN) {
                 return -1;
             } else {
@@ -80,9 +88,12 @@ public class TeamSettingsFragment extends Fragment {
 
             holder.emailText.setText(userConnection.getEmail());
 
+            String founder = AppRes.getInstance().getSelectedTeam().getFounder();
+            boolean isFounder = founder.equals(userConnection.getUserId());
+
             String roleText;
             UserConnection.Role role = UserConnection.Role.fromDatabaseName(userConnection.getRole());
-            roleText = getString(role == UserConnection.Role.PLAYER ? R.string.player : R.string.admin);
+            roleText = getString(role == UserConnection.Role.PLAYER ? R.string.player : (isFounder ? R.string.founder : R.string.admin));
             holder.roleText.setText(roleText);
 
             final UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnection.getStatus());
@@ -97,7 +108,9 @@ public class TeamSettingsFragment extends Fragment {
                 holder.statusUserConnectionIcon.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_green_light));
             }
 
-            if (userConnection.getEmail().equalsIgnoreCase(AppRes.getInstance().getUser().getEmail())) {
+            String userId = AppRes.getInstance().getUser().getUserId();
+            // Founder or self cannot be remove
+            if (isFounder || userId.equals(userConnection.getUserId())) {
                 holder.removeUserConnectionIcon.setVisibility(View.GONE);
                 holder.editUserConnectionIcon.setVisibility(View.GONE);
             } else {

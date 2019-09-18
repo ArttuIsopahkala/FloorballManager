@@ -12,17 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
-import com.ardeapps.floorballmanager.dialogFragments.SelectPlayerDialogFragment;
+import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
+import com.ardeapps.floorballmanager.dialogFragments.SelectPlayerToLineDialogFragment;
 import com.ardeapps.floorballmanager.objects.Connection;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
-import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
 import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
@@ -33,10 +34,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-;
-
-
 public class LineFragment extends Fragment implements DataView {
+
+    LinearLayout attackersContainer;
+    LinearLayout defendersContainer;
 
     Listener mListener = null;
     TextView c_lw_text;
@@ -56,6 +57,11 @@ public class LineFragment extends Fragment implements DataView {
     RelativeLayout container_rw;
     RelativeLayout container_ld;
     RelativeLayout container_rd;
+
+    public void setListener(Listener l) {
+        mListener = l;
+    }
+
     ImageView chemistryLinesImageView;
     Map<Position, Integer> closestChemistries = new HashMap<>();
     Map<Connection, Integer> chemistryConnectionPercents = new HashMap<>();
@@ -64,8 +70,82 @@ public class LineFragment extends Fragment implements DataView {
     boolean showChemistry = false;
     private LineFragmentData data;
 
-    public void setListener(Listener l) {
-        mListener = l;
+    public void update(boolean showChemistry) {
+        this.showChemistry = showChemistry;
+
+        // Set rows dynamically based on field height
+        defendersContainer.post(() -> {
+            int attackersHeight = attackersContainer.getHeight();
+            int defendersHeight = defendersContainer.getHeight();
+            int marginHeight = (data.getFieldHeight() - attackersHeight - defendersHeight - 20) / 3;
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) attackersContainer.getLayoutParams();
+            params.topMargin = marginHeight;
+            attackersContainer.setLayoutParams(params);
+            params = (ViewGroup.MarginLayoutParams) defendersContainer.getLayoutParams();
+            params.topMargin = marginHeight;
+            defendersContainer.setLayoutParams(params);
+            attackersContainer.setVisibility(View.VISIBLE);
+            defendersContainer.setVisibility(View.VISIBLE);
+
+            if (showChemistry) {
+                chemistryLinesImageView.setVisibility(View.VISIBLE);
+                // Show numbers only to admin for debug purposes
+                boolean isAdmin = AppRes.getInstance().getUser().isAdmin();
+                c_lw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+                c_rw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+                c_ld_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+                c_rd_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+                ld_rd_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+                ld_lw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+                rd_rw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+
+                // Get data
+                Line line = data.getLine();
+                closestChemistries = new HashMap<>();
+                chemistryConnectionPercents = new HashMap<>();
+                if (line != null) {
+                    closestChemistries = AnalyzerService.getInstance().getAverageChemistryPercentForPositions(line.getPlayerIdMap());
+                    chemistryConnectionPercents = AnalyzerService.getInstance().getChemistryConnectionPercents(line.getPlayerIdMap());
+                }
+
+                // Set chemistry texts
+                setChemistryText(c_lw_text, chemistryConnectionPercents.get(Connection.C_LW));
+                setChemistryText(c_rw_text, chemistryConnectionPercents.get(Connection.C_RW));
+                setChemistryText(c_ld_text, chemistryConnectionPercents.get(Connection.C_LD));
+                setChemistryText(c_rd_text, chemistryConnectionPercents.get(Connection.C_RD));
+                setChemistryText(ld_rd_text, chemistryConnectionPercents.get(Connection.LD_RD));
+                setChemistryText(ld_lw_text, chemistryConnectionPercents.get(Connection.LD_LW));
+                setChemistryText(rd_rw_text, chemistryConnectionPercents.get(Connection.RD_RW));
+
+                // Set chemistry lines
+                chemistryLinesImageView.post(() -> {
+                    int[] location = new int[2];
+                    chemistryLinesImageView.getLocationOnScreen(location);
+                    canvasLeft = location[0];
+                    canvasTop = location[1];
+                    int width = chemistryLinesImageView.getWidth();
+                    int height = chemistryLinesImageView.getHeight();
+                    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
+                    drawChemistryLine(canvas, container_c, container_lw, Connection.C_LW);
+                    drawChemistryLine(canvas, container_c, container_rw, Connection.C_RW);
+                    drawChemistryLine(canvas, container_c, container_ld, Connection.C_LD);
+                    drawChemistryLine(canvas, container_c, container_rd, Connection.C_RD);
+                    drawChemistryLine(canvas, container_ld, container_rd, Connection.LD_RD);
+                    drawChemistryLine(canvas, container_ld, container_lw, Connection.LD_LW);
+                    drawChemistryLine(canvas, container_rd, container_rw, Connection.RD_RW);
+
+                    chemistryLinesImageView.setImageBitmap(bitmap);
+                });
+            }
+
+            // Set cards
+            setCardView(card_lw, Position.LW);
+            setCardView(card_c, Position.C);
+            setCardView(card_rw, Position.RW);
+            setCardView(card_ld, Position.LD);
+            setCardView(card_rd, Position.RD);
+        });
     }
 
     @Override
@@ -78,74 +158,14 @@ public class LineFragment extends Fragment implements DataView {
         data = (LineFragmentData) viewData;
     }
 
-    public void update(boolean showChemistry) {
-        this.showChemistry = showChemistry;
-        if (showChemistry) {
-            chemistryLinesImageView.setVisibility(View.VISIBLE);
-            // Show numbers only to admin for debug purposes
-            boolean isAdmin = AppRes.getInstance().getUser().isAdmin();
-            c_lw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-            c_rw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-            c_ld_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-            c_rd_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-            ld_rd_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-            ld_lw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-            rd_rw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-
-            // Get data
-            Line line = data.getLine();
-            closestChemistries = new HashMap<>();
-            chemistryConnectionPercents = new HashMap<>();
-            if(line != null) {
-                closestChemistries = AnalyzerService.getInstance().getAverageChemistryPercentForPositions(line.getPlayerIdMap());
-                chemistryConnectionPercents = AnalyzerService.getInstance().getChemistryConnectionPercents(line.getPlayerIdMap());
-            }
-
-            // Set chemistry texts
-            setChemistryText(c_lw_text, chemistryConnectionPercents.get(Connection.C_LW));
-            setChemistryText(c_rw_text, chemistryConnectionPercents.get(Connection.C_RW));
-            setChemistryText(c_ld_text, chemistryConnectionPercents.get(Connection.C_LD));
-            setChemistryText(c_rd_text, chemistryConnectionPercents.get(Connection.C_RD));
-            setChemistryText(ld_rd_text, chemistryConnectionPercents.get(Connection.LD_RD));
-            setChemistryText(ld_lw_text, chemistryConnectionPercents.get(Connection.LD_LW));
-            setChemistryText(rd_rw_text, chemistryConnectionPercents.get(Connection.RD_RW));
-
-            // Set chemistry lines
-            chemistryLinesImageView.post(() -> {
-                int[] location = new int[2];
-                chemistryLinesImageView.getLocationOnScreen(location);
-                canvasLeft = location[0];
-                canvasTop = location[1] / 2;
-                int width = chemistryLinesImageView.getWidth();
-                int height = chemistryLinesImageView.getHeight();
-                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bitmap);
-                drawChemistryLine(canvas, container_c, container_lw, Connection.C_LW);
-                drawChemistryLine(canvas, container_c, container_rw, Connection.C_RW);
-                drawChemistryLine(canvas, container_c, container_ld, Connection.C_LD);
-                drawChemistryLine(canvas, container_c, container_rd, Connection.C_RD);
-                drawChemistryLine(canvas, container_ld, container_rd, Connection.LD_RD);
-                drawChemistryLine(canvas, container_ld, container_lw, Connection.LD_LW);
-                drawChemistryLine(canvas, container_rd, container_rw, Connection.RD_RW);
-
-                chemistryLinesImageView.setImageBitmap(bitmap);
-            });
-        }
-
-        // Set cards
-        setCardView(card_lw, Position.LW);
-        setCardView(card_c, Position.C);
-        setCardView(card_rw, Position.RW);
-        setCardView(card_ld, Position.LD);
-        setCardView(card_rd, Position.RD);
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_line, container, false);
 
         chemistryLinesImageView = v.findViewById(R.id.chemistryLinesImageView);
+        attackersContainer = v.findViewById(R.id.attackersContainer);
+        defendersContainer = v.findViewById(R.id.defendersContainer);
         c_lw_text = v.findViewById(R.id.c_lw_text);
         c_rw_text = v.findViewById(R.id.c_rw_text);
         c_ld_text = v.findViewById(R.id.c_ld_text);
@@ -174,6 +194,8 @@ public class LineFragment extends Fragment implements DataView {
         ld_rd_text.setVisibility(View.GONE);
         ld_lw_text.setVisibility(View.GONE);
         rd_rw_text.setVisibility(View.GONE);
+        attackersContainer.setVisibility(View.INVISIBLE);
+        defendersContainer.setVisibility(View.INVISIBLE);
 
         update(false);
 
@@ -188,7 +210,6 @@ public class LineFragment extends Fragment implements DataView {
         ImageView pictureImage = card.findViewById(R.id.pictureImage);
         IconView addIcon = card.findViewById(R.id.addIcon);
         TextView nameText = card.findViewById(R.id.nameText);
-        TextView avgPercentText = card.findViewById(R.id.avgPercentText);
 
         // Default view
         addIcon.setClickable(false);
@@ -198,6 +219,7 @@ public class LineFragment extends Fragment implements DataView {
         nameText.setText(getString(R.string.select));
 
         Line line = data.getLine();
+        Logger.log("SET line " + line);
         if (line != null) {
             String playerId = line.getPlayerIdMap().get(pos);
             if (playerId != null) {
@@ -206,7 +228,17 @@ public class LineFragment extends Fragment implements DataView {
 
                 Player player = AppRes.getInstance().getPlayers().get(playerId);
 
-                setChemistryColorBorder(avgPercentText, chemistryBorder, position);
+                int color = R.color.color_background_third; // Default color
+                if (showChemistry) {
+                    Integer percent = closestChemistries.get(position);
+                    if (percent != null) {
+                        color = getChemistryColor(percent);
+                    }
+                }
+                //NOTE: Drawable must be set as 'background' in xml to this take effect
+                chemistryBorder.setImageResource(R.drawable.circle);
+                chemistryBorder.setColorFilter(color);
+
                 if (player == null) {
                     // Poistettu pelaaja
                     nameText.setText(getString(R.string.removed_player));
@@ -228,9 +260,11 @@ public class LineFragment extends Fragment implements DataView {
                 return;
             }
 
-            final SelectPlayerDialogFragment dialog = new SelectPlayerDialogFragment();
+            final SelectPlayerToLineDialogFragment dialog = new SelectPlayerToLineDialogFragment();
             dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Valitse pelaaja");
-            dialog.setListener(new SelectPlayerDialogFragment.SelectPlayerDialogListener() {
+            dialog.setPosition(position);
+            dialog.setLineNumber(data.getLineNumber());
+            dialog.setListener(new SelectPlayerToLineDialogFragment.SelectPlayerDialogListener() {
                 @Override
                 public void onPlayerSelected(Player player) {
                     Line line1 = data.getLine();
@@ -281,6 +315,16 @@ public class LineFragment extends Fragment implements DataView {
         });
     }
 
+    private Point getPosition(final RelativeLayout card) {
+        int[] location = new int[2];
+        card.getLocationOnScreen(location);
+        int x = location[0];
+        int y = location[1];
+        double positionX = x - canvasLeft + card.getWidth() / 2.0;
+        double positionY = y - canvasTop + card.getHeight() / 2.0;
+        return new Point((int) positionX, (int) positionY);
+    }
+
     private void drawChemistryLine(Canvas canvas, RelativeLayout fromView, RelativeLayout toView, Connection connection) {
         Integer percent = chemistryConnectionPercents.get(connection);
         if (percent != null) {
@@ -299,37 +343,8 @@ public class LineFragment extends Fragment implements DataView {
         textView.setText(points != null ? points + "%" : "");
     }
 
-    /**
-     * NOTE: Drawable must be set as 'background' in xml to this take effect
-     *
-     * @param view border ImageView
-     */
-    private void setChemistryColorBorder(TextView avgPercentText, ImageView view, Position position) {
-        int color = R.color.color_background_third; // Default color
-        String percentText = "";
-
-        if (showChemistry) {
-            Integer percent = closestChemistries.get(position);
-            if (percent != null) {
-                percentText = String.valueOf(percent);
-                color = getChemistryColor(percent);
-            }
-        }
-
-        view.setColorFilter(color);
-        avgPercentText.setText(percentText);
-        // Show numbers only to admin for debug purposes
-        avgPercentText.setVisibility(AppRes.getInstance().getUser().isAdmin() ? View.VISIBLE : View.GONE);
-    }
-
-    private Point getPosition(final RelativeLayout card) {
-        int[] location = new int[2];
-        card.getLocationOnScreen(location);
-        int x = location[0];
-        int y = location[1];
-        double positionX = x - canvasLeft + card.getWidth() / 2.0;
-        double positionY = y - canvasTop - card.getHeight();
-        return new Point((int) positionX, (int) positionY);
+    public interface Listener {
+        void onLineChanged(Line line, String playerId);
     }
 
     private int getChemistryColor(int percent) {
@@ -342,9 +357,5 @@ public class LineFragment extends Fragment implements DataView {
             color = R.color.color_green_light;
         }
         return ContextCompat.getColor(AppRes.getContext(), color);
-    }
-
-    public interface Listener {
-        void onLineChanged(Line line, String playerId);
     }
 }

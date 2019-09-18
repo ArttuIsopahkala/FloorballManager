@@ -9,6 +9,8 @@ public class Team {
 
     private String teamId;
     private String name;
+    private String founder;
+    private long creationTime;
     private boolean logoUploaded;
     @Exclude
     private Bitmap logo;
@@ -20,6 +22,8 @@ public class Team {
         Team clone = new Team();
         clone.teamId = this.teamId;
         clone.name = this.name;
+        clone.founder = this.founder;
+        clone.creationTime = this.creationTime;
         return clone;
     }
 
@@ -37,6 +41,22 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFounder() {
+        return founder;
+    }
+
+    public void setFounder(String founder) {
+        this.founder = founder;
+    }
+
+    public long getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(long creationTime) {
+        this.creationTime = creationTime;
     }
 
     public boolean isLogoUploaded() {

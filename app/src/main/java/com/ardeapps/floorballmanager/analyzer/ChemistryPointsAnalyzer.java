@@ -20,63 +20,128 @@ public class ChemistryPointsAnalyzer {
     private static final ArrayList<Player.Skill> defenceSkills3 = new ArrayList<>(Arrays.asList(Player.Skill.BLOCKING, Player.Skill.INTERCEPTION));
 
     /**
-     * Get chemistry points of two players based on all abilities
+     * Get chemistry connectionPoints of two players based on all abilities
      *
-     * @param playerPos        player position to compare
-     * @param player         player to compare against
-     * @param comparePlayerPos player position to compare against
-     * @param comparePlayer player to compare
-     * @return count of chemistry points
+     * @param position1        player position to compare
+     * @param player1         player to compare against
+     * @param position2 player position to compare against
+     * @param player2 player to compare
+     * @return count of chemistry connectionPoints
      */
-    static double getChemistryPoints(Position playerPos, Player player, Position comparePlayerPos, Player comparePlayer) {
+    static double getConnectionPoints(Position position1, Player player1, Position position2, Player player2) {
         double chemistryPoints = 0.0;
-        if (player != null && comparePlayer != null) {
-            String playerId = player.getPlayerId();
-            String comparePlayerId = comparePlayer.getPlayerId();
-            int gameCount = AnalyzerDataCollector.getGameCountWherePlayersInSameLine(playerId, comparePlayerId);
-            // Divide by games to get relative points. (More points in a few games -> higher chemistry)
-            int goalChemistry = 0;
-            if(gameCount > 0) {
+        if (player1 != null && player2 != null) {
+            String playerId = player1.getPlayerId();
+            String comparePlayerId = player2.getPlayerId();
+            // GET COMMON GOALS
+            int commonGameCount = AnalyzerDataCollector.getGameCountWherePlayersInSameLine(playerId, comparePlayerId);
+            // Divide by games to get relative connectionPoints. (More connectionPoints in a few games -> higher chemistry)
+            double goalChemistry = 0;
+            if (commonGameCount > 0) {
                 ArrayList<Goal> commonGoals = AnalyzerDataCollector.getCommonGoals(playerId, comparePlayerId);
-                goalChemistry = getGoalsChemistry(playerId, comparePlayerId, commonGoals) / gameCount;
+                goalChemistry = getGoalsChemistry(playerId, comparePlayerId, commonGoals) / (double) commonGameCount;
+            }
+            double weightedGoalChemistry = getWeightedGoalChemistry(position1, player1, position2, player2, goalChemistry);
+
+            // THESE ARE BASED ON POSITION -> COMPARE EACH OTHER
+            Shoots playerShoots = Shoots.fromDatabaseName(player1.getShoots());
+            Shoots comparePlayerShoots = Shoots.fromDatabaseName(player2.getShoots());
+            int shootsChemistry = getShootsChemistry(position1, playerShoots, position2, comparePlayerShoots);
+            shootsChemistry += getShootsChemistry(position2, comparePlayerShoots, position1, playerShoots);
+            int strengthsChemistry = getStrengthsChemistry(position1, player1, position2, player2);
+            strengthsChemistry += getStrengthsChemistry(position2, player2, position1, player1);
+            int positionsChemistry = getPositionChemistry(position1, player1);
+            positionsChemistry += getPositionChemistry(position2, player2);
+
+            double playerPositionChemistry = 0.0;
+            ArrayList<String> gameIds = AnalyzerDataCollector.getGamesByPlayerPosition(position1, playerId);
+            ArrayList<Goal> goals = AnalyzerDataCollector.getGoalsOfGames(gameIds);
+            if (gameIds.size() > 0) {
+                playerPositionChemistry += getGoalPointsForPlayer(playerId, goals) / (double) gameIds.size();
+            }
+            gameIds = AnalyzerDataCollector.getGamesByPlayerPosition(position2, comparePlayerId);
+            goals = AnalyzerDataCollector.getGoalsOfGames(gameIds);
+            if (gameIds.size() > 0) {
+                playerPositionChemistry += getGoalPointsForPlayer(comparePlayerId, goals) / (double) gameIds.size();
             }
 
-            Shoots playerShoots = Shoots.fromDatabaseName(player.getShoots());
-            Shoots comparePlayerShoots = Shoots.fromDatabaseName(comparePlayer.getShoots());
-            int shootsChemistry = getShootsChemistry(playerPos, playerShoots, comparePlayerPos, comparePlayerShoots);
-            shootsChemistry += getShootsChemistry(comparePlayerPos, comparePlayerShoots, playerPos, playerShoots);
-
-            int strengthsChemistry = getStrengthsChemistry(playerPos, player, comparePlayerPos, comparePlayer);
-            strengthsChemistry += getStrengthsChemistry(comparePlayerPos, comparePlayer, playerPos, player);
-
-            chemistryPoints = getWeightedChemistryPoints(goalChemistry, shootsChemistry, strengthsChemistry);
+            chemistryPoints = getWeightedChemistryPoints(weightedGoalChemistry, shootsChemistry, strengthsChemistry, playerPositionChemistry);
         }
-
         return chemistryPoints;
     }
 
     /**
      * @param goalChemistry goal chemistryPoints
-     * @param shootsChemistry shoots chemistry points
-     * @param strengthsChemistry strengths chemistry points
-     * @return weighted chemistry points
+     * @param shootsChemistry shoots chemistry connectionPoints
+     * @param strengthsChemistry strengths chemistry connectionPoints
+     * @return weighted chemistry connectionPoints
      */
-    protected static double getWeightedChemistryPoints(int goalChemistry, int shootsChemistry, int strengthsChemistry) {
+    protected static double getWeightedChemistryPoints(double goalChemistry, int shootsChemistry, int strengthsChemistry, double positionsChemistry) {
+        double positionsWeight = 0.3;
+        double strengthsWeight = 0.2;
+        double shootsWeight = 0.1;
         double chemistrySum;
+        double positionsMax;
         double strengthsMax;
         double shootsMax;
         if(goalChemistry > 0) {
-            strengthsMax = goalChemistry * 0.2;
-            shootsMax = goalChemistry * 0.1;
+            positionsMax = goalChemistry * positionsWeight;
+            strengthsMax = goalChemistry * strengthsWeight;
+            shootsMax = goalChemistry * shootsWeight;
         } else {
-            strengthsMax = 2.0;
-            shootsMax = 1.0;
+            positionsMax = positionsWeight;
+            strengthsMax = strengthsWeight;
+            shootsMax = shootsWeight;
         }
-        double weightedStrengthsChemistry = strengthsChemistry / 2.0 * strengthsMax;
-        double weightedShootsChemistry = shootsChemistry / 2.0 * shootsMax;
-        chemistrySum = goalChemistry + weightedStrengthsChemistry + weightedShootsChemistry;
+        double weightedStrengthsChemistry = strengthsChemistry * strengthsMax;
+        double weightedShootsChemistry = shootsChemistry * shootsMax;
+        double weightedPositionsChemistry = positionsChemistry * positionsMax;
+        chemistrySum = goalChemistry + weightedStrengthsChemistry + weightedShootsChemistry + weightedPositionsChemistry;
 
         return chemistrySum;
+    }
+
+
+    /**
+     * More points if defenders has made goals
+     *
+     * @param player1
+     * @param player2
+     * @param goalChemistry
+     * @return
+     */
+    protected static double getWeightedGoalChemistry(Position position1, Player player1, Position position2, Player player2, double goalChemistry) {
+        double chemistryWeight = 0.0;
+        Position playerOwnPosition = Position.fromDatabaseName(player1.getPosition());
+        Position comparePlayerOwnPosition = Position.fromDatabaseName(player2.getPosition());
+
+        if (position1.isAttacker() && playerOwnPosition.isAttacker()) {
+            if (playerOwnPosition == position1) {
+                chemistryWeight += 0.5;
+            } else {
+                chemistryWeight += 0.2;
+            }
+        } else if (position1.isDefender() && playerOwnPosition.isDefender()) {
+            if (playerOwnPosition == position1) {
+                chemistryWeight += 1.0;
+            } else {
+                chemistryWeight += 0.7;
+            }
+        }
+        if (position2.isAttacker() && comparePlayerOwnPosition.isAttacker()) {
+            if (comparePlayerOwnPosition == position2) {
+                chemistryWeight += 0.5;
+            } else {
+                chemistryWeight += 0.2;
+            }
+        } else if (position2.isDefender() && comparePlayerOwnPosition.isDefender()) {
+            if (comparePlayerOwnPosition == position2) {
+                chemistryWeight += 1.0;
+            } else {
+                chemistryWeight += 0.7;
+            }
+        }
+        return goalChemistry * (1 + chemistryWeight);
     }
 
     /**
@@ -103,6 +168,28 @@ public class ChemistryPointsAnalyzer {
                 } else if (!goal.isOpponentGoal() && scorerAndAssistant.containsAll(comparePlayers)) {
                     chemistryPoints += 3;
                 } else if (!goal.isOpponentGoal() && (scorerAndAssistant.contains(playerId1) || scorerAndAssistant.contains(playerId2))) {
+                    chemistryPoints += 2;
+                } else if (!goal.isOpponentGoal()) {
+                    chemistryPoints++;
+                }
+            }
+        }
+        return chemistryPoints;
+    }
+
+    static int getGoalPointsForPlayer(Position position, String playerId) {
+        ArrayList<String> gameIds = AnalyzerDataCollector.getGamesByPlayerPosition(position, playerId);
+        ArrayList<Goal> goals = AnalyzerDataCollector.getGoalsOfGames(gameIds);
+        int chemistryPoints = 0;
+        for (Goal goal : goals) {
+            boolean playerOnField = goal.getPlayerIds().contains(playerId);
+            if (playerOnField) {
+                List<String> scorerAndAssistant = Arrays.asList(goal.getScorerId(), goal.getAssistantId());
+                if (goal.isOpponentGoal()) {
+                    chemistryPoints--;
+                } else if (!goal.isOpponentGoal() && scorerAndAssistant.contains(playerId)) {
+                    chemistryPoints += 3;
+                } else if (!goal.isOpponentGoal() && (scorerAndAssistant.contains(playerId) || scorerAndAssistant.contains(playerId))) {
                     chemistryPoints += 2;
                 } else if (!goal.isOpponentGoal()) {
                     chemistryPoints++;
@@ -285,6 +372,35 @@ public class ChemistryPointsAnalyzer {
             } else if (player.hasSomeOfSkills(defenceSkills3) && comparePlayerPos == Position.LD && (comparePlayer.hasSomeOfSkills(defenceSkills1) || comparePlayer.hasSomeOfSkills(defenceSkills2))) {
                 chemistryPoints++;
             }
+        }
+        return chemistryPoints;
+    }
+
+    /**
+     * Get chemistry based on player position
+     * <p>
+     * +2 if compared position is player's marked position
+     * +1 if compared position is attacker position and player is attacker
+     * +1 if compared position is defender position and player is defender
+     * -1 if wrong attacker is in defender position or defender is in attacker position
+     *
+     * @param position player position to compare
+     * @param player   player to compare
+     * @return chemistry count
+     */
+    @Deprecated
+    // Ei ehkä kannata laskea
+    protected static int getPositionChemistry(Position position, Player player) {
+        int chemistryPoints;
+        Position markedPosition = Position.fromDatabaseName(player.getPosition());
+        if (position == markedPosition) {
+            chemistryPoints = 2;
+        } else if (position.isAttacker() && markedPosition.isAttacker()) {
+            chemistryPoints = 1;
+        } else if (position.isDefender() && markedPosition.isDefender()) {
+            chemistryPoints = 1;
+        } else {
+            chemistryPoints = -1;
         }
         return chemistryPoints;
     }

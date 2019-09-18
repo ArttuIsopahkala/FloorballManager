@@ -8,7 +8,7 @@ import com.ardeapps.floorballmanager.R;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -96,18 +96,25 @@ public class Player {
     }
 
     @Exclude
-    public String getNameWithNumber(boolean numberFirst) {
+    public String getNameWithNumber() {
         String name = "";
-        if (numberFirst) {
-            if (getNumber() != null) {
-                name = "#" + getNumber() + " ";
-            }
-            name += getName();
-        } else {
-            name = getName();
-            if (getNumber() != null) {
-                name += " | #" + getNumber();
-            }
+        if (getNumber() != null) {
+            name = "#" + getNumber() + " ";
+        }
+        name += getName();
+        return name;
+    }
+
+    @Exclude
+    public String getNameWithInfo(boolean showNumber) {
+        String name = getName();
+        if (showNumber && getNumber() != null) {
+            name += " | #" + getNumber();
+        }
+        if (getShoots() != null) {
+            Shoots shoots = Shoots.fromDatabaseName(getShoots());
+            String shootsText = AppRes.getContext().getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
+            name += " | " + shootsText;
         }
         return name;
     }
@@ -222,25 +229,15 @@ public class Player {
         public String toDatabaseName() {
             return this.name();
         }
-    }
 
-    public enum Type {
-        GRINDER_FORWARD,
-        PLAY_MAKER_FORWARD,
-        POWER_FORWARD,
-        SNIPER_FORWARD,
-        TWO_WAY_FORWARD,
-        DEFENSIVE_DEFENDER,
-        POWER_DEFENDER,
-        OFFENSIVE_DEFENDER,
-        TWO_WAY_DEFENDER;
-
-        public static Type fromDatabaseName(String value) {
-            return Enum.valueOf(Type.class, value);
+        public boolean isAttacker() {
+            ArrayList<Position> attackerPositions = new ArrayList<>(Arrays.asList(Position.LW, Position.C, Position.RW));
+            return attackerPositions.contains(this);
         }
 
-        public String toDatabaseName() {
-            return this.name();
+        public boolean isDefender() {
+            ArrayList<Position> defenderPositions = new ArrayList<>(Arrays.asList(Position.LD, Position.RD));
+            return defenderPositions.contains(this);
         }
     }
 
@@ -275,34 +272,5 @@ public class Player {
         public String toDatabaseName() {
             return this.name();
         }
-    }
-
-    public static Map<Position, ArrayList<Position>> getClosestPositions() {
-        Map<Position, ArrayList<Position>> closestPositions = new HashMap<>();
-        ArrayList<Position> positions = new ArrayList<>();
-        positions.add(Position.C);
-        positions.add(Position.LD);
-        closestPositions.put(Position.LW, positions);
-        positions = new ArrayList<>();
-        positions.add(Position.LW);
-        positions.add(Position.RW);
-        positions.add(Position.RD);
-        positions.add(Position.LD);
-        closestPositions.put(Position.C, positions);
-        positions = new ArrayList<>();
-        positions.add(Position.RD);
-        positions.add(Position.C);
-        closestPositions.put(Position.RW, positions);
-        positions = new ArrayList<>();
-        positions.add(Position.LW);
-        positions.add(Position.C);
-        positions.add(Position.RD);
-        closestPositions.put(Position.LD, positions);
-        positions = new ArrayList<>();
-        positions.add(Position.RW);
-        positions.add(Position.C);
-        positions.add(Position.LD);
-        closestPositions.put(Position.RD, positions);
-        return closestPositions;
     }
 }

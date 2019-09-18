@@ -6,7 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.objects.Goal;
@@ -16,15 +17,18 @@ import com.ardeapps.floorballmanager.viewObjects.DataView;
 import com.ardeapps.floorballmanager.viewObjects.GoalDetailsFragmentData;
 import com.ardeapps.floorballmanager.views.TimePicker;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class GoalDetailsFragment extends Fragment implements DataView {
 
     public Listener mListener = null;
-    RadioButton fullRadioButton;
-    RadioButton yvRadioButton;
-    RadioButton avRadioButton;
-    RadioButton rlRadioButton;
     TimePicker timePicker;
+    Spinner gameModeSpinner;
     private GoalDetailsFragmentData data;
+    private ArrayList<Goal.Mode> gameModes;
+    private int gameModeSpinnerPosition;
 
     public void setListener(Listener l) {
         mListener = l;
@@ -33,15 +37,7 @@ public class GoalDetailsFragment extends Fragment implements DataView {
     @Override
     public GoalDetailsFragmentData getData() {
         data.setTime(timePicker.getTimeInMillis());
-        Goal.Mode gameMode = Goal.Mode.FULL;
-        if (yvRadioButton.isChecked()) {
-            gameMode = Goal.Mode.YV;
-        } else if (avRadioButton.isChecked()) {
-            gameMode = Goal.Mode.AV;
-        } else if (rlRadioButton.isChecked()) {
-            gameMode = Goal.Mode.RL;
-        }
-        data.setGameMode(gameMode);
+        data.setGameMode(gameModes.get(gameModeSpinnerPosition));
         return data;
     }
 
@@ -54,44 +50,44 @@ public class GoalDetailsFragment extends Fragment implements DataView {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_goal_details, container, false);
-        fullRadioButton = v.findViewById(R.id.fullRadioButton);
-        yvRadioButton = v.findViewById(R.id.yvRadioButton);
-        avRadioButton = v.findViewById(R.id.avRadioButton);
-        rlRadioButton = v.findViewById(R.id.rlRadioButton);
         timePicker = v.findViewById(R.id.timePicker);
+        gameModeSpinner = v.findViewById(R.id.gameModeSpinner);
 
         timePicker.setTimeInMillis(data.getTime());
 
-        if (data.getGameMode() == Goal.Mode.FULL) {
-            Helper.setRadioButtonChecked(fullRadioButton, true);
-        } else if (data.getGameMode() == Goal.Mode.YV) {
-            Helper.setRadioButtonChecked(yvRadioButton, true);
-        } else if (data.getGameMode() == Goal.Mode.AV) {
-            Helper.setRadioButtonChecked(avRadioButton, true);
-        } else if (data.getGameMode() == Goal.Mode.RL) {
-            Helper.setRadioButtonChecked(rlRadioButton, true);
+        Map<Goal.Mode, String> gameModeMap = new TreeMap<>();
+        gameModeMap.put(Goal.Mode.FULL, getString(R.string.add_event_full));
+        gameModeMap.put(Goal.Mode.AV, getString(R.string.add_event_av));
+        gameModeMap.put(Goal.Mode.YV, getString(R.string.add_event_yv));
+        gameModeMap.put(Goal.Mode.SR, getString(R.string.add_event_sr));
+        gameModeMap.put(Goal.Mode.IM, getString(R.string.add_event_im));
+        gameModeMap.put(Goal.Mode.TM, getString(R.string.add_event_tm));
+        gameModeMap.put(Goal.Mode.OM, getString(R.string.add_event_om));
+        gameModeMap.put(Goal.Mode.RL, getString(R.string.add_event_rl));
+        ArrayList<String> gameModeTitles = new ArrayList<>(gameModeMap.values());
+        gameModes = new ArrayList<>(gameModeMap.keySet());
+        Helper.setSpinnerAdapter(gameModeSpinner, gameModeTitles);
+        if (data.getGameMode() != null) {
+            gameModeSpinnerPosition = gameModes.indexOf(data.getGameMode());
+            Helper.setSpinnerSelection(gameModeSpinner, gameModeSpinnerPosition);
+        } else {
+            gameModeSpinnerPosition = 0;
+            Helper.setSpinnerSelection(gameModeSpinner, 0);
         }
 
-        fullRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mListener.onFullRadioButtonChecked();
+        gameModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                gameModeSpinnerPosition = position;
+                Goal.Mode gameMode = gameModes.get(position);
+                mListener.onGameModeChanged(gameMode);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        yvRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mListener.onYvRadioButtonChecked();
-            }
-        });
-        avRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mListener.onAvRadioButtonChecked();
-            }
-        });
-        rlRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mListener.onRlRadioButtonChecked();
-            }
-        });
+
         return v;
     }
 
@@ -101,7 +97,7 @@ public class GoalDetailsFragment extends Fragment implements DataView {
             return false;
         }
 
-        if (!fullRadioButton.isChecked() && !yvRadioButton.isChecked() && !avRadioButton.isChecked() && !rlRadioButton.isChecked()) {
+        if (gameModeSpinnerPosition < 0) {
             Logger.toast(R.string.add_event_error_mode);
             return false;
         }
@@ -110,12 +106,6 @@ public class GoalDetailsFragment extends Fragment implements DataView {
     }
 
     public interface Listener {
-        void onFullRadioButtonChecked();
-
-        void onAvRadioButtonChecked();
-
-        void onYvRadioButtonChecked();
-
-        void onRlRadioButtonChecked();
+        void onGameModeChanged(Goal.Mode gameMode);
     }
 }

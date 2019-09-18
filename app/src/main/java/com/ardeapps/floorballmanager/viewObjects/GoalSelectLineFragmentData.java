@@ -11,6 +11,7 @@ public class GoalSelectLineFragmentData {
 
     private Map<Integer, Line> lines;
     private int maxSelectPlayers;
+    private int minSelectPlayers;
     private List<String> selectedPlayerIds;
     private List<String> disabledPlayerIds;
 
@@ -34,6 +35,14 @@ public class GoalSelectLineFragmentData {
 
     public void setMaxSelectPlayers(int maxSelectPlayers) {
         this.maxSelectPlayers = maxSelectPlayers;
+    }
+
+    public int getMinSelectPlayers() {
+        return minSelectPlayers;
+    }
+
+    public void setMinSelectPlayers(int minSelectPlayers) {
+        this.minSelectPlayers = minSelectPlayers;
     }
 
     public List<String> getSelectedPlayerIds() {
