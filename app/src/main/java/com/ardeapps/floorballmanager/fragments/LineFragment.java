@@ -219,7 +219,6 @@ public class LineFragment extends Fragment implements DataView {
         nameText.setText(getString(R.string.select));
 
         Line line = data.getLine();
-        Logger.log("SET line " + line);
         if (line != null) {
             String playerId = line.getPlayerIdMap().get(pos);
             if (playerId != null) {

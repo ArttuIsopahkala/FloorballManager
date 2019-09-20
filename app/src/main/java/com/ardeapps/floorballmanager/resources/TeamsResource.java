@@ -98,7 +98,6 @@ public class TeamsResource extends FirebaseDatabaseService {
     private void getTeamsData(final List<String> teamIds, final GetTeamsHandler handler) {
         final Map<String, Team> teams = new HashMap<>();
         for (final String teamId : teamIds) {
-            Logger.log("TEAM " + teamId);
             getData(database.child(teamId), snapshot -> {
                 final Team team = snapshot.getValue(Team.class);
                 if (team != null) {

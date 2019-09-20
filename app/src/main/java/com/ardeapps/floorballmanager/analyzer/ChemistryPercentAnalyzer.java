@@ -5,7 +5,6 @@ import android.util.Pair;
 import com.ardeapps.floorballmanager.objects.Connection;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
-import com.ardeapps.floorballmanager.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -128,8 +127,8 @@ class ChemistryPercentAnalyzer {
             pointLimits.minPoints = minConnectionPoints != null ? minConnectionPoints : 0;
             pointLimits.maxPoints = maxConnectionPoints;
             connectionPointLimits.put(connection, pointLimits);
-            Logger.log("MAX CONNECTION " + connection.name() + ": " + maxConnectionPlayers.connectionPoints + " "
-                    + maxConnectionPlayers.position1 + " " + maxConnectionPlayers.player1.getName() + " - " + maxConnectionPlayers.position2 + " " + maxConnectionPlayers.player2.getName());
+            /*Logger.log("MAX CONNECTION " + connection.name() + ": " + maxConnectionPlayers.connectionPoints + " "
+                    + maxConnectionPlayers.position1 + " " + maxConnectionPlayers.player1.getName() + " - " + maxConnectionPlayers.position2 + " " + maxConnectionPlayers.player2.getName());*/
         }
     }
 

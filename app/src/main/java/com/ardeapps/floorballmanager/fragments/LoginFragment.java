@@ -3,6 +3,8 @@ package com.ardeapps.floorballmanager.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.PrefRes;
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballmanager.objects.User;
 import com.ardeapps.floorballmanager.resources.UsersResource;
@@ -96,27 +99,31 @@ public class LoginFragment extends Fragment {
         if (type == LoginType.LOGIN) {
             loginButton.setText(getString(R.string.login_login));
             infoText.setText(getString(R.string.login_login_info));
-            changeLoginTypeText.setText(getString(R.string.login_new_user));
-            forgotPasswordText.setText(getString(R.string.login_forgot_password));
+            changeLoginTypeText.setText(underline(R.string.login_new_user));
+            forgotPasswordText.setText(underline(R.string.login_forgot_password));
             forgotPasswordText.setVisibility(View.VISIBLE);
             changeLoginTypeText.setVisibility(View.VISIBLE);
             passwordContent.setVisibility(View.VISIBLE);
         } else if (type == LoginType.REGISTER) {
             loginButton.setText(getString(R.string.login_register));
             infoText.setText(getString(R.string.login_register_info));
-            changeLoginTypeText.setText(getString(R.string.login_old_user));
-            forgotPasswordText.setText(getString(R.string.login_forgot_password));
+            changeLoginTypeText.setText(underline(R.string.login_old_user));
+            forgotPasswordText.setText(underline(R.string.login_forgot_password));
             forgotPasswordText.setVisibility(View.GONE);
             changeLoginTypeText.setVisibility(View.VISIBLE);
             passwordContent.setVisibility(View.VISIBLE);
         } else if (type == LoginType.FORGOT_PASSWORD) {
             loginButton.setText(getString(R.string.login_continue));
             infoText.setText(getString(R.string.login_forgot_password_info));
-            forgotPasswordText.setText(getString(R.string.login_back));
+            forgotPasswordText.setText(underline(R.string.login_back));
             forgotPasswordText.setVisibility(View.VISIBLE);
             changeLoginTypeText.setVisibility(View.GONE);
             passwordContent.setVisibility(View.GONE);
         }
+    }
+
+    private Spanned underline(int resource) {
+        return Html.fromHtml("<u>" + getString(resource) + "</u>");
     }
 
     private void resetPassword() {
@@ -159,16 +166,43 @@ public class LoginFragment extends Fragment {
 
         if (type == LoginType.REGISTER) {
             FirebaseAuthService.getInstance().registerByEmailPassword(email, password, userId -> {
-                long now = System.currentTimeMillis();
-                final User user = new User();
-                user.setUserId(userId);
-                user.setEmail(email);
-                user.setCreationTime(now);
-                user.setLastLoginTime(now);
-                UsersResource.getInstance().editUser(user, () -> mListener.onLogIn(user.getUserId()));
+                FirebaseAuthService.getInstance().sendEmailVerification(() -> {
+                    InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.login_verification_sent));
+                    dialog.show(getChildFragmentManager(), "Vahvistusähköposti lähetetty.");
+                });
+                setView(LoginType.LOGIN);
             });
         } else {
-            FirebaseAuthService.getInstance().logInByEmailPassword(email, password, userId -> mListener.onLogIn(userId));
+            FirebaseAuthService.getInstance().logInByEmailPassword(email, password, new FirebaseAuthService.EmailPasswordLoginHandler() {
+                @Override
+                public void onEmailPasswordLoginSuccess(String userId) {
+                    UsersResource.getInstance().getUser(userId, oldUser -> {
+                        if(oldUser == null) {
+                            long now = System.currentTimeMillis();
+                            final User user = new User();
+                            user.setUserId(userId);
+                            user.setEmail(email);
+                            user.setCreationTime(now);
+                            user.setLastLoginTime(now);
+                            UsersResource.getInstance().editUser(user, () -> mListener.onLogIn(user.getUserId()));
+                        } else {
+                            mListener.onLogIn(userId);
+                        }
+                    });
+                }
+
+                @Override
+                public void onEmailNotVerified() {
+                    ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.login_email_not_verified));
+                    dialogFragment.show(getChildFragmentManager(), "Lähetetäänkö vahvistussähköposti uudelleen?");
+                    dialogFragment.setListener(() -> {
+                        FirebaseAuthService.getInstance().sendEmailVerification(() -> {
+                            InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.login_verification_sent));
+                            dialog.show(getChildFragmentManager(), "Vahvistusähköposti lähetetty.");
+                        });
+                    });
+                }
+            });
         }
     }
 

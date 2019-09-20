@@ -43,6 +43,13 @@ public class FirebaseAuthService {
         Logger.toast(R.string.error_profile);
     }
 
+    private static void onEmailNotSentError() {
+        if (Loader.isVisible()) {
+            Loader.hide();
+        }
+        Logger.toast(R.string.error_email_not_sent);
+    }
+
     private static void onAuthenticationError() {
         if (Loader.isVisible()) {
             Loader.hide();
@@ -57,13 +64,38 @@ public class FirebaseAuthService {
     }
 
     public void sendPasswordResetEmail(final String email, final ResetPasswordHandler handler) {
-        FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnSuccessListener(aVoid -> handler.onEmailSentSuccess()).addOnFailureListener(e -> {
-            if (e instanceof FirebaseAuthInvalidUserException) {
-                Logger.toast(AppRes.getContext().getString(R.string.login_error_user_not_found));
-            } else {
-                onUserNotFoundError();
-            }
-        });
+        logAction();
+        if (isNetworkAvailable()) {
+            Loader.show();
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnSuccessListener(aVoid -> {
+                Loader.hide();
+                handler.onResetPasswordEmailSent();
+            }).addOnFailureListener(e -> {
+                Loader.hide();
+                if (e instanceof FirebaseAuthInvalidUserException) {
+                    Logger.toast(AppRes.getContext().getString(R.string.login_error_user_not_found));
+                } else {
+                    onEmailNotSentError();
+                }
+            });
+        } else onNetworkError();
+    }
+
+    public void sendEmailVerification(final EmailVerificationHandler handler) {
+        logAction();
+        if (isNetworkAvailable()) {
+            Loader.show();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if(user != null) {
+                user.sendEmailVerification().addOnSuccessListener(aVoid -> {
+                    Loader.hide();
+                    handler.onEmailVerificationSent();
+                }).addOnFailureListener(e -> {
+                    Loader.hide();
+                    onEmailNotSentError();
+                });
+            } else onAuthenticationError();
+        } else onNetworkError();
     }
 
     /**
@@ -78,10 +110,13 @@ public class FirebaseAuthService {
                 Loader.hide();
                 final FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
-                    Logger.log("Tunnistautuminen Sähköposti/Salasanalla. userId: " + user.getUid());
                     // Save credentials
                     PrefRes.putString(EMAIL, email);
-                    handler.onEmailPasswordLoginSuccess(user.getUid());
+                    if(user.isEmailVerified()) {
+                        handler.onEmailPasswordLoginSuccess(user.getUid());
+                    } else {
+                        handler.onEmailNotVerified();
+                    }
                 } else {
                     onAuthenticationError();
                 }
@@ -98,7 +133,7 @@ public class FirebaseAuthService {
         } else onNetworkError();
     }
 
-    public void registerByEmailPassword(final String email, final String password, final EmailPasswordLoginHandler handler) {
+    public void registerByEmailPassword(final String email, final String password, final EmailPasswordRegisterHandler handler) {
         logAction();
         if (isNetworkAvailable()) {
             Loader.show();
@@ -107,10 +142,9 @@ public class FirebaseAuthService {
                 Loader.hide();
                 final FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
-                    Logger.log("Tunnistautuminen Sähköposti/Salasanalla. userId: " + user.getUid());
                     // Save credentials
                     PrefRes.putString(EMAIL, email);
-                    handler.onEmailPasswordLoginSuccess(user.getUid());
+                    handler.onEmailPasswordRegisterSuccess(user.getUid());
                 } else {
                     onAuthenticationError();
                 }
@@ -129,11 +163,20 @@ public class FirebaseAuthService {
         } else onNetworkError();
     }
 
+    public interface EmailPasswordRegisterHandler {
+        void onEmailPasswordRegisterSuccess(String userId);
+    }
+
     public interface EmailPasswordLoginHandler {
         void onEmailPasswordLoginSuccess(String userId);
+        void onEmailNotVerified();
     }
 
     public interface ResetPasswordHandler {
-        void onEmailSentSuccess();
+        void onResetPasswordEmailSent();
+    }
+
+    public interface EmailVerificationHandler {
+        void onEmailVerificationSent();
     }
 }

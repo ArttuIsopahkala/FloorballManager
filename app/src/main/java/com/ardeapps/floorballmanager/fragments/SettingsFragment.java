@@ -20,7 +20,6 @@ import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballmanager.objects.AppData;
 import com.ardeapps.floorballmanager.services.AppInviteService;
 import com.ardeapps.floorballmanager.services.FirebaseAuthService;
-import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsFragment extends Fragment {
@@ -67,7 +66,7 @@ public class SettingsFragment extends Fragment {
 
         logOutButton.setOnClickListener(v14 -> {
             FirebaseAuth.getInstance().signOut();
-            FragmentListeners.getInstance().getFragmentChangeListener().goToLoginFragment();
+            AppRes.getActivity().finish();
         });
 
         rateText.setOnClickListener(v13 -> openUrl(getString(R.string.google_play_app_url)));

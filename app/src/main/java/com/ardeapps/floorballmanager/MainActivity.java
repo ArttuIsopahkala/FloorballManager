@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         setListeners();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
+        if (user != null && user.isEmailVerified()) {
             onUserLoggedIn(user.getUid());
         } else {
             FragmentListeners.getInstance().getFragmentChangeListener().goToLoginFragment();

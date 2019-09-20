@@ -48,6 +48,7 @@
     <string name="season">Tunniste</string>
     <string name="nothing">Ei mikään</string>
     <string name="overtime">Jatkoaika</string>
+    <string name="send">Lähetä</string>
 
     <string name="remove_player">Poista pelaaja</string>
     <string name="remove_game">Poista ottelu</string>
@@ -112,6 +113,8 @@
     <string name="login_forgot_password">Unohditko salasanasi?</string>
     <string name="login_forgot_password_info">Lähetämme sähköpostiisi linkin salasanan vaihtamiseen.</string>
     <string name="login_forgot_password_sent">Tarkista sähköpostisi. Lähetimme ohjeet salasanan vaihtoon.</string>
+    <string name="login_verification_sent">Lähetimme sähköpostiisi linkin, jolla tili täytyy vahvistaa. Voit kirjautua sisään vahvistamisen jälkeen.</string>
+    <string name="login_email_not_verified">Sähköpostia ei ole vahvistettu. Haluatko lähettää vahvistusviestin sähköpostiisi?</string>
 
     <string name="main_selection_desc">Lisää tai valitse joukkue, jota haluat seurata.</string>
     <string name="main_selection_add_team">Lisää joukkue</string>
@@ -318,6 +321,7 @@
     <string name="error_database">Ei yhteyttä tietokantaan!</string>
     <string name="error_data_not_found">Dataa ei löytynyt!</string>
     <string name="error_profile">Profiilia ei löydetty!</string>
+    <string name="error_email_not_sent">Sähköpostia ei voitu lähettää!</string>
     <string name="error_authentication">Virhe tunnistautumisessa!</string>
     <string name="error_service_action">Tapahtui virhe! Toimintaa ei suoritettu!</string>
 
