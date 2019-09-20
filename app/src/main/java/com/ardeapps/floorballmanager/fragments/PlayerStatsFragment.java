@@ -150,18 +150,22 @@ public class PlayerStatsFragment extends Fragment implements DataView {
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-        if (role == UserConnection.Role.PLAYER) {
-            // Allow player edit own info
-            String selectedPlayerId = AppRes.getInstance().getSelectedPlayerId();
-            if (player.getPlayerId().equals(selectedPlayerId)) {
-                editIcon.setVisibility(View.VISIBLE);
+        if (role == UserConnection.Role.ADMIN) {
+            editIcon.setVisibility(View.VISIBLE);
+            strengthsContainer.setVisibility(View.VISIBLE);
+        } else {
+            strengthsContainer.setVisibility(View.GONE);
+            if (role == UserConnection.Role.PLAYER) {
+                // Allow player edit own info
+                String selectedPlayerId = AppRes.getInstance().getSelectedPlayerId();
+                if (player.getPlayerId().equals(selectedPlayerId)) {
+                    editIcon.setVisibility(View.VISIBLE);
+                } else {
+                    editIcon.setVisibility(View.GONE);
+                }
             } else {
                 editIcon.setVisibility(View.GONE);
             }
-            strengthsContainer.setVisibility(View.GONE);
-        } else {
-            editIcon.setVisibility(View.VISIBLE);
-            strengthsContainer.setVisibility(View.VISIBLE);
         }
 
         setSeasonSpinner();
@@ -275,7 +279,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         });
 
         editIcon.setOnClickListener(v1 -> {
-            final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
+            final ActionMenuDialogFragment dialog = ActionMenuDialogFragment.newInstance(null, getString(R.string.remove_player));
             dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
             dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
                 @Override

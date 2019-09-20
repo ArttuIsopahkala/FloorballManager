@@ -73,6 +73,8 @@ public class TeamSettingsFragment extends Fragment {
                 }
             } else if (role1 == UserConnection.Role.ADMIN) {
                 return -1;
+            } else if (role1 == UserConnection.Role.PLAYER) {
+                return -1;
             } else {
                 return 1;
             }
@@ -93,7 +95,13 @@ public class TeamSettingsFragment extends Fragment {
 
             String roleText;
             UserConnection.Role role = UserConnection.Role.fromDatabaseName(userConnection.getRole());
-            roleText = getString(role == UserConnection.Role.PLAYER ? R.string.player : (isFounder ? R.string.founder : R.string.admin));
+            if (role == UserConnection.Role.ADMIN) {
+                roleText = getString(isFounder ? R.string.founder : R.string.admin);
+            } else if (role == UserConnection.Role.PLAYER) {
+                roleText = getString(R.string.player);
+            } else {
+                roleText = getString(R.string.guest);
+            }
             holder.roleText.setText(roleText);
 
             final UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnection.getStatus());
@@ -156,7 +164,9 @@ public class TeamSettingsFragment extends Fragment {
         removeTeamButton = v.findViewById(R.id.removeTeamButton);
         inactivePlayersButton = v.findViewById(R.id.inactivePlayersButton);
 
-        removeTeamButton.setVisibility(AppRes.getInstance().getUser().isAdmin() ? View.VISIBLE : View.GONE);
+        String founder = AppRes.getInstance().getSelectedTeam().getFounder();
+        boolean isFounder = founder.equals(AppRes.getInstance().getUser().getUserId());
+        removeTeamButton.setVisibility(isFounder ? View.VISIBLE : View.GONE);
 
         update();
 
@@ -188,27 +198,43 @@ public class TeamSettingsFragment extends Fragment {
     private void deleteAllTeamData() {
         // Delete all team data
         final Team team = AppRes.getInstance().getSelectedTeam();
-        UserConnectionsResource.getInstance().getUserConnections(team.getTeamId(), userConnections -> UserInvitationsResource.getInstance().removeUserInvitations(userConnections.keySet(), () -> UserConnectionsResource.getInstance().removeUserConnections(team.getTeamId(), () -> LinesResource.getInstance().removeAllLines(() -> GameLinesResource.getInstance().removeAllLines(() -> GoalsResource.getInstance().removeAllGoals(() -> GamesResource.getInstance().removeAllGames(() -> TeamsResource.getInstance().removeTeam(team, () -> SeasonsResource.getInstance().removeAllSeasons(() -> {
-            User user = AppRes.getInstance().getUser();
-            user.getTeamIds().remove(team.getTeamId());
-            UsersResource.getInstance().editUser(user, () -> {
-                AppRes.getInstance().setSeasons(null);
-                AppRes.getInstance().setUserConnections(null);
-                AppRes.getInstance().setLines(null);
-                AppRes.getInstance().setLinesByGame(null);
-                AppRes.getInstance().setGoalsByGame(null);
-                AppRes.getInstance().setGames(null);
-                AppRes.getInstance().setTeam(team.getTeamId(), null);
-                AppRes.getInstance().setSelectedTeam(null);
+        UserConnectionsResource.getInstance().getUserConnections(team.getTeamId(), userConnections ->
+                UserInvitationsResource.getInstance().removeUserInvitations(userConnections.keySet(), () ->
+                        UserConnectionsResource.getInstance().removeUserConnections(team.getTeamId(), () ->
+                                LinesResource.getInstance().removeAllLines(() ->
+                                        GameLinesResource.getInstance().removeAllLines(() ->
+                                                GoalsResource.getInstance().removeAllGoals(() ->
+                                                        GamesResource.getInstance().removeAllGames(() ->
+                                                                TeamsResource.getInstance().removeTeam(team, () ->
+                                                                        SeasonsResource.getInstance().removeAllSeasons(() -> {
+                                                                            User user = AppRes.getInstance().getUser();
+                                                                            user.getTeamIds().remove(team.getTeamId());
+                                                                            UsersResource.getInstance().editUser(user, () -> {
+                                                                                AppRes.getInstance().setSeasons(null);
+                                                                                AppRes.getInstance().setUserConnections(null);
+                                                                                AppRes.getInstance().setLines(null);
+                                                                                AppRes.getInstance().setLinesByGame(null);
+                                                                                AppRes.getInstance().setGoalsByGame(null);
+                                                                                AppRes.getInstance().setGames(null);
+                                                                                AppRes.getInstance().setTeam(team.getTeamId(), null);
+                                                                                AppRes.getInstance().setSelectedTeam(null);
 
-                // Reset common user data
-                for (String userConnectionId : userConnections.keySet()) {
-                    AppRes.getInstance().setUserInvitation(userConnectionId, null);
-                }
-                Logger.toast(R.string.team_settings_remove_team_successful);
-                AppRes.getActivity().finish();
-            });
-        })))))))));
+                                                                                // Reset common user data
+                                                                                for (String userConnectionId : userConnections.keySet()) {
+                                                                                    AppRes.getInstance().setUserInvitation(userConnectionId, null);
+                                                                                }
+                                                                                Logger.toast(R.string.team_settings_remove_team_successful);
+                                                                                AppRes.getActivity().finish();
+                                                                            });
+                                                                        })
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
     }
 
     private class UserConnectionHolder {

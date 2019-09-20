@@ -5,28 +5,34 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.objects.UserConnection;
 
 public class ActionMenuDialogFragment extends DialogFragment {
 
-    String editText;
+    String editString;
+    String removeString;
     GoalMenuDialogCloseListener mListener = null;
     Button editButton;
-    Button removeButton;
     Button cancelButton;
+    TextView removeText;
 
-    public static ActionMenuDialogFragment newInstance(String editText) {
+    public static ActionMenuDialogFragment newInstance(String editText, String removeText) {
         ActionMenuDialogFragment f = new ActionMenuDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putString("editText", editText);
+        args.putString("editString", editText);
+        args.putString("removeString", removeText);
         f.setArguments(args);
 
         return f;
@@ -36,9 +42,11 @@ public class ActionMenuDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() == null) {
-            editText = getString(R.string.edit);
+            editString = getString(R.string.edit);
+            removeString = getString(R.string.remove);
         } else {
-            editText = getArguments().getString("editText", getString(R.string.edit));
+            editString = getArguments().getString("editString", getString(R.string.edit));
+            removeString = getArguments().getString("removeString", getString(R.string.remove));
         }
     }
 
@@ -54,14 +62,23 @@ public class ActionMenuDialogFragment extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         editButton = v.findViewById(R.id.editButton);
-        removeButton = v.findViewById(R.id.removeButton);
         cancelButton = v.findViewById(R.id.cancelButton);
+        removeText = v.findViewById(R.id.removeText);
 
-        editButton.setText(editText);
+        // Role specific content
+        UserConnection.Role role = AppRes.getInstance().getSelectedRole();
+        if (role == UserConnection.Role.ADMIN) {
+            removeText.setVisibility(View.VISIBLE);
+        } else {
+            removeText.setVisibility(View.GONE);
+        }
+
+        editButton.setText(editString);
+        removeText.setText(Html.fromHtml("<u>" + removeString + "</u>"));
 
         editButton.setOnClickListener(v13 -> mListener.onEditItem());
 
-        removeButton.setOnClickListener(v12 -> mListener.onRemoveItem());
+        removeText.setOnClickListener(v12 -> mListener.onRemoveItem());
 
         cancelButton.setOnClickListener(v1 -> mListener.onCancel());
 

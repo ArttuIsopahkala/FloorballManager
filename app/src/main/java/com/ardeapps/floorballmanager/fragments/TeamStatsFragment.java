@@ -158,10 +158,10 @@ public class TeamStatsFragment extends Fragment {
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-        if (role == UserConnection.Role.PLAYER) {
-            editIcon.setVisibility(View.GONE);
-        } else {
+        if (role == UserConnection.Role.ADMIN) {
             editIcon.setVisibility(View.VISIBLE);
+        } else {
+            editIcon.setVisibility(View.GONE);
         }
 
         setSeasonSpinner();

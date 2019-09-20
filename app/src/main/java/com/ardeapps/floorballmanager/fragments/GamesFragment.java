@@ -67,12 +67,12 @@ public class GamesFragment extends Fragment implements GameListAdapter.Listener 
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-        if (role == UserConnection.Role.PLAYER) {
-            addSeasonIcon.setVisibility(View.GONE);
-            newGameButton.setVisibility(View.GONE);
-        } else {
+        if (role == UserConnection.Role.ADMIN) {
             addSeasonIcon.setVisibility(View.VISIBLE);
             newGameButton.setVisibility(View.VISIBLE);
+        } else {
+            addSeasonIcon.setVisibility(View.GONE);
+            newGameButton.setVisibility(View.GONE);
         }
 
         setSeasonSpinner();

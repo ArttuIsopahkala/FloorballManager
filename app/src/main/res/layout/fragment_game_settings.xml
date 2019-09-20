@@ -62,6 +62,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/changeIcon"
                 android:text="O2 miehet 2"
+                android:gravity="center"
                 android:textColor="@color/color_text_light"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -193,7 +194,9 @@
                 android:layout_margin="20dp"
                 android:background="@drawable/button_background"
                 android:text="@string/save"
-                android:textColor="@color/color_text_light" />
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

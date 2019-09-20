@@ -6,6 +6,7 @@ import com.ardeapps.floorballmanager.handlers.GetTeamHandler;
 import com.ardeapps.floorballmanager.handlers.GetTeamsHandler;
 import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
+import com.ardeapps.floorballmanager.utils.Logger;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class TeamsResource extends FirebaseDatabaseService {
     private void getTeamsData(final List<String> teamIds, final GetTeamsHandler handler) {
         final Map<String, Team> teams = new HashMap<>();
         for (final String teamId : teamIds) {
+            Logger.log("TEAM " + teamId);
             getData(database.child(teamId), snapshot -> {
                 final Team team = snapshot.getValue(Team.class);
                 if (team != null) {

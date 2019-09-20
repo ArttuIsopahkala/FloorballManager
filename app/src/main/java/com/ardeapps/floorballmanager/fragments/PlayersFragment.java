@@ -52,10 +52,10 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-        if (role == UserConnection.Role.PLAYER) {
-            createPlayerButton.setVisibility(View.GONE);
-        } else {
+        if (role == UserConnection.Role.ADMIN) {
             createPlayerButton.setVisibility(View.VISIBLE);
+        } else {
+            createPlayerButton.setVisibility(View.GONE);
         }
 
         playerList.setEmptyView(noPlayersText);

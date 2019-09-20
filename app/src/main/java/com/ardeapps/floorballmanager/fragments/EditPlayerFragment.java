@@ -117,10 +117,10 @@ public class EditPlayerFragment extends Fragment implements DataView {
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-        if (role == UserConnection.Role.PLAYER) {
-            strengthsContent.setVisibility(View.GONE);
-        } else {
+        if (role == UserConnection.Role.ADMIN) {
             strengthsContent.setVisibility(View.VISIBLE);
+        } else {
+            strengthsContent.setVisibility(View.GONE);
         }
 
         Map<Player.Position, String> positionMap = new TreeMap<>();

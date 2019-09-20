@@ -81,10 +81,12 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
 
                 String roleText;
                 UserConnection.Role role = UserConnection.Role.fromDatabaseName(userInvitation.getRole());
-                if (role == UserConnection.Role.PLAYER) {
+                if (role == UserConnection.Role.ADMIN) {
+                    roleText = getString(R.string.main_selection_user_invitation_admin);
+                } else if (role == UserConnection.Role.PLAYER) {
                     roleText = getString(R.string.main_selection_user_invitation_player);
                 } else {
-                    roleText = getString(R.string.main_selection_user_invitation_admin);
+                    roleText = getString(R.string.main_selection_user_invitation_guest);
                 }
                 holder.roleText.setText(roleText);
                 holder.nameText.setText(userInvitation.getTeam().getName());

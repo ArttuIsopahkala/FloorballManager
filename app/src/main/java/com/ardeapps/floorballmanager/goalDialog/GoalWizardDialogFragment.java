@@ -137,7 +137,10 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         if (fragment instanceof GoalDetailsFragment) {
             infoText.setText(R.string.add_event_details);
         } else if (fragment instanceof GoalSelectLineFragment) {
-            infoText.setText(R.string.add_event_line);
+            String title = getString(R.string.add_event_line)
+                    + System.getProperty("line.separator")
+                    + getString(data.isOpponentGoal() ? R.string.add_event_minus_players : R.string.add_event_plus_players);
+            infoText.setText(title);
         } else if (fragment instanceof GoalPositionFragment) {
             infoText.setText(R.string.add_event_position);
         } else if (!data.isOpponentGoal() && position == scorerFragmentPosition) {

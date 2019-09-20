@@ -43,10 +43,15 @@
     <string name="remove">Poista</string>
     <string name="admin">Admin</string>
     <string name="player">Pelaaja</string>
+    <string name="guest">Vierailija</string>
     <string name="founder">Perustaja</string>
     <string name="season">Tunniste</string>
     <string name="nothing">Ei mikään</string>
     <string name="overtime">Jatkoaika</string>
+
+    <string name="remove_player">Poista pelaaja</string>
+    <string name="remove_game">Poista ottelu</string>
+    <string name="remove_goal">Poista maali</string>
 
     <string name="stats_games">Ottelut</string>
     <string name="stats_points">Pisteet</string>
@@ -73,13 +78,13 @@
     <string name="title_teams">Joukkueet</string>
     <string name="title_add_team">Lisää joukkue</string>
     <string name="title_add_player">Lisää pelaaja</string>
-    <string name="title_edit_team">Muokkaa joukkuetta</string>
-    <string name="title_edit_player">Muokkaa pelaajaa</string>
+    <string name="title_edit_team">Joukkueen tiedot</string>
+    <string name="title_edit_player">Pelaajan tiedot</string>
     <string name="title_manage_players">Joukkueen pelaajat</string>
     <string name="title_settings">Asetukset</string>
     <string name="title_game_settings">Ottelun asetukset</string>
     <string name="title_lines">Kentälliset</string>
-    <string name="title_lines_default">Oletuskentälliset</string>
+    <string name="title_lines_default">Kokoonpano</string>
     <string name="title_game">Ottelu</string>
     <string name="title_games">Pelatut ottelut</string>
     <string name="title_new_game">Uusi ottelu</string>
@@ -87,6 +92,7 @@
     <string name="title_player_stats">Pelaajan tilastot</string>
     <string name="title_team_stats">Joukkueen tilastot</string>
     <string name="title_inactive_players">Poistetut pelaajat</string>
+    <string name="title_edit_user_connection">Jäsenen tiedot</string>
 
     <string name="login_email">Sähköposti</string>
     <string name="login_password">Salasana</string>
@@ -113,6 +119,7 @@
     <string name="main_selection_user_invitation_info">Sinulle on uusia kutsuja!</string>
     <string name="main_selection_user_invitation_admin">Kutsu Adminiksi joukkueeseen:</string>
     <string name="main_selection_user_invitation_player">Kutsu pelaajaksi joukkueeseen:</string>
+    <string name="main_selection_user_invitation_guest">Kutsu vierailijaksi joukkueeseen:</string>
     <string name="main_selection_connection_not_found">Sinulla ei ole enää oikeuksia tähän joukkueeseen. Ota halutessasi yhteyttä joukkueen ylläpitäjään.</string>
 
     <string name="players_no_players">Ei lisättyjä pelaajia.</string>
@@ -127,8 +134,8 @@
     <string name="add_event_assistant">Syöttäjä</string>
     <string name="add_event_position">Laukauksen lähtöpaikka</string>
     <string name="add_event_line">Kentällä olleet pelaajat</string>
-    <string name="add_event_plus_players">Plussapelaajat</string>
-    <string name="add_event_minus_players">Miinuspelaajat</string>
+    <string name="add_event_plus_players">Plussa (+)</string>
+    <string name="add_event_minus_players">Miinus (-)</string>
     <string name="add_event_full">Tasakentät</string>
     <string name="add_event_av">(AV) Alivoima</string>
     <string name="add_event_yv">(YV) Ylivoima</string>
@@ -162,7 +169,7 @@
     <string name="add_player_position">Pelipaikka</string>
     <string name="add_player_shoots_left">LEFT</string>
     <string name="add_player_shoots_right">RIGHT</string>
-    <string name="add_player_remove_confirmation">Haluatko siirtää poistettujen listalle? Pelaajan voi palauttaa tai poistaa lopullisesti joukkueen asetuksista.</string>
+    <string name="add_player_remove_confirmation">Haluatko siirtää pelaajan poistettujen listalle? Pelaajan voi palauttaa tai poistaa lopullisesti joukkueen asetuksista.</string>
 
     <string name="strengths_title">Vahvuudet</string>
     <string name="strengths_desc">Valitse enintään kolme. Vahvuuksia käytetään pelaajakemioiden laskemisessa ja ne näkyvät vain Adminille.</string>
@@ -203,21 +210,23 @@
     <string name="inactive_players_move_player_active">Palauta pelaajalistalle</string>
     <string name="inactive_players_remove_player_confirmation">Haluatko varmasti poistaa tämän pelaajan? Myös kaikki pelaajaan liitetyt tilastot poistetaan. Toimintoa ei voi kumota.</string>
     <string name="inactive_players_no_players">Ei poistettuja pelaajia.</string>
+    <string name="inactive_players_connection_found">Sähköposti %1$s on liitetty tähän pelaajaan. Muuta jäsenen rooli tai poista yhteys ensin.</string>
 
     <string name="add_user_connection_desc">Anna sähköposti, jonka haluat linkittää joukkueeseen. Linkitettävä käyttäjä näkee kutsun joukkueeseen sovelluksen aloitusnäkymässä.</string>
     <string name="add_user_connection_email">Jäsenen sähköposti</string>
     <string name="add_user_connection_role">Rooli</string>
-    <string name="add_user_connection_info_admin">Täysi hallinta joukkueeseen.</string>
-    <string name="add_user_connection_info_player">Näkee tilastot, mutta ei voi muokata joukkueen tietoja.</string>
+    <string name="add_user_connection_info_admin">Täysi hallinta joukkueeseen ja pelaajiin.</string>
+    <string name="add_user_connection_info_player">Näkee tilastot ja voi muokata omia tietojaan. Ei voi muokata joukkueen tietoja.</string>
+    <string name="add_user_connection_info_guest">Näkee tilastot.</string>
     <string name="add_user_connection_player_not_selected">Pelaajaa ei ole valittu.</string>
-    <string name="add_user_connection_email_self">Olet jo Admin ja sinulla on kaikki oikeudet joukkueeseen.</string>
+    <string name="add_user_connection_email_self">Olet jo liitetty joukkueeseen.</string>
     <string name="add_user_connection_email_changed_error">Olemassa olevan liitoksen sähköpostia ei voi vaihtaa. Halutessasi voit poistaa liitoksen ja luoda uuden.</string>
     <string name="add_user_connection_email_already_added">Olet jo lisännyt tämän sähköpostin.</string>
     <string name="add_user_connection_player_not_exists">Sähköpostilla ei löydetty käyttäjää. Haluatko lähettää kutsun joukkueeseen?</string>
     <string name="add_user_connection_invite_again">Tallenna ja lähetä kutsu uudelleen</string>
 
     <string name="lines_no_players">Joukkueessa ei ole pelaajia.</string>
-    <string name="lines_title">Oletuskentällisiä ehdotetaan uuden ottelun luonnissa.</string>
+    <string name="lines_title">Valitut kentälliset näkyvät oletuksena uuden ottelun luonnissa.</string>
     <string name="lines_analyze">Analysoi pelaajakemiat</string>
     <string name="lines_best_lines">Hae parhaat kentälliset</string>
     <string name="lines_saved">Kentälliset tallennettu</string>

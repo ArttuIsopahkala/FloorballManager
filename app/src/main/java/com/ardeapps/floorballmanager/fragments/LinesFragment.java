@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
@@ -29,6 +30,7 @@ public class LinesFragment extends Fragment {
     Button analyzeChemistryButton;
     Button getBestLinesButton;
     Button saveButton;
+    TextView infoText;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -38,13 +40,16 @@ public class LinesFragment extends Fragment {
         analyzeChemistryButton = v.findViewById(R.id.analyzeChemistryButton);
         getBestLinesButton = v.findViewById(R.id.getBestLinesButton);
         saveButton = v.findViewById(R.id.saveButton);
+        infoText = v.findViewById(R.id.infoText);
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-        if (role == UserConnection.Role.PLAYER) {
-            saveButton.setVisibility(View.GONE);
-        } else {
+        if (role == UserConnection.Role.ADMIN) {
             saveButton.setVisibility(View.VISIBLE);
+            infoText.setVisibility(View.VISIBLE);
+        } else {
+            saveButton.setVisibility(View.GONE);
+            infoText.setVisibility(View.GONE);
         }
 
         lineUpSelector.createView(this, true, () -> {

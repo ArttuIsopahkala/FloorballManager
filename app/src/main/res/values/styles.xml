@@ -8,6 +8,7 @@
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
         <item name="android:spinnerItemStyle">@style/mySpinnerText</item>
         <item name="android:radioButtonStyle">@style/myRadioButtonStyle</item>
+        <item name="android:textViewStyle">@style/myTextView</item>
     </style>
 
     <style name="myTextView" parent="@android:style/TextAppearance">
@@ -28,13 +29,13 @@
     </style>
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/color_text_light</item>
-        <item name="android:background">@color/color_background_fourth</item>
+        <item name="android:background">@color/color_background_third</item>
+    </style>
+    <style name="mySpinnerText" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/color_text_light</item>
     </style>
     <style name="myRadioButtonStyle" parent="@style/Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:textColor">@color/color_text_light</item>
         <item name="colorAccent">@color/color_text_light</item>
-    </style>
-    <style name="mySpinnerText" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="android:textColor">@color/color_text_light</item>
     </style>
 </resources>

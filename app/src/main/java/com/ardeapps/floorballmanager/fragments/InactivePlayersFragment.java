@@ -14,12 +14,15 @@ import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.adapters.PlayerListAdapter;
 import com.ardeapps.floorballmanager.dialogFragments.ActionMenuDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
+import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballmanager.objects.Player;
+import com.ardeapps.floorballmanager.objects.UserConnection;
 import com.ardeapps.floorballmanager.resources.PlayerGamesResource;
 import com.ardeapps.floorballmanager.resources.PlayerStatsResource;
 import com.ardeapps.floorballmanager.resources.PlayersResource;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class InactivePlayersFragment extends Fragment implements PlayerListAdapter.PlayerListSelectListener {
@@ -60,7 +63,7 @@ public class InactivePlayersFragment extends Fragment implements PlayerListAdapt
 
     @Override
     public void onPlayerSelected(final Player player) {
-        final ActionMenuDialogFragment dialog = ActionMenuDialogFragment.newInstance(getString(R.string.inactive_players_move_player_active));
+        final ActionMenuDialogFragment dialog = ActionMenuDialogFragment.newInstance(getString(R.string.inactive_players_move_player_active), getString(R.string.remove_player));
         dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
         dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
             @Override
@@ -77,12 +80,31 @@ public class InactivePlayersFragment extends Fragment implements PlayerListAdapt
             @Override
             public void onRemoveItem() {
                 dialog.dismiss();
+
+                UserConnection foundConnection = null;
+                Map<String, UserConnection> userConnections = AppRes.getInstance().getUserConnections();
+                for(UserConnection userConnection : userConnections.values()) {
+                    if(player.getPlayerId().equals(userConnection.getPlayerId())) {
+                        foundConnection = userConnection;
+                        break;
+                    }
+                }
+                if(foundConnection != null) {
+                    InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.inactive_players_connection_found, foundConnection.getEmail()));
+                    dialog.show(getChildFragmentManager(), "Pelaajaan on liitetty jäsen.");
+                    return;
+                }
+
                 ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.inactive_players_remove_player_confirmation));
                 dialogFragment.show(getChildFragmentManager(), "Poistetaanko pelaaja ja tilastot?");
-                dialogFragment.setListener(() -> PlayerStatsResource.getInstance().removeAllStats(player.getPlayerId(), () -> PlayerGamesResource.getInstance().removeAllGames(player.getPlayerId(), () -> PlayersResource.getInstance().removePlayer(player, () -> {
-                    AppRes.getInstance().setPlayer(player.getPlayerId(), null);
-                    update();
-                }))));
+                dialogFragment.setListener(() -> PlayerStatsResource.getInstance().removeAllStats(player.getPlayerId(),
+                        () -> PlayerGamesResource.getInstance().removeAllGames(player.getPlayerId(),
+                                () -> PlayersResource.getInstance().removePlayer(player, () -> {
+                                    AppRes.getInstance().setPlayer(player.getPlayerId(), null);
+                                    update();
+                                })
+                        )
+                ));
             }
 
             @Override

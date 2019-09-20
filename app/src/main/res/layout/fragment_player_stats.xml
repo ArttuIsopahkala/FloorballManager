@@ -80,6 +80,7 @@
                         android:id="@+id/positionText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="Keskushyökkääjä"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
@@ -104,6 +105,7 @@
                         android:id="@+id/numberText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
@@ -128,6 +130,7 @@
                         android:id="@+id/shootsText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="Vasen"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />

@@ -28,7 +28,7 @@
         <Spinner
             android:id="@+id/seasonSpinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:textColor="@color/color_text_light" />
 
         <com.ardeapps.floorballmanager.views.IconView

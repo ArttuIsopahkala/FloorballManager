@@ -485,9 +485,9 @@ public class MainActivity extends AppCompatActivity {
             backIcon.setVisibility(View.GONE);
             titleText.setText(R.string.title_teams);
         } else if (f instanceof EditTeamFragment) {
-            titleText.setVisibility(View.GONE);
+            titleText.setText(R.string.title_edit_team);
         } else if (f instanceof EditPlayerFragment) {
-            titleText.setVisibility(View.GONE);
+            titleText.setText(R.string.title_edit_player);
         } else if (f instanceof PlayersFragment) {
             titleText.setText(R.string.title_manage_players);
         } else if (f instanceof LinesFragment) {
@@ -505,7 +505,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (f instanceof InactivePlayersFragment) {
             titleText.setText(R.string.title_inactive_players);
         } else if (f instanceof EditUserConnectionFragment) {
-            titleText.setVisibility(View.GONE);
+            titleText.setText(R.string.title_edit_user_connection);
         } else if (f instanceof TeamStatsFragment) {
             titleText.setText(R.string.title_team_stats);
         } else {

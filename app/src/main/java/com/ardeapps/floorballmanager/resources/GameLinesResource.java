@@ -5,6 +5,7 @@ import com.ardeapps.floorballmanager.handlers.GetLinesHandler;
 import com.ardeapps.floorballmanager.handlers.GetTeamLinesHandler;
 import com.ardeapps.floorballmanager.handlers.SaveLinesHandler;
 import com.ardeapps.floorballmanager.objects.Line;
+import com.ardeapps.floorballmanager.objects.Season;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
 import com.ardeapps.floorballmanager.utils.StringUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -21,14 +22,18 @@ import java.util.Map;
 public class GameLinesResource extends FirebaseDatabaseService {
     private static GameLinesResource instance;
     private static DatabaseReference database;
+    private static String seasonId;
 
     public static GameLinesResource getInstance() {
         if (instance == null) {
             instance = new GameLinesResource();
         }
         String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
-        String seasonId = AppRes.getInstance().getSelectedSeason().getSeasonId();
-        database = getDatabase().child(TEAMS_SEASONS_GAMES_LINES).child(teamId).child(seasonId);
+        Season season = AppRes.getInstance().getSelectedSeason();
+        if (season != null) {
+            seasonId = season.getSeasonId();
+        }
+        database = getDatabase().child(TEAMS_SEASONS_GAMES_LINES).child(teamId);
         return instance;
     }
 
@@ -73,20 +78,20 @@ public class GameLinesResource extends FirebaseDatabaseService {
     }
 
     private void addLine(String gameId, Line line, final AddDataSuccessListener handler) {
-        line.setLineId(database.push().getKey());
-        addData(database.child(gameId).child(line.getLineId()), line, handler);
+        line.setLineId(database.child(seasonId).push().getKey());
+        addData(database.child(seasonId).child(gameId).child(line.getLineId()), line, handler);
     }
 
     private void editLine(String gameId, Line line, final EditDataSuccessListener handler) {
-        editData(database.child(gameId).child(line.getLineId()), line, handler);
+        editData(database.child(seasonId).child(gameId).child(line.getLineId()), line, handler);
     }
 
     private void removeLine(String gameId, String lineId, final DeleteDataSuccessListener handler) {
-        deleteData(database.child(gameId).child(lineId), handler);
+        deleteData(database.child(seasonId).child(gameId).child(lineId), handler);
     }
 
     public void removeLines(String gameId, final DeleteDataSuccessListener handler) {
-        deleteData(database.child(gameId), handler);
+        deleteData(database.child(seasonId).child(gameId), handler);
     }
 
     public void removeAllLines(final DeleteDataSuccessListener handler) {
@@ -97,7 +102,7 @@ public class GameLinesResource extends FirebaseDatabaseService {
      * Get lines indexed by gameId
      */
     public void getLines(final GetTeamLinesHandler handler) {
-        getData(database, dataSnapshot -> {
+        getData(database.child(seasonId), dataSnapshot -> {
             final Map<String, ArrayList<Line>> linesMap = new HashMap<>();
             for (DataSnapshot game : dataSnapshot.getChildren()) {
                 String gameId = game.getKey();
@@ -120,7 +125,7 @@ public class GameLinesResource extends FirebaseDatabaseService {
      * Get lines indexed by line number
      */
     public void getLines(String gameId, final GetLinesHandler handler) {
-        getData(database.child(gameId), dataSnapshot -> {
+        getData(database.child(seasonId).child(gameId), dataSnapshot -> {
             Map<Integer, Line> lines = new HashMap<>();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                 Line line = snapshot.getValue(Line.class);

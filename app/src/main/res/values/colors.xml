@@ -7,7 +7,7 @@
     <item name="color_background_text" type="color">#9AC4C3B6</item>
 
     <item name="color_button" type="color">#3E3E3E</item>
-    <item name="color_button_selected" type="color">#3E3E3E</item>
+    <item name="color_button_selected" type="color">#444444</item>
     <item name="color_shadow" type="color">#95242424</item>
 
     <item name="color_menu" type="color">#242425</item>

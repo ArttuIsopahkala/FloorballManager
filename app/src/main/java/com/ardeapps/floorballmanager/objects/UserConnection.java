@@ -73,7 +73,8 @@ public class UserConnection {
 
     public enum Role {
         PLAYER,
-        ADMIN;
+        ADMIN,
+        GUEST;
 
         public static Role fromDatabaseName(String value) {
             return Enum.valueOf(Role.class, value);

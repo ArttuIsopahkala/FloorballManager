@@ -55,14 +55,16 @@ public class TeamDashboardFragment extends Fragment {
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-        if (role == UserConnection.Role.PLAYER) {
-            linesButton.setVisibility(View.GONE);
-            settingsButton.setVisibility(View.GONE);
-            ownStatsButton.setVisibility(View.VISIBLE);
-        } else {
-            linesButton.setVisibility(View.VISIBLE);
+        if (role == UserConnection.Role.ADMIN) {
             settingsButton.setVisibility(View.VISIBLE);
             ownStatsButton.setVisibility(View.GONE);
+        } else {
+            settingsButton.setVisibility(View.GONE);
+            if(role == UserConnection.Role.PLAYER) {
+                ownStatsButton.setVisibility(View.VISIBLE);
+            } else {
+                ownStatsButton.setVisibility(View.GONE);
+            }
         }
 
         ownStatsButton.setOnClickListener(v16 -> {

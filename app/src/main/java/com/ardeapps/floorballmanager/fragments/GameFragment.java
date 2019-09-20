@@ -162,20 +162,20 @@ public class GameFragment extends Fragment implements DataView {
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-        if (role == UserConnection.Role.PLAYER) {
-            settingsIcon.setVisibility(View.GONE);
-            homeGoalButton.setVisibility(View.GONE);
-            awayGoalButton.setVisibility(View.GONE);
-        } else {
+        if (role == UserConnection.Role.ADMIN) {
             settingsIcon.setVisibility(View.VISIBLE);
             homeGoalButton.setVisibility(View.VISIBLE);
             awayGoalButton.setVisibility(View.VISIBLE);
+        } else {
+            settingsIcon.setVisibility(View.GONE);
+            homeGoalButton.setVisibility(View.GONE);
+            awayGoalButton.setVisibility(View.GONE);
         }
 
         update();
 
         settingsIcon.setOnClickListener(v13 -> {
-            final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
+            final ActionMenuDialogFragment dialog = ActionMenuDialogFragment.newInstance(null, getString(R.string.remove_game));
             dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
             dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
                 @Override
@@ -326,16 +326,20 @@ public class GameFragment extends Fragment implements DataView {
             holder.timeText.setText(StringUtils.getMinSecTimeText(goal.getTime()));
             holder.scoreText.setText(homeGoals + " - " + awayGoals);
 
+            if (isHomeGoal) {
+                holder.awayContainer.setVisibility(View.GONE);
+                holder.homeContainer.setVisibility(View.VISIBLE);
+            } else {
+                holder.homeContainer.setVisibility(View.GONE);
+                holder.awayContainer.setVisibility(View.VISIBLE);
+            }
+
             // Role specific content
             UserConnection.Role role = AppRes.getInstance().getSelectedRole();
-            if (role != UserConnection.Role.PLAYER) {
+            if (role == UserConnection.Role.ADMIN) {
                 if (isHomeGoal) {
-                    holder.awayContainer.setVisibility(View.GONE);
-                    holder.homeContainer.setVisibility(View.VISIBLE);
                     setGoalMenuIconListener(holder.homeContainer, goal, true);
                 } else {
-                    holder.homeContainer.setVisibility(View.GONE);
-                    holder.awayContainer.setVisibility(View.VISIBLE);
                     setGoalMenuIconListener(holder.awayContainer, goal, false);
                 }
             }
@@ -346,7 +350,7 @@ public class GameFragment extends Fragment implements DataView {
 
     private void setGoalMenuIconListener(RelativeLayout layout, final Goal goal, final boolean isHomeGoal) {
         layout.setOnClickListener(v -> {
-            final ActionMenuDialogFragment dialog = new ActionMenuDialogFragment();
+            final ActionMenuDialogFragment dialog = ActionMenuDialogFragment.newInstance(null, getString(R.string.remove_goal));
             dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
             dialog.setListener(new ActionMenuDialogFragment.GoalMenuDialogCloseListener() {
                 @Override

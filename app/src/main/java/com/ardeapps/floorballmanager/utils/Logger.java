@@ -31,6 +31,6 @@ public class Logger {
     }
 
     public static void toast(int resourceId) {
-        Toast.makeText(AppRes.getContext(), resourceId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(AppRes.getContext(), resourceId, Toast.LENGTH_LONG).show();
     }
 }

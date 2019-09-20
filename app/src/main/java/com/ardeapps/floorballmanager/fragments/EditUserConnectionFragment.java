@@ -77,6 +77,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
         ArrayList<String> roleTitles = new ArrayList<>();
         roleTitles.add(getString(R.string.admin));
         roleTitles.add(getString(R.string.player));
+        roleTitles.add(getString(R.string.guest));
         Helper.setSpinnerAdapter(roleSpinner, roleTitles);
 
         // Set holder views
@@ -127,6 +128,9 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             if (role == UserConnection.Role.PLAYER) {
                 setSpinnerSelection(roleSpinner, 1);
                 roleInfoText.setText(getString(R.string.add_user_connection_info_player));
+            } else if (role == UserConnection.Role.GUEST) {
+                setSpinnerSelection(roleSpinner, 2);
+                roleInfoText.setText(getString(R.string.add_user_connection_info_guest));
             }
             UserConnection.Status status = UserConnection.Status.fromDatabaseName(oldUserConnection.getStatus());
             if (status == UserConnection.Status.DENY) {
@@ -151,6 +155,9 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
                 } else if (position == 1) {
                     roleInfoText.setText(getString(R.string.add_user_connection_info_player));
                     setPlayerListVisibility(true);
+                } else if (position == 2) {
+                    roleInfoText.setText(getString(R.string.add_user_connection_info_guest));
+                    setPlayerListVisibility(false);
                 }
             }
 
@@ -182,8 +189,14 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
     private void saveUserConnection() {
         final String email = emailText.getText().toString();
         int position = roleSpinner.getSelectedItemPosition();
-        final UserConnection.Role role = position == 0 ? UserConnection.Role.ADMIN : UserConnection.Role.PLAYER;
-
+        UserConnection.Role role;
+        if(position == 0) {
+            role = UserConnection.Role.ADMIN;
+        } else if(position == 1) {
+            role = UserConnection.Role.PLAYER;
+        } else {
+            role = UserConnection.Role.GUEST;
+        }
         if (StringUtils.isEmptyString(email)) {
             Logger.toast(getString(R.string.error_empty));
             return;
@@ -195,7 +208,8 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
         }
 
         if ((role == UserConnection.Role.PLAYER && selectedPlayerId == null)
-                || (role == UserConnection.Role.ADMIN && selectedPlayerId != null)) {
+                || (role == UserConnection.Role.ADMIN && selectedPlayerId != null)
+                || (role == UserConnection.Role.GUEST && selectedPlayerId != null)) {
             Logger.toast(getString(R.string.add_user_connection_player_not_selected));
             return;
         }
