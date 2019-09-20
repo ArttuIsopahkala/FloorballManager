@@ -1,6 +1,7 @@
 package com.ardeapps.floorballmanager;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 
@@ -50,6 +51,14 @@ public class AppRes extends MultiDexApplication {
             instance = (AppRes) getContext();
         }
         return instance;
+    }
+
+    public static boolean isDeveloper() {
+        if (BuildConfig.DEBUG) {
+            String android_id = Settings.Secure.getString(AppRes.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+            return android_id != null && android_id.equals("15c7a9f3626aad4a");
+        }
+        return false;
     }
 
     public static Context getContext() {

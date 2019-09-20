@@ -89,8 +89,9 @@ public class LineFragment extends Fragment implements DataView {
 
             if (showChemistry) {
                 chemistryLinesImageView.setVisibility(View.VISIBLE);
-                // Show numbers only to admin for debug purposes
-                boolean isAdmin = AppRes.getInstance().getUser().isAdmin();
+
+                // Show numbers only to developer for debug purposes
+                boolean isAdmin = AppRes.isDeveloper();
                 c_lw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
                 c_rw_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
                 c_ld_text.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
