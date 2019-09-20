@@ -1,12 +1,25 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            def propsFile = rootProject.file('keystore.properties')
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                keyAlias props['keyAlias']
+                keyPassword props['keyPassword']
+                storeFile file(props['storeFile'])
+                storePassword props['storePassword']
+            }
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.ardeapps.floorballcoach"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 1
+        versionCode 2
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -15,9 +28,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
             aaptOptions {
                 ignoreAssetsPattern '!.json:'
             }
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -33,6 +50,7 @@ dependencies {
     implementation 'com.android.support:support-vector-drawable:28.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.billingclient:billing:2.0.3'
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
