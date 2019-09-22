@@ -83,6 +83,22 @@
                 android:textColor="@color/color_text_light"
                 android:textColorHint="@color/color_text_hint" />
 
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/add_player_position"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/positionSpinner"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/color_text_light" />
+
             <LinearLayout
                 android:id="@+id/shootsContent"
                 android:layout_width="300dp"
@@ -121,22 +137,6 @@
                         android:textColor="@color/color_text_light" />
                 </RadioGroup>
             </LinearLayout>
-
-            <TextView
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/add_player_position"
-                android:textColor="@color/color_text_light"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/positionSpinner"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:layout_marginBottom="20dp"
-                android:textColor="@color/color_text_light" />
 
             <LinearLayout
                 android:id="@+id/strengthsContent"

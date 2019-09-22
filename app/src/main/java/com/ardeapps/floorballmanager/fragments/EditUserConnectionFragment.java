@@ -81,7 +81,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
         Helper.setSpinnerAdapter(roleSpinner, roleTitles);
 
         // Set holder views
-        ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
+        ArrayList<Player> players = AppRes.getInstance().getActivePlayers(true);
         playersList.removeAllViewsInLayout();
         LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
         holders = new HashMap<>();
@@ -172,7 +172,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
 
     public void setPlayerListVisibility(boolean visible) {
         if (visible) {
-            ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
+            ArrayList<Player> players = AppRes.getInstance().getActivePlayers(true);
             if (!players.isEmpty()) {
                 playersList.setVisibility(View.VISIBLE);
                 noPlayersText.setVisibility(View.GONE);

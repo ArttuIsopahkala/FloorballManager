@@ -32,7 +32,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_toEndOf="@+id/logoImage"
-                android:text="O2 Miehet 2"
+                android:text="-"
                 android:textColor="@color/color_text_light"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -91,7 +91,7 @@
                     android:id="@+id/noSeasonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/team_settings_no_seasons"
+                    android:text="@string/season_settings_no_seasons"
                     android:textColor="@color/color_text_light_secondary"
                     android:textSize="16sp"
                     android:textStyle="italic" />
@@ -831,7 +831,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="3 - 13, Riemu"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -857,7 +857,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="1 - 13, MSM"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -883,7 +883,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="3 ottelua"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -909,7 +909,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="5 ottelua"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>

@@ -61,8 +61,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/changeIcon"
-                android:text="O2 miehet 2"
                 android:gravity="center"
+                android:text="-"
                 android:textColor="@color/color_text_light"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -168,9 +168,39 @@
                 android:id="@+id/seasonText"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="@string/team_settings_no_seasons"
+                android:text="@string/season_settings_no_seasons"
                 android:textColor="@color/color_text_light"
                 android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/game_settings_goalie"
+                android:textColor="@color/color_text_light"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+
+            <Spinner
+                android:id="@+id/goalieSpinner"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/color_text_light"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/noGoaliesText"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/game_settings_no_goalies"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="300dp"

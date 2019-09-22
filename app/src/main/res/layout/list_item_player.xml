@@ -44,7 +44,7 @@
             android:id="@+id/nameNumberShootsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Arttu Isopahkala | #11 | R"
+            android:text="-"
             android:textColor="@color/color_text_light"
             android:textSize="16sp"
             android:textStyle="bold" />

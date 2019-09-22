@@ -180,13 +180,16 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         positionText.setText(Player.getPositionText(player.getPosition(), false));
         String numberString = player.getNumber() != null ? String.valueOf(player.getNumber()) : "";
         numberText.setText(numberString);
-        Player.Shoots shoots = Player.Shoots.fromDatabaseName(player.getShoots());
-        String shootsString = getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
+        String shootsString = "-";
+        if(player.getShoots() != null) {
+            Player.Shoots shoots = Player.Shoots.fromDatabaseName(player.getShoots());
+            shootsString = getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
+        }
         shootsText.setText(shootsString);
 
         String result = "";
         List<String> strengths = player.getStrengths();
-        if (!strengths.isEmpty()) {
+        if (strengths != null && !strengths.isEmpty()) {
             Map<Player.Skill, String> strengthTextsMap = Player.getStrengthTextsMap();
             int addedCount = 0;
             for (String strength : strengths) {

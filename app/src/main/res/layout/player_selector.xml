@@ -10,17 +10,17 @@
 
     <include
         android:id="@+id/lineContainer1"
-        layout="@layout/container_line" />
+        layout="@layout/container_line_players" />
 
     <include
         android:id="@+id/lineContainer2"
-        layout="@layout/container_line" />
+        layout="@layout/container_line_players" />
 
     <include
         android:id="@+id/lineContainer3"
-        layout="@layout/container_line" />
+        layout="@layout/container_line_players" />
 
     <include
         android:id="@+id/lineContainer4"
-        layout="@layout/container_line" />
+        layout="@layout/container_line_players" />
 </LinearLayout>

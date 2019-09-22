@@ -37,7 +37,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:layout_toEndOf="@+id/pictureImage"
-                    android:text="Arttu Isopahkala"
+                    android:text="-"
                     android:textColor="@color/color_text_light"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -206,7 +206,7 @@
                     android:id="@+id/noSeasonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/team_settings_no_seasons"
+                    android:text="@string/season_settings_no_seasons"
                     android:textColor="@color/color_text_light_secondary"
                     android:textSize="16sp"
                     android:textStyle="italic" />
@@ -701,7 +701,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="3 + 4"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -727,7 +727,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="2 ottelua"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -753,7 +753,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="5"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -787,7 +787,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Jussi Kemppi, 2 syöttöä"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -813,7 +813,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Mikki Leppä, 5 maalia"
+                        android:text="-"
                         android:textColor="@color/color_text_light"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -842,7 +842,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Sampsa Huoponen: 10 maalia yhdessä"
+                    android:text="-"
                     android:textColor="@color/color_text_light"
                     android:textSize="16sp" />
             </LinearLayout>

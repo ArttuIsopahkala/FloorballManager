@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                         user.getTeamIds().remove(team.getTeamId());
                         AppRes.getInstance().setUser(user);
                         AppRes.getInstance().setTeam(team.getTeamId(), null);
-                        mainSelectionFragment.update();
+                        UsersResource.getInstance().editUser(user, () -> mainSelectionFragment.update());
                         return;
                     }
 

@@ -21,11 +21,13 @@
     <string name="position_rw">Oikea laitahyökkääjä</string>
     <string name="position_ld">Vasen puolustaja</string>
     <string name="position_rd">Oikea puolustaja</string>
+    <string name="position_mv">Maalivahti</string>
     <string name="position_lw_short">VL</string>
     <string name="position_c_short">KH</string>
     <string name="position_rw_short">OL</string>
     <string name="position_ld_short">VP</string>
     <string name="position_rd_short">OP</string>
+    <string name="position_mv_short">MV</string>
     <string name="clear">Tyhjennä</string>
     <string name="period">erä</string>
     <string name="line">kenttä</string>
@@ -159,12 +161,14 @@
 
     <string name="add_team_name_hint">Joukkueen nimi</string>
 
-    <string name="team_settings_season_info">Esim. Kausi %1$s tai Suomen Cup. Voit myöhemmin suodattaa tilastoja nimen perusteella.</string>
-    <string name="team_settings_exists">Tällä nimellä löytyy jo tunniste.</string>
-    <string name="team_settings_no_seasons">Ei lisättyjä tunnisteita.</string>
-    <string name="team_settings_no_lines">Aseta kentälliset.</string>
-    <string name="team_settings_season_not_selected">Tunnistetta ei valittu.</string>
-    <string name="team_settings_season_hint">Tunniste</string>
+    <string name="season_settings_season_info">Esim. Kausi %1$s tai Suomen Cup. Voit myöhemmin suodattaa tilastoja nimen perusteella.</string>
+    <string name="season_settings_exists">Tällä nimellä löytyy jo tunniste.</string>
+    <string name="season_settings_no_seasons">Ei lisättyjä tunnisteita.</string>
+    <string name="season_settings_season_hint">Tunniste</string>
+
+    <string name="game_settings_no_lines">Aseta kentälliset.</string>
+    <string name="game_settings_goalie">Aloittava maalivahti</string>
+    <string name="game_settings_no_goalies">Ei maalivahteja.</string>
 
     <string name="add_player_name">Nimi</string>
     <string name="add_player_number">Pelinumero</string>
@@ -325,7 +329,7 @@
     <string name="error_authentication">Virhe tunnistautumisessa!</string>
     <string name="error_service_action">Tapahtui virhe! Toimintaa ei suoritettu!</string>
 
-    <string name="google_play_app_url">http://play.google.com/store/apps/details?id=com.ardeapps.floorballmanager</string>
+    <string name="google_play_app_url">http://play.google.com/store/apps/details?id=com.ardeapps.floorballcoach</string>
     <string name="google_play_developer_url">http://play.google.com/store/apps/developer?id=Arde+Apps</string>
 
     <string name="icon_light">fa-regular.ttf</string>

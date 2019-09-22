@@ -54,7 +54,7 @@ public class EditSeasonDialogFragment extends DialogFragment {
         Calendar calendar = GregorianCalendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         String hintYears = year + "-" + (year + 1);
-        seasonInfoText.setText(getString(R.string.team_settings_season_info, hintYears));
+        seasonInfoText.setText(getString(R.string.season_settings_season_info, hintYears));
         Helper.setEditTextValue(seasonEditText, "");
 
         if (season != null) {
@@ -76,7 +76,7 @@ public class EditSeasonDialogFragment extends DialogFragment {
 
         for (Season season : AppRes.getInstance().getSeasons().values()) {
             if (season.getName().equals(seasonName)) {
-                Logger.toast(R.string.team_settings_exists);
+                Logger.toast(R.string.season_settings_exists);
                 return;
             }
         }

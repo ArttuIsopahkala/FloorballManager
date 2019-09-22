@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
-            android:text="arttu.isopahkala@hotmail.com"
+            android:text="-"
             android:textColor="@color/color_text_light" />
 
         <Button

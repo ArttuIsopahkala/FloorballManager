@@ -20,7 +20,7 @@
             android:id="@+id/emailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="arttu.isopahkala@hotmail.com"
+            android:text="-"
             android:textColor="@color/color_text_light"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -29,7 +29,7 @@
             android:id="@+id/roleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pelaaja: Arttu Isopahkala"
+            android:text="-"
             android:textColor="@color/color_text_light"
             android:textSize="14sp" />
     </LinearLayout>

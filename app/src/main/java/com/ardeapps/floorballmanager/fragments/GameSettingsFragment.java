@@ -19,6 +19,7 @@ import com.ardeapps.floorballmanager.PrefRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Line;
+import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Season;
 import com.ardeapps.floorballmanager.resources.GameLinesResource;
 import com.ardeapps.floorballmanager.resources.GamesResource;
@@ -43,6 +44,7 @@ import java.util.Set;
 public class GameSettingsFragment extends Fragment implements DataView {
 
     final ArrayList<Long> durations = new ArrayList<>(Arrays.asList(20L, 15L, 10L, 5L));
+    ArrayList<Player> goalies = new ArrayList<>();
     public Listener mListener = null;
     TextView nameText;
     DatePicker datePicker;
@@ -52,6 +54,8 @@ public class GameSettingsFragment extends Fragment implements DataView {
     LineUpSelector lineUpSelector;
     Button saveButton;
     Spinner periodSpinner;
+    Spinner goalieSpinner;
+    TextView noGoaliesText;
     boolean isHomeGame = true;
     private GameSettingsFragmentData data;
 
@@ -139,12 +143,29 @@ public class GameSettingsFragment extends Fragment implements DataView {
         lineUpSelector = v.findViewById(R.id.lineUpSelector);
         saveButton = v.findViewById(R.id.saveButton);
         periodSpinner = v.findViewById(R.id.periodSpinner);
+        goalieSpinner = v.findViewById(R.id.goalieSpinner);
+        noGoaliesText = v.findViewById(R.id.noGoaliesText);
 
         ArrayList<String> durationTitles = new ArrayList<>();
         for (Long duration : durations) {
             durationTitles.add(duration + "min");
         }
         Helper.setSpinnerAdapter(periodSpinner, durationTitles);
+
+        /*goalies = AppRes.getInstance().getActiveGoalies();
+        if(goalies.isEmpty()) {
+            noGoaliesText.setVisibility(View.VISIBLE);
+            goalieSpinner.setVisibility(View.GONE);
+        } else {
+            noGoaliesText.setVisibility(View.GONE);
+            goalieSpinner.setVisibility(View.VISIBLE);
+
+            ArrayList<String> goalieTitles = new ArrayList<>();
+            for (Player goalie : goalies) {
+                goalieTitles.add(goalie.getName());
+            }
+            Helper.setSpinnerAdapter(goalieSpinner, goalieTitles);
+        }*/
 
         update();
 
@@ -177,19 +198,14 @@ public class GameSettingsFragment extends Fragment implements DataView {
         String opponentName = opponentEditText.getText().toString();
         Helper.hideKeyBoard(opponentEditText);
 
-        if (StringUtils.isEmptyString(opponentName)) {
+        if (StringUtils.isEmptyString(opponentName) || AppRes.getInstance().getSelectedSeason() == null || periodSpinner.getSelectedItemPosition() < 0) {
             Logger.toast(R.string.error_empty);
             return;
         }
 
         final Map<Integer, Line> linesToSave = lineUpSelector.getLines();
         if (linesToSave == null || linesToSave.isEmpty()) {
-            Logger.toast(R.string.team_settings_no_lines);
-            return;
-        }
-
-        if (AppRes.getInstance().getSelectedSeason() == null || periodSpinner.getSelectedItemPosition() < 0) {
-            Logger.toast(R.string.error_empty);
+            Logger.toast(R.string.game_settings_no_lines);
             return;
         }
 

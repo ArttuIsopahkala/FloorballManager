@@ -138,7 +138,7 @@ class ChemistryPercentAnalyzer {
         // Get 5 best players for each position. These are compare players.
         // Compare those players in line every to every position
         // Choose best line or best team chemistry
-        for (Position position : Position.values()) {
+        for (Position position : Position.getPlayers()) {
             // Get closest connections to this position
             ArrayList<Position> closestPositions = Connection.getClosestPositions(position);
             ArrayList<Pair<Player, Double>> playersInPosition = new ArrayList<>();

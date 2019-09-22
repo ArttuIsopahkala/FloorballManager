@@ -73,7 +73,7 @@ public class LinesFragment extends Fragment {
         });
 
         getBestLinesButton.setOnClickListener(button -> {
-            if(AppRes.getInstance().getActivePlayers().size() < 5) {
+            if(AppRes.getInstance().getActivePlayers(false).size() < 5) {
                 Logger.toast(AppRes.getContext().getString(R.string.lines_too_few_players));
                 return;
             }

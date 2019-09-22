@@ -238,28 +238,49 @@ public class AppRes extends MultiDexApplication {
         return inActivePlayers;
     }
 
-    public ArrayList<Player> getActivePlayers() {
+    public ArrayList<Player> getActivePlayers(boolean includeGoalie) {
         if (players == null) {
             players = new HashMap<>();
         }
         ArrayList<Player> activePlayers = new ArrayList<>();
         for (Player player : players.values()) {
             if (player.isActive()) {
-                activePlayers.add(player);
+                Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
+                if(includeGoalie || position != Player.Position.MV) {
+                    activePlayers.add(player);
+                }
             }
         }
         Collections.sort(activePlayers, (player1, player2) -> player1.getName().compareTo(player2.getName()));
         return activePlayers;
     }
 
-    public Map<String, Player> getActivePlayersMap() {
+    public ArrayList<Player> getActiveGoalies() {
+        if (players == null) {
+            players = new HashMap<>();
+        }
+        ArrayList<Player> activeGoalies = new ArrayList<>();
+        for (Player player : players.values()) {
+            Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
+            if (player.isActive() && position == Player.Position.MV) {
+                activeGoalies.add(player);
+            }
+        }
+        Collections.sort(activeGoalies, (player1, player2) -> player1.getName().compareTo(player2.getName()));
+        return activeGoalies;
+    }
+
+    public Map<String, Player> getActivePlayersMap(boolean includeGoalie) {
         if (players == null) {
             players = new HashMap<>();
         }
         Map<String, Player> activePlayers = new HashMap<>();
         for (Player player : players.values()) {
             if (player.isActive()) {
-                activePlayers.put(player.getPlayerId(), player);
+                Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
+                if(includeGoalie || position != Player.Position.MV) {
+                    activePlayers.put(player.getPlayerId(), player);
+                }
             }
         }
         return activePlayers;

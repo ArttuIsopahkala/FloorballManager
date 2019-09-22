@@ -255,7 +255,7 @@ public class LineFragment extends Fragment implements DataView {
         }
 
         card.setOnClickListener(v -> {
-            if (AppRes.getInstance().getPlayers().isEmpty()) {
+            if (AppRes.getInstance().getActivePlayers(false).isEmpty()) {
                 Logger.toast(R.string.lines_no_players);
                 return;
             }

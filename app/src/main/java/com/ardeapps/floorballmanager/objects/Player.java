@@ -60,6 +60,8 @@ public class Player {
             return AppRes.getContext().getString(shorten ? R.string.position_ld_short : R.string.position_ld);
         } else if (position == Position.RD) {
             return AppRes.getContext().getString(shorten ? R.string.position_rd_short : R.string.position_rd);
+        } else if (position == Position.MV) {
+            return AppRes.getContext().getString(shorten ? R.string.position_mv_short : R.string.position_mv);
         } else {
             return "";
         }
@@ -121,10 +123,12 @@ public class Player {
 
     @Exclude
     public boolean hasSomeOfSkills(ArrayList<Skill> skills) {
-        for (String strength : getStrengths()) {
-            Player.Skill skill = Player.Skill.fromDatabaseName(strength);
-            if (skills.contains(skill)) {
-                return true;
+        if(getStrengths() != null) {
+            for (String strength : getStrengths()) {
+                Player.Skill skill = Player.Skill.fromDatabaseName(strength);
+                if (skills.contains(skill)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -220,7 +224,8 @@ public class Player {
         C,
         RW,
         LD,
-        RD;
+        RD,
+        MV;
 
         public static Position fromDatabaseName(String value) {
             return Enum.valueOf(Position.class, value);
@@ -238,6 +243,10 @@ public class Player {
         public boolean isDefender() {
             ArrayList<Position> defenderPositions = new ArrayList<>(Arrays.asList(Position.LD, Position.RD));
             return defenderPositions.contains(this);
+        }
+
+        public static ArrayList<Position> getPlayers() {
+            return new ArrayList<>(Arrays.asList(LW, C, RW, LD, RD));
         }
     }
 

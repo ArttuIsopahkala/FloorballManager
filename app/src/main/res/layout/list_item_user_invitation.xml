@@ -43,7 +43,7 @@
             android:id="@+id/nameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="O2 Miehet 2"
+            android:text="-"
             android:textColor="@color/color_text_light"
             android:textSize="18sp"
             android:textStyle="bold" />

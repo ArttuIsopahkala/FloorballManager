@@ -11,6 +11,7 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -57,6 +58,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
     Spinner positionSpinner;
     LinearLayout strengthsContainer;
     LinearLayout strengthsContent;
+    LinearLayout shootsContent;
     Player player;
     ArrayList<CheckBox> strengthCheckBoxes = new ArrayList<>();
     ArrayList<Player.Position> positionTypes;
@@ -114,6 +116,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
         positionSpinner = v.findViewById(R.id.positionSpinner);
         strengthsContainer = v.findViewById(R.id.strengthsContainer);
         strengthsContent = v.findViewById(R.id.strengthsContent);
+        shootsContent = v.findViewById(R.id.shootsContent);
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
@@ -129,6 +132,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
         positionMap.put(Player.Position.RW, getString(R.string.position_rw));
         positionMap.put(Player.Position.LD, getString(R.string.position_ld));
         positionMap.put(Player.Position.RD, getString(R.string.position_rd));
+        positionMap.put(Player.Position.MV, getString(R.string.position_mv));
         ArrayList<String> positionTitles = new ArrayList<>(positionMap.values());
         positionTypes = new ArrayList<>(positionMap.keySet());
         Helper.setSpinnerAdapter(positionSpinner, positionTitles);
@@ -173,21 +177,46 @@ public class EditPlayerFragment extends Fragment implements DataView {
             } else {
                 setEditTextValue(numberText, "");
             }
-            // Shoots
-            if (Player.Shoots.fromDatabaseName(player.getShoots()) == Player.Shoots.LEFT) {
-                setRadioButtonChecked(leftRadioButton, true);
-            } else setRadioButtonChecked(rightRadioButton, true);
 
             // Position
             Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
             setSpinnerSelection(positionSpinner, positionTypes.indexOf(position));
 
-            // Strengths
-            for (CheckBox checkBox : strengthCheckBoxes) {
-                Player.Skill skill = (Player.Skill) checkBox.getTag();
-                setCheckBoxChecked(checkBox, player.getStrengths().contains(skill.toDatabaseName()));
+            if (position != Player.Position.MV) {
+                strengthsContent.setVisibility(View.VISIBLE);
+                shootsContent.setVisibility(View.VISIBLE);
+                // Shoots
+                if (Player.Shoots.fromDatabaseName(player.getShoots()) == Player.Shoots.LEFT) {
+                    setRadioButtonChecked(leftRadioButton, true);
+                } else setRadioButtonChecked(rightRadioButton, true);
+
+                // Strengths
+                for (CheckBox checkBox : strengthCheckBoxes) {
+                    Player.Skill skill = (Player.Skill) checkBox.getTag();
+                    setCheckBoxChecked(checkBox, player.getStrengths() != null && player.getStrengths().contains(skill.toDatabaseName()));
+                }
+            } else {
+                strengthsContent.setVisibility(View.GONE);
+                shootsContent.setVisibility(View.GONE);
             }
         }
+
+        positionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == positionTypes.size() - 1) {
+                    strengthsContent.setVisibility(View.GONE);
+                    shootsContent.setVisibility(View.GONE);
+                } else {
+                    strengthsContent.setVisibility(View.VISIBLE);
+                    shootsContent.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         selectPictureIcon.setOnClickListener(v12 -> {
             final SelectPictureDialogFragment dialog = new SelectPictureDialogFragment();
@@ -232,22 +261,29 @@ public class EditPlayerFragment extends Fragment implements DataView {
                     return;
                 }
             }
-            // Collect strengths
-            ArrayList<String> strengths = new ArrayList<>();
-            for (CheckBox checkBox : strengthCheckBoxes) {
-                Player.Skill skill = (Player.Skill) checkBox.getTag();
-                if (checkBox.isChecked()) {
-                    strengths.add(skill.toDatabaseName());
-                }
-            }
-            if (strengths.size() > 3) {
-                Logger.toast(getString(R.string.strengths_too_many_error));
-                return;
-            }
 
             int positionSpinnerPosition = positionSpinner.getSelectedItemPosition();
-            String position = positionTypes.get(positionSpinnerPosition).toDatabaseName();
-            String shoots = leftRadioButton.isChecked() ? Player.Shoots.LEFT.toDatabaseName() : Player.Shoots.RIGHT.toDatabaseName();
+            Player.Position position = positionTypes.get(positionSpinnerPosition);
+            String shoots = null;
+            if(position != Player.Position.MV) {
+                shoots = leftRadioButton.isChecked() ? Player.Shoots.LEFT.toDatabaseName() : Player.Shoots.RIGHT.toDatabaseName();
+            }
+
+            // Collect strengths
+            ArrayList<String> strengths = null;
+            if(position != Player.Position.MV) {
+                strengths = new ArrayList<>();
+                for (CheckBox checkBox : strengthCheckBoxes) {
+                    Player.Skill skill = (Player.Skill) checkBox.getTag();
+                    if (checkBox.isChecked()) {
+                        strengths.add(skill.toDatabaseName());
+                    }
+                }
+                if (strengths.size() > 3) {
+                    Logger.toast(getString(R.string.strengths_too_many_error));
+                    return;
+                }
+            }
 
             final Player playerToSave = player != null ? player.clone() : new Player();
             playerToSave.setTeamId(AppRes.getInstance().getSelectedTeam().getTeamId());
@@ -256,7 +292,7 @@ public class EditPlayerFragment extends Fragment implements DataView {
             if (number != null) {
                 playerToSave.setNumber(number);
             }
-            playerToSave.setPosition(position);
+            playerToSave.setPosition(position.toDatabaseName());
             playerToSave.setStrengths(strengths);
 
             if (player != null) {

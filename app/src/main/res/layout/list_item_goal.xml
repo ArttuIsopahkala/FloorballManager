@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="#11 Arttu Isopahkala"
+            android:text="-"
             android:textColor="@color/color_text_light"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/homeScoreText"
             android:gravity="end"
-            android:text="#88 Jussi Kemppi"
+            android:text="-"
             android:textColor="@color/color_text_light_secondary"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -83,7 +83,7 @@
             android:id="@+id/awayScoreText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="#11 Arttu Isopahkala"
+            android:text="-"
             android:textColor="@color/color_text_light"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/awayScoreText"
-            android:text="#88 Jussi Kemppi"
+            android:text="-"
             android:textColor="@color/color_text_light_secondary"
             android:textSize="12sp" />
     </RelativeLayout>

@@ -29,7 +29,7 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.Playe
     PlayerListAdapter adapter;
 
     public void update() {
-        ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
+        ArrayList<Player> players = AppRes.getInstance().getActivePlayers(true);
         adapter.setPlayers(players);
         adapter.notifyDataSetChanged();
     }

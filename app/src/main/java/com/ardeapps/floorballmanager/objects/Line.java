@@ -83,6 +83,8 @@ public class Line {
                 return -1;
             } else if (pos1 == Player.Position.LD && (pos2 != Player.Position.C && pos2 != Player.Position.LW && pos2 == Player.Position.RW)) {
                 return -1;
+            } else if (pos1 == Player.Position.RD && (pos2 != Player.Position.C && pos2 != Player.Position.LW && pos2 != Player.Position.RW && pos2 == Player.Position.RD)) {
+                return -1;
             } else {
                 return 1;
             }

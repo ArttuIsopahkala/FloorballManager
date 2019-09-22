@@ -69,7 +69,7 @@ public class SelectPlayerToLineDialogFragment extends DialogFragment {
 
         playerList.setAdapter(adapter);
 
-        ArrayList<Player> players = AppRes.getInstance().getActivePlayers();
+        ArrayList<Player> players = AppRes.getInstance().getActivePlayers(false);
         // Sort by position
         Collections.sort(players, (o1, o2) -> {
             Player.Position position1 = Player.Position.fromDatabaseName(o1.getPosition());

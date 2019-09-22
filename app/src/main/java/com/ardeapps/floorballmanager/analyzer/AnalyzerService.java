@@ -38,7 +38,7 @@ public class AnalyzerService {
         if (!isJsonDatabase) {
             goalsInGames = AppRes.getInstance().getGoalsByGame();
             linesInGames = AppRes.getInstance().getLinesByGame();
-            playersInTeam = AppRes.getInstance().getActivePlayersMap();
+            playersInTeam = AppRes.getInstance().getActivePlayersMap(false);
         }
         if (!chemistryPercentAnalyzerInitialized) {
             ChemistryPercentAnalyzer.initialize(new ArrayList<>(playersInTeam.values()));
@@ -298,7 +298,7 @@ public class AnalyzerService {
             if (RDs == null) RDs = new ArrayList<>();
 
             int combinationsCount = 1;
-            for (Position position : Position.values()) {
+            for (Position position : Position.getPlayers()) {
                 ArrayList<Player> playersInPosition = bestPlayersForPosition.get(position);
                 if (playersInPosition != null) {
                     int currentSize = playersInPosition.size();

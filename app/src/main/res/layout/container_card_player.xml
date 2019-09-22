@@ -60,7 +60,7 @@
         android:background="@color/color_background_text"
         android:gravity="center"
         android:padding="3dp"
-        android:text="Arttu Isopahkala"
+        android:text="-"
         android:textColor="@color/color_text_black"
         android:textSize="16sp" />
 

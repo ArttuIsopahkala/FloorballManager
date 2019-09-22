@@ -20,7 +20,7 @@
             android:id="@+id/seasonText"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:text="@string/team_settings_no_seasons"
+            android:text="@string/season_settings_no_seasons"
             android:textColor="@color/color_text_light_secondary"
             android:textSize="16sp"
             android:textStyle="italic" />
