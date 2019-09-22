@@ -47,12 +47,7 @@ public class FirebaseDatabaseService {
 
     protected static DatabaseReference getDatabase() {
         if (BuildConfig.DEBUG) {
-            boolean release = false;
-            if(release) {
-                return FirebaseDatabase.getInstance().getReference().child(RELEASE);
-            } else {
-                return FirebaseDatabase.getInstance().getReference().child(DEBUG);
-            }
+            return FirebaseDatabase.getInstance().getReference().child(DEBUG);
         } else {
             return FirebaseDatabase.getInstance().getReference().child(RELEASE);
         }

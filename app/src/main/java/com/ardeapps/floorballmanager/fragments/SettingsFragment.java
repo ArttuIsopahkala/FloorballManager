@@ -69,7 +69,7 @@ public class SettingsFragment extends Fragment {
             AppRes.getActivity().finish();
         });
 
-        rateText.setOnClickListener(v13 -> openUrl(getString(R.string.google_play_app_url)));
+        rateText.setOnClickListener(v13 -> openUrl(AppData.GOOGLE_PLAY_APP_URL));
 
         moreText.setOnClickListener(v12 -> openUrl(getString(R.string.google_play_developer_url)));
 

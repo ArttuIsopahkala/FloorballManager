@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Floorball Manager</string>
+    <string name="app_name_release">Floorball Manager</string>
+    <string name="app_name_debug">Floorball DEBUG</string>
 
     <string name="update_new_version">Sovelluksen uusi versio on julkaistu. Nykyinen versiosi on vanhentunut ja se voi aiheuttaa epävakautta tai kaatuilua. Ladataanko uusi versio?</string>
 
@@ -329,7 +330,6 @@
     <string name="error_authentication">Virhe tunnistautumisessa!</string>
     <string name="error_service_action">Tapahtui virhe! Toimintaa ei suoritettu!</string>
 
-    <string name="google_play_app_url">http://play.google.com/store/apps/details?id=com.ardeapps.floorballcoach</string>
     <string name="google_play_developer_url">http://play.google.com/store/apps/developer?id=Arde+Apps</string>
 
     <string name="icon_light">fa-regular.ttf</string>

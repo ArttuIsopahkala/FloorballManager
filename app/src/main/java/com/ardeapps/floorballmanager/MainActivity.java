@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     dialogFragment.show(getSupportFragmentManager(), "Päivitä uusin versio");
                     dialogFragment.setListener(() -> {
                         Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(getString(R.string.google_play_app_url)));
+                        i.setData(Uri.parse(AppData.GOOGLE_PLAY_APP_URL));
                         startActivity(i);
                     });
                 }
