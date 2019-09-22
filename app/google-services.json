@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:565051645937:android:c50831c66fcad923ce2e50",
+        "mobilesdk_app_id": "1:565051645937:android:a3f33704f77fd5c8ce2e50",
         "android_client_info": {
-          "package_name": "com.ardeapps.floorballmanager"
+          "package_name": "com.ardeapps.floorballcoach"
         }
       },
       "oauth_client": [
         {
-          "client_id": "565051645937-eb73pt48qi68p4ee5nu72lmt5n582fr0.apps.googleusercontent.com",
+          "client_id": "565051645937-jd6psffgqjuu6d7qc1g4g97rehc4u5s1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.ardeapps.floorballmanager",
+            "package_name": "com.ardeapps.floorballcoach",
             "certificate_hash": "5a0f699f37ddc4d7e7cfe46046273bb92b19e73b"
           }
         },
@@ -45,17 +45,17 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:565051645937:android:8598e825e5e1b8e3ce2e50",
+        "mobilesdk_app_id": "1:565051645937:android:2e0cfcca3ab66ce3ce2e50",
         "android_client_info": {
-          "package_name": "com.ardeapps.floorballmanager.debug"
+          "package_name": "com.ardeapps.floorballcoach.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "565051645937-ig5voe3nr5icnguq1i9gsln370lbcfgq.apps.googleusercontent.com",
+          "client_id": "565051645937-463h0v0jno3uq52bfha8iaha4ss4p7u9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.ardeapps.floorballmanager.debug",
+            "package_name": "com.ardeapps.floorballcoach.debug",
             "certificate_hash": "5a0f699f37ddc4d7e7cfe46046273bb92b19e73b"
           }
         },
