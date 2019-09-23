@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,6 +43,38 @@ public class PlayerStatsResource extends FirebaseDatabaseService {
 
     public void removeStat(String playerId, String gameId, String goalId, final DeleteDataSuccessListener handler) {
         deleteData(database.child(playerId).child(seasonId).child(gameId).child(goalId), handler);
+    }
+
+    public void editStats(final List<String> playerIds, Goal goal, final EditDataSuccessListener handler) {
+        if (!playerIds.isEmpty()) {
+            final ArrayList<String> removedStats = new ArrayList<>();
+            for (final String playerId : playerIds) {
+                editData(database.child(playerId).child(seasonId).child(goal.getGameId()).child(goal.getGoalId()), goal, () -> {
+                    removedStats.add(playerId);
+                    if (playerIds.size() == removedStats.size()) {
+                        handler.onEditDataSuccess();
+                    }
+                });
+            }
+        } else {
+            handler.onEditDataSuccess();
+        }
+    }
+
+    public void removeStats(final List<String> playerIds, String gameId, String goalId, final DeleteDataSuccessListener handler) {
+        if (!playerIds.isEmpty()) {
+            final ArrayList<String> removedStats = new ArrayList<>();
+            for (final String playerId : playerIds) {
+                deleteData(database.child(playerId).child(seasonId).child(gameId).child(goalId), () -> {
+                    removedStats.add(playerId);
+                    if (playerIds.size() == removedStats.size()) {
+                        handler.onDeleteDataSuccess();
+                    }
+                });
+            }
+        } else {
+            handler.onDeleteDataSuccess();
+        }
     }
 
     public void removeStats(final Set<String> playerIds, String gameId, final DeleteDataSuccessListener handler) {

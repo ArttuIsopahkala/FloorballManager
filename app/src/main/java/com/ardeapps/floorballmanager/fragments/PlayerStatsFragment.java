@@ -21,13 +21,14 @@ import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.dialogFragments.ActionMenuDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
+import com.ardeapps.floorballmanager.handlers.GetGoalsHandler;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Season;
 import com.ardeapps.floorballmanager.objects.UserConnection;
+import com.ardeapps.floorballmanager.resources.GoalsResource;
 import com.ardeapps.floorballmanager.resources.PlayerGamesResource;
-import com.ardeapps.floorballmanager.resources.PlayerStatsResource;
 import com.ardeapps.floorballmanager.resources.PlayersResource;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.services.StatsHelper;
@@ -181,7 +182,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         String numberString = player.getNumber() != null ? String.valueOf(player.getNumber()) : "";
         numberText.setText(numberString);
         String shootsString = "-";
-        if(player.getShoots() != null) {
+        if (player.getShoots() != null) {
             Player.Shoots shoots = Player.Shoots.fromDatabaseName(player.getShoots());
             shootsString = getString(shoots == Player.Shoots.LEFT ? R.string.add_player_shoots_left : R.string.add_player_shoots_right);
         }
@@ -359,17 +360,37 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     private void loadStats(final String seasonId) {
         final String playerId = player.getPlayerId();
         if (seasonId == null) {
-            PlayerStatsResource.getInstance().getAllStats(playerId, stats -> PlayerGamesResource.getInstance().getAllGames(playerId, games -> {
+            // TODO player stateja ei käytetä toistaiseksi
+            /*PlayerStatsResource.getInstance().getAllStats(playerId, stats -> PlayerGamesResource.getInstance().getAllGames(playerId, games -> {
                 PlayerStatsFragment.this.stats = stats;
                 PlayerStatsFragment.this.games = games;
                 updateStats(null);
-            }));
+            }));*/
+            PlayerGamesResource.getInstance().getAllGames(playerId, games -> {
+                PlayerStatsFragment.this.games = games;
+                updateStats(null);
+                if (!AppRes.getInstance().getGoalsByGame().isEmpty()) {
+                    PlayerStatsFragment.this.stats = AppRes.getInstance().getGoalsByGame();
+                    updateStats(null);
+                } else {
+                    GoalsResource.getInstance().getAllGoals(goals -> {
+                        AppRes.getInstance().setGoalsByGame(goals);
+                        PlayerStatsFragment.this.stats = goals;
+                        updateStats(null);
+                    });
+                }
+            });
         } else {
-            PlayerStatsResource.getInstance().getStats(playerId, seasonId, stats -> PlayerGamesResource.getInstance().getGames(playerId, seasonId, games -> {
-                PlayerStatsFragment.this.stats = stats;
+            GoalsResource.getInstance().getGoals(seasonId, (GetGoalsHandler) goals -> PlayerGamesResource.getInstance().getGames(playerId, seasonId, games -> {
+                PlayerStatsFragment.this.stats = goals;
                 PlayerStatsFragment.this.games = games;
                 updateStats(seasonId);
             }));
+            /*PlayerStatsResource.getInstance().getStats(playerId, seasonId, stats -> PlayerGamesResource.getInstance().getGames(playerId, seasonId, games -> {
+                PlayerStatsFragment.this.stats = stats;
+                PlayerStatsFragment.this.games = games;
+                updateStats(seasonId);
+            }));*/
         }
     }
 
@@ -378,7 +399,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
 
         // Set games sorted by date
         sortedGames = new ArrayList<>(games.values());
-        Collections.sort(sortedGames, (o1, o2) -> Long.valueOf(o2.getDate()).compareTo(o1.getDate()));
+        Collections.sort(sortedGames, (o1, o2) -> Long.compare(o2.getDate(), o1.getDate()));
 
         ArrayList<String> gameTitles = new ArrayList<>();
         gameTitles.add(getString(R.string.player_stats_all_games));

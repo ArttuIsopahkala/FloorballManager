@@ -9,6 +9,8 @@ import android.content.res.Resources;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.objects.AppData;
+import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -25,8 +27,14 @@ public class AppInviteService {
         Intent emailIntent = new Intent();
         emailIntent.setAction(Intent.ACTION_SEND);
         // Native email client doesn't currently support HTML, but it doesn't hurt to try in case they fix it
-        emailIntent.putExtra(Intent.EXTRA_TEXT, StringUtils.fromHtml(resources.getString(R.string.settings_invite_message)));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.settings_invite_email_subject));
+        Team team = AppRes.getInstance().getSelectedTeam();
+        if(team != null) {
+            emailIntent.putExtra(Intent.EXTRA_TEXT, StringUtils.fromHtml(resources.getString(R.string.settings_invite_message_team, team.getName(), AppData.GOOGLE_PLAY_APP_URL)));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.settings_invite_email_subject_team, team.getName()));
+        } else {
+            emailIntent.putExtra(Intent.EXTRA_TEXT, StringUtils.fromHtml(resources.getString(R.string.settings_invite_message, AppData.GOOGLE_PLAY_APP_URL)));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.settings_invite_email_subject));
+        }
         emailIntent.setType("message/rfc822");
 
         PackageManager pm = AppRes.getContext().getPackageManager();
@@ -49,9 +57,17 @@ public class AppInviteService {
                 intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
                 intent.setAction(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.settings_invite_message));
+                if(team != null) {
+                    intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.settings_invite_message_team, team.getName(), AppData.GOOGLE_PLAY_APP_URL));
+                } else {
+                    intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.settings_invite_message, AppData.GOOGLE_PLAY_APP_URL));
+                }
                 if (packageName.contains("android.gm")) {
-                    intent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.settings_invite_email_subject));
+                    if(team != null) {
+                        intent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.settings_invite_email_subject_team, team.getName()));
+                    } else {
+                        intent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.settings_invite_email_subject));
+                    }
                     intent.setType("message/rfc822");
                 }
                 intentList.add(new LabeledIntent(intent, packageName, ri.loadLabel(pm), ri.icon));

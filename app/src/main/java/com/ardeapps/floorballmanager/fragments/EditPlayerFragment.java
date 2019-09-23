@@ -262,6 +262,8 @@ public class EditPlayerFragment extends Fragment implements DataView {
                 }
             }
 
+            Helper.hideKeyBoard(nameText);
+
             int positionSpinnerPosition = positionSpinner.getSelectedItemPosition();
             Player.Position position = positionTypes.get(positionSpinnerPosition);
             String shoots = null;

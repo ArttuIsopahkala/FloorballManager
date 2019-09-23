@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/userConnectionContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
@@ -14,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/rightContainer"
+        android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <TextView
@@ -44,11 +44,11 @@
 
         <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/statusUserConnectionIcon"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:text="@string/icon_check"
             app:iconFont="@string/icon_solid"
-            app:iconSize="20sp" />
+            app:iconSize="16sp" />
 
         <com.ardeapps.floorballmanager.views.IconView
             android:id="@+id/removeUserConnectionIcon"

@@ -167,6 +167,10 @@
     <string name="season_settings_no_seasons">Ei lisättyjä tunnisteita.</string>
     <string name="season_settings_season_hint">Tunniste</string>
 
+    <string name="feedback_title">Auta kehittämään sovellusta!</string>
+    <string name="feedback_desc">Ilmoita bugista tai toivo uutta ominaisuutta.</string>
+    <string name="feedback_sent">Kiitos palautteesta!</string>
+
     <string name="game_settings_no_lines">Aseta kentälliset.</string>
     <string name="game_settings_goalie">Aloittava maalivahti</string>
     <string name="game_settings_no_goalies">Ei maalivahteja.</string>
@@ -235,8 +239,8 @@
 
     <string name="lines_no_players">Joukkueessa ei ole pelaajia.</string>
     <string name="lines_title">Valitut kentälliset näkyvät oletuksena uuden ottelun luonnissa.</string>
-    <string name="lines_analyze">Analysoi pelaajakemiat</string>
-    <string name="lines_best_lines">Hae parhaat kentälliset</string>
+    <string name="lines_analyze">Analysoi pelaajakemiat (beta)</string>
+    <string name="lines_best_lines">Hae parhaat kentälliset (beta)</string>
     <string name="lines_saved">Kentälliset tallennettu</string>
     <string name="lines_changed">Kentälliset muuttuivat. Tallennetaanko?</string>
     <string name="lines_line_chemistry">Kentän kemia</string>
@@ -277,7 +281,9 @@
     <string name="settings_change_password_confirm">Haluatko lähettää sähköpostiisi tiedot salasanan vaihtamiseen?</string>
     <string name="settings_link_privacy">Tietosuojakäytäntö</string>
     <string name="settings_link_privacy_url">www.google.com</string>
-    <string name="settings_invite_message">Hei! Tämä on automaattisesti luotu kutsu Android-sovellukseen Floorball Manager. https://play.google.com/store/apps/details?id=com.ardeapps.floorballmanager</string>
+    <string name="settings_invite_message_team">Hei! Sähköpostisi on lisätty joukkueeseen %1$s. Liity mukaan ja lataa Android-sovellus täältä: %2$s</string>
+    <string name="settings_invite_email_subject_team">Floorball Manager: Kutsu joukkueeseen %1$s</string>
+    <string name="settings_invite_message">Hei! Tämä on automaattisesti luotu kutsu Android-sovellukseen Floorball Manager. %1$s</string>
     <string name="settings_invite_email_subject">Kutsu sovellukseen Floorball Manager</string>
     <string name="settings_invite_title">Kuinka haluat kutsua käyttäjiä?</string>
     <string name="settings_logged_user">Kirjauduttu käyttäjänä</string>

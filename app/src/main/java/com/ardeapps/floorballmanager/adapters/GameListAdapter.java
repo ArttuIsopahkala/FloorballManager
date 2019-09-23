@@ -32,7 +32,7 @@ public class GameListAdapter extends BaseAdapter {
 
     public void setGames(ArrayList<Game> games) {
         this.games = games;
-        Collections.sort(games, (o1, o2) -> Long.valueOf(o2.getDate()).compareTo(o1.getDate()));
+        Collections.sort(games, (o1, o2) -> Long.compare(o2.getDate(), o1.getDate()));
     }
 
     @Override

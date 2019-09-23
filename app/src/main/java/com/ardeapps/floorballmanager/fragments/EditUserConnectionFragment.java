@@ -151,6 +151,11 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
                     roleInfoText.setText(getString(R.string.add_user_connection_info_admin));
+                    selectedPlayerId = null;
+                    for (Map.Entry<String, PlayerHolder> entry : holders.entrySet()) {
+                        PlayerHolder holder = entry.getValue();
+                        holder.setSelected(false);
+                    }
                     setPlayerListVisibility(false);
                 } else if (position == 1) {
                     roleInfoText.setText(getString(R.string.add_user_connection_info_player));

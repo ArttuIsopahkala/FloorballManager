@@ -22,6 +22,7 @@ import com.ardeapps.floorballmanager.resources.LogoResource;
 import com.ardeapps.floorballmanager.resources.TeamsResource;
 import com.ardeapps.floorballmanager.resources.UserConnectionsResource;
 import com.ardeapps.floorballmanager.resources.UsersResource;
+import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
 import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.utils.StringUtils;
@@ -123,6 +124,8 @@ public class EditTeamFragment extends Fragment implements DataView {
                 Logger.toast(getString(R.string.error_empty));
                 return;
             }
+
+            Helper.hideKeyBoard(nameText);
 
             // Edit or create
             final Team teamToSave;

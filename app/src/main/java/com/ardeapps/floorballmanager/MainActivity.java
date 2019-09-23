@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
+import com.ardeapps.floorballmanager.dialogFragments.FeedbackDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballmanager.fragments.BluetoothFragment;
 import com.ardeapps.floorballmanager.fragments.EditPlayerFragment;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout menuTop;
     IconView backIcon;
     IconView settingsIcon;
+    IconView feedbackIcon;
     TextView titleText;
 
     private boolean isLoginUsed = false;
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         loaderSpinner = findViewById(R.id.loaderSpinner);
         backIcon = findViewById(R.id.backIcon);
         settingsIcon = findViewById(R.id.settingsIcon);
+        feedbackIcon = findViewById(R.id.feedbackIcon);
         titleText = findViewById(R.id.titleText);
         menuTop = findViewById(R.id.menuTop);
 
@@ -472,12 +475,14 @@ public class MainActivity extends AppCompatActivity {
         menuTop.setVisibility(View.VISIBLE);
         backIcon.setVisibility(View.VISIBLE);
         settingsIcon.setVisibility(View.VISIBLE);
+        feedbackIcon.setVisibility(View.VISIBLE);
         titleText.setVisibility(View.VISIBLE);
         if (f instanceof LoginFragment) {
             menuTop.setVisibility(View.GONE);
         } else if (f instanceof SettingsFragment) {
             titleText.setText(R.string.title_settings);
             settingsIcon.setVisibility(View.GONE);
+            feedbackIcon.setVisibility(View.GONE);
         } else if (f instanceof TeamDashboardFragment) {
             backIcon.setVisibility(View.GONE);
             titleText.setText(AppRes.getInstance().getSelectedTeam().getName());
@@ -514,6 +519,10 @@ public class MainActivity extends AppCompatActivity {
 
         backIcon.setOnClickListener(v -> onBackPressed());
         settingsIcon.setOnClickListener(v -> FragmentListeners.getInstance().getFragmentChangeListener().goToSettingsFragment());
+        feedbackIcon.setOnClickListener(v -> {
+            FeedbackDialogFragment dialog = new FeedbackDialogFragment();
+            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Anna palautetta");
+        });
     }
 
     @Override

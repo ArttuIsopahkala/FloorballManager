@@ -36,4 +36,5 @@
     <string name="icon_check">&#xf00c;</string>
     <string name="icon_change">&#xf362;</string>
     <string name="icon_bars">&#xf0c9;</string>
+    <string name="icon_feedback">&#xf0a1;</string>
 </resources>

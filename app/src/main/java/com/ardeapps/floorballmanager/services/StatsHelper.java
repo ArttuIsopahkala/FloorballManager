@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
+import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.viewObjects.PlayerPointsData;
 import com.ardeapps.floorballmanager.viewObjects.PlayerStatsData;
 import com.ardeapps.floorballmanager.viewObjects.TeamGameData;
@@ -90,6 +91,10 @@ public class StatsHelper extends AnalyzerService {
                     // Minus
                     if (goal.isOpponentGoal() && !(Goal.Mode.AV == mode || Goal.Mode.RL == mode)) {
                         minuses++;
+                        // TODO
+                        if(playerId.equals("-LlgUZalaOHq7QaHwDcI")) { //LlgUQ--n1JfB7hlNGF3
+                            Logger.log("MINUSES: " + minuses);
+                        }
                         plusMinuses--;
                     }
                 }
