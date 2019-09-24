@@ -99,7 +99,7 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
                 holder.acceptIcon.setOnClickListener(v -> {
                     // Add team to user
                     final User userToSave = AppRes.getInstance().getUser();
-                    userToSave.getTeamIds().add(userInvitation.getTeamId());
+                    userToSave.getTeamIds().put(userInvitation.getTeamId(), true);
                     UsersResource.getInstance().editUser(userToSave, () -> {
                         AppRes.getInstance().setUser(userToSave);
                         // Add team to AppRes. Team is loaded when invitations are shown.

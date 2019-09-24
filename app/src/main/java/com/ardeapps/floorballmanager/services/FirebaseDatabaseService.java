@@ -55,6 +55,24 @@ public class FirebaseDatabaseService {
     }
 
     public static void updateDatabase() {
+        getData(getDatabase().child(USERS), new GetDataSuccessListener() {
+            @Override
+            public void onGetDataSuccess(DataSnapshot dataSnapshot) {
+                for(DataSnapshot user : dataSnapshot.getChildren()) {
+                    String userId = user.getKey();
+                    if(userId != null) {
+                        if(user.child("teamIds").exists()) {
+                            for(DataSnapshot team : user.child("teamIds").getChildren()) {
+                                String teamId = (String) team.getValue();
+                                if(teamId != null) {
+                                    editData(getDatabase().child(USERS).child(userId).child("teamIds").child(teamId), true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
         /*final String teamId = AppRes.getInstance().getSelectedTeam().getTeamId();
         getData(getDatabase().child(PLAYERS_SEASONS_GAMES), new GetDataSuccessListener() {
             @Override

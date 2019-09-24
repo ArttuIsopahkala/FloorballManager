@@ -59,7 +59,7 @@ public class EditTeamFragment extends Fragment implements DataView {
     public void refreshLogo(Bitmap selectedLogo) {
         this.selectedLogo = selectedLogo;
         if (selectedLogo != null) {
-            logoImage.setImageDrawable(ImageUtil.getRoundedDrawable(selectedLogo));
+            logoImage.setImageBitmap(ImageUtil.getSquarePicture(selectedLogo));
         } else {
             logoImage.setImageResource(R.drawable.default_logo);
         }
@@ -170,10 +170,10 @@ public class EditTeamFragment extends Fragment implements DataView {
     private void saveTeamToUser(final Team teamToSave) {
         // Set user to team author
         User user = AppRes.getInstance().getUser();
-        if (user.getTeamIds().contains(teamToSave.getTeamId())) {
+        if (user.getTeamIds().keySet().contains(teamToSave.getTeamId())) {
             handleLogoAndSave(teamToSave);
         } else {
-            user.getTeamIds().add(teamToSave.getTeamId());
+            user.getTeamIds().put(teamToSave.getTeamId(), true);
             UsersResource.getInstance().editUser(user, () -> handleLogoAndSave(teamToSave));
         }
     }

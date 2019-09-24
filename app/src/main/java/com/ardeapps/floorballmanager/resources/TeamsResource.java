@@ -6,13 +6,12 @@ import com.ardeapps.floorballmanager.handlers.GetTeamHandler;
 import com.ardeapps.floorballmanager.handlers.GetTeamsHandler;
 import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
-import com.ardeapps.floorballmanager.utils.Logger;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Arttu on 19.1.2018.
@@ -68,7 +67,7 @@ public class TeamsResource extends FirebaseDatabaseService {
     /**
      * Get teams and their logos indexed by teamId
      */
-    public void getTeams(final List<String> teamIds, final GetTeamsHandler handler) {
+    public void getTeams(final Set<String> teamIds, final GetTeamsHandler handler) {
         getTeamsData(teamIds, teams -> {
             final ArrayList<String> teamIdsWithLogo = new ArrayList<>();
             for (final Team team : teams.values()) {
@@ -95,7 +94,7 @@ public class TeamsResource extends FirebaseDatabaseService {
         });
     }
 
-    private void getTeamsData(final List<String> teamIds, final GetTeamsHandler handler) {
+    private void getTeamsData(final Set<String> teamIds, final GetTeamsHandler handler) {
         final Map<String, Team> teams = new HashMap<>();
         for (final String teamId : teamIds) {
             getData(database.child(teamId), snapshot -> {

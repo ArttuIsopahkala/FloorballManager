@@ -1,8 +1,8 @@
 package com.ardeapps.floorballmanager.objects;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
 
@@ -11,8 +11,7 @@ public class User {
     private long creationTime;
     private long lastLoginTime;
     private boolean premium;
-    private List<String> teamIds;
-    private List<String> playerIds;
+    private Map<String, Boolean> teamIds; // Must be map due firebase security rules
 
     public User() {
     }
@@ -25,14 +24,9 @@ public class User {
         clone.creationTime = this.creationTime;
         clone.premium = this.premium;
         if (this.teamIds == null) {
-            clone.teamIds = new ArrayList<>();
+            clone.teamIds = new HashMap<>();
         } else {
             clone.teamIds = this.teamIds;
-        }
-        if (this.playerIds == null) {
-            clone.playerIds = new ArrayList<>();
-        } else {
-            clone.playerIds = this.playerIds;
         }
         return clone;
     }
@@ -77,27 +71,32 @@ public class User {
         this.premium = premium;
     }
 
-    public List<String> getTeamIds() {
+    public Map<String, Boolean> getTeamIds() {
         if (teamIds == null) {
-            teamIds = new ArrayList<>();
+            teamIds = new HashMap<>();
         }
         return teamIds;
     }
 
-    public void setTeamIds(List<String> teamIds) {
+    public void setTeamIds(Map<String, Boolean> teamIds) {
         this.teamIds = teamIds;
     }
 
-    public List<String> getPlayerIds() {
-        if (playerIds == null) {
-            playerIds = new ArrayList<>();
+    /*@Exclude
+    public List<String> getTeamIdsList() {
+        if (teamIds == null) {
+            teamIds = new HashMap<>();
         }
-        return playerIds;
+        return new ArrayList<>(teamIds.keySet());
     }
 
-    public void setPlayerIds(List<String> playerIds) {
-        this.playerIds = playerIds;
-    }
+    @Exclude
+    public void setTeamIdsList(List<String> teamIds) {
+        for(String teamId : teamIds) {
+            this.teamIds.put(teamId, true);
+        }
+    }*/
+
 
     public enum Flag {
         PREMIUM,
