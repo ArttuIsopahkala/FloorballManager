@@ -27,7 +27,12 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         mListener = l;
     }
 
+    public interface GoalWizardListener {
+        void onGoalSaved(Goal goal);
+    }
+
     GoalWizardListener mListener = null;
+
     TextView infoText;
     Button previousButton;
     Button nextButton;
@@ -163,7 +168,4 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         }
     }
 
-    public interface GoalWizardListener {
-        void onGoalSaved(Goal goal);
-    }
 }

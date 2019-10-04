@@ -1,6 +1,5 @@
 package com.ardeapps.floorballmanager.fragments;
 
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,6 @@ import com.ardeapps.floorballmanager.PrefRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Line;
-import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Season;
 import com.ardeapps.floorballmanager.resources.GameLinesResource;
 import com.ardeapps.floorballmanager.resources.GamesResource;
@@ -44,7 +42,6 @@ import java.util.Set;
 public class GameSettingsFragment extends Fragment implements DataView {
 
     final ArrayList<Long> durations = new ArrayList<>(Arrays.asList(20L, 15L, 10L, 5L));
-    ArrayList<Player> goalies = new ArrayList<>();
     public Listener mListener = null;
     TextView nameText;
     DatePicker datePicker;
@@ -56,6 +53,7 @@ public class GameSettingsFragment extends Fragment implements DataView {
     Spinner periodSpinner;
     Spinner goalieSpinner;
     TextView noGoaliesText;
+
     boolean isHomeGame = true;
     private GameSettingsFragmentData data;
 
@@ -152,6 +150,7 @@ public class GameSettingsFragment extends Fragment implements DataView {
         }
         Helper.setSpinnerAdapter(periodSpinner, durationTitles);
 
+        // TODO lisää maalivahti
         /*goalies = AppRes.getInstance().getActiveGoalies();
         if(goalies.isEmpty()) {
             noGoaliesText.setVisibility(View.VISIBLE);

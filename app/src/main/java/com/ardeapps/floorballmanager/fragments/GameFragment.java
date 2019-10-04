@@ -4,6 +4,7 @@ package com.ardeapps.floorballmanager.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.dialogFragments.ActionMenuDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
+import com.ardeapps.floorballmanager.dialogFragments.GameResultDialogFragment;
 import com.ardeapps.floorballmanager.goalDialog.GoalWizardDialogFragment;
+import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.Player;
@@ -32,6 +35,7 @@ import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.utils.StringUtils;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
 import com.ardeapps.floorballmanager.viewObjects.GameFragmentData;
+import com.ardeapps.floorballmanager.viewObjects.GameResultDialogData;
 import com.ardeapps.floorballmanager.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballmanager.viewObjects.GoalWizardDialogData;
 import com.ardeapps.floorballmanager.views.IconView;
@@ -63,8 +67,12 @@ public class GameFragment extends Fragment implements DataView {
     LinearLayout lineStats4;
     Button homeGoalButton;
     Button awayGoalButton;
-    int homeGoals = 0;
-    int awayGoals = 0;
+    int currentHomeGoals = 0;
+    int currentAwayGoals = 0;
+    int markedHomeGoals = 0;
+    int markedAwayGoals = 0;
+    String homeName;
+    String awayName;
     private GameFragmentData data;
 
     @Override
@@ -78,32 +86,27 @@ public class GameFragment extends Fragment implements DataView {
     }
 
     public void update() {
-        Season season = AppRes.getInstance().getSeasons().get(data.getGame().getSeasonId());
-        if (season != null) {
-            seasonText.setText(season.getName());
-            periodDurationText.setText(data.getGame().getPeriodInMinutes() + "min");
-        } else {
-            seasonText.setText("-");
-            periodDurationText.setText("-");
-        }
-        dateText.setText(StringUtils.getDateText(data.getGame().getDate()));
-
-        String homeName = data.getGame().isHomeGame() ? AppRes.getInstance().getSelectedTeam().getName() : data.getGame().getOpponentName();
-        String awayName = !data.getGame().isHomeGame() ? AppRes.getInstance().getSelectedTeam().getName() : data.getGame().getOpponentName();
-        homeNameText.setText(homeName);
-        awayNameText.setText(awayName);
-
+        // Initialize and collect data
         ArrayList<Goal> goalsPeriod1 = new ArrayList<>();
         ArrayList<Goal> goalsPeriod2 = new ArrayList<>();
         ArrayList<Goal> goalsPeriod3 = new ArrayList<>();
         ArrayList<Goal> goalsPeriodJA = new ArrayList<>();
-        homeGoals = 0;
-        awayGoals = 0;
-
+        currentHomeGoals = 0;
+        currentAwayGoals = 0;
+        markedHomeGoals = 0;
+        markedAwayGoals = 0;
         long firstPeriodEnd = TimeUnit.MINUTES.toMillis(data.getGame().getPeriodInMinutes());
         long secondPeriodEnd = firstPeriodEnd * 2;
         long thirdPeriodEnd = firstPeriodEnd * 3;
         for (Goal goal : data.getGoals().values()) {
+            // Add user marked goals
+            boolean isHomeGoal = (!goal.isOpponentGoal() && data.getGame().isHomeGame()) || (goal.isOpponentGoal() && !data.getGame().isHomeGame());
+            if (isHomeGoal) {
+                markedHomeGoals++;
+            } else {
+                markedAwayGoals++;
+            }
+
             if (goal.getTime() < firstPeriodEnd) {
                 goalsPeriod1.add(goal);
             } else if (goal.getTime() >= firstPeriodEnd && goal.getTime() < secondPeriodEnd) {
@@ -114,6 +117,24 @@ public class GameFragment extends Fragment implements DataView {
                 goalsPeriodJA.add(goal);
             }
         }
+
+        homeName = data.getGame().isHomeGame() ? AppRes.getInstance().getSelectedTeam().getName() : data.getGame().getOpponentName();
+        awayName = !data.getGame().isHomeGame() ? AppRes.getInstance().getSelectedTeam().getName() : data.getGame().getOpponentName();
+
+        // Set data
+        homeNameText.setText(homeName);
+        awayNameText.setText(awayName);
+
+        Season season = AppRes.getInstance().getSeasons().get(data.getGame().getSeasonId());
+        if (season != null) {
+            seasonText.setText(season.getName());
+            periodDurationText.setText(data.getGame().getPeriodInMinutes() + "min");
+        } else {
+            seasonText.setText("-");
+            periodDurationText.setText("-");
+        }
+        dateText.setText(StringUtils.getDateText(data.getGame().getDate()));
+
         setPeriodView(periodLayout1, 1, goalsPeriod1);
         setPeriodView(periodLayout2, 2, goalsPeriod2);
         setPeriodView(periodLayout3, 3, goalsPeriod3);
@@ -166,7 +187,10 @@ public class GameFragment extends Fragment implements DataView {
             settingsIcon.setVisibility(View.VISIBLE);
             homeGoalButton.setVisibility(View.VISIBLE);
             awayGoalButton.setVisibility(View.VISIBLE);
+            resultText.setBackground(ContextCompat.getDrawable(AppRes.getContext(), R.drawable.button_background));
+            resultText.setOnClickListener(v14 -> onEditResultManually());
         } else {
+            resultText.setBackgroundColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_background_second));
             settingsIcon.setVisibility(View.GONE);
             homeGoalButton.setVisibility(View.GONE);
             awayGoalButton.setVisibility(View.GONE);
@@ -195,7 +219,12 @@ public class GameFragment extends Fragment implements DataView {
                     dialogFragment.setListener(() -> {
                         final String gameId = data.getGame().getGameId();
                         final Set<String> playerIds = AppRes.getInstance().getPlayers().keySet();
-                        PlayerStatsResource.getInstance().removeStats(playerIds, gameId, () -> PlayerGamesResource.getInstance().removeGame(playerIds, gameId, () -> GoalsResource.getInstance().removeGoals(gameId, () -> GameLinesResource.getInstance().removeLines(gameId, () -> GamesResource.getInstance().removeGame(gameId, () -> AppRes.getActivity().onBackPressed())))));
+                        PlayerStatsResource.getInstance().removeStats(playerIds, gameId, ()
+                                -> PlayerGamesResource.getInstance().removeGame(playerIds, gameId, ()
+                                -> GoalsResource.getInstance().removeGoals(gameId, ()
+                                -> GameLinesResource.getInstance().removeLines(gameId, ()
+                                -> GamesResource.getInstance().removeGame(gameId, ()
+                                -> AppRes.getActivity().onBackPressed())))));
                     });
                 }
 
@@ -211,6 +240,51 @@ public class GameFragment extends Fragment implements DataView {
         awayGoalButton.setOnClickListener(v1 -> openGoalWizardDialog(null, false));
 
         return v;
+    }
+
+    private void onEditResultManually() {
+        Game game = data.getGame();
+        GameResultDialogData resultData = new GameResultDialogData();
+        resultData.setHomeName(homeName);
+        resultData.setAwayName(awayName);
+        resultData.setHomeGoals(game.getHomeGoals() != null ? game.getHomeGoals() : 0);
+        resultData.setAwayGoals(game.getAwayGoals() != null ? game.getAwayGoals() : 0);
+        resultData.setMarkedHomeGoals(markedHomeGoals);
+        resultData.setMarkedAwayGoals(markedAwayGoals);
+        GameResultDialogFragment dialog = new GameResultDialogFragment();
+        dialog.setData(resultData);
+        dialog.show(getChildFragmentManager(), "Ottelun lopputulos");
+        dialog.setListener((homeGoals, awayGoals) -> {
+            game.setHomeGoals(homeGoals);
+            game.setAwayGoals(awayGoals);
+            GamesResource.getInstance().editGame(game, this::update);
+        });
+    }
+
+    private void openGoalWizardDialog(final Goal goal, boolean isHomeGoal) {
+        final GoalWizardDialogFragment dialog = new GoalWizardDialogFragment();
+        dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa maalia");
+
+        final boolean opponentGoal = (data.getGame().isHomeGame() && !isHomeGoal) || (!data.getGame().isHomeGame() && isHomeGoal);
+        GoalWizardDialogData dialogData = new GoalWizardDialogData();
+        dialogData.setGoal(goal);
+        dialogData.setGame(data.getGame());
+        dialogData.setLines(data.getLines());
+        dialogData.setOpponentGoal(opponentGoal);
+        dialog.setData(dialogData);
+
+        dialog.setListener(goalToSave -> {
+            dialog.dismiss();
+            int homeGoals = data.getGame().getHomeGoals() != null ? data.getGame().getHomeGoals() : 0;
+            int awayGoals = data.getGame().getAwayGoals() != null ? data.getGame().getAwayGoals() : 0;
+            // Add goal to result only if it equals to marked goals
+            boolean addToResult = (isHomeGoal && homeGoals == markedHomeGoals) || (!isHomeGoal && awayGoals == markedAwayGoals);
+
+            GoalsResourceWrapper.getInstance(data).editGoal(goal, goalToSave, opponentGoal, addToResult, data -> {
+                GameFragment.this.data = data;
+                update();
+            });
+        });
     }
 
     private void setPeriodView(LinearLayout view, int period, List<Goal> goals) {
@@ -273,9 +347,9 @@ public class GameFragment extends Fragment implements DataView {
             // Add goals
             boolean isHomeGoal = (!goal.isOpponentGoal() && data.getGame().isHomeGame()) || (goal.isOpponentGoal() && !data.getGame().isHomeGame());
             if (isHomeGoal) {
-                homeGoals++;
+                currentHomeGoals++;
             } else {
-                awayGoals++;
+                currentAwayGoals++;
             }
 
             // Initialize
@@ -324,7 +398,7 @@ public class GameFragment extends Fragment implements DataView {
             holder.awayAssistText.setText(awayAssist);
 
             holder.timeText.setText(StringUtils.getMinSecTimeText(goal.getTime()));
-            holder.scoreText.setText(homeGoals + " - " + awayGoals);
+            holder.scoreText.setText(currentHomeGoals + " - " + currentAwayGoals);
 
             if (isHomeGoal) {
                 holder.awayContainer.setVisibility(View.GONE);
@@ -338,9 +412,9 @@ public class GameFragment extends Fragment implements DataView {
             UserConnection.Role role = AppRes.getInstance().getSelectedRole();
             if (role == UserConnection.Role.ADMIN) {
                 if (isHomeGoal) {
-                    setGoalMenuIconListener(holder.homeContainer, goal, true);
+                    setGoalMenuListener(holder.homeContainer, goal, true);
                 } else {
-                    setGoalMenuIconListener(holder.awayContainer, goal, false);
+                    setGoalMenuListener(holder.awayContainer, goal, false);
                 }
             }
 
@@ -348,7 +422,7 @@ public class GameFragment extends Fragment implements DataView {
         }
     }
 
-    private void setGoalMenuIconListener(RelativeLayout layout, final Goal goal, final boolean isHomeGoal) {
+    private void setGoalMenuListener(RelativeLayout layout, final Goal goal, final boolean isHomeGoal) {
         layout.setOnClickListener(v -> {
             final ActionMenuDialogFragment dialog = ActionMenuDialogFragment.newInstance(null, getString(R.string.remove_goal));
             dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa tai poista");
@@ -364,37 +438,22 @@ public class GameFragment extends Fragment implements DataView {
                     dialog.dismiss();
                     ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.add_event_remove_confirmation));
                     dialogFragment.show(getChildFragmentManager(), "Poistetaanko maali?");
-                    dialogFragment.setListener(() -> GoalsResourceWrapper.getInstance(data).removeGoal(goal, isHomeGoal, data -> {
-                        GameFragment.this.data = data;
-                        update();
-                    }));
+                    dialogFragment.setListener(() -> {
+                        int homeGoals = data.getGame().getHomeGoals() != null ? data.getGame().getHomeGoals() : 0;
+                        int awayGoals = data.getGame().getAwayGoals() != null ? data.getGame().getAwayGoals() : 0;
+                        // Remove goal from result only if it equals to marked goals
+                        boolean removeFromResult = (isHomeGoal && homeGoals == markedHomeGoals) || (!isHomeGoal && awayGoals == markedAwayGoals);
+                        GoalsResourceWrapper.getInstance(data).removeGoal(goal, isHomeGoal, removeFromResult, data -> {
+                            GameFragment.this.data = data;
+                            update();
+                        });
+                    });
                 }
 
                 @Override
                 public void onCancel() {
                     dialog.dismiss();
                 }
-            });
-        });
-    }
-
-    private void openGoalWizardDialog(final Goal goal, boolean homeGoal) {
-        final GoalWizardDialogFragment dialog = new GoalWizardDialogFragment();
-        dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Muokkaa maalia");
-
-        final boolean opponentGoal = (data.getGame().isHomeGame() && !homeGoal) || (!data.getGame().isHomeGame() && homeGoal);
-        GoalWizardDialogData dialogData = new GoalWizardDialogData();
-        dialogData.setGoal(goal);
-        dialogData.setGame(data.getGame());
-        dialogData.setLines(data.getLines());
-        dialogData.setOpponentGoal(opponentGoal);
-        dialog.setData(dialogData);
-
-        dialog.setListener(goalToSave -> {
-            dialog.dismiss();
-            GoalsResourceWrapper.getInstance(data).editGoal(goal, goalToSave, opponentGoal, data -> {
-                GameFragment.this.data = data;
-                update();
             });
         });
     }

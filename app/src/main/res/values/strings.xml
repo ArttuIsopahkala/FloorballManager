@@ -39,6 +39,7 @@
     <string name="opponent">Vastustaja</string>
     <string name="period_duration">Erän pituus</string>
     <string name="date">Päivämäärä</string>
+    <string name="time">Kellonaika</string>
     <string name="removed_player">Poistettu pelaaja</string>
     <string name="select">Valitse</string>
     <string name="stats">TILASTOT</string>
@@ -52,6 +53,7 @@
     <string name="nothing">Ei mikään</string>
     <string name="overtime">Jatkoaika</string>
     <string name="send">Lähetä</string>
+    <string name="klo">klo</string>
 
     <string name="remove_player">Poista pelaaja</string>
     <string name="remove_game">Poista ottelu</string>
@@ -78,6 +80,9 @@
     <string name="select_picture_from_url">Kuvan url</string>
     <string name="select_picture_error">Kuvaa ei voitu ladata</string>
     <string name="select_picture_use_default">Käytä oletuskuvaa</string>
+
+    <string name="game_result_title">Ottelun lopputulos</string>
+    <string name="game_result_too_low">Merkattuja maaleja on enemmän kuin annoit tulokseksi.</string>
 
     <string name="title_teams">Joukkueet</string>
     <string name="title_add_team">Lisää joukkue</string>
@@ -212,7 +217,7 @@
     <string name="team_settings_remove_team">Poista joukkue</string>
     <string name="team_settings_remove_players_first">Joukkueessa on pelaajia. Poista ensin pelaajat yksitellen.</string>
     <string name="team_settings_remove_team_confirmation">Haluatko varmasti poistaa joukkueen ja kaiken siihen liitetyn datan? Toimintoa ei voi perua.</string>
-    <string name="team_settings_remove_team_successful">Joukkue ja sen data poistettu. Avaa sovellus uudelleen.</string>
+    <string name="team_settings_remove_team_successful">Joukkue ja sen data nyt poistettu.</string>
     <string name="team_settings_invitation_status">Kutsun tilat:</string>
     <string name="team_settings_pending">Kutsu lähetetty.</string>
     <string name="team_settings_connected">Käyttäjä liitetty.</string>

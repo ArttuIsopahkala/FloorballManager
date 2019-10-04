@@ -150,6 +150,32 @@ public class MainActivity extends AppCompatActivity {
 
     private void onUserLoggedIn(String userId) {
         AppRes.getInstance().resetData();
+        AppDataResource.getInstance().getAppData(() -> {
+            if (BuildConfig.VERSION_CODE < AppData.NEWEST_VERSION_CODE) {
+                ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.update_new_version));
+                dialogFragment.show(getSupportFragmentManager(), "Päivitä uusin versio");
+                dialogFragment.setCancelable(false);
+                dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogYesNoListener() {
+                    @Override
+                    public void onDialogYesButtonClick() {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(AppData.GOOGLE_PLAY_APP_URL));
+                        startActivity(i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onDialogNoButtonClick() {
+                        loadUserData(userId);
+                    }
+                });
+            } else {
+                loadUserData(userId);
+            }
+        });
+    }
+
+    private void loadUserData(String userId) {
         UsersResource.getInstance().getUser(userId, user -> {
             // If user is removed from database, remove auth also
             if (user == null) {
@@ -167,28 +193,16 @@ public class MainActivity extends AppCompatActivity {
             UsersResource.getInstance().editUser(user);
             AppRes.getInstance().setUser(user);
 
-            AppDataResource.getInstance().getAppData(() -> {
-                if (BuildConfig.VERSION_CODE < AppData.NEWEST_VERSION_CODE) {
-                    ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.update_new_version));
-                    dialogFragment.show(getSupportFragmentManager(), "Päivitä uusin versio");
-                    dialogFragment.setListener(() -> {
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(AppData.GOOGLE_PLAY_APP_URL));
-                        startActivity(i);
-                    });
-                }
-
-                UserInvitationsResource.getInstance().getUserInvitations(userInvitations -> {
-                    AppRes.getInstance().setUserInvitations(userInvitations);
-                    if (!user.getTeamIds().isEmpty()) {
-                        TeamsResource.getInstance().getTeams(user.getTeamIds(), teams -> {
-                            AppRes.getInstance().setTeams(teams);
-                            FragmentListeners.getInstance().getFragmentChangeListener().goToMainSelectionFragment();
-                        });
-                    } else {
+            UserInvitationsResource.getInstance().getUserInvitations(userInvitations -> {
+                AppRes.getInstance().setUserInvitations(userInvitations);
+                if (!user.getTeamIds().isEmpty()) {
+                    TeamsResource.getInstance().getTeams(user.getTeamIds(), teams -> {
+                        AppRes.getInstance().setTeams(teams);
                         FragmentListeners.getInstance().getFragmentChangeListener().goToMainSelectionFragment();
-                    }
-                });
+                    });
+                } else {
+                    FragmentListeners.getInstance().getFragmentChangeListener().goToMainSelectionFragment();
+                }
             });
         });
     }

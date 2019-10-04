@@ -6,8 +6,10 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.utils.Helper;
@@ -20,9 +22,9 @@ import java.util.Calendar;
  */
 
 public class DatePicker extends LinearLayout {
-    DateEditText dayText;
-    DateEditText monthText;
-    DateEditText yearText;
+    TimeEditText dayText;
+    TimeEditText monthText;
+    TimeEditText yearText;
     Calendar date;
 
     public DatePicker(Context context) {
@@ -44,56 +46,64 @@ public class DatePicker extends LinearLayout {
         clearFocus();
     }
 
-    private void setTextListeners() {
+    private void setTextListener(TimeEditText editText) {
         // ON FOCUS CHANGE
-        dayText.setOnFocusChangeListener((v, hasFocus) -> {
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                formatDayText();
-            }
-        });
-        monthText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                formatMonthText();
-            }
-        });
-        yearText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                formatYearText();
+                if(editText.getId() == dayText.getId()) {
+                    formatDayText();
+                } else if(editText.getId() == monthText.getId()) {
+                    formatMonthText();
+                } else if(editText.getId() == yearText.getId()) {
+                    formatYearText();
+                }
             }
         });
         // ON TEXT CHANGE
-        dayText.addTextChangedListener(new TextWatcher() {
+        editText.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String day = s.toString();
-                if (!StringUtils.isEmptyString(day)) {
-                    int value = Integer.parseInt(day);
-                    if (count == 1 && value > 3) {
-                        setDayText(value);
-                    }
-                    if (count == 2) {
-                        monthText.setFocusableInTouchMode(true);
-                        monthText.requestFocus();
-                    }
-                }
-            }
+                String valueString = s.toString();
+                if (!StringUtils.isEmptyString(valueString)) {
+                    int value = Integer.parseInt(valueString);
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        monthText.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String month = s.toString();
-                if (!StringUtils.isEmptyString(month)) {
-                    int value = Integer.parseInt(month);
-                    if (count == 1 && value > 1) {
-                        setMonthText(value);
+                    // TODO edit text focuset saattaa hyppiä ja moninkertaistua
+                    // Format to limits
+                    if(editText.getId() == dayText.getId()) {
+                        if (value < 1) {
+                            setDayText(1);
+                        }
+                        if (value > 31) {
+                            setDayText(31);
+                        }
+                    } else if(editText.getId() == monthText.getId()) {
+                        if (value < 1) {
+                            setMonthText(1);
+                        }
+                        if (value > 12) {
+                            setMonthText(12);
+                        }
+                    } else if(editText.getId() == yearText.getId()) {
+                        if(count == 4) {
+                            if (value < 2010) {
+                                setYearText(2010);
+                            }
+                            int year = Calendar.getInstance().get(Calendar.YEAR);
+                            if (value > year + 1) {
+                                setYearText(year + 1);
+                            }
+                        }
                     }
-                    if (count == 2) {
-                        yearText.setFocusableInTouchMode(true);
-                        yearText.requestFocus();
+
+                    if (editText.getId() == yearText.getId()) {
+                        if(count == 4) {
+                            TextView nextField = (TextView)editText.focusSearch(View.FOCUS_RIGHT);
+                            nextField.requestFocus();
+                        }
+                    } else {
+                        if (count == 2) {
+                            TextView nextField = (TextView) editText.focusSearch(View.FOCUS_RIGHT);
+                            nextField.requestFocus();
+                        }
                     }
                 }
             }
@@ -105,49 +115,37 @@ public class DatePicker extends LinearLayout {
             }
         });
         // IME
-        dayText.setKeyImeChangeListener((keyCode, event) -> {
+        editText.setKeyImeChangeListener((keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                formatDayText();
-                dayText.clearFocus();
-                Helper.hideKeyBoard(dayText);
-            }
-        });
-        monthText.setKeyImeChangeListener((keyCode, event) -> {
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                formatMonthText();
-                monthText.clearFocus();
-                Helper.hideKeyBoard(monthText);
-            }
-        });
-        yearText.setKeyImeChangeListener((keyCode, event) -> {
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                formatYearText();
-                yearText.clearFocus();
-                Helper.hideKeyBoard(yearText);
+                if(editText.getId() == dayText.getId()) {
+                    formatDayText();
+                } else if(editText.getId() == monthText.getId()) {
+                    formatMonthText();
+                } else if(editText.getId() == yearText.getId()) {
+                    formatYearText();
+                }
+
+                editText.clearFocus();
+                Helper.hideKeyBoard(editText);
             }
         });
         // EDITOR
-        dayText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                formatDayText();
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_NEXT) {
+                if(editText.getId() == dayText.getId()) {
+                    formatDayText();
+                } else if(editText.getId() == monthText.getId()) {
+                    formatMonthText();
+                }
+            } else if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if(editText.getId() == yearText.getId()) {
+                    formatYearText();
+                    editText.clearFocus();
+                    Helper.hideKeyBoard(editText);
+                }
             }
             return false;
         });
-        monthText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                formatMonthText();
-            }
-            return false;
-        });
-        yearText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                formatYearText();
-                yearText.clearFocus();
-                Helper.hideKeyBoard(yearText);
-            }
-            return false;
-        });
-
     }
 
     private void formatDayText() {
@@ -225,6 +223,8 @@ public class DatePicker extends LinearLayout {
         setDayText(day);
         setMonthText(month);
         setYearText(year);
-        setTextListeners();
+        setTextListener(dayText);
+        setTextListener(monthText);
+        setTextListener(yearText);
     }
 }

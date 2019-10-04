@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.BuildConfig;
+import com.ardeapps.floorballmanager.MainActivity;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
@@ -66,7 +68,12 @@ public class SettingsFragment extends Fragment {
 
         logOutButton.setOnClickListener(v14 -> {
             FirebaseAuth.getInstance().signOut();
-            AppRes.getActivity().finish();
+            FragmentActivity activity = AppRes.getActivity();
+            Intent i = new Intent(activity, MainActivity.class);
+            activity.finish();
+            activity.overridePendingTransition(0, 0);
+            activity.startActivity(i);
+            activity.overridePendingTransition(0, 0);
         });
 
         rateText.setOnClickListener(v13 -> openUrl(AppData.GOOGLE_PLAY_APP_URL));

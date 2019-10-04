@@ -1,8 +1,10 @@
 package com.ardeapps.floorballmanager.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
+import com.ardeapps.floorballmanager.MainActivity;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
@@ -224,7 +227,12 @@ public class TeamSettingsFragment extends Fragment {
                                                                                     AppRes.getInstance().setUserInvitation(userConnectionId, null);
                                                                                 }
                                                                                 Logger.toast(R.string.team_settings_remove_team_successful);
-                                                                                AppRes.getActivity().finish();
+                                                                                FragmentActivity activity = AppRes.getActivity();
+                                                                                Intent i = new Intent(activity, MainActivity.class);
+                                                                                activity.finish();
+                                                                                activity.overridePendingTransition(0, 0);
+                                                                                activity.startActivity(i);
+                                                                                activity.overridePendingTransition(0, 0);
                                                                             });
                                                                         })
                                                                 )

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
 import com.ardeapps.floorballmanager.viewObjects.GoalPositionFragmentData;
 
@@ -103,8 +104,8 @@ public class GoalPositionFragment extends Fragment implements DataView {
         gD.setStroke(strokeWidth, Color.BLACK);
         shootPointImage.setBackground(gD);
 
-        int shootPointWidth = 40;
-        int shootPointHeight = 40;
+        int shootPointWidth = Helper.dpToPx(30);
+        int shootPointHeight = Helper.dpToPx(30);
         double pictureX = positionX - (shootPointWidth / 2.0);
         double pictureY = positionY - (shootPointHeight / 2.0);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) shootPointImage.getLayoutParams();

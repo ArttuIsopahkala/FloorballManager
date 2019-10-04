@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <com.ardeapps.floorballmanager.views.TimeEditText
+        android:id="@+id/hoursText"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="2"
+        android:selectAllOnFocus="true"
+        android:nextFocusRight="@id/minutesText"
+        android:textColor="@color/color_text_light"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:text="."
+        android:textColor="@color/color_text_light" />
+
+    <com.ardeapps.floorballmanager.views.TimeEditText
+        android:id="@+id/minutesText"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:maxLength="2"
+        android:selectAllOnFocus="true"
+        android:textColor="@color/color_text_light"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="20sp" />
+
+    <com.ardeapps.floorballmanager.views.IconView
+        android:id="@+id/chooserIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/button_background"
+        android:text="@string/icon_clock"
+        app:iconFont="@string/icon_solid"
+        app:iconSize="16sp" />
+</LinearLayout>

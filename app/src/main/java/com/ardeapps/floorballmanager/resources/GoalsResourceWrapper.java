@@ -21,11 +21,36 @@ public class GoalsResourceWrapper extends FirebaseDatabaseService {
         return instance;
     }
 
-    public void editGoal(final Goal oldGoal, final Goal goalToSave, final boolean opponentGoal, final EditGoalListener handler) {
+    public void editGoal(final Goal oldGoal, final Goal goalToSave, final boolean opponentGoal, boolean addToResult, final EditGoalListener handler) {
         // Change team stats
         editTeamStatsGoal(oldGoal, goalToSave, () -> {
-            // Change game goals
-            addGoalToGameIfNeeded(oldGoal, goalToSave, () -> {
+            if(addToResult) {
+                // Change game goals
+                addGoalToGameIfNeeded(oldGoal, goalToSave, () -> {
+                    if (opponentGoal) {
+                        handler.onGoalEdited(fragmentData);
+                        //editOpponentStatsGoal(oldGoal, goalToSave, () -> handler.onGoalEdited(fragmentData));
+                    } else {
+                        // TODO tallenna pelaajan maalit eri tavalla
+                        boolean scorerAdded = !StringUtils.isEmptyString(goalToSave.getScorerId());
+                        boolean assistantAdded = !StringUtils.isEmptyString(goalToSave.getAssistantId());
+
+                        if (scorerAdded && assistantAdded) {
+                            editScorerStatsGoal(oldGoal, goalToSave, ()
+                                    -> editAssistantStatsGoal(oldGoal, goalToSave, ()
+                                    -> handler.onGoalEdited(fragmentData)));
+                        } else if (scorerAdded) {
+                            editScorerStatsGoal(oldGoal, goalToSave, ()
+                                    -> handler.onGoalEdited(fragmentData));
+                        } else if (assistantAdded) {
+                            editAssistantStatsGoal(oldGoal, goalToSave, ()
+                                    -> handler.onGoalEdited(fragmentData));
+                        } else {
+                            handler.onGoalEdited(fragmentData);
+                        }
+                    }
+                });
+            } else {
                 if (opponentGoal) {
                     handler.onGoalEdited(fragmentData);
                     //editOpponentStatsGoal(oldGoal, goalToSave, () -> handler.onGoalEdited(fragmentData));
@@ -48,7 +73,7 @@ public class GoalsResourceWrapper extends FirebaseDatabaseService {
                         handler.onGoalEdited(fragmentData);
                     }
                 }
-            });
+            }
         });
     }
 
@@ -124,29 +149,54 @@ public class GoalsResourceWrapper extends FirebaseDatabaseService {
         }
     }
 
-    public void removeGoal(final Goal goal, final boolean isHomeGoal, final RemoveGoalListener handler) {
-        removeTeamStatsGoal(goal, () -> removeGoalFromGame(isHomeGoal, () -> {
-            final boolean opponentGoal = (fragmentData.getGame().isHomeGame() && !isHomeGoal) || (!fragmentData.getGame().isHomeGame() && isHomeGoal);
-            if (opponentGoal) {
-                handler.onGoalRemoved(fragmentData);
-                //removeOpponentStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
-            } else {
-                // TODO tallenna pelaajan maalit eri tavalla
-                boolean scorerAdded = !StringUtils.isEmptyString(goal.getScorerId());
-                boolean assistantAdded = !StringUtils.isEmptyString(goal.getAssistantId());
+    public void removeGoal(final Goal goal, final boolean isHomeGoal, boolean removeFromResult, final RemoveGoalListener handler) {
+        removeTeamStatsGoal(goal, () -> {
+            if(removeFromResult) {
+                removeGoalFromGame(isHomeGoal, () -> {
+                    final boolean opponentGoal = (fragmentData.getGame().isHomeGame() && !isHomeGoal) || (!fragmentData.getGame().isHomeGame() && isHomeGoal);
+                    if (opponentGoal) {
+                        handler.onGoalRemoved(fragmentData);
+                        //removeOpponentStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
+                    } else {
+                        // TODO tallenna pelaajan maalit eri tavalla
+                        boolean scorerAdded = !StringUtils.isEmptyString(goal.getScorerId());
+                        boolean assistantAdded = !StringUtils.isEmptyString(goal.getAssistantId());
 
-                if (scorerAdded && assistantAdded) {
-                    removeScorerStatsGoal(goal, () -> removeAssistantStatsGoal(goal, ()
-                            -> handler.onGoalRemoved(fragmentData)));
-                } else if (scorerAdded) {
-                    removeScorerStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
-                } else if (assistantAdded) {
-                    removeAssistantStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
-                } else {
+                        if (scorerAdded && assistantAdded) {
+                            removeScorerStatsGoal(goal, () -> removeAssistantStatsGoal(goal, ()
+                                    -> handler.onGoalRemoved(fragmentData)));
+                        } else if (scorerAdded) {
+                            removeScorerStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
+                        } else if (assistantAdded) {
+                            removeAssistantStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
+                        } else {
+                            handler.onGoalRemoved(fragmentData);
+                        }
+                    }
+                });
+            } else {
+                final boolean opponentGoal = (fragmentData.getGame().isHomeGame() && !isHomeGoal) || (!fragmentData.getGame().isHomeGame() && isHomeGoal);
+                if (opponentGoal) {
                     handler.onGoalRemoved(fragmentData);
+                    //removeOpponentStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
+                } else {
+                    // TODO tallenna pelaajan maalit eri tavalla
+                    boolean scorerAdded = !StringUtils.isEmptyString(goal.getScorerId());
+                    boolean assistantAdded = !StringUtils.isEmptyString(goal.getAssistantId());
+
+                    if (scorerAdded && assistantAdded) {
+                        removeScorerStatsGoal(goal, () -> removeAssistantStatsGoal(goal, ()
+                                -> handler.onGoalRemoved(fragmentData)));
+                    } else if (scorerAdded) {
+                        removeScorerStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
+                    } else if (assistantAdded) {
+                        removeAssistantStatsGoal(goal, () -> handler.onGoalRemoved(fragmentData));
+                    } else {
+                        handler.onGoalRemoved(fragmentData);
+                    }
                 }
             }
-        }));
+        });
     }
 
     private void removeTeamStatsGoal(final Goal goal, final RemoveGoalStatsListener listener) {

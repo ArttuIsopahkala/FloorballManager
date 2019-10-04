@@ -596,15 +596,15 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         shootPoint.setScaleType(ImageView.ScaleType.FIT_XY);
         shootPoint.setAdjustViewBounds(true);
 
-        int strokeWidth = 5;
+        int strokeWidth = Helper.dpToPx(3);
         GradientDrawable gD = new GradientDrawable();
         gD.setColor(Color.WHITE);
         gD.setShape(GradientDrawable.OVAL);
         gD.setStroke(strokeWidth, Color.BLACK);
         shootPoint.setBackground(gD);
 
-        int shootPointWidth = 40;
-        int shootPointHeight = 40;
+        int shootPointWidth = Helper.dpToPx(20);
+        int shootPointHeight = Helper.dpToPx(20);
         double pictureX = positionX - (shootPointWidth / 2.0);
         double pictureY = positionY - (shootPointHeight / 2.0);
 

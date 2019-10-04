@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/curve_shape"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/game_result_title"
+        android:textColor="@color/color_text_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/homeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/vsText"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/homeNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center|top"
+                android:text="O2 Jyväskylä"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <NumberPicker
+                android:id="@+id/homeResultPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:descendantFocusability="blocksDescendants"
+                android:theme="@style/AppTheme.Picker" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/vsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="-"
+            android:textColor="@color/color_text_light"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/awayContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@id/vsText"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/awayNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center|top"
+                android:text="Luppo"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <NumberPicker
+                android:id="@+id/awayResultPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:descendantFocusability="blocksDescendants"
+                android:theme="@style/AppTheme.Picker" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/button_background"
+        android:text="@string/save"
+        android:textColor="@color/color_text_light"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>
