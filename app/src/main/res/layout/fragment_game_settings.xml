@@ -101,7 +101,7 @@
         <LinearLayout
             android:id="@+id/dateContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/teamsContainer"
             android:layout_marginTop="20dp"
             android:background="@color/color_background"
@@ -128,9 +128,37 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/timeContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/dateContainer"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateContainer"
+            android:layout_marginTop="20dp"
+            android:background="@color/color_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/time"
+                android:textColor="@color/color_text_light"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.ardeapps.floorballmanager.views.TimeChooserPicker
+                android:id="@+id/timePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_text_light"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/timeContainer"
             android:layout_marginTop="20dp"
             android:background="@color/color_background"
             android:clickable="true"
@@ -180,7 +208,7 @@
                 android:textColor="@color/color_text_light"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <Spinner
                 android:id="@+id/goalieSpinner"
@@ -189,7 +217,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/color_text_light"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/noGoaliesText"
@@ -200,7 +228,7 @@
                 android:text="@string/game_settings_no_goalies"
                 android:textColor="@color/color_text_light"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="300dp"

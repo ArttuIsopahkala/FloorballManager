@@ -52,7 +52,6 @@ public class GoalDetailsFragment extends Fragment implements DataView {
         View v = inflater.inflate(R.layout.fragment_goal_details, container, false);
         timePicker = v.findViewById(R.id.timePicker);
         gameModeSpinner = v.findViewById(R.id.gameModeSpinner);
-
         timePicker.setTimeInMillis(data.getTime());
 
         Map<Goal.Mode, String> gameModeMap = new TreeMap<>();

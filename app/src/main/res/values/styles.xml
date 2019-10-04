@@ -38,4 +38,8 @@
         <item name="android:textColor">@color/color_text_light</item>
         <item name="colorAccent">@color/color_text_light</item>
     </style>
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/color_text_light</item>
+        <item name="colorControlNormal">@color/color_text_light</item>
+    </style>
 </resources>
