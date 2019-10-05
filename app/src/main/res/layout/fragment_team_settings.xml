@@ -41,6 +41,21 @@
             android:textColor="@color/color_text_light" />
 
         <TextView
+            android:id="@+id/userRequestsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/team_settings_requests"
+            android:textColor="@color/color_text_light"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/userJoinRequestsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

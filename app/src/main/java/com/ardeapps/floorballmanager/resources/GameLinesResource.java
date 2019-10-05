@@ -101,20 +101,22 @@ public class GameLinesResource extends FirebaseDatabaseService {
     /**
      * Get lines indexed by gameId
      */
-    public void getLines(final GetTeamLinesHandler handler) {
-        getData(database.child(seasonId), dataSnapshot -> {
+    public void getAllLines(final GetTeamLinesHandler handler) {
+        getData(database, dataSnapshot -> {
             final Map<String, ArrayList<Line>> linesMap = new HashMap<>();
-            for (DataSnapshot game : dataSnapshot.getChildren()) {
-                String gameId = game.getKey();
-                if (gameId != null) {
-                    ArrayList<Line> lines = new ArrayList<>();
-                    for (DataSnapshot snapshot : game.getChildren()) {
-                        Line line = snapshot.getValue(Line.class);
-                        if (line != null) {
-                            lines.add(line);
+            for (DataSnapshot season : dataSnapshot.getChildren()) {
+                for (DataSnapshot game : season.getChildren()) {
+                    String gameId = game.getKey();
+                    if (gameId != null) {
+                        ArrayList<Line> lines = new ArrayList<>();
+                        for (DataSnapshot snapshot : game.getChildren()) {
+                            Line line = snapshot.getValue(Line.class);
+                            if (line != null) {
+                                lines.add(line);
+                            }
                         }
+                        linesMap.put(gameId, lines);
                     }
-                    linesMap.put(gameId, lines);
                 }
             }
             handler.onTeamLinesLoaded(linesMap);

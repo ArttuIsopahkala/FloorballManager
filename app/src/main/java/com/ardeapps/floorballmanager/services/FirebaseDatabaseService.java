@@ -35,6 +35,7 @@ public class FirebaseDatabaseService {
     protected static final String TEAMS_USER_CONNECTIONS = "teams_userConnections";
     protected static final String USERS = "users";
     protected static final String FEEDBACKS = "feedbacks";
+    protected static final String USER_REQUESTS = "userRequests";
     protected static final String USER_INVITATIONS = "userInvitations";
 
     protected static final String DEBUG = "DEBUG";

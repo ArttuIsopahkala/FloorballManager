@@ -3,7 +3,6 @@ package com.ardeapps.floorballmanager.resources;
 import com.ardeapps.floorballmanager.handlers.GetUserHandler;
 import com.ardeapps.floorballmanager.objects.User;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 /**
@@ -41,7 +40,7 @@ public class UsersResource extends FirebaseDatabaseService {
         });
     }
 
-    public void getUserByEmail(String email, final GetUserHandler handler) {
+    /*public void getUserByEmail(String email, final GetUserHandler handler) {
         getData(database.orderByChild("email").equalTo(email).limitToFirst(1), dataSnapshot -> {
             if (dataSnapshot.getChildren().iterator().hasNext()) {
                 DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
@@ -51,5 +50,5 @@ public class UsersResource extends FirebaseDatabaseService {
                 handler.onUserLoaded(null);
             }
         });
-    }
+    }*/
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_background"
+    android:gravity="center_horizontal"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/infoText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_menu"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="@string/search_team_desc"
+        android:textColor="@color/color_text_light"
+        android:textSize="15sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp">
+        <EditText
+            android:id="@+id/searchText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:layout_toStartOf="@id/searchIcon"
+            android:hint="@string/add_team_name_hint"
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"
+            android:inputType="textCapWords"
+            android:maxLength="250"
+            android:nextFocusRight="@+id/numberText"
+            android:textColor="@color/color_text_light"
+            android:textColorHint="@color/color_text_hint" />
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/searchIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_background"
+            android:text="@string/icon_search"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="16sp" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/noResultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="@string/search_team_no_result"
+        android:textColor="@color/color_text_light"
+        android:textSize="15sp" />
+    <ListView
+        android:id="@+id/teamList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        android:dividerHeight="3dp" />
+</LinearLayout>

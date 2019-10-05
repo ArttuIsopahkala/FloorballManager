@@ -66,7 +66,6 @@ public class DatePicker extends LinearLayout {
                 if (!StringUtils.isEmptyString(valueString)) {
                     int value = Integer.parseInt(valueString);
 
-                    // TODO edit text focuset saattaa hyppiä ja moninkertaistua
                     // Format to limits
                     if(editText.getId() == dayText.getId()) {
                         if (value < 1) {

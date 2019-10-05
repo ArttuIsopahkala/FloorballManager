@@ -5,23 +5,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.objects.Team;
+import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
+import com.ardeapps.floorballmanager.views.IconView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TeamListAdapter extends BaseAdapter {
+
+    public enum Type {
+        SELECT,
+        JOIN
+    }
 
     private static LayoutInflater inflater = null;
     public Listener mListener = null;
     private ArrayList<Team> teams = new ArrayList<>();
+    private Type type;
 
-    public TeamListAdapter(Context ctx) { // Activity
+    public TeamListAdapter(Context ctx, Type type) { // Activity
+        this.type = type;
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -55,6 +67,8 @@ public class TeamListAdapter extends BaseAdapter {
             v = inflater.inflate(R.layout.list_item_team, null);
         }
 
+        holder.selectIcon = v.findViewById(R.id.selectIcon);
+        holder.joinButton = v.findViewById(R.id.joinButton);
         holder.logoImage = v.findViewById(R.id.logoImage);
         holder.nameText = v.findViewById(R.id.nameText);
         holder.teamContainer = v.findViewById(R.id.teamContainer);
@@ -68,7 +82,32 @@ public class TeamListAdapter extends BaseAdapter {
 
         holder.nameText.setText(team.getName());
 
-        holder.teamContainer.setOnClickListener(v1 -> mListener.onTeamSelected(team));
+        if(type == Type.SELECT) {
+            holder.selectIcon.setVisibility(View.VISIBLE);
+            holder.joinButton.setVisibility(View.GONE);
+            holder.teamContainer.setOnClickListener(v1 -> mListener.onTeamSelected(team));
+        } else {
+            holder.selectIcon.setVisibility(View.GONE);
+
+            boolean showJoinButton = true;
+            // Show if user is not joined or sent request to team
+            List<String> userJoinedTeams = AppRes.getInstance().getUser().getTeamIds();
+            if (userJoinedTeams.contains(team.getTeamId())) {
+                showJoinButton = false;
+            }
+            for(UserRequest userRequest : AppRes.getInstance().getUserRequests().values()) {
+                if(userRequest.getTeamId().equals(team.getTeamId())) {
+                    showJoinButton = false;
+                    break;
+                }
+            }
+            if(showJoinButton) {
+                holder.joinButton.setVisibility(View.VISIBLE);
+                holder.joinButton.setOnClickListener(v2 -> mListener.onTeamSelected(team));
+            } else {
+                holder.joinButton.setVisibility(View.GONE);
+            }
+        }
 
         return v;
     }
@@ -81,6 +120,8 @@ public class TeamListAdapter extends BaseAdapter {
         ImageView logoImage;
         TextView nameText;
         RelativeLayout teamContainer;
+        IconView selectIcon;
+        Button joinButton;
     }
 
 }

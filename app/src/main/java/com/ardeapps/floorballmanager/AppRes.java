@@ -14,6 +14,7 @@ import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.objects.User;
 import com.ardeapps.floorballmanager.objects.UserConnection;
 import com.ardeapps.floorballmanager.objects.UserInvitation;
+import com.ardeapps.floorballmanager.objects.UserRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +33,7 @@ public class AppRes extends MultiDexApplication {
     // User info
     private User user;
     private Map<String, UserInvitation> userInvitations;
+    private Map<String, UserRequest> userRequests;
     private UserConnection.Role selectedRole;
     private String selectedPlayerId;
     // Selected team's info
@@ -41,6 +43,7 @@ public class AppRes extends MultiDexApplication {
     private Map<String, Season> seasons;
     private Map<Integer, Line> lines;
     private Map<String, UserConnection> userConnections;
+    private Map<String, UserRequest> userJoinRequests;
     private Map<String, Game> games; // Loaded in TeamDashboardFragment
     // For analyzer service
     private Map<String, ArrayList<Goal>> goalsByGame;
@@ -81,12 +84,15 @@ public class AppRes extends MultiDexApplication {
         selectedRole = null;
         teams = null;
         userInvitations = null;
+        userRequests = null;
         players = null;
         games = null;
         lines = null;
         userConnections = null;
         goalsByGame = null;
         linesByGame = null;
+        seasons = null;
+        userJoinRequests = null;
     }
 
     public User getUser() {
@@ -182,6 +188,28 @@ public class AppRes extends MultiDexApplication {
             seasons.put(seasonId, season);
         } else {
             seasons.remove(seasonId);
+        }
+    }
+
+    public Map<String, UserRequest> getUserRequests() {
+        if (userRequests == null) {
+            userRequests = new HashMap<>();
+        }
+        return userRequests;
+    }
+
+    public void setUserRequests(Map<String, UserRequest> userRequests) {
+        this.userRequests = userRequests;
+    }
+
+    public void setUserRequest(String userRequestId, UserRequest userRequest) {
+        if (userRequests == null) {
+            userRequests = new HashMap<>();
+        }
+        if (userRequest != null) {
+            userRequests.put(userRequestId, userRequest);
+        } else {
+            userRequests.remove(userRequestId);
         }
     }
 
@@ -375,6 +403,28 @@ public class AppRes extends MultiDexApplication {
             userConnections.put(userConnectionId, userConnection);
         } else {
             userConnections.remove(userConnectionId);
+        }
+    }
+
+    public Map<String, UserRequest> getUserJoinRequests() {
+        if (userJoinRequests == null) {
+            userJoinRequests = new HashMap<>();
+        }
+        return userJoinRequests;
+    }
+
+    public void setUserJoinRequests(Map<String, UserRequest> userJoinRequests) {
+        this.userJoinRequests = userJoinRequests;
+    }
+
+    public void setUserJoinRequest(String userRequestId, UserRequest userJoinRequest) {
+        if (userJoinRequests == null) {
+            userJoinRequests = new HashMap<>();
+        }
+        if (userJoinRequest != null) {
+            userJoinRequests.put(userRequestId, userJoinRequest);
+        } else {
+            userJoinRequests.remove(userRequestId);
         }
     }
 

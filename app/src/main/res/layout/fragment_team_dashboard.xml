@@ -28,7 +28,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/teamNameText"
+            android:id="@+id/infoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/titleContainer"
@@ -43,7 +43,7 @@
             android:id="@+id/gamesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/teamNameText"
+            android:layout_below="@+id/infoText"
             android:layout_margin="10dp"
             android:background="@drawable/button_background"
             android:text="@string/team_dashboard_games"
