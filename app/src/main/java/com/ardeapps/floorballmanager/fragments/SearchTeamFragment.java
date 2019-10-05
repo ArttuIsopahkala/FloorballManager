@@ -20,6 +20,7 @@ import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.resources.TeamsResource;
 import com.ardeapps.floorballmanager.resources.UserRequestsResource;
 import com.ardeapps.floorballmanager.utils.Helper;
+import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.utils.StringUtils;
 import com.ardeapps.floorballmanager.views.IconView;
 
@@ -96,17 +97,25 @@ public class SearchTeamFragment extends Fragment implements TeamListAdapter.List
         ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.search_team_join_request));
         dialogFragment.show(getChildFragmentManager(), "Lähetetäänkö liittymispyyntö?");
         dialogFragment.setListener(() -> {
-            User user = AppRes.getInstance().getUser();
-            UserRequest userRequest = new UserRequest();
-            userRequest.setEmail(user.getEmail());
-            userRequest.setUserId(user.getUserId());
-            userRequest.setTeamId(team.getTeamId());
-            userRequest.setStatus(UserRequest.Status.PENDING.toDatabaseName());
-            UserRequestsResource.getInstance().addUserRequest(userRequest, id -> {
-                userRequest.setUserConnectionId(id);
-                userRequest.setTeam(team);
-                AppRes.getInstance().setUserRequest(userRequest.getUserConnectionId(), userRequest);
-                adapter.notifyDataSetChanged();
+            TeamsResource.getInstance().getTeam(team.getTeamId(), false, existingTeam -> {
+                // Check that team still exists
+                if(existingTeam == null) {
+                    Logger.toast(R.string.search_team_removed);
+                    return;
+                }
+
+                User user = AppRes.getInstance().getUser();
+                UserRequest userRequest = new UserRequest();
+                userRequest.setEmail(user.getEmail());
+                userRequest.setUserId(user.getUserId());
+                userRequest.setTeamId(team.getTeamId());
+                userRequest.setStatus(UserRequest.Status.PENDING.toDatabaseName());
+                UserRequestsResource.getInstance().addUserRequest(userRequest, id -> {
+                    userRequest.setUserConnectionId(id);
+                    userRequest.setTeam(team);
+                    AppRes.getInstance().setUserRequest(userRequest.getUserConnectionId(), userRequest);
+                    adapter.notifyDataSetChanged();
+                });
             });
         });
     }

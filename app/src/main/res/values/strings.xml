@@ -141,6 +141,7 @@
     <string name="search_team_desc">Etsi olemassa olevaa joukkuetta, johon haluat liittyä.</string>
     <string name="search_team_join">Liity</string>
     <string name="search_team_no_result">Ei hakutuloksia</string>
+    <string name="search_team_removed">Joukkue on poistettu</string>
     <string name="search_team_join_request">Lähetetäänkö pyyntö liittyä joukkueen jäseneksi?</string>
 
     <string name="players_no_players">Ei lisättyjä pelaajia.</string>

@@ -68,6 +68,8 @@ public class UserConnectionsResource extends FirebaseDatabaseService {
                 userConnection.setStatus(status.toDatabaseName());
                 userConnection.setUserId(userId);
                 editData(database.child(teamId).child(userConnectionId), userConnection, handler);
+            } else {
+                handler.onEditDataSuccess();
             }
         });
     }
@@ -80,6 +82,8 @@ public class UserConnectionsResource extends FirebaseDatabaseService {
             if (userConnection != null) {
                 userConnection.setStatus(status.toDatabaseName());
                 editData(database.child(teamId).child(userConnectionId), userConnection, handler);
+            } else {
+                handler.onEditDataSuccess();
             }
         });
     }

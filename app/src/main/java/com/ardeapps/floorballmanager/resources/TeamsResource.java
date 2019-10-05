@@ -61,6 +61,8 @@ public class TeamsResource extends FirebaseDatabaseService {
                 } else {
                     handler.onTeamLoaded(team);
                 }
+            } else {
+                handler.onTeamLoaded(null);
             }
         });
     }
@@ -132,14 +134,17 @@ public class TeamsResource extends FirebaseDatabaseService {
 
     private void getTeamsData(final List<String> teamIds, final GetTeamsHandler handler) {
         final Map<String, Team> teams = new HashMap<>();
+        ArrayList<String> failedTeams = new ArrayList<>();
         for (final String teamId : teamIds) {
             getData(database.child(teamId), snapshot -> {
                 final Team team = snapshot.getValue(Team.class);
                 if (team != null) {
                     teams.put(team.getTeamId(), team);
-                    if (teams.size() == teamIds.size()) {
-                        handler.onTeamsLoaded(teams);
-                    }
+                } else {
+                    failedTeams.add(teamId);
+                }
+                if (teams.size() + failedTeams.size() == teamIds.size()) {
+                    handler.onTeamsLoaded(teams);
                 }
             });
         }
