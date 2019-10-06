@@ -178,6 +178,7 @@
 
     <string name="add_team_name_hint">Joukkueen nimi</string>
     <string name="add_team_info">Tiedot tällä sivulla ovat julkisia, jotta muut voivat löytää joukkueen.</string>
+    <string name="add_team_name_exists">Tällä nimellä löytyy jo joukkue!</string>
 
     <string name="season_settings_season_info">Esim. Kausi %1$s tai Suomen Cup. Voit myöhemmin suodattaa tilastoja nimen perusteella.</string>
     <string name="season_settings_exists">Tällä nimellä löytyy jo tunniste.</string>

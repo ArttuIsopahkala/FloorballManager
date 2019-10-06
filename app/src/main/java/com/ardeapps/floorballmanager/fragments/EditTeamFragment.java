@@ -138,14 +138,21 @@ public class EditTeamFragment extends Fragment implements DataView {
                 });
             } else {
                 teamToSave = new Team();
-                teamToSave.setName(name);
-                teamToSave.setCreationTime(System.currentTimeMillis());
-                teamToSave.setFounder(AppRes.getInstance().getUser().getUserId());
-                TeamsResource.getInstance().addTeam(teamToSave, id -> {
-                    teamToSave.setTeamId(id);
-                    AppRes.getInstance().setSelectedTeam(teamToSave);
+                TeamsResource.getInstance().getTeamByName(name, team -> {
+                    if(team != null) {
+                        Logger.toast(R.string.add_team_name_exists);
+                        return;
+                    }
 
-                    addUserConnection(teamToSave);
+                    teamToSave.setName(name);
+                    teamToSave.setCreationTime(System.currentTimeMillis());
+                    teamToSave.setFounder(AppRes.getInstance().getUser().getUserId());
+                    TeamsResource.getInstance().addTeam(teamToSave, id -> {
+                        teamToSave.setTeamId(id);
+                        AppRes.getInstance().setSelectedTeam(teamToSave);
+
+                        addUserConnection(teamToSave);
+                    });
                 });
             }
         });

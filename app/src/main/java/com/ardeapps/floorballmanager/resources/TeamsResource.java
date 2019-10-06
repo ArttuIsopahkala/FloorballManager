@@ -150,4 +150,15 @@ public class TeamsResource extends FirebaseDatabaseService {
         }
     }
 
+    public void getTeamByName(String name, final GetTeamHandler handler) {
+        getData(database.orderByChild("name").equalTo(name).limitToFirst(1), dataSnapshot -> {
+            if (dataSnapshot.getChildren().iterator().hasNext()) {
+                DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
+                Team team = snapshot.getValue(Team.class);
+                handler.onTeamLoaded(team);
+            } else {
+                handler.onTeamLoaded(null);
+            }
+        });
+    }
 }
