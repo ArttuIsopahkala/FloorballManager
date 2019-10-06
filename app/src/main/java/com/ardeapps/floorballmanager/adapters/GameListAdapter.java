@@ -64,7 +64,7 @@ public class GameListAdapter extends BaseAdapter {
 
         final Game game = games.get(position);
 
-        holder.dateText.setText(StringUtils.getDateText(game.getDate()));
+        holder.dateText.setText(StringUtils.getDateText(game.getDate(), true));
 
         String nameText;
         if (game.isHomeGame()) {

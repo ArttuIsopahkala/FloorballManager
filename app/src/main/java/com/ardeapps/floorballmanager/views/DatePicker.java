@@ -82,7 +82,7 @@ public class DatePicker extends LinearLayout {
                             setMonthText(12);
                         }
                     } else if(editText.getId() == yearText.getId()) {
-                        if(count == 4) {
+                        if(valueString.length() == 4) {
                             if (value < 2010) {
                                 setYearText(2010);
                             }
@@ -94,14 +94,14 @@ public class DatePicker extends LinearLayout {
                     }
 
                     if (editText.getId() == yearText.getId()) {
-                        if(count == 4) {
+                        if(valueString.length() == 4) {
                             TextView nextField = (TextView)editText.focusSearch(View.FOCUS_RIGHT);
                             if(nextField != null) {
                                 nextField.requestFocus();
                             }
                         }
                     } else {
-                        if (count == 2) {
+                        if(valueString.length() == 2) {
                             TextView nextField = (TextView) editText.focusSearch(View.FOCUS_RIGHT);
                             if(nextField != null) {
                                 nextField.requestFocus();

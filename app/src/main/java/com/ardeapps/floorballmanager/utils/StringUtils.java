@@ -3,6 +3,9 @@ package com.ardeapps.floorballmanager.utils;
 import android.text.Html;
 import android.text.Spanned;
 
+import com.ardeapps.floorballmanager.AppRes;
+import com.ardeapps.floorballmanager.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,21 +32,18 @@ public class StringUtils {
                 TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
     }
 
-    public static String getTimeText(long milliseconds) {
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(milliseconds);
-
-        int minutes = c.get(Calendar.MINUTE);
-        String minutesString = minutes < 10 ? "0" + minutes : minutes + "";
-
-        int hours = c.get(Calendar.HOUR_OF_DAY);
-        String hoursString = hours < 10 ? "0" + hours : hours + "";
-
-        return hoursString + ":" + minutesString;
-    }
-
-    public static String getDateText(long milliseconds) {
-        return simpleDateFormat.format(new Date(milliseconds));
+    public static String getDateText(long milliseconds, boolean showTime) {
+        String result = simpleDateFormat.format(new Date(milliseconds));
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(milliseconds);
+        // Show time if different than 00:00
+        int hours = cal.get(Calendar.HOUR_OF_DAY);
+        int minutes = cal.get(Calendar.MINUTE);
+        if(showTime && hours != 0 || minutes != 0) {
+            String minutesString = (minutes < 10 ? "0" : "") + minutes;
+            result += " " + AppRes.getContext().getString(R.string.klo) + " " + hours + "." + minutesString;
+        }
+        return result;
     }
 
     public static Spanned fromHtml(String html) {

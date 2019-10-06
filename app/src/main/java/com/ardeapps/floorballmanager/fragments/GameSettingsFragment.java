@@ -30,6 +30,7 @@ import com.ardeapps.floorballmanager.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballmanager.views.DatePicker;
 import com.ardeapps.floorballmanager.views.IconView;
 import com.ardeapps.floorballmanager.views.LineUpSelector;
+import com.ardeapps.floorballmanager.views.TimeChooserPicker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +54,7 @@ public class GameSettingsFragment extends Fragment implements DataView {
     Spinner periodSpinner;
     Spinner goalieSpinner;
     TextView noGoaliesText;
+    TimeChooserPicker timeChooserPicker;
 
     boolean isHomeGame = true;
     private GameSettingsFragmentData data;
@@ -104,6 +106,14 @@ public class GameSettingsFragment extends Fragment implements DataView {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(game.getDate());
                 Helper.setDatePickerValue(datePicker, cal);
+                // Show time if different than 00:00
+                int hours = cal.get(Calendar.HOUR_OF_DAY);
+                int minutes = cal.get(Calendar.MINUTE);
+                if(hours > 0 || minutes > 0) {
+                    timeChooserPicker.setTime(hours, minutes);
+                } else {
+                    timeChooserPicker.setTime(null, null);
+                }
                 lineUpSelector.setLines(data.getLines());
                 Helper.setSpinnerSelection(periodSpinner, durations.indexOf(game.getPeriodInMinutes()));
             }
@@ -119,7 +129,7 @@ public class GameSettingsFragment extends Fragment implements DataView {
         nameText.setText(AppRes.getInstance().getSelectedTeam().getName());
         Helper.setEditTextValue(opponentEditText, "");
         Helper.setDatePickerValue(datePicker, Calendar.getInstance());
-
+        timeChooserPicker.setTime(null, null);
         Long duration = PrefRes.getPeriodDuration(AppRes.getInstance().getSelectedSeason().getSeasonId());
         if (duration != null) {
             Helper.setSpinnerSelection(periodSpinner, durations.indexOf(duration));
@@ -143,6 +153,7 @@ public class GameSettingsFragment extends Fragment implements DataView {
         periodSpinner = v.findViewById(R.id.periodSpinner);
         goalieSpinner = v.findViewById(R.id.goalieSpinner);
         noGoaliesText = v.findViewById(R.id.noGoaliesText);
+        timeChooserPicker = v.findViewById(R.id.timeChooserPicker);
 
         ArrayList<String> durationTitles = new ArrayList<>();
         for (Long duration : durations) {
@@ -197,8 +208,13 @@ public class GameSettingsFragment extends Fragment implements DataView {
         String opponentName = opponentEditText.getText().toString();
         Helper.hideKeyBoard(opponentEditText);
 
-        if (StringUtils.isEmptyString(opponentName) || AppRes.getInstance().getSelectedSeason() == null || periodSpinner.getSelectedItemPosition() < 0) {
+        if (StringUtils.isEmptyString(opponentName) || AppRes.getInstance().getSelectedSeason() == null || periodSpinner.getSelectedItemPosition() < 0 || datePicker.getDate() == null) {
             Logger.toast(R.string.error_empty);
+            return;
+        }
+
+        if(!timeChooserPicker.isValidTime()) {
+            Logger.toast(R.string.game_settings_fill_both_times);
             return;
         }
 
@@ -213,8 +229,11 @@ public class GameSettingsFragment extends Fragment implements DataView {
         // Save duration for season
         PrefRes.setPeriodDuration(seasonId, periodDuration);
 
+        long dateMillis = datePicker.getDate().getTimeInMillis();
+        dateMillis += timeChooserPicker.getTimeInMillis();
+
         final Game gameToSave = data.getGame() != null ? data.getGame().clone() : new Game();
-        gameToSave.setDate(datePicker.getDate().getTimeInMillis());
+        gameToSave.setDate(dateMillis);
         gameToSave.setHomeGame(isHomeGame);
         gameToSave.setOpponentName(opponentName);
         gameToSave.setSeasonId(seasonId);

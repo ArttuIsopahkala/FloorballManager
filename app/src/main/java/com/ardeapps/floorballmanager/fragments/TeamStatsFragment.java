@@ -319,7 +319,7 @@ public class TeamStatsFragment extends Fragment {
         ArrayList<String> gameTitles = new ArrayList<>();
         gameTitles.add(getString(R.string.player_stats_all_games));
         for (Game game : filteredGames) {
-            String title = StringUtils.getDateText(game.getDate()) + ": " + game.getOpponentName();
+            String title = StringUtils.getDateText(game.getDate(), false) + ": " + game.getOpponentName();
             gameTitles.add(title);
         }
         Helper.setSpinnerAdapter(gameSpinner, gameTitles);

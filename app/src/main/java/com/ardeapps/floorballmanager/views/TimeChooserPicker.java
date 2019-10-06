@@ -24,8 +24,8 @@ public class TimeChooserPicker extends LinearLayout {
     TimeEditText hoursText;
     TimeEditText minutesText;
     IconView chooserIcon;
-    int hours;
-    int minutes;
+    Integer hours;
+    Integer minutes;
 
     public TimeChooserPicker(Context context) {
         super(context);
@@ -46,17 +46,24 @@ public class TimeChooserPicker extends LinearLayout {
         clearFocus();
 
         chooserIcon.setOnClickListener(v -> {
-            // Get Current Time
-            final Calendar c = Calendar.getInstance();
-            hours = c.get(Calendar.HOUR_OF_DAY);
-            minutes = c.get(Calendar.MINUTE);
+            int currentHours;
+            int currentMinutes;
+            try {
+                currentHours = Integer.parseInt(hoursText.getText().toString());
+                currentMinutes = Integer.parseInt(minutesText.getText().toString());
+            } catch (Exception e) {
+                // Set current time as default
+                final Calendar c = Calendar.getInstance();
+                currentHours = c.get(Calendar.HOUR_OF_DAY);
+                currentMinutes = c.get(Calendar.MINUTE);
+            }
 
             // Launch Time Picker Dialog
             TimePickerDialog timePickerDialog = new TimePickerDialog(AppRes.getActivity(),
                     (view, hourOfDay, minute) -> {
-                        hoursText.setText(String.valueOf(hourOfDay));
-                        minutesText.setText(String.valueOf(minute));
-                    }, hours, minutes, true);
+                        setHoursText(hourOfDay);
+                        setMinutesText(minute);
+                    }, currentHours, currentMinutes, true);
             timePickerDialog.show();
         });
     }
@@ -90,14 +97,16 @@ public class TimeChooserPicker extends LinearLayout {
                         }
                     }
 
-                    if (count == 2) {
-                        // Change focus is max length
+                    if (valueString.length() == 2) {
+                        // Change focus is two values
                         if (editText.getId() == minutesText.getId()) {
                             editText.clearFocus();
                             Helper.hideKeyBoard(editText);
                         } else {
                             TextView nextField = (TextView) editText.focusSearch(View.FOCUS_RIGHT);
-                            nextField.requestFocus();
+                            if(nextField != null) {
+                                nextField.requestFocus();
+                            }
                         }
                     }
                 }
@@ -140,27 +149,29 @@ public class TimeChooserPicker extends LinearLayout {
     }
 
     private void formatHoursText() {
-        int hour = hours;
-        String hoursString = hoursText.getText().toString();
-        if (!StringUtils.isEmptyString(hoursString)) {
-            hour = Integer.parseInt(hoursString);
-            if (hour > 23) {
-                hour = hours;
+        if(hours != null) {
+            String hoursString = hoursText.getText().toString();
+            if (!StringUtils.isEmptyString(hoursString)) {
+                int hour = Integer.parseInt(hoursString);
+                if (hour > 23) {
+                    hour = hours;
+                }
+                setHoursText(hour);
             }
         }
-        setHoursText(hour);
     }
 
     private void formatMinutesText() {
-        int minute = minutes;
-        String minutesString = minutesText.getText().toString();
-        if (!StringUtils.isEmptyString(minutesString)) {
-            minute = Integer.parseInt(minutesString);
-            if (minute > 59) {
-                minute = minutes;
+        if(minutes != null) {
+            String minutesString = minutesText.getText().toString();
+            if (!StringUtils.isEmptyString(minutesString)) {
+                int minute = Integer.parseInt(minutesString);
+                if (minute > 59) {
+                    minute = minutes;
+                }
+                setMinutesText(minute);
             }
         }
-        setMinutesText(minute);
     }
 
     private void setHoursText(int hours) {
@@ -173,6 +184,18 @@ public class TimeChooserPicker extends LinearLayout {
         minutesText.setText(minutesString);
     }
 
+    public boolean isValidTime() {
+        String hoursString = hoursText.getText().toString();
+        String minutesString = minutesText.getText().toString();
+        if(!StringUtils.isEmptyString(hoursString) && !StringUtils.isEmptyString(minutesString)) {
+            return true;
+        }
+        if(StringUtils.isEmptyString(hoursString) && StringUtils.isEmptyString(minutesString)) {
+            return true;
+        }
+        return false;
+    }
+
     public long getTimeInMillis() {
         try {
             int hours = Integer.parseInt(hoursText.getText().toString());
@@ -183,11 +206,19 @@ public class TimeChooserPicker extends LinearLayout {
         }
     }
 
-    public void setTimeInMillis(long millis) {
-        hours = (int) TimeUnit.MILLISECONDS.toHours(millis);
-        minutes = (int) (TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.MINUTES.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)));
-        setHoursText(hours);
-        setMinutesText(minutes);
+    public void setTime(Integer hours, Integer minutes) {
+        if(hours != null && minutes != null) {
+            this.hours = hours;
+            this.minutes = minutes;
+            setHoursText(hours);
+            setMinutesText(minutes);
+        } else {
+            this.hours = null;
+            this.minutes = null;
+            hoursText.setText("");
+            minutesText.setText("");
+        }
+
         setTextListener(hoursText);
         setTextListener(minutesText);
     }

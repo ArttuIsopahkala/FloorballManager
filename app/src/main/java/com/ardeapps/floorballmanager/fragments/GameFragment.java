@@ -133,7 +133,8 @@ public class GameFragment extends Fragment implements DataView {
             seasonText.setText("-");
             periodDurationText.setText("-");
         }
-        dateText.setText(StringUtils.getDateText(data.getGame().getDate()));
+
+        dateText.setText(StringUtils.getDateText(data.getGame().getDate(), true));
 
         setPeriodView(periodLayout1, 1, goalsPeriod1);
         setPeriodView(periodLayout2, 2, goalsPeriod2);

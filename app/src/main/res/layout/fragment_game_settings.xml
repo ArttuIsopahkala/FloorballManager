@@ -137,18 +137,19 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="horizontal">
             <TextView
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/time"
-                android:textColor="@color/color_text_light"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/klo"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/color_text_light_secondary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <com.ardeapps.floorballmanager.views.TimeChooserPicker
-                android:id="@+id/timePicker"
+                android:id="@+id/timeChooserPicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_text_light"
