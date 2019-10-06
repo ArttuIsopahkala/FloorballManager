@@ -21,6 +21,7 @@ import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.objects.User;
 import com.ardeapps.floorballmanager.objects.UserConnection;
+import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.resources.GameLinesResource;
 import com.ardeapps.floorballmanager.resources.GamesResource;
 import com.ardeapps.floorballmanager.resources.GoalsResource;
@@ -29,6 +30,7 @@ import com.ardeapps.floorballmanager.resources.SeasonsResource;
 import com.ardeapps.floorballmanager.resources.TeamsResource;
 import com.ardeapps.floorballmanager.resources.UserConnectionsResource;
 import com.ardeapps.floorballmanager.resources.UserInvitationsResource;
+import com.ardeapps.floorballmanager.resources.UserRequestsResource;
 import com.ardeapps.floorballmanager.resources.UsersResource;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.utils.Logger;
@@ -47,16 +49,53 @@ public class TeamSettingsFragment extends Fragment {
     Button removeTeamButton;
     Button inactivePlayersButton;
     LinearLayout userConnectionsContainer;
-
-    private Map<String, UserConnection> userConnections = new HashMap<>();
-
-    public void refreshData() {
-        userConnections = AppRes.getInstance().getUserConnections();
-    }
+    TextView userRequestsTitle;
+    LinearLayout userJoinRequestsContainer;
 
     public void update() {
-        final UserConnectionHolder holder = new UserConnectionHolder();
+        Map<String, UserConnection> userConnections = AppRes.getInstance().getUserConnections();
+        Map<String, UserRequest> userJoinRequests = AppRes.getInstance().getUserJoinRequests();
+
+        final Map<String, UserRequest> filteredUserRequests = new HashMap<>();
+        // Show only pending requests
+        for(UserRequest userJoinRequest : userJoinRequests.values()) {
+            if(UserRequest.Status.fromDatabaseName(userJoinRequest.getStatus()) == UserRequest.Status.PENDING) {
+                filteredUserRequests.put(userJoinRequest.getUserConnectionId(), userJoinRequest);
+            }
+        }
+
+        final UserJoinRequestHolder userJoinHolder = new UserJoinRequestHolder();
         LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
+        userJoinRequestsContainer.removeAllViews();
+        userRequestsTitle.setVisibility(filteredUserRequests.isEmpty() ? View.GONE : View.VISIBLE);
+
+        for (final UserRequest userRequest : filteredUserRequests.values()) {
+            View cv = inf.inflate(R.layout.list_item_user_join_request, userJoinRequestsContainer, false);
+            userJoinHolder.joinEmailText = cv.findViewById(R.id.joinEmailText);
+            userJoinHolder.removeIcon = cv.findViewById(R.id.removeIcon);
+            userJoinHolder.acceptIcon = cv.findViewById(R.id.acceptIcon);
+
+            userJoinHolder.joinEmailText.setText(userRequest.getEmail());
+
+            userJoinHolder.removeIcon.setOnClickListener(v -> {
+                ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.team_settings_request_remove));
+                dialogFragment.show(getChildFragmentManager(), "Poistetaanko tämä pyyntö?");
+                dialogFragment.setListener(() -> {
+                    UserRequestsResource.getInstance().removeUserRequest(userRequest.getUserConnectionId(), () -> {
+                        AppRes.getInstance().setUserJoinRequest(userRequest.getUserConnectionId(), null);
+                        update();
+                    });
+                });
+            });
+            userJoinHolder.acceptIcon.setOnClickListener(v -> {
+                FragmentListeners.getInstance().getFragmentChangeListener().goToAcceptUserRequestFragment(userRequest);
+            });
+
+            userJoinRequestsContainer.addView(cv);
+        }
+
+        final UserConnectionHolder userConnectionHolder = new UserConnectionHolder();
+        inf = LayoutInflater.from(AppRes.getContext());
         userConnectionsContainer.removeAllViews();
 
         ArrayList<UserConnection> userConnectionsList = new ArrayList<>(userConnections.values());
@@ -85,13 +124,13 @@ public class TeamSettingsFragment extends Fragment {
 
         for (final UserConnection userConnection : userConnectionsList) {
             View cv = inf.inflate(R.layout.list_item_user_connection, userConnectionsContainer, false);
-            holder.emailText = cv.findViewById(R.id.emailText);
-            holder.roleText = cv.findViewById(R.id.roleText);
-            holder.statusUserConnectionIcon = cv.findViewById(R.id.statusUserConnectionIcon);
-            holder.removeUserConnectionIcon = cv.findViewById(R.id.removeUserConnectionIcon);
-            holder.editUserConnectionIcon = cv.findViewById(R.id.editUserConnectionIcon);
+            userConnectionHolder.emailText = cv.findViewById(R.id.emailText);
+            userConnectionHolder.roleText = cv.findViewById(R.id.roleText);
+            userConnectionHolder.statusUserConnectionIcon = cv.findViewById(R.id.statusUserConnectionIcon);
+            userConnectionHolder.removeUserConnectionIcon = cv.findViewById(R.id.removeUserConnectionIcon);
+            userConnectionHolder.editUserConnectionIcon = cv.findViewById(R.id.editUserConnectionIcon);
 
-            holder.emailText.setText(userConnection.getEmail());
+            userConnectionHolder.emailText.setText(userConnection.getEmail());
 
             String founder = AppRes.getInstance().getSelectedTeam().getFounder();
             boolean isFounder = founder.equals(userConnection.getUserId());
@@ -105,53 +144,44 @@ public class TeamSettingsFragment extends Fragment {
             } else {
                 roleText = getString(R.string.guest);
             }
-            holder.roleText.setText(roleText);
+            userConnectionHolder.roleText.setText(roleText);
 
             final UserConnection.Status status = UserConnection.Status.fromDatabaseName(userConnection.getStatus());
             if (status == UserConnection.Status.DENY) {
-                holder.statusUserConnectionIcon.setText(getString(R.string.icon_close));
-                holder.statusUserConnectionIcon.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_red_light));
+                userConnectionHolder.statusUserConnectionIcon.setText(getString(R.string.icon_close));
+                userConnectionHolder.statusUserConnectionIcon.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_red_light));
             } else if (status == UserConnection.Status.PENDING) {
-                holder.statusUserConnectionIcon.setText(getString(R.string.icon_clock));
-                holder.statusUserConnectionIcon.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_yellow_light));
+                userConnectionHolder.statusUserConnectionIcon.setText(getString(R.string.icon_clock));
+                userConnectionHolder.statusUserConnectionIcon.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_yellow_light));
             } else {
-                holder.statusUserConnectionIcon.setText(getString(R.string.icon_check));
-                holder.statusUserConnectionIcon.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_green_light));
+                userConnectionHolder.statusUserConnectionIcon.setText(getString(R.string.icon_check));
+                userConnectionHolder.statusUserConnectionIcon.setTextColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_green_light));
             }
 
             String userId = AppRes.getInstance().getUser().getUserId();
             // Founder or self cannot be remove
             if (isFounder || userId.equals(userConnection.getUserId())) {
-                holder.removeUserConnectionIcon.setVisibility(View.GONE);
-                holder.editUserConnectionIcon.setVisibility(View.GONE);
+                userConnectionHolder.removeUserConnectionIcon.setVisibility(View.GONE);
+                userConnectionHolder.editUserConnectionIcon.setVisibility(View.GONE);
             } else {
-                holder.removeUserConnectionIcon.setVisibility(View.VISIBLE);
-                holder.editUserConnectionIcon.setVisibility(View.VISIBLE);
+                userConnectionHolder.removeUserConnectionIcon.setVisibility(View.VISIBLE);
+                userConnectionHolder.editUserConnectionIcon.setVisibility(View.VISIBLE);
             }
 
-            holder.removeUserConnectionIcon.setOnClickListener(v -> {
+            userConnectionHolder.removeUserConnectionIcon.setOnClickListener(v -> {
                 ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.team_settings_remove_confirmation));
                 dialogFragment.show(getChildFragmentManager(), "Poistetaanko linkitys käyttäjään?");
                 dialogFragment.setListener(() -> {
                     final String userConnectionId = userConnection.getUserConnectionId();
                     UserConnectionsResource.getInstance().removeUserConnection(userConnectionId, () -> {
                         userConnections.remove(userConnectionId);
-                        UserInvitationsResource.getInstance().removeUserInvitation(userConnectionId, () -> {
-                            // Remove connection from user
-                            if (userConnection.getUserId() != null) {
-                                UsersResource.getInstance().getUser(userConnection.getUserId(), user -> {
-                                    user.getTeamIds().remove(AppRes.getInstance().getSelectedTeam().getTeamId());
-                                    UsersResource.getInstance().editUser(user);
-                                    update();
-                                });
-                            } else {
-                                update();
-                            }
+                        UserRequestsResource.getInstance().removeUserRequest(userConnectionId, () -> {
+                            UserInvitationsResource.getInstance().removeUserInvitation(userConnectionId, this::update);
                         });
                     });
                 });
             });
-            holder.editUserConnectionIcon.setOnClickListener(v -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditUserConnectionFragment(userConnection));
+            userConnectionHolder.editUserConnectionIcon.setOnClickListener(v -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditUserConnectionFragment(userConnection));
 
             userConnectionsContainer.addView(cv);
         }
@@ -163,6 +193,8 @@ public class TeamSettingsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_team_settings, container, false);
         editTeamButton = v.findViewById(R.id.editTeamButton);
         addUserConnectionButton = v.findViewById(R.id.addUserConnectionButton);
+        userRequestsTitle = v.findViewById(R.id.userRequestsTitle);
+        userJoinRequestsContainer = v.findViewById(R.id.userJoinRequestsContainer);
         userConnectionsContainer = v.findViewById(R.id.userConnectionsContainer);
         removeTeamButton = v.findViewById(R.id.removeTeamButton);
         inactivePlayersButton = v.findViewById(R.id.inactivePlayersButton);
@@ -201,41 +233,28 @@ public class TeamSettingsFragment extends Fragment {
     private void deleteAllTeamData() {
         // Delete all team data
         final Team team = AppRes.getInstance().getSelectedTeam();
-        UserConnectionsResource.getInstance().getUserConnections(team.getTeamId(), userConnections ->
-                UserInvitationsResource.getInstance().removeUserInvitations(userConnections.keySet(), () ->
-                        UserConnectionsResource.getInstance().removeUserConnections(team.getTeamId(), () ->
-                                LinesResource.getInstance().removeAllLines(() ->
-                                        GameLinesResource.getInstance().removeAllLines(() ->
-                                                GoalsResource.getInstance().removeAllGoals(() ->
-                                                        GamesResource.getInstance().removeAllGames(() ->
-                                                                TeamsResource.getInstance().removeTeam(team, () ->
-                                                                        SeasonsResource.getInstance().removeAllSeasons(() -> {
-                                                                            User user = AppRes.getInstance().getUser();
-                                                                            user.getTeamIds().remove(team.getTeamId());
-                                                                            UsersResource.getInstance().editUser(user, () -> {
-                                                                                AppRes.getInstance().setSeasons(null);
-                                                                                AppRes.getInstance().setUserConnections(null);
-                                                                                AppRes.getInstance().setLines(null);
-                                                                                AppRes.getInstance().setLinesByGame(null);
-                                                                                AppRes.getInstance().setGoalsByGame(null);
-                                                                                AppRes.getInstance().setGames(null);
-                                                                                AppRes.getInstance().setTeam(team.getTeamId(), null);
-                                                                                AppRes.getInstance().setSelectedTeam(null);
-
-                                                                                // Reset common user data
-                                                                                for (String userConnectionId : userConnections.keySet()) {
-                                                                                    AppRes.getInstance().setUserInvitation(userConnectionId, null);
-                                                                                }
-                                                                                Logger.toast(R.string.team_settings_remove_team_successful);
-                                                                                FragmentActivity activity = AppRes.getActivity();
-                                                                                Intent i = new Intent(activity, MainActivity.class);
-                                                                                activity.finish();
-                                                                                activity.overridePendingTransition(0, 0);
-                                                                                activity.startActivity(i);
-                                                                                activity.overridePendingTransition(0, 0);
-                                                                            });
-                                                                        })
-                                                                )
+        UserInvitationsResource.getInstance().removeUserInvitations(AppRes.getInstance().getUserConnections().keySet(), () ->
+                UserConnectionsResource.getInstance().removeUserConnections(team.getTeamId(), () ->
+                        LinesResource.getInstance().removeAllLines(() ->
+                                GameLinesResource.getInstance().removeAllLines(() ->
+                                        GoalsResource.getInstance().removeAllGoals(() ->
+                                                GamesResource.getInstance().removeAllGames(() ->
+                                                        TeamsResource.getInstance().removeTeam(team, () ->
+                                                                SeasonsResource.getInstance().removeAllSeasons(() -> {
+                                                                    UserRequestsResource.getInstance().removeUserRequests(AppRes.getInstance().getUserJoinRequests().keySet(), () -> {
+                                                                        User user = AppRes.getInstance().getUser();
+                                                                        user.getTeamIds().remove(team.getTeamId());
+                                                                        UsersResource.getInstance().editUser(user, () -> {
+                                                                            Logger.toast(R.string.team_settings_remove_team_successful);
+                                                                            FragmentActivity activity = AppRes.getActivity();
+                                                                            Intent i = new Intent(activity, MainActivity.class);
+                                                                            activity.finish();
+                                                                            activity.overridePendingTransition(0, 0);
+                                                                            activity.startActivity(i);
+                                                                            activity.overridePendingTransition(0, 0);
+                                                                        });
+                                                                    });
+                                                                })
                                                         )
                                                 )
                                         )
@@ -251,5 +270,11 @@ public class TeamSettingsFragment extends Fragment {
         IconView statusUserConnectionIcon;
         IconView removeUserConnectionIcon;
         IconView editUserConnectionIcon;
+    }
+
+    private class UserJoinRequestHolder {
+        TextView joinEmailText;
+        IconView removeIcon;
+        IconView acceptIcon;
     }
 }

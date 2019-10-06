@@ -60,6 +60,12 @@
         android:textColor="@color/color_text_light"
         android:visibility="gone" />
 
+    <LinearLayout
+        android:id="@+id/userJoinRequestsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
     <TextView
         android:id="@+id/userInvitationInfoText"
         android:layout_width="match_parent"
@@ -76,20 +82,37 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" />
 
-    <Button
-        android:id="@+id/addTeamButton"
-        android:layout_width="200dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button_background"
-        android:text="@string/main_selection_add_team"
-        android:textColor="@color/color_text_light" />
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_marginTop="10dp">
+        <Button
+            android:id="@+id/addTeamButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.45"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/button_background"
+            android:text="@string/main_selection_add_team"
+            android:textColor="@color/color_text_light" />
+
+        <Button
+            android:id="@+id/searchTeamButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.45"
+            android:background="@drawable/button_background"
+            android:text="@string/main_selection_search_team"
+            android:textColor="@color/color_text_light" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/teamList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:divider="@null"
         android:dividerHeight="3dp" />
 </LinearLayout>

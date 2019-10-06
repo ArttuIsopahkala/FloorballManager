@@ -66,7 +66,6 @@ public class DatePicker extends LinearLayout {
                 if (!StringUtils.isEmptyString(valueString)) {
                     int value = Integer.parseInt(valueString);
 
-                    // TODO edit text focuset saattaa hyppiä ja moninkertaistua
                     // Format to limits
                     if(editText.getId() == dayText.getId()) {
                         if (value < 1) {
@@ -97,12 +96,16 @@ public class DatePicker extends LinearLayout {
                     if (editText.getId() == yearText.getId()) {
                         if(count == 4) {
                             TextView nextField = (TextView)editText.focusSearch(View.FOCUS_RIGHT);
-                            nextField.requestFocus();
+                            if(nextField != null) {
+                                nextField.requestFocus();
+                            }
                         }
                     } else {
                         if (count == 2) {
                             TextView nextField = (TextView) editText.focusSearch(View.FOCUS_RIGHT);
-                            nextField.requestFocus();
+                            if(nextField != null) {
+                                nextField.requestFocus();
+                            }
                         }
                     }
                 }

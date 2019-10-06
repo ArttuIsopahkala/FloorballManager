@@ -4,6 +4,7 @@ import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.handlers.GetUserConnectionsHandler;
 import com.ardeapps.floorballmanager.objects.UserConnection;
 import com.ardeapps.floorballmanager.objects.UserInvitation;
+import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -67,8 +68,23 @@ public class UserConnectionsResource extends FirebaseDatabaseService {
                 userConnection.setStatus(status.toDatabaseName());
                 userConnection.setUserId(userId);
                 editData(database.child(teamId).child(userConnectionId), userConnection, handler);
+            } else {
+                handler.onEditDataSuccess();
             }
         });
     }
 
+    public void editUserConnectionAsRequest(UserRequest userRequest, final UserConnection.Status status, final EditDataSuccessListener handler) {
+        final String teamId = userRequest.getTeamId();
+        final String userConnectionId = userRequest.getUserConnectionId();
+        getData(database.child(teamId).child(userConnectionId), dataSnapshot -> {
+            UserConnection userConnection = dataSnapshot.getValue(UserConnection.class);
+            if (userConnection != null) {
+                userConnection.setStatus(status.toDatabaseName());
+                editData(database.child(teamId).child(userConnectionId), userConnection, handler);
+            } else {
+                handler.onEditDataSuccess();
+            }
+        });
+    }
 }

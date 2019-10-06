@@ -4,6 +4,7 @@ import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.objects.UserConnection;
+import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.viewObjects.GameSettingsFragmentData;
 
 /**
@@ -69,11 +70,15 @@ public class FragmentListeners {
 
         void goToBluetoothFragment();
 
+        void goToSearchTeamFragment();
+
         void goToPlayerStatsFragment(Player player);
 
         void goToTeamStatsFragment();
 
         void goToEditUserConnectionFragment(UserConnection userConnection);
+
+        void goToAcceptUserRequestFragment(UserRequest userRequest);
 
         void goToTeamSettingsFragment();
 

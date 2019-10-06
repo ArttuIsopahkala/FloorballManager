@@ -62,7 +62,7 @@ public class LinesFragment extends Fragment {
             if(AppRes.getInstance().getGoalsByGame().isEmpty()) {
                 GoalsResource.getInstance().getAllGoals(goals -> {
                     AppRes.getInstance().setGoalsByGame(goals);
-                    GameLinesResource.getInstance().getLines(lines1 -> {
+                    GameLinesResource.getInstance().getAllLines(lines1 -> {
                         AppRes.getInstance().setLinesByGame(lines1);
                         lineUpSelector.refreshLines(true);
                     });
@@ -83,7 +83,7 @@ public class LinesFragment extends Fragment {
                 if(AppRes.getInstance().getGoalsByGame().isEmpty()) {
                     GoalsResource.getInstance().getAllGoals(goals -> {
                         AppRes.getInstance().setGoalsByGame(goals);
-                        GameLinesResource.getInstance().getLines(lines1 -> {
+                        GameLinesResource.getInstance().getAllLines(lines1 -> {
                             AppRes.getInstance().setLinesByGame(lines1);
                             AnalyzerService.getInstance().getBestLines(allowedPlayerPosition, bestLineType, gameCount, bestLines -> AppRes.getActivity().runOnUiThread(() -> {
                                 lineUpSelector.setLines(bestLines);

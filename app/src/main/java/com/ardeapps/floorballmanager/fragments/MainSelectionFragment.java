@@ -20,12 +20,16 @@ import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.objects.User;
 import com.ardeapps.floorballmanager.objects.UserConnection;
 import com.ardeapps.floorballmanager.objects.UserInvitation;
+import com.ardeapps.floorballmanager.objects.UserRequest;
+import com.ardeapps.floorballmanager.resources.TeamsResource;
 import com.ardeapps.floorballmanager.resources.UserConnectionsResource;
 import com.ardeapps.floorballmanager.resources.UserInvitationsResource;
+import com.ardeapps.floorballmanager.resources.UserRequestsResource;
 import com.ardeapps.floorballmanager.resources.UsersResource;
 import com.ardeapps.floorballmanager.services.BillingService;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
+import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.views.IconView;
 
 import java.util.ArrayList;
@@ -36,9 +40,11 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
 
     Button bluetoothButton;
     Button addTeamButton;
+    Button searchTeamButton;
     ListView teamList;
     TextView userInvitationInfoText;
     LinearLayout userInvitationsContainer;
+    LinearLayout userRequestsContainer;
     TeamListAdapter adapter;
 
     TextView productIdTextView;
@@ -91,29 +97,75 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
                 holder.roleText.setText(roleText);
                 holder.nameText.setText(userInvitation.getTeam().getName());
 
-                holder.removeIcon.setOnClickListener(v -> UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.DENY, null, () -> UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), () -> {
+                holder.removeIcon.setOnClickListener(v -> UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.DENY, null, ()
+                        -> UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), () -> {
                     AppRes.getInstance().setUserInvitation(userInvitation.getUserConnectionId(), null);
                     update();
                 })));
 
                 holder.acceptIcon.setOnClickListener(v -> {
-                    // Add team to user
-                    final User userToSave = AppRes.getInstance().getUser();
-                    userToSave.getTeamIds().add(userInvitation.getTeamId());
-                    UsersResource.getInstance().editUser(userToSave, () -> {
-                        AppRes.getInstance().setUser(userToSave);
-                        // Add team to AppRes. Team is loaded when invitations are shown.
-                        AppRes.getInstance().getTeams().put(userInvitation.getTeamId(), userInvitation.getTeam());
-                        // Remove invitation
-                        UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), () -> {
+                    // Check that team still exists
+                    TeamsResource.getInstance().getTeam(userInvitation.getTeamId(), false, team1 -> {
+                        if(team1 != null) {
+                            // Add team to user
+                            final User userToSave = AppRes.getInstance().getUser();
+                            userToSave.getTeamIds().add(userInvitation.getTeamId());
+                            UsersResource.getInstance().editUser(userToSave, () -> {
+                                AppRes.getInstance().setUser(userToSave);
+                                // Add team to AppRes. Team is loaded when invitations are shown.
+                                AppRes.getInstance().getTeams().put(userInvitation.getTeamId(), userInvitation.getTeam());
+                                // Remove invitation
+                                UserInvitationsResource.getInstance().removeUserInvitation(userInvitation.getUserConnectionId(), () -> {
+                                    AppRes.getInstance().setUserInvitation(userInvitation.getUserConnectionId(), null);
+                                    // Set user connection as connected
+                                    UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.CONNECTED, userToSave.getUserId(), this::update);
+                                });
+                            });
+                        } else {
+                            Logger.toast(R.string.main_selection_user_invitation_team_removed);
                             AppRes.getInstance().setUserInvitation(userInvitation.getUserConnectionId(), null);
-                            // Set user connection as connected
-                            UserConnectionsResource.getInstance().editUserConnectionAsInvited(userInvitation, UserConnection.Status.CONNECTED, userToSave.getUserId(), this::update);
-                        });
+                            update();
+                        }
                     });
                 });
 
                 userInvitationsContainer.addView(cv);
+            }
+        }
+
+        Map<String, UserRequest> userRequests = AppRes.getInstance().getUserRequests();
+        if (userRequests.isEmpty()) {
+            userRequestsContainer.setVisibility(View.GONE);
+        } else {
+            userRequestsContainer.setVisibility(View.VISIBLE);
+
+            final UserRequestHolder holder = new UserRequestHolder();
+            LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
+            userRequestsContainer.removeAllViews();
+
+            for (final UserRequest userRequest : userRequests.values()) {
+                View cv = inf.inflate(R.layout.list_item_user_request, userRequestsContainer, false);
+                holder.nameText = cv.findViewById(R.id.nameText);
+                holder.removeIcon = cv.findViewById(R.id.removeIcon);
+                holder.logoImage = cv.findViewById(R.id.logoImage);
+
+                final Team team = userRequest.getTeam();
+                if (team.getLogo() != null) {
+                    holder.logoImage.setImageBitmap(ImageUtil.getSquarePicture(team.getLogo()));
+                } else {
+                    holder.logoImage.setImageResource(R.drawable.default_logo);
+                }
+
+                holder.nameText.setText(userRequest.getTeam().getName());
+
+                holder.removeIcon.setOnClickListener(v -> {
+                    UserRequestsResource.getInstance().removeUserRequest(userRequest.getUserConnectionId(), () -> {
+                        AppRes.getInstance().setUserRequest(userRequest.getUserConnectionId(), null);
+                        UserConnectionsResource.getInstance().editUserConnectionAsRequest(userRequest, UserConnection.Status.DENY, this::update);
+                    });
+                });
+
+                userRequestsContainer.addView(cv);
             }
         }
     }
@@ -121,7 +173,7 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new TeamListAdapter(AppRes.getActivity());
+        adapter = new TeamListAdapter(AppRes.getActivity(), TeamListAdapter.Type.SELECT);
         adapter.setListener(this);
     }
 
@@ -132,8 +184,10 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
 
         bluetoothButton = v.findViewById(R.id.bluetoothButton);
         addTeamButton = v.findViewById(R.id.addTeamButton);
+        searchTeamButton = v.findViewById(R.id.searchTeamButton);
         teamList = v.findViewById(R.id.teamList);
         userInvitationsContainer = v.findViewById(R.id.userInvitationsContainer);
+        userRequestsContainer = v.findViewById(R.id.userJoinRequestsContainer);
         userInvitationInfoText = v.findViewById(R.id.userInvitationInfoText);
 
         productIdTextView = v.findViewById(R.id.productIdTextView);
@@ -145,6 +199,7 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
         update();
 
         addTeamButton.setOnClickListener(v12 -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(null));
+        searchTeamButton.setOnClickListener(v13 -> FragmentListeners.getInstance().getFragmentChangeListener().goToSearchTeamFragment());
         //bluetoothButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToBluetoothFragment());
 
         // TODO
@@ -183,4 +238,9 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
         IconView acceptIcon;
     }
 
+    private class UserRequestHolder {
+        ImageView logoImage;
+        TextView nameText;
+        IconView removeIcon;
+    }
 }

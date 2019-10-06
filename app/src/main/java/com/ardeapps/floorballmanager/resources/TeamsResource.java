@@ -6,7 +6,7 @@ import com.ardeapps.floorballmanager.handlers.GetTeamHandler;
 import com.ardeapps.floorballmanager.handlers.GetTeamsHandler;
 import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
-import com.ardeapps.floorballmanager.utils.Logger;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -61,6 +61,43 @@ public class TeamsResource extends FirebaseDatabaseService {
                 } else {
                     handler.onTeamLoaded(team);
                 }
+            } else {
+                handler.onTeamLoaded(null);
+            }
+        });
+    }
+
+    /**
+     * Get all teams and their logos indexed by teamId
+     */
+    public void getAllTeams(final GetTeamsHandler handler) {
+        getData(database, dataSnapshot -> {
+            final Map<String, Team> teams = new HashMap<>();
+            final ArrayList<String> teamsWithLogo = new ArrayList<>();
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                final Team team = snapshot.getValue(Team.class);
+                if (team != null) {
+                    teams.put(team.getTeamId(), team);
+                    if (team.isLogoUploaded()) {
+                        teamsWithLogo.add(team.getTeamId());
+                    }
+                }
+            }
+
+            if (!teamsWithLogo.isEmpty()) {
+                LogoResource.getInstance().getLogos(teamsWithLogo, bitmaps -> {
+                    for (Map.Entry<String, Bitmap> entry : bitmaps.entrySet()) {
+                        String teamId = entry.getKey();
+                        Bitmap bitmap = entry.getValue();
+                        Team team = teams.get(teamId);
+                        if (team != null) {
+                            team.setLogo(bitmap);
+                        }
+                    }
+                    handler.onTeamsLoaded(teams);
+                });
+            } else {
+                handler.onTeamsLoaded(teams);
             }
         });
     }
@@ -97,17 +134,31 @@ public class TeamsResource extends FirebaseDatabaseService {
 
     private void getTeamsData(final List<String> teamIds, final GetTeamsHandler handler) {
         final Map<String, Team> teams = new HashMap<>();
+        ArrayList<String> failedTeams = new ArrayList<>();
         for (final String teamId : teamIds) {
             getData(database.child(teamId), snapshot -> {
                 final Team team = snapshot.getValue(Team.class);
                 if (team != null) {
                     teams.put(team.getTeamId(), team);
-                    if (teams.size() == teamIds.size()) {
-                        handler.onTeamsLoaded(teams);
-                    }
+                } else {
+                    failedTeams.add(teamId);
+                }
+                if (teams.size() + failedTeams.size() == teamIds.size()) {
+                    handler.onTeamsLoaded(teams);
                 }
             });
         }
     }
 
+    public void getTeamByName(String name, final GetTeamHandler handler) {
+        getData(database.orderByChild("name").equalTo(name).limitToFirst(1), dataSnapshot -> {
+            if (dataSnapshot.getChildren().iterator().hasNext()) {
+                DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
+                Team team = snapshot.getValue(Team.class);
+                handler.onTeamLoaded(team);
+            } else {
+                handler.onTeamLoaded(null);
+            }
+        });
+    }
 }

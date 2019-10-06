@@ -162,6 +162,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
                     setPlayerListVisibility(true);
                 } else if (position == 2) {
                     roleInfoText.setText(getString(R.string.add_user_connection_info_guest));
+                    selectedPlayerId = null;
                     setPlayerListVisibility(false);
                 }
             }
@@ -238,6 +239,21 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             }
         }
 
+        // Check if player is already connected
+        for(UserConnection userConnection : AppRes.getInstance().getUserConnections().values()) {
+            if(selectedPlayerId != null && userConnection.getPlayerId() != null && selectedPlayerId.equals(userConnection.getPlayerId())) {
+                if(oldUserConnection != null) {
+                    if(!userConnection.getPlayerId().equals(oldUserConnection.getPlayerId())) {
+                        Logger.toast(R.string.add_user_connection_exists);
+                        return;
+                    }
+                } else {
+                    Logger.toast(R.string.add_user_connection_exists);
+                    return;
+                }
+            }
+        }
+
         // Collect data from view
         if (oldUserConnection != null) {
             final UserConnection userConnectionToSave = oldUserConnection.clone();
@@ -275,7 +291,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
         }
     }
 
-    private void sendUserInvitation(final UserConnection userConnection) {
+    private void sendUserInvitation(UserConnection userConnection) {
         final UserInvitation userInvitation = new UserInvitation();
         userInvitation.setUserConnectionId(userConnection.getUserConnectionId());
         userInvitation.setTeamId(AppRes.getInstance().getSelectedTeam().getTeamId());

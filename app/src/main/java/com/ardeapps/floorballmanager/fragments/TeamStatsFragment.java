@@ -94,7 +94,7 @@ public class TeamStatsFragment extends Fragment {
     int goalTypeSpinnerPosition = 0;
     private double imageWidth;
     private double imageHeight;
-    private ArrayList<Game> sortedGames;
+    private ArrayList<Game> filteredGames;
     private ArrayList<Goal.Mode> gameModes;
     private Team team;
     private Map<String, ArrayList<Goal>> stats = new HashMap<>();
@@ -305,13 +305,20 @@ public class TeamStatsFragment extends Fragment {
     private void updateStats(String seasonId) {
         drawShootPoints();
 
+        filteredGames = new ArrayList<>();
+        for (Game game : games.values()) {
+            // Show only games which result is marked
+            if(game.getHomeGoals() != null && game.getAwayGoals() != null) {
+                filteredGames.add(game);
+            }
+        }
+
         // Set games sorted by date
-        sortedGames = new ArrayList<>(games.values());
-        Collections.sort(sortedGames, (o1, o2) -> Long.compare(o2.getDate(), o1.getDate()));
+        Collections.sort(filteredGames, (o1, o2) -> Long.compare(o2.getDate(), o1.getDate()));
 
         ArrayList<String> gameTitles = new ArrayList<>();
         gameTitles.add(getString(R.string.player_stats_all_games));
-        for (Game game : sortedGames) {
+        for (Game game : filteredGames) {
             String title = StringUtils.getDateText(game.getDate()) + ": " + game.getOpponentName();
             gameTitles.add(title);
         }
@@ -321,7 +328,7 @@ public class TeamStatsFragment extends Fragment {
 
         // Collect filtered map
         Map<Game, ArrayList<Goal>> filteredStats = new HashMap<>();
-        for (Game game : sortedGames) {
+        for (Game game : filteredGames) {
             ArrayList<Goal> goals = stats.get(game.getGameId());
             ArrayList<Goal> filteredGoals = new ArrayList<>();
             if (goals != null) {
@@ -470,7 +477,7 @@ public class TeamStatsFragment extends Fragment {
             }
         } else {
             // Show by game
-            Game game = sortedGames.get(spinnerPosition - 1); // -1 because first is all
+            Game game = filteredGames.get(spinnerPosition - 1); // -1 because first is all
             ArrayList<Goal> goals = stats.get(game.getGameId());
             if (goals != null) {
                 filteredGoals.addAll(goals);

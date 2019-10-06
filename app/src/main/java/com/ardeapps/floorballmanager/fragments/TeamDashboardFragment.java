@@ -15,6 +15,7 @@ import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.UserConnection;
+import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
 
@@ -27,7 +28,7 @@ public class TeamDashboardFragment extends Fragment {
     Button gamesButton;
     Button teamStatsButton;
     Button settingsButton;
-    TextView teamNameText;
+    TextView infoText;
     ImageView logoImage;
 
     @Override
@@ -41,7 +42,7 @@ public class TeamDashboardFragment extends Fragment {
         teamStatsButton = v.findViewById(R.id.teamStatsButton);
         playersButton = v.findViewById(R.id.playersButton);
         settingsButton = v.findViewById(R.id.settingsButton);
-        teamNameText = v.findViewById(R.id.teamNameText);
+        infoText = v.findViewById(R.id.infoText);
         logoImage = v.findViewById(R.id.logoImage);
 
         Bitmap logo = AppRes.getInstance().getSelectedTeam().getLogo();
@@ -51,7 +52,20 @@ public class TeamDashboardFragment extends Fragment {
             logoImage.setImageResource(R.drawable.default_logo);
         }
 
-        teamNameText.setText(AppRes.getInstance().getSelectedTeam().getName());
+        boolean isPendingRequests = false;
+        for(UserRequest userJoinRequest : AppRes.getInstance().getUserJoinRequests().values()) {
+            if(UserRequest.Status.fromDatabaseName(userJoinRequest.getStatus()) == UserRequest.Status.PENDING) {
+                isPendingRequests = true;
+                break;
+            }
+        }
+        if(isPendingRequests) {
+            infoText.setText(getString(R.string.team_dashboard_info_new_requests));
+        } else if (AppRes.getInstance().getSelectedSeason() == null) {
+            infoText.setText(getString(R.string.team_dashboard_info_get_started));
+        } else {
+            infoText.setText(AppRes.getInstance().getSelectedTeam().getName());
+        }
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();

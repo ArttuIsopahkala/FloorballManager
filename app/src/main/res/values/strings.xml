@@ -102,6 +102,8 @@
     <string name="title_team_stats">Joukkueen tilastot</string>
     <string name="title_inactive_players">Poistetut pelaajat</string>
     <string name="title_edit_user_connection">Jäsenen tiedot</string>
+    <string name="title_search_team">Etsi joukkue</string>
+    <string name="title_accept_user_request">Liitä käyttäjä joukkueeseen</string>
 
     <string name="login_email">Sähköposti</string>
     <string name="login_password">Salasana</string>
@@ -124,14 +126,23 @@
     <string name="login_verification_sent">Lähetimme sähköpostiisi linkin, jolla tili täytyy vahvistaa. Voit kirjautua sisään vahvistamisen jälkeen.</string>
     <string name="login_email_not_verified">Sähköpostia ei ole vahvistettu. Haluatko lähettää vahvistusviestin sähköpostiisi?</string>
 
-    <string name="main_selection_desc">Lisää tai valitse joukkue, jota haluat seurata.</string>
+    <string name="main_selection_desc">Lisää tai valitse olemassa oleva joukkue, jota haluat seurata.</string>
     <string name="main_selection_add_team">Lisää joukkue</string>
+    <string name="main_selection_search_team">Etsi joukkue</string>
     <string name="main_selection_add_player">Lisää pelaaja</string>
+    <string name="main_selection_user_request">Pyyntö odottaa joukkueeseen:</string>
+    <string name="main_selection_user_invitation_team_removed">Joukkue on poistettu.</string>
     <string name="main_selection_user_invitation_info">Sinulle on uusia kutsuja!</string>
     <string name="main_selection_user_invitation_admin">Kutsu Adminiksi joukkueeseen:</string>
     <string name="main_selection_user_invitation_player">Kutsu pelaajaksi joukkueeseen:</string>
     <string name="main_selection_user_invitation_guest">Kutsu vierailijaksi joukkueeseen:</string>
     <string name="main_selection_connection_not_found">Sinulla ei ole enää oikeuksia tähän joukkueeseen. Ota halutessasi yhteyttä joukkueen ylläpitäjään.</string>
+
+    <string name="search_team_desc">Etsi olemassa olevaa joukkuetta, johon haluat liittyä.</string>
+    <string name="search_team_join">Liity</string>
+    <string name="search_team_no_result">Ei hakutuloksia</string>
+    <string name="search_team_removed">Joukkue on poistettu</string>
+    <string name="search_team_join_request">Lähetetäänkö pyyntö liittyä joukkueen jäseneksi?</string>
 
     <string name="players_no_players">Ei lisättyjä pelaajia.</string>
 
@@ -166,6 +177,8 @@
     <string name="add_event_other">Joku muu</string>
 
     <string name="add_team_name_hint">Joukkueen nimi</string>
+    <string name="add_team_info">Tiedot tällä sivulla ovat julkisia, jotta muut voivat löytää joukkueen.</string>
+    <string name="add_team_name_exists">Tällä nimellä löytyy jo joukkue!</string>
 
     <string name="season_settings_season_info">Esim. Kausi %1$s tai Suomen Cup. Voit myöhemmin suodattaa tilastoja nimen perusteella.</string>
     <string name="season_settings_exists">Tällä nimellä löytyy jo tunniste.</string>
@@ -209,9 +222,12 @@
     <string name="team_dashboard_settings">Joukkueen hallinta</string>
     <string name="team_dashboard_seasons_info">Aloita luomalla tunniste, jonka alle ottelut luodaan.</string>
     <string name="team_dashboard_seasons_not_selected">Tunnistetta ei ole valittu.</string>
+    <string name="team_dashboard_info_new_requests">Uusia liittymispyyntöjä Joukkueen Hallinta -sivulla!</string>
+    <string name="team_dashboard_info_get_started">Alkuun pääset lisäämällä joukkueeseen pelaajia ja luomalla tunnisteen Ottelut -sivulla.</string>
 
     <string name="team_settings_edit">Muokkaa joukkueen tietoja</string>
     <string name="team_settings_add_connection">Lisää jäsen</string>
+    <string name="team_settings_requests">Pyynnöt:</string>
     <string name="team_settings_connections">Jäsenet:</string>
     <string name="team_settings_remove_confirmation">Haluatko varmasti poistaa tämän linkityksen? Käyttäjä ei sen jälkeen pääse enää tarkastelemaan joukkueen tietoja.</string>
     <string name="team_settings_remove_team">Poista joukkue</string>
@@ -223,6 +239,8 @@
     <string name="team_settings_connected">Käyttäjä liitetty.</string>
     <string name="team_settings_deny">Kutsu hylätty.</string>
     <string name="team_settings_removed_players">Poistetut pelaajat</string>
+    <string name="team_settings_request_from">Pyyntö liittyä joukkueeseen käyttäjältä:</string>
+    <string name="team_settings_request_remove">Poistetaanko tämä pyyntö?</string>
 
     <string name="inactive_players_move_player_active">Palauta pelaajalistalle</string>
     <string name="inactive_players_remove_player_confirmation">Haluatko varmasti poistaa tämän pelaajan? Myös kaikki pelaajaan liitetyt tilastot poistetaan. Toimintoa ei voi kumota.</string>
@@ -239,8 +257,12 @@
     <string name="add_user_connection_email_self">Olet jo liitetty joukkueeseen.</string>
     <string name="add_user_connection_email_changed_error">Olemassa olevan liitoksen sähköpostia ei voi vaihtaa. Halutessasi voit poistaa liitoksen ja luoda uuden.</string>
     <string name="add_user_connection_email_already_added">Olet jo lisännyt tämän sähköpostin.</string>
-    <string name="add_user_connection_player_not_exists">Sähköpostilla ei löydetty käyttäjää. Haluatko lähettää kutsun joukkueeseen?</string>
+    <string name="add_user_connection_ask_invitation">Haluatko lähettää kutsun joukkueeseen myös ulkoisella sovelluksella?</string>
     <string name="add_user_connection_invite_again">Tallenna ja lähetä kutsu uudelleen</string>
+    <string name="add_user_connection_exists">Pelaajalla on jo liitos</string>
+
+    <string name="accept_user_request_email">Käyttäjän sähköposti</string>
+    <string name="accept_user_request_save">Hyväksy ja tallenna</string>
 
     <string name="lines_no_players">Joukkueessa ei ole pelaajia.</string>
     <string name="lines_title">Valitut kentälliset näkyvät oletuksena uuden ottelun luonnissa.</string>
