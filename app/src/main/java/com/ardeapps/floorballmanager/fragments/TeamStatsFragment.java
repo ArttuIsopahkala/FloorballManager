@@ -327,7 +327,7 @@ public class TeamStatsFragment extends Fragment {
         ArrayList<Goal> goalsInThreeLastGames = new ArrayList<>();
 
         // Collect filtered map
-        Map<Game, ArrayList<Goal>> filteredStats = new HashMap<>();
+        Map<Game, ArrayList<Goal>> filteredStats = new TreeMap<>();
         for (Game game : filteredGames) {
             ArrayList<Goal> goals = stats.get(game.getGameId());
             ArrayList<Goal> filteredGoals = new ArrayList<>();

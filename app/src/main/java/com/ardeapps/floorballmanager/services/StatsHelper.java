@@ -221,6 +221,8 @@ public class StatsHelper extends AnalyzerService {
                     currentNotLoseCount++;
                 } else if (homeGoals < awayGoals) {
                     loses++;
+                    currentWinCount = 0;
+                    currentNotLoseCount = 0;
                 } else {
                     draws++;
                     currentNotLoseCount++;
@@ -235,6 +237,8 @@ public class StatsHelper extends AnalyzerService {
                     currentNotLoseCount++;
                 } else if (homeGoals > awayGoals) {
                     loses++;
+                    currentWinCount = 0;
+                    currentNotLoseCount = 0;
                 } else {
                     draws++;
                     currentNotLoseCount++;

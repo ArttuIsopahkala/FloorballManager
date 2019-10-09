@@ -1,6 +1,8 @@
 package com.ardeapps.floorballmanager.objects;
 
-public class Game {
+import android.support.annotation.NonNull;
+
+public class Game implements Comparable<Game>{
 
     private String gameId;
     private String seasonId;
@@ -8,7 +10,7 @@ public class Game {
     private boolean homeGame;
     private String opponentName;
     private Integer homeGoals;
-    private Integer awayGoals;
+    private Integer awayGoals; // opponent goals
     private long periodInMinutes;
 
     public Game() {
@@ -89,5 +91,10 @@ public class Game {
 
     public void setPeriodInMinutes(long periodInMinutes) {
         this.periodInMinutes = periodInMinutes;
+    }
+
+    @Override
+    public int compareTo(@NonNull Game o) {
+        return Long.compare(this.date, o.date);
     }
 }

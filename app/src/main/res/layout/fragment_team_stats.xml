@@ -808,7 +808,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_margin="5dp">
 
                 <LinearLayout
                     android:layout_width="0dp"

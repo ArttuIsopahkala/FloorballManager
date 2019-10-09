@@ -239,6 +239,12 @@ public class GameSettingsFragment extends Fragment implements DataView {
         gameToSave.setSeasonId(seasonId);
         gameToSave.setPeriodInMinutes(periodDuration);
 
+        // Check if isHomeGame changed and change also result goals
+        if(data.getGame() != null && isHomeGame != data.getGame().isHomeGame()) {
+            gameToSave.setHomeGoals(data.getGame().getAwayGoals());
+            gameToSave.setAwayGoals(data.getGame().getHomeGoals());
+        }
+
         if (data.getGame() != null) {
             GamesResource.getInstance().editGame(gameToSave, () -> {
                 AppRes.getInstance().setGame(gameToSave.getGameId(), gameToSave);
