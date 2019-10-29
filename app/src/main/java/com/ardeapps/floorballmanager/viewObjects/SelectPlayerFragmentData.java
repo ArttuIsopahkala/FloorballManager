@@ -5,13 +5,13 @@ import com.ardeapps.floorballmanager.objects.Line;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GoalSelectPlayerFragmentData {
+public class SelectPlayerFragmentData {
 
     private Map<Integer, Line> lines;
     private String playerId;
     private String disabledPlayerId;
 
-    public GoalSelectPlayerFragmentData() {
+    public SelectPlayerFragmentData() {
     }
 
     public Map<Integer, Line> getLines() {

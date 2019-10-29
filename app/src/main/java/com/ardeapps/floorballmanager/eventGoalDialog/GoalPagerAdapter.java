@@ -1,17 +1,18 @@
-package com.ardeapps.floorballmanager.goalDialog;
+package com.ardeapps.floorballmanager.eventGoalDialog;
 
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.ardeapps.floorballmanager.fragments.SelectPlayerFragment;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.viewObjects.GoalDetailsFragmentData;
 import com.ardeapps.floorballmanager.viewObjects.GoalPositionFragmentData;
 import com.ardeapps.floorballmanager.viewObjects.GoalSelectLineFragmentData;
-import com.ardeapps.floorballmanager.viewObjects.GoalSelectPlayerFragmentData;
 import com.ardeapps.floorballmanager.viewObjects.GoalWizardDialogData;
+import com.ardeapps.floorballmanager.viewObjects.SelectPlayerFragmentData;
 import com.ardeapps.floorballmanager.views.PlayerSelector;
 
 import java.util.ArrayList;
@@ -23,8 +24,8 @@ import java.util.Iterator;
 public class GoalPagerAdapter extends FragmentStatePagerAdapter {
 
     private GoalDetailsFragment detailsFragment;
-    private GoalSelectPlayerFragment selectScorerFragment;
-    private GoalSelectPlayerFragment selectAssistantFragment;
+    private SelectPlayerFragment selectScorerFragment;
+    private SelectPlayerFragment selectAssistantFragment;
 
     private GoalSelectLineFragment selectLineFragment;
     private GoalPositionFragment positionFragment;
@@ -43,8 +44,8 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         this.commonData = commonData;
 
         detailsFragment = new GoalDetailsFragment();
-        selectScorerFragment = new GoalSelectPlayerFragment();
-        selectAssistantFragment = new GoalSelectPlayerFragment();
+        selectScorerFragment = new SelectPlayerFragment();
+        selectAssistantFragment = new SelectPlayerFragment();
         positionFragment = new GoalPositionFragment();
         selectLineFragment = new GoalSelectLineFragment();
 
@@ -97,7 +98,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             public void onPlayerSelected(int lineNumber, String playerId) {
                 scorerLineNumber = lineNumber;
                 scorerPlayerId = playerId;
-                GoalSelectPlayerFragmentData data = selectAssistantFragment.getData();
+                SelectPlayerFragmentData data = selectAssistantFragment.getData();
                 data.setDisabledPlayerId(playerId);
                 selectAssistantFragment.setData(data);
                 selectAssistantFragment.updateSelection();
@@ -109,7 +110,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             public void onPlayerUnSelected(int lineNumber, String playerId) {
                 scorerLineNumber = null;
                 scorerPlayerId = null;
-                GoalSelectPlayerFragmentData data = selectAssistantFragment.getData();
+                SelectPlayerFragmentData data = selectAssistantFragment.getData();
                 data.setDisabledPlayerId(null);
                 selectAssistantFragment.setData(data);
                 selectAssistantFragment.updateSelection();
@@ -122,7 +123,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             public void onPlayerSelected(int lineNumber, String playerId) {
                 assistantLineNumber = lineNumber;
                 assistantPlayerId = playerId;
-                GoalSelectPlayerFragmentData data = selectScorerFragment.getData();
+                SelectPlayerFragmentData data = selectScorerFragment.getData();
                 data.setDisabledPlayerId(playerId);
                 selectScorerFragment.setData(data);
                 selectScorerFragment.updateSelection();
@@ -134,7 +135,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             public void onPlayerUnSelected(int lineNumber, String playerId) {
                 assistantLineNumber = null;
                 assistantPlayerId = null;
-                GoalSelectPlayerFragmentData data = selectScorerFragment.getData();
+                SelectPlayerFragmentData data = selectScorerFragment.getData();
                 data.setDisabledPlayerId(null);
                 selectScorerFragment.setData(data);
                 selectScorerFragment.updateSelection();
@@ -211,8 +212,8 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             goalToSave.setPositionPercentX(positionFragmentData.getPositionPercentX());
             goalToSave.setPositionPercentY(positionFragmentData.getPositionPercentY());
         } else {
-            GoalSelectPlayerFragmentData scorerFragmentData = selectScorerFragment.getData();
-            GoalSelectPlayerFragmentData assistantFragmentData = selectAssistantFragment.getData();
+            SelectPlayerFragmentData scorerFragmentData = selectScorerFragment.getData();
+            SelectPlayerFragmentData assistantFragmentData = selectAssistantFragment.getData();
             if (isPenaltyShot) {
                 goalToSave.setAssistantId(null);
                 goalToSave.setPlayerIds(null);
@@ -240,13 +241,15 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
         GoalDetailsFragmentData detailsFragmentData = new GoalDetailsFragmentData();
         detailsFragmentData.setTime(0);
         detailsFragmentData.setGameMode(Goal.Mode.FULL);
+        detailsFragmentData.setGoals(commonData.getGoals());
+        detailsFragmentData.setCurrentGoalId(null);
         // Scorer
-        GoalSelectPlayerFragmentData scorerFragmentData = new GoalSelectPlayerFragmentData();
+        SelectPlayerFragmentData scorerFragmentData = new SelectPlayerFragmentData();
         scorerFragmentData.setLines(commonData.getLines());
         scorerFragmentData.setPlayerId(null);
         scorerFragmentData.setDisabledPlayerId(null);
         // Assistant
-        GoalSelectPlayerFragmentData assistantFragmentData = new GoalSelectPlayerFragmentData();
+        SelectPlayerFragmentData assistantFragmentData = new SelectPlayerFragmentData();
         assistantFragmentData.setLines(commonData.getLines());
         assistantFragmentData.setPlayerId(null);
         assistantFragmentData.setDisabledPlayerId(null);
@@ -268,6 +271,7 @@ public class GoalPagerAdapter extends FragmentStatePagerAdapter {
             // Details
             detailsFragmentData.setTime(goal.getTime());
             detailsFragmentData.setGameMode(Goal.Mode.fromDatabaseName(goal.getGameMode()));
+            detailsFragmentData.setCurrentGoalId(goal.getGoalId());
             // Scorer
             scorerFragmentData.setPlayerId(goal.getScorerId());
             scorerFragmentData.setDisabledPlayerId(goal.getAssistantId());

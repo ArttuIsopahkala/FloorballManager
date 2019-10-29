@@ -24,6 +24,8 @@ public class PlayerStatsData {
     public Pair<Integer, Integer> bestStats;
     public int longestStats;
     public int bestPlusMinus;
+    public int penalties;
+    public double penaltiesPerGame;
     public Pair<ArrayList<String>, Integer> bestAssists;
     public Pair<ArrayList<String>, Integer> bestScorers;
     public Pair<ArrayList<String>, Integer> bestLineMates;

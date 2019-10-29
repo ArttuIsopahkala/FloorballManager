@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.goalDialog;
+package com.ardeapps.floorballmanager.eventGoalDialog;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.utils.Logger;
@@ -23,22 +24,26 @@ import java.util.TreeMap;
 
 public class GoalDetailsFragment extends Fragment implements DataView {
 
+    public interface Listener {
+        void onGameModeChanged(Goal.Mode gameMode);
+    }
+
     public Listener mListener = null;
     TimePicker timePicker;
     Spinner gameModeSpinner;
-    private GoalDetailsFragmentData data;
     private ArrayList<Goal.Mode> gameModes;
     private int gameModeSpinnerPosition;
-
-    public void setListener(Listener l) {
-        mListener = l;
-    }
+    private GoalDetailsFragmentData data;
 
     @Override
     public GoalDetailsFragmentData getData() {
         data.setTime(timePicker.getTimeInMillis());
         data.setGameMode(gameModes.get(gameModeSpinnerPosition));
         return data;
+    }
+
+    public void setListener(Listener l) {
+        mListener = l;
     }
 
     @Override
@@ -101,10 +106,32 @@ public class GoalDetailsFragment extends Fragment implements DataView {
             return false;
         }
 
+        for(Goal goal : data.getGoals().values()) {
+            if(!goal.getGoalId().equals(data.getCurrentGoalId()) && goal.getTime() == timePicker.getTimeInMillis()) {
+                Logger.toast(R.string.add_event_error_goal_same_time);
+                return false;
+            }
+        }
+        
         return true;
     }
 
-    public interface Listener {
-        void onGameModeChanged(Goal.Mode gameMode);
+    public void askForWrongGameMode(Goal.Mode gameModeToChange, String description, GoalWizardDialogFragment.NextClickChangesListener handler) {
+        ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(description);
+        dialogFragment.show(getChildFragmentManager(), "Muutetaanko pelimuoto?");
+        dialogFragment.setCancelable(false);
+        dialogFragment.setListener(new ConfirmDialogFragment.ConfirmationDialogYesNoListener() {
+            @Override
+            public void onDialogYesButtonClick() {
+                gameModeSpinnerPosition = gameModes.indexOf(gameModeToChange);
+                Helper.setSpinnerSelection(gameModeSpinner, gameModeSpinnerPosition);
+                handler.onNextClickChangesHandled();
+            }
+
+            @Override
+            public void onDialogNoButtonClick() {
+                handler.onNextClickChangesHandled();
+            }
+        });
     }
 }

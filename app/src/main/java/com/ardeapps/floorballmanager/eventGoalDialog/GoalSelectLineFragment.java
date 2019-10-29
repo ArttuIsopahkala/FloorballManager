@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.goalDialog;
+package com.ardeapps.floorballmanager.eventGoalDialog;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.goalDialog;
+package com.ardeapps.floorballmanager.eventPenaltyDialog;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,48 +17,66 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.R;
-import com.ardeapps.floorballmanager.objects.Goal;
+import com.ardeapps.floorballmanager.fragments.SelectPlayerFragment;
+import com.ardeapps.floorballmanager.objects.Penalty;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
-import com.ardeapps.floorballmanager.viewObjects.GoalWizardDialogData;
+import com.ardeapps.floorballmanager.viewObjects.PenaltyWizardDialogData;
 
-public class GoalWizardDialogFragment extends DialogFragment implements DataView {
+public class PenaltyWizardDialogFragment extends DialogFragment implements DataView {
 
-    public void setListener(GoalWizardListener l) {
+    public void setListener(PenaltyWizardListener l) {
         mListener = l;
     }
 
-    public interface GoalWizardListener {
-        void onGoalSaved(Goal goal);
+    @Override
+    public PenaltyWizardDialogData getData() {
+        return data;
     }
 
-    GoalWizardListener mListener = null;
+    @Override
+    public void setData(Object viewData) {
+        data = (PenaltyWizardDialogData) viewData;
+    }
 
+    public interface PenaltyWizardListener {
+        void onPenaltySaved(Penalty penalty);
+    }
+
+    PenaltyWizardListener mListener = null;
+
+    TextView titleText;
     TextView infoText;
     Button previousButton;
     Button nextButton;
     TabLayout tabLayout;
     ViewPager eventPager;
-    GoalPagerAdapter goalAdapter;
-    GoalWizardDialogData data;
-    int scorerFragmentPosition = 1;
+    PenaltyPagerAdapter penaltyAdapter;
     int position = 0;
+    private PenaltyWizardDialogData data;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.dialog_goal, container, false);
+        View v = inflater.inflate(R.layout.dialog_event, container, false);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        titleText = v.findViewById(R.id.titleText);
         infoText = v.findViewById(R.id.infoText);
         previousButton = v.findViewById(R.id.previousButton);
         nextButton = v.findViewById(R.id.nextButton);
         eventPager = v.findViewById(R.id.eventPager);
         tabLayout = v.findViewById(R.id.tabLayout);
 
-        goalAdapter = new GoalPagerAdapter(getChildFragmentManager(), data);
-        goalAdapter.setGoal(data.getGoal());
+        if(data.getPenalty() == null) {
+            titleText.setText(getString(R.string.event_title_penalty_add).toUpperCase());
+        } else {
+            titleText.setText(getString(R.string.event_title_penalty_edit).toUpperCase());
+        }
 
-        eventPager.setOffscreenPageLimit(goalAdapter.getCount());
-        eventPager.setAdapter(goalAdapter);
+        penaltyAdapter = new PenaltyPagerAdapter(getChildFragmentManager(), data.isOpponentPenalty(), data.getLines());
+        penaltyAdapter.setPenalty(data.getPenalty());
+
+        eventPager.setOffscreenPageLimit(penaltyAdapter.getCount());
+        eventPager.setAdapter(penaltyAdapter);
         tabLayout.setupWithViewPager(eventPager);
         // Disable tab title clicks
         LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
@@ -76,46 +94,27 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         return v;
     }
 
-    @Override
-    public GoalWizardDialogData getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(Object viewData) {
-        data = (GoalWizardDialogData) viewData;
-    }
-
     private void handlePreviousClick() {
         if (position == 0) {
             dismiss();
         } else {
-            int max = goalAdapter.getCount() - 1;
-            if (goalAdapter.isPenaltyShot() && position == max) {
-                position = data.isOpponentGoal() ? 0 : 1;
-            } else {
-                position--;
-            }
+            position--;
             changePage(position);
         }
     }
 
     private void handleNextClick() {
-        int max = goalAdapter.getCount() - 1;
-        boolean isValid = goalAdapter.validate(position);
+        int max = penaltyAdapter.getCount() - 1;
+        boolean isValid = penaltyAdapter.validate(position);
         if (isValid) {
             if (position == max) {
-                Goal goalToSave = goalAdapter.getGoal();
-                goalToSave.setGameId(data.getGame().getGameId());
-                goalToSave.setSeasonId(data.getGame().getSeasonId());
-                goalToSave.setOpponentGoal(data.isOpponentGoal());
-                mListener.onGoalSaved(goalToSave);
+                Penalty penaltyToSave = penaltyAdapter.getPenalty();
+                penaltyToSave.setGameId(data.getGame().getGameId());
+                penaltyToSave.setSeasonId(data.getGame().getSeasonId());
+                penaltyToSave.setOpponentPenalty(data.isOpponentPenalty());
+                mListener.onPenaltySaved(penaltyToSave);
             } else {
-                if (goalAdapter.isPenaltyShot() && (data.isOpponentGoal() || position == scorerFragmentPosition)) {
-                    position = max;
-                } else {
-                    position++;
-                }
+                position++;
                 changePage(position);
             }
         }
@@ -137,21 +136,12 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
     private void changePage(int position) {
         eventPager.setCurrentItem(position);
 
-        Fragment fragment = goalAdapter.getItem(position);
+        Fragment fragment = penaltyAdapter.getItem(position);
         // Header text
-        if (fragment instanceof GoalDetailsFragment) {
+        if (fragment instanceof PenaltyDetailsFragment) {
             infoText.setText(R.string.add_event_details);
-        } else if (fragment instanceof GoalSelectLineFragment) {
-            String title = getString(R.string.add_event_line)
-                    + System.getProperty("line.separator")
-                    + getString(data.isOpponentGoal() ? R.string.add_event_minus_players : R.string.add_event_plus_players);
-            infoText.setText(title);
-        } else if (fragment instanceof GoalPositionFragment) {
-            infoText.setText(R.string.add_event_position);
-        } else if (!data.isOpponentGoal() && position == scorerFragmentPosition) {
-            infoText.setText(R.string.add_event_scorer);
-        } else if (!data.isOpponentGoal() && position == scorerFragmentPosition + 1) {
-            infoText.setText(R.string.add_event_assistant);
+        } else if (fragment instanceof SelectPlayerFragment) {
+            infoText.setText(R.string.add_event_penalty_player);
         }
 
         // Buttons
@@ -160,7 +150,7 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
         } else {
             previousButton.setText(R.string.previous);
         }
-        int max = goalAdapter.getCount() - 1;
+        int max = penaltyAdapter.getCount() - 1;
         if (position == max) {
             nextButton.setText(R.string.save);
         } else {

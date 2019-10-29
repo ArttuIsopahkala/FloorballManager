@@ -6,10 +6,23 @@
     android:background="@color/color_background"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_menu"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/add_event_scorer"
+        android:textColor="@color/color_text_light"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/titleText"
         android:background="@color/color_menu"
         app:tabBackground="@drawable/tab_selector"
         app:tabGravity="center"
@@ -23,7 +36,7 @@
         android:layout_below="@+id/tabLayout"
         android:background="@color/color_menu"
         android:gravity="center"
-        android:padding="15dp"
+        android:padding="10dp"
         android:text="@string/add_event_scorer"
         android:textColor="@color/color_text_light"
         android:textSize="15sp" />

@@ -34,6 +34,7 @@
     <string name="line">kenttä</string>
     <string name="line_number">Kenttä %1$s</string>
     <string name="goal">maali</string>
+    <string name="penalty">rangaistus</string>
     <string name="home">Koti</string>
     <string name="away">Vieras</string>
     <string name="opponent">Vastustaja</string>
@@ -57,11 +58,14 @@
     <string name="remove_player">Poista pelaaja</string>
     <string name="remove_game">Poista ottelu</string>
     <string name="remove_goal">Poista maali</string>
+    <string name="remove_penalty">Poista rangaistus</string>
 
     <string name="stats_games">Ottelut</string>
     <string name="stats_points">Pisteet</string>
     <string name="stats_goals">Maalit</string>
     <string name="stats_assists">Syötöt</string>
+    <string name="stats_penalties">Jäähyt</string>
+    <string name="stats_penalties_per_game">JM/O</string>
     <string name="stats_points_per_game">P/O</string>
     <string name="stats_goals_per_game">M/O</string>
     <string name="stats_assists_per_game">S/O</string>
@@ -80,8 +84,15 @@
     <string name="select_picture_error">Kuvaa ei voitu ladata</string>
     <string name="select_picture_use_default">Käytä oletuskuvaa</string>
 
+    <string name="game_add_event">Lisää tapahtuma</string>
+
     <string name="game_result_title">Ottelun lopputulos</string>
     <string name="game_result_too_low">Merkattuja maaleja on enemmän kuin annoit tulokseksi.</string>
+
+    <string name="game_settings_no_lines">Aseta kentälliset.</string>
+    <string name="game_settings_goalie">Aloittava maalivahti</string>
+    <string name="game_settings_no_goalies">Ei maalivahteja.</string>
+    <string name="game_settings_fill_both_times">Kellonaika on virheellinen.</string>
 
     <string name="title_teams">Joukkueet</string>
     <string name="title_add_team">Lisää joukkue</string>
@@ -145,6 +156,10 @@
 
     <string name="players_no_players">Ei lisättyjä pelaajia.</string>
 
+    <string name="event_title_goal_add">Lisää maali</string>
+    <string name="event_title_goal_edit">Muokkaa maalia</string>
+    <string name="event_title_penalty_add">Lisää jäähy</string>
+    <string name="event_title_penalty_edit">Muokkaa jäähyä</string>
     <string name="add_event_goal">Maali</string>
     <string name="add_event_save">Torjuttu</string>
     <string name="add_event_miss">Ohi maalin</string>
@@ -167,13 +182,24 @@
     <string name="add_event_om">(OM) Oma maali</string>
     <string name="add_event_mode">Pelimuoto</string>
     <string name="add_event_time">Aika</string>
+    <string name="add_event_remove_goal_confirmation">Haluatko varmasti poistaa tämän maalin?</string>
+    <string name="add_event_remove_penalty_confirmation">Haluatko varmasti poistaa tämän rangaistuksen?</string>
+    <string name="add_event_other">Joku muu</string>
+    <string name="add_event_penalty_length">Jäähyn pituus</string>
+    <string name="add_event_penalty_type">Jäähyn pituus</string>
+    <string name="add_event_error_penalty">Aseta jäähyn aika.</string>
+    <string name="add_event_penalty_player">Jäähyn saanut pelaaja</string>
+    <string name="add_event_opponent_penalty_yv">Vastustajalla on rangaistus käynnissä. Merkataanko ylivoimamaaliksi?</string>
+    <string name="add_event_opponent_penalty_av">Vastustajalla on rangaistus käynnissä. Merkataanko alivoimamaaliksi?</string>
+    <string name="add_event_home_penalty_yv">Joukkueellasi on rangaistus käynnissä. Merkataanko ylivoimamaaliksi?</string>
+    <string name="add_event_home_penalty_av">Joukkueellasi on rangaistus käynnissä. Merkataanko alivoimamaaliksi?</string>
     <string name="add_event_error_time">Aseta aika.</string>
     <string name="add_event_error_mode">Aseta pelimuoto.</string>
+    <string name="add_event_error_goal_same_time">Tähän aikaan on jo merkattu maali.</string>
     <string name="add_event_error_scorer">Valitse maalintekijä.</string>
     <string name="add_event_error_line_less">Valitse vähemmän pelaajia.</string>
     <string name="add_event_error_line_more">Valitse enemmän pelaajia.</string>
-    <string name="add_event_remove_confirmation">Haluatko varmasti poistaa tämän maalin?</string>
-    <string name="add_event_other">Joku muu</string>
+    <string name="add_event_error_penalty_and_goal">Valittu pelaaja on merkattu jäähylle. Poista valinta.</string>
 
     <string name="add_team_name_hint">Joukkueen nimi</string>
     <string name="add_team_info">Tiedot tällä sivulla ovat julkisia, jotta muut voivat löytää joukkueen.</string>
@@ -187,11 +213,6 @@
     <string name="feedback_title">Auta kehittämään sovellusta!</string>
     <string name="feedback_desc">Ilmoita bugista tai toivo uutta ominaisuutta.</string>
     <string name="feedback_sent">Kiitos palautteesta!</string>
-
-    <string name="game_settings_no_lines">Aseta kentälliset.</string>
-    <string name="game_settings_goalie">Aloittava maalivahti</string>
-    <string name="game_settings_no_goalies">Ei maalivahteja.</string>
-    <string name="game_settings_fill_both_times">Kellonaika on virheellinen.</string>
 
     <string name="add_player_name">Nimi</string>
     <string name="add_player_number">Pelinumero</string>
@@ -296,7 +317,11 @@
     <string name="game_add_goal">Lisää maali +</string>
     <string name="game_stat_goal_abbr">M</string>
     <string name="game_stat_assist_abbr">S</string>
+    <string name="game_stat_penalty_abbr">JM</string>
     <string name="game_stat_plus_minus">+/-</string>
+    <string name="game_event_add">Lisää +</string>
+    <string name="game_event_goal">Maali</string>
+    <string name="game_event_penalty">Rangaistus</string>
 
     <string name="settings_invite">Kutsu kavereita</string>
     <string name="settings_link_more">Lisää sovelluksia</string>

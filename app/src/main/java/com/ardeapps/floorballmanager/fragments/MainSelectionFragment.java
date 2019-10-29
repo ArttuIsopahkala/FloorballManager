@@ -202,7 +202,7 @@ public class MainSelectionFragment extends Fragment implements TeamListAdapter.L
         searchTeamButton.setOnClickListener(v13 -> FragmentListeners.getInstance().getFragmentChangeListener().goToSearchTeamFragment());
         //bluetoothButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToBluetoothFragment());
 
-        // TODO
+        // TODO billing service
         final BillingService billingService = new BillingService();
         //billingService.initialize();
        /* buyButton.setOnClickListener(new View.OnClickListener() {

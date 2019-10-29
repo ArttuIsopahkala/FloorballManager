@@ -26,6 +26,7 @@ import com.ardeapps.floorballmanager.resources.GameLinesResource;
 import com.ardeapps.floorballmanager.resources.GamesResource;
 import com.ardeapps.floorballmanager.resources.GoalsResource;
 import com.ardeapps.floorballmanager.resources.LinesResource;
+import com.ardeapps.floorballmanager.resources.PenaltiesResource;
 import com.ardeapps.floorballmanager.resources.SeasonsResource;
 import com.ardeapps.floorballmanager.resources.TeamsResource;
 import com.ardeapps.floorballmanager.resources.UserConnectionsResource;
@@ -58,8 +59,8 @@ public class TeamSettingsFragment extends Fragment {
 
         final Map<String, UserRequest> filteredUserRequests = new HashMap<>();
         // Show only pending requests
-        for(UserRequest userJoinRequest : userJoinRequests.values()) {
-            if(UserRequest.Status.fromDatabaseName(userJoinRequest.getStatus()) == UserRequest.Status.PENDING) {
+        for (UserRequest userJoinRequest : userJoinRequests.values()) {
+            if (UserRequest.Status.fromDatabaseName(userJoinRequest.getStatus()) == UserRequest.Status.PENDING) {
                 filteredUserRequests.put(userJoinRequest.getUserConnectionId(), userJoinRequest);
             }
         }
@@ -238,23 +239,25 @@ public class TeamSettingsFragment extends Fragment {
                         LinesResource.getInstance().removeAllLines(() ->
                                 GameLinesResource.getInstance().removeAllLines(() ->
                                         GoalsResource.getInstance().removeAllGoals(() ->
-                                                GamesResource.getInstance().removeAllGames(() ->
-                                                        TeamsResource.getInstance().removeTeam(team, () ->
-                                                                SeasonsResource.getInstance().removeAllSeasons(() -> {
-                                                                    UserRequestsResource.getInstance().removeUserRequests(AppRes.getInstance().getUserJoinRequests().keySet(), () -> {
-                                                                        User user = AppRes.getInstance().getUser();
-                                                                        user.getTeamIds().remove(team.getTeamId());
-                                                                        UsersResource.getInstance().editUser(user, () -> {
-                                                                            Logger.toast(R.string.team_settings_remove_team_successful);
-                                                                            FragmentActivity activity = AppRes.getActivity();
-                                                                            Intent i = new Intent(activity, MainActivity.class);
-                                                                            activity.finish();
-                                                                            activity.overridePendingTransition(0, 0);
-                                                                            activity.startActivity(i);
-                                                                            activity.overridePendingTransition(0, 0);
-                                                                        });
-                                                                    });
-                                                                })
+                                                PenaltiesResource.getInstance().removeAllPenalties(() ->
+                                                        GamesResource.getInstance().removeAllGames(() ->
+                                                                TeamsResource.getInstance().removeTeam(team, () ->
+                                                                        SeasonsResource.getInstance().removeAllSeasons(() -> {
+                                                                            UserRequestsResource.getInstance().removeUserRequests(AppRes.getInstance().getUserJoinRequests().keySet(), () -> {
+                                                                                User user = AppRes.getInstance().getUser();
+                                                                                user.getTeamIds().remove(team.getTeamId());
+                                                                                UsersResource.getInstance().editUser(user, () -> {
+                                                                                    Logger.toast(R.string.team_settings_remove_team_successful);
+                                                                                    FragmentActivity activity = AppRes.getActivity();
+                                                                                    Intent i = new Intent(activity, MainActivity.class);
+                                                                                    activity.finish();
+                                                                                    activity.overridePendingTransition(0, 0);
+                                                                                    activity.startActivity(i);
+                                                                                    activity.overridePendingTransition(0, 0);
+                                                                                });
+                                                                            });
+                                                                        })
+                                                                )
                                                         )
                                                 )
                                         )

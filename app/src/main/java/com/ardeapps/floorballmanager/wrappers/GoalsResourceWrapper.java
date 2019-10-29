@@ -1,6 +1,9 @@
-package com.ardeapps.floorballmanager.resources;
+package com.ardeapps.floorballmanager.wrappers;
 
 import com.ardeapps.floorballmanager.objects.Goal;
+import com.ardeapps.floorballmanager.resources.GamesResource;
+import com.ardeapps.floorballmanager.resources.GoalsResource;
+import com.ardeapps.floorballmanager.resources.PlayerStatsResource;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
 import com.ardeapps.floorballmanager.utils.StringUtils;
 import com.ardeapps.floorballmanager.viewObjects.GameFragmentData;

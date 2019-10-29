@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.goalDialog;
+package com.ardeapps.floorballmanager.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,26 +9,26 @@ import android.view.ViewGroup;
 
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
-import com.ardeapps.floorballmanager.viewObjects.GoalSelectPlayerFragmentData;
+import com.ardeapps.floorballmanager.viewObjects.SelectPlayerFragmentData;
 import com.ardeapps.floorballmanager.views.PlayerSelector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoalSelectPlayerFragment extends Fragment implements DataView {
+public class SelectPlayerFragment extends Fragment implements DataView {
 
     public PlayerSelector.Listener mListener = null;
     PlayerSelector playerSelector;
     List<String> selectedPlayerIds = new ArrayList<>();
     List<String> disabledPlayerIds = new ArrayList<>();
-    private GoalSelectPlayerFragmentData data;
+    private SelectPlayerFragmentData data;
 
     public void setListener(PlayerSelector.Listener l) {
         mListener = l;
     }
 
     @Override
-    public GoalSelectPlayerFragmentData getData() {
+    public SelectPlayerFragmentData getData() {
         if (!playerSelector.getSelectedPlayerIds().isEmpty()) {
             data.setPlayerId(playerSelector.getSelectedPlayerIds().get(0));
         } else {
@@ -39,7 +39,7 @@ public class GoalSelectPlayerFragment extends Fragment implements DataView {
 
     @Override
     public void setData(Object viewData) {
-        data = (GoalSelectPlayerFragmentData) viewData;
+        data = (SelectPlayerFragmentData) viewData;
 
         disabledPlayerIds = new ArrayList<>();
         if (data.getDisabledPlayerId() != null) {

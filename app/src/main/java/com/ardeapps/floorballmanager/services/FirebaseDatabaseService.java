@@ -28,6 +28,7 @@ public class FirebaseDatabaseService {
     protected static final String TEAMS_PLAYERS_SEASONS_GAMES = "teams_players_seasons_games";
     protected static final String TEAMS_SEASONS_GAMES = "teams_seasons_games";
     protected static final String TEAMS_SEASONS_GAMES_GOALS = "teams_seasons_games_goals";
+    protected static final String TEAMS_SEASONS_GAMES_PENALTIES = "teams_seasons_games_penalties";
     protected static final String TEAMS_SEASONS_GAMES_LINES = "teams_seasons_games_lines";
     protected static final String TEAMS_SEASONS = "teams_seasons";
     protected static final String TEAMS_LINES = "teams_lines";
@@ -86,7 +87,7 @@ public class FirebaseDatabaseService {
                                 String gameId = game.getKey();
                                 for(DataSnapshot snap : game.getChildren()) {
                                     Goal goal = snap.getValue(Goal.class);
-                                    editData(getDatabase().child(TEAMS_PLAYERS_SEASONS_GAMES_STATS).child(teamId).child(playerId).child(seasonId).child(gameId).child(goal.getGoalId()), goal);
+                                    editData(getDatabase().child(TEAMS_PLAYERS_SEASONS_GAMES_STATS).child(teamId).child(playerId).child(seasonId).child(gameId).child(goal.getCurrentGoalId()), goal);
                                 }
                             }
                         }
@@ -134,7 +135,7 @@ public class FirebaseDatabaseService {
                             Game game = gamesMap.get(gameId);
                             for(Goal goal : goals) {
                                 goal.setSeasonId(game.getSeasonId());
-                                editData(getDatabase().child(TEAMS_SEASONS_GAMES_GOALS).child(teamId).child(game.getSeasonId()).child(game.getGameId()).child(goal.getGoalId()), goal);
+                                editData(getDatabase().child(TEAMS_SEASONS_GAMES_GOALS).child(teamId).child(game.getSeasonId()).child(game.getGameId()).child(goal.getCurrentGoalId()), goal);
                             }
 
                         }

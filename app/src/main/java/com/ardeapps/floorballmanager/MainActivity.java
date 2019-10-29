@@ -37,6 +37,7 @@ import com.ardeapps.floorballmanager.fragments.TeamDashboardFragment;
 import com.ardeapps.floorballmanager.fragments.TeamSettingsFragment;
 import com.ardeapps.floorballmanager.fragments.TeamStatsFragment;
 import com.ardeapps.floorballmanager.handlers.GetGameGoalsHandler;
+import com.ardeapps.floorballmanager.handlers.GetGamePenaltiesHandler;
 import com.ardeapps.floorballmanager.objects.AppData;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Line;
@@ -50,6 +51,7 @@ import com.ardeapps.floorballmanager.resources.AppDataResource;
 import com.ardeapps.floorballmanager.resources.GameLinesResource;
 import com.ardeapps.floorballmanager.resources.GoalsResource;
 import com.ardeapps.floorballmanager.resources.LinesResource;
+import com.ardeapps.floorballmanager.resources.PenaltiesResource;
 import com.ardeapps.floorballmanager.resources.PlayersResource;
 import com.ardeapps.floorballmanager.resources.SeasonsResource;
 import com.ardeapps.floorballmanager.resources.TeamsResource;
@@ -375,8 +377,11 @@ public class MainActivity extends AppCompatActivity {
 
                     GoalsResource.getInstance().getGoals(game.getGameId(), (GetGameGoalsHandler) goals -> {
                         fragmentData.setGoals(goals);
-                        gameFragment.setData(fragmentData);
-                        switchToFragment(gameFragment);
+                        PenaltiesResource.getInstance().getPenalties(game.getGameId(), (GetGamePenaltiesHandler) penalties -> {
+                            fragmentData.setPenalties(penalties);
+                            gameFragment.setData(fragmentData);
+                            switchToFragment(gameFragment);
+                        });
                     });
                 });
             }

@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.goalDialog;
+package com.ardeapps.floorballmanager.eventGoalDialog;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;

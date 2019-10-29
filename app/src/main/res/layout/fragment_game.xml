@@ -157,46 +157,79 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/addGoalButtons"
+        android:id="@+id/addEventsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/teamsContainer"
-        android:padding="10dp">
+        android:layout_below="@id/teamsContainer"
+        android:padding="5dp">
 
-        <Button
-            android:id="@+id/homeGoalButton"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/homePlusIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@drawable/button_background"
-            android:text="@string/game_add_goal"
-            android:textColor="@color/color_text_light" />
+            android:text="@string/icon_plus"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="18sp" />
 
-        <Button
-            android:id="@+id/awayGoalButton"
-            android:layout_width="150dp"
+        <TextView
+            android:id="@+id/addEventText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:text="@string/game_add_event"
+            android:textColor="@color/color_text_light"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:id="@+id/eventContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addEventText"
+            android:layout_centerInParent="true"
+            android:background="@color/color_background_third">
+
+            <Spinner
+                android:id="@+id/eventSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:minWidth="200dp"
+                android:textColor="@color/color_text_light" />
+        </RelativeLayout>
+
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/awayPlusIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_alignParentEnd="true"
             android:background="@drawable/button_background"
-            android:text="@string/game_add_goal"
-            android:textColor="@color/color_text_light" />
+            android:text="@string/icon_plus"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="18sp" />
     </RelativeLayout>
+
+    <View
+        android:id="@+id/eventsDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/addEventsContainer"
+        android:background="@color/color_text_light" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/addGoalButtons">
+        android:layout_below="@+id/eventsDivider">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include
-                android:id="@+id/periodLayout1"
-                layout="@layout/container_monitor_period" />
 
             <include
-                android:id="@+id/periodLayout2"
+                android:id="@+id/periodLayoutJA"
                 layout="@layout/container_monitor_period" />
 
             <include
@@ -204,7 +237,11 @@
                 layout="@layout/container_monitor_period" />
 
             <include
-                android:id="@+id/periodLayoutJA"
+                android:id="@+id/periodLayout2"
+                layout="@layout/container_monitor_period" />
+
+            <include
+                android:id="@+id/periodLayout1"
                 layout="@layout/container_monitor_period" />
 
             <LinearLayout
@@ -217,36 +254,55 @@
                 android:padding="5dp">
 
                 <TextView
-                    android:layout_width="250dp"
+                    android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:text="@string/stats"
                     android:textColor="@color/color_text_light"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_stat_plus_minus"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="18sp" />
+                <LinearLayout
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:gravity="center"
+                        android:text="@string/game_stat_plus_minus"
+                        android:textColor="@color/color_text_light"
+                        android:textSize="18sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:text="@string/game_stat_goal_abbr"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="18sp" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.45"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/game_stat_goal_abbr"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/statsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="@string/game_stat_assist_abbr"
-                    android:textColor="@color/color_text_light"
-                    android:textSize="18sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:text="@string/game_stat_assist_abbr"
+                            android:textColor="@color/color_text_light"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/penaltyText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.35"
+                        android:gravity="center"
+                        android:text="@string/game_stat_penalty_abbr"
+                        android:textColor="@color/color_text_light"
+                        android:textSize="18sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <include

@@ -22,7 +22,7 @@
         android:textStyle="bold" />
 
     <com.ardeapps.floorballmanager.views.TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/penaltyTimePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/timeText"
@@ -31,25 +31,25 @@
         android:background="@color/color_background_third" />
 
     <TextView
-        android:id="@+id/modeText"
+        android:id="@+id/penaltyLengthText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/timePicker"
+        android:layout_below="@+id/penaltyTimePicker"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="10dp"
-        android:text="@string/add_event_mode"
+        android:text="@string/add_event_penalty_length"
         android:textColor="@color/color_text_light"
         android:textSize="16sp"
         android:textStyle="bold" />
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/modeText"
+        android:layout_below="@+id/penaltyLengthText"
         android:layout_centerHorizontal="true"
         android:background="@color/color_background_third">
         <Spinner
-            android:id="@+id/gameModeSpinner"
+            android:id="@+id/penaltyLengthSpinner"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:minWidth="200dp" />

@@ -3,6 +3,7 @@ package com.ardeapps.floorballmanager.viewObjects;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
+import com.ardeapps.floorballmanager.objects.Penalty;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ public class GameFragmentData {
     private Game game;
     private Map<Integer, Line> lines;
     private Map<String, Goal> goals;
+    private Map<String, Penalty> penalties;
 
     public GameFragmentData() {
     }
@@ -44,5 +46,13 @@ public class GameFragmentData {
 
     public void setGoals(Map<String, Goal> goals) {
         this.goals = goals;
+    }
+
+    public Map<String, Penalty> getPenalties() {
+        return penalties;
+    }
+
+    public void setPenalties(Map<String, Penalty> penalties) {
+        this.penalties = penalties;
     }
 }

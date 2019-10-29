@@ -147,12 +147,16 @@ public class PlayerSelector extends LinearLayout {
                         } else {
                             if (holder.isSelected()) {
                                 selectedPlayerIds.remove(playerId);
-                                mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
+                                if(mListener != null) {
+                                    mListener.onPlayerUnSelected(line.getLineNumber(), playerId);
+                                }
                             } else {
                                 // Clear other and add new selection
                                 selectedPlayerIds.clear();
                                 selectedPlayerIds.add(playerId);
-                                mListener.onPlayerSelected(line.getLineNumber(), playerId);
+                                if(mListener != null) {
+                                    mListener.onPlayerSelected(line.getLineNumber(), playerId);
+                                }
                             }
                         }
                         setSelections();

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Line;
+import com.ardeapps.floorballmanager.objects.Penalty;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Season;
 import com.ardeapps.floorballmanager.objects.Team;
@@ -45,7 +46,9 @@ public class AppRes extends MultiDexApplication {
     private Map<String, UserConnection> userConnections;
     private Map<String, UserRequest> userJoinRequests;
     private Map<String, Game> games; // Loaded in TeamDashboardFragment
-    // For analyzer service
+    // For analyzer service and stats
+    private Map<String, Game> allGames;
+    private Map<String, ArrayList<Penalty>> penaltiesByGame;
     private Map<String, ArrayList<Goal>> goalsByGame;
     private Map<String, ArrayList<Line>> linesByGame;
 
@@ -93,6 +96,7 @@ public class AppRes extends MultiDexApplication {
         linesByGame = null;
         seasons = null;
         userJoinRequests = null;
+        penaltiesByGame = null;
     }
 
     public User getUser() {
@@ -274,7 +278,7 @@ public class AppRes extends MultiDexApplication {
         for (Player player : players.values()) {
             if (player.isActive()) {
                 Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
-                if(includeGoalie || position != Player.Position.MV) {
+                if (includeGoalie || position != Player.Position.MV) {
                     activePlayers.add(player);
                 }
             }
@@ -306,7 +310,7 @@ public class AppRes extends MultiDexApplication {
         for (Player player : players.values()) {
             if (player.isActive()) {
                 Player.Position position = Player.Position.fromDatabaseName(player.getPosition());
-                if(includeGoalie || position != Player.Position.MV) {
+                if (includeGoalie || position != Player.Position.MV) {
                     activePlayers.put(player.getPlayerId(), player);
                 }
             }
@@ -429,6 +433,7 @@ public class AppRes extends MultiDexApplication {
     }
 
     /**
+     * GOALS BY GAME
      * Get goals indexed by gameId
      */
     public Map<String, ArrayList<Goal>> getGoalsByGame() {
@@ -438,14 +443,27 @@ public class AppRes extends MultiDexApplication {
         return goalsByGame;
     }
 
-    /**
-     * GOALS BY GAME
-     */
     public void setGoalsByGame(Map<String, ArrayList<Goal>> goalsByGame) {
         this.goalsByGame = goalsByGame;
     }
 
     /**
+     * PENALTIES BY GAME
+     * Get penalties indexed by gameId
+     */
+    public Map<String, ArrayList<Penalty>> getPenaltiesByGame() {
+        if (penaltiesByGame == null) {
+            penaltiesByGame = new HashMap<>();
+        }
+        return penaltiesByGame;
+    }
+
+    public void setPenaltiesByGame(Map<String, ArrayList<Penalty>> penaltiesByGame) {
+        this.penaltiesByGame = penaltiesByGame;
+    }
+
+    /**
+     * LINES BY GAME
      * Get lines indexed by gameId
      */
     public Map<String, ArrayList<Line>> getLinesByGame() {
@@ -455,11 +473,22 @@ public class AppRes extends MultiDexApplication {
         return linesByGame;
     }
 
-    /**
-     * LINES BY GAME
-     */
     public void setLinesByGame(Map<String, ArrayList<Line>> linesByGame) {
         this.linesByGame = linesByGame;
     }
 
+    /**
+     * ALL GAMES
+     * Get games indexed by gameId
+     */
+    public Map<String, Game> getAllGames() {
+        if (allGames == null) {
+            allGames = new HashMap<>();
+        }
+        return allGames;
+    }
+
+    public void setAllGames(Map<String, Game> allGames) {
+        this.allGames = allGames;
+    }
 }

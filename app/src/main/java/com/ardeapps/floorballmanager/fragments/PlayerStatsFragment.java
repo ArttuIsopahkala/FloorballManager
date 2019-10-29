@@ -22,12 +22,15 @@ import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.dialogFragments.ActionMenuDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballmanager.handlers.GetGoalsHandler;
+import com.ardeapps.floorballmanager.handlers.GetPenaltiesHandler;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
+import com.ardeapps.floorballmanager.objects.Penalty;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Season;
 import com.ardeapps.floorballmanager.objects.UserConnection;
 import com.ardeapps.floorballmanager.resources.GoalsResource;
+import com.ardeapps.floorballmanager.resources.PenaltiesResource;
 import com.ardeapps.floorballmanager.resources.PlayerGamesResource;
 import com.ardeapps.floorballmanager.resources.PlayersResource;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
@@ -77,6 +80,8 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     TextView bestAssistantText;
     TextView bestScorerText;
     TextView bestSameLineText;
+    TextView penaltiesText;
+    TextView penaltiesPerGameText;
 
     ImageView shootmapImage;
     RelativeLayout shootmapPointsContainer;
@@ -95,7 +100,8 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     private ArrayList<Game> sortedGames;
     private ArrayList<Goal.Mode> gameModes;
     private Player player;
-    private Map<String, ArrayList<Goal>> stats = new HashMap<>();
+    private Map<String, ArrayList<Penalty>> penalties = new HashMap<>();
+    private Map<String, ArrayList<Goal>> goals = new HashMap<>();
     private Map<String, Game> games = new HashMap<>();
 
     @Override
@@ -148,6 +154,8 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         bestSameLineText = v.findViewById(R.id.bestSameLineText);
         strengthsContainer = v.findViewById(R.id.strengthsContainer);
         strengthsText = v.findViewById(R.id.strengthsText);
+        penaltiesText = v.findViewById(R.id.penaltiesText);
+        penaltiesPerGameText = v.findViewById(R.id.penaltiesPerGameText);
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
@@ -357,40 +365,64 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         });
     }
 
-    private void loadStats(final String seasonId) {
+    private void loadStats(String seasonId) {
         final String playerId = player.getPlayerId();
         if (seasonId == null) {
-            // TODO player stateja ei käytetä toistaiseksi
-            /*PlayerStatsResource.getInstance().getAllStats(playerId, stats -> PlayerGamesResource.getInstance().getAllGames(playerId, games -> {
-                PlayerStatsFragment.this.stats = stats;
-                PlayerStatsFragment.this.games = games;
-                updateStats(null);
-            }));*/
-            PlayerGamesResource.getInstance().getAllGames(playerId, games -> {
-                PlayerStatsFragment.this.games = games;
-                updateStats(null);
-                if (!AppRes.getInstance().getGoalsByGame().isEmpty()) {
-                    PlayerStatsFragment.this.stats = AppRes.getInstance().getGoalsByGame();
-                    updateStats(null);
-                } else {
-                    GoalsResource.getInstance().getAllGoals(goals -> {
-                        AppRes.getInstance().setGoalsByGame(goals);
-                        PlayerStatsFragment.this.stats = goals;
-                        updateStats(null);
-                    });
-                }
-            });
+            if(!AppRes.getInstance().getAllGames().isEmpty()) {
+                PlayerStatsFragment.this.games = AppRes.getInstance().getAllGames();
+                loadGoals(null);
+            } else {
+                PlayerGamesResource.getInstance().getAllGames(playerId, games -> {
+                    AppRes.getInstance().setAllGames(games);
+                    PlayerStatsFragment.this.games = games;
+                    loadGoals(null);
+                });
+            }
         } else {
-            GoalsResource.getInstance().getGoals(seasonId, (GetGoalsHandler) goals -> PlayerGamesResource.getInstance().getGames(playerId, seasonId, games -> {
-                PlayerStatsFragment.this.stats = goals;
+            PlayerGamesResource.getInstance().getGames(playerId, seasonId, games -> {
                 PlayerStatsFragment.this.games = games;
+                loadGoals(seasonId);
+            });
+        }
+    }
+
+    private void loadGoals(String seasonId) {
+        if (seasonId == null) {
+            if (!AppRes.getInstance().getGoalsByGame().isEmpty()) {
+                PlayerStatsFragment.this.goals = AppRes.getInstance().getGoalsByGame();
+                loadPenalties(null);
+            } else {
+                GoalsResource.getInstance().getAllGoals(goals -> {
+                    AppRes.getInstance().setGoalsByGame(goals);
+                    PlayerStatsFragment.this.goals = goals;
+                    loadPenalties(null);
+                });
+            }
+        } else {
+            GoalsResource.getInstance().getGoals(seasonId, (GetGoalsHandler) goals -> {
+                PlayerStatsFragment.this.goals = goals;
+                loadPenalties(seasonId);
+            });
+        }
+    }
+
+    private void loadPenalties(String seasonId) {
+        if (seasonId == null) {
+            if (!AppRes.getInstance().getPenaltiesByGame().isEmpty()) {
+                PlayerStatsFragment.this.penalties = AppRes.getInstance().getPenaltiesByGame();
+                updateStats(null);
+            } else {
+                PenaltiesResource.getInstance().getAllPenalties(penalties -> {
+                    AppRes.getInstance().setPenaltiesByGame(penalties);
+                    PlayerStatsFragment.this.penalties = penalties;
+                    updateStats(null);
+                });
+            }
+        } else {
+            PenaltiesResource.getInstance().getPenalties(seasonId, (GetPenaltiesHandler) penalties -> {
+                PlayerStatsFragment.this.penalties = penalties;
                 updateStats(seasonId);
-            }));
-            /*PlayerStatsResource.getInstance().getStats(playerId, seasonId, stats -> PlayerGamesResource.getInstance().getGames(playerId, seasonId, games -> {
-                PlayerStatsFragment.this.stats = stats;
-                PlayerStatsFragment.this.games = games;
-                updateStats(seasonId);
-            }));*/
+            });
         }
     }
 
@@ -412,7 +444,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         // Collect filtered map
         Map<Game, ArrayList<Goal>> filteredStats = new HashMap<>();
         for (Game game : sortedGames) {
-            ArrayList<Goal> goals = stats.get(game.getGameId());
+            ArrayList<Goal> goals = this.goals.get(game.getGameId());
             ArrayList<Goal> filteredGoals = new ArrayList<>();
             if (goals != null) {
                 for (Goal goal : goals) {
@@ -424,7 +456,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
             filteredStats.put(game, filteredGoals);
         }
 
-        PlayerStatsData stats = StatsHelper.getPlayerStats(player.getPlayerId(), filteredStats);
+        PlayerStatsData stats = StatsHelper.getPlayerStats(player.getPlayerId(), filteredStats, penalties);
         gamesText.setText(String.valueOf(stats.gamesCount));
         pointsText.setText(String.valueOf(stats.points));
         pointsPerGameText.setText(getPerGameText(stats.pointsPerGame));
@@ -446,6 +478,8 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         bestAssistantText.setText(getBestAssistText(stats.bestAssists));
         bestScorerText.setText(getBestScorerText(stats.bestScorers));
         bestSameLineText.setText(getLineMateText(stats.bestLineMates));
+        penaltiesText.setText(stats.penalties + " min");
+        penaltiesPerGameText.setText(getPerGameText(stats.penaltiesPerGame));
     }
 
     private String getPerGameText(double value) {
@@ -547,13 +581,13 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         ArrayList<Goal> filteredGoals = new ArrayList<>();
         if (spinnerPosition == 0) {
             // Show all
-            for (ArrayList<Goal> goals : stats.values()) {
+            for (ArrayList<Goal> goals : goals.values()) {
                 filteredGoals.addAll(goals);
             }
         } else {
             // Show by game
             Game game = sortedGames.get(spinnerPosition - 1); // -1 because first is all
-            ArrayList<Goal> goals = stats.get(game.getGameId());
+            ArrayList<Goal> goals = this.goals.get(game.getGameId());
             if (goals != null) {
                 filteredGoals.addAll(goals);
             }

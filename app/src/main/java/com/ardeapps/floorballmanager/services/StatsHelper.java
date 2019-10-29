@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
+import com.ardeapps.floorballmanager.objects.Penalty;
 import com.ardeapps.floorballmanager.viewObjects.PlayerPointsData;
 import com.ardeapps.floorballmanager.viewObjects.PlayerStatsData;
 import com.ardeapps.floorballmanager.viewObjects.TeamGameData;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class StatsHelper extends AnalyzerService {
 
-    public static PlayerStatsData getPlayerStats(String playerId, Map<Game, ArrayList<Goal>> stats) {
+    public static PlayerStatsData getPlayerStats(String playerId, Map<Game, ArrayList<Goal>> stats, Map<String, ArrayList<Penalty>> penalties) {
         int gamesCount = stats.size();
         int points = 0;
 
@@ -82,13 +83,13 @@ public class StatsHelper extends AnalyzerService {
                 // Plus minus
                 if (goal.getPlayerIds().contains(playerId)) {
                     // Plus
-                    if (!goal.isOpponentGoal() && !(Goal.Mode.YV == mode || Goal.Mode.RL == mode)) {
+                    if (!goal.isOpponentGoal() && Goal.Mode.RL != mode) {
                         pluses++;
                         plusMinuses++;
                     }
 
                     // Minus
-                    if (goal.isOpponentGoal() && !(Goal.Mode.AV == mode || Goal.Mode.RL == mode)) {
+                    if (goal.isOpponentGoal() && Goal.Mode.RL != mode) {
                         minuses++;
                         plusMinuses--;
                     }
@@ -122,14 +123,26 @@ public class StatsHelper extends AnalyzerService {
             }
         }
 
+        // Penalties
+        int penaltyMinutes = 0;
+        for(ArrayList<Penalty> penaltiesList : penalties.values()) {
+            for(Penalty penalty : penaltiesList) {
+                if(playerId.equals(penalty.getPlayerId())) {
+                    penaltyMinutes += penalty.getLength();
+                }
+            }
+        }
+
         double pointsPerGame = 0.0;
         double scoresPerGame = 0.0;
         double assistsPerGame = 0.0;
+        double penaltiesPerGame = 0.0;
 
         if (gamesCount > 0) {
             pointsPerGame = (double) points / gamesCount;
             scoresPerGame = (double) scores / gamesCount;
             assistsPerGame = (double) assists / gamesCount;
+            penaltiesPerGame = (double) penaltyMinutes / gamesCount;
         }
 
         ArrayList<Goal> allGoals = new ArrayList<>();
@@ -165,7 +178,8 @@ public class StatsHelper extends AnalyzerService {
         result.bestAssists = bestAssists;
         result.bestScorers = bestScorers;
         result.bestLineMates = bestLineMates;
-
+        result.penalties = penaltyMinutes;
+        result.penaltiesPerGame = penaltiesPerGame;
         return result;
     }
 
