@@ -216,10 +216,6 @@ public class LineUpSelector extends LinearLayout {
         refreshChemistry();
     }
 
-    public interface CreateViewListener {
-        void onViewCreated();
-    }
-
     private void updateLineFragment(Line line) {
         LineFragment lineFragment = lineFragments.get(line.getLineNumber() - 1);
         LineFragmentData data = lineFragment.getData();

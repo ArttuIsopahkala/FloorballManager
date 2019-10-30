@@ -1,7 +1,5 @@
 package com.ardeapps.floorballmanager.fragments;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,11 +7,9 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,6 +37,7 @@ import com.ardeapps.floorballmanager.utils.StringUtils;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
 import com.ardeapps.floorballmanager.viewObjects.PlayerStatsData;
 import com.ardeapps.floorballmanager.views.IconView;
+import com.ardeapps.floorballmanager.views.ShootMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +50,7 @@ import java.util.TreeMap;
 
 public class PlayerStatsFragment extends Fragment implements DataView {
 
+    ShootMap shootMap;
     ImageView pictureImage;
     TextView nameText;
     TextView positionText;
@@ -83,8 +81,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     TextView penaltiesText;
     TextView penaltiesPerGameText;
 
-    ImageView shootmapImage;
-    RelativeLayout shootmapPointsContainer;
     Spinner gameSpinner;
     Spinner gameModeSpinner;
     Spinner typeSpinner;
@@ -95,8 +91,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     int gameSpinnerPosition = 0;
     int gameModeSpinnerPosition = 0;
     int typeSpinnerPosition = 0;
-    private double imageWidth;
-    private double imageHeight;
     private ArrayList<Game> sortedGames;
     private ArrayList<Goal.Mode> gameModes;
     private Player player;
@@ -118,6 +112,7 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_player_stats, container, false);
+        shootMap = v.findViewById(R.id.shootMap);
         pictureImage = v.findViewById(R.id.pictureImage);
         nameText = v.findViewById(R.id.nameText);
         positionText = v.findViewById(R.id.positionText);
@@ -126,8 +121,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
         editIcon = v.findViewById(R.id.editIcon);
         seasonSpinner = v.findViewById(R.id.seasonSpinner);
         noSeasonsText = v.findViewById(R.id.noSeasonsText);
-        shootmapImage = v.findViewById(R.id.shootmapImage);
-        shootmapPointsContainer = v.findViewById(R.id.shootmapPointsContainer);
         gameSpinner = v.findViewById(R.id.gameSpinner);
         gameModeSpinner = v.findViewById(R.id.gameModeSpinner);
         typeSpinner = v.findViewById(R.id.typeSpinner);
@@ -272,22 +265,14 @@ public class PlayerStatsFragment extends Fragment implements DataView {
             }
         });
 
-        ViewTreeObserver vto = shootmapImage.getViewTreeObserver();
-        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            public boolean onPreDraw() {
-                shootmapImage.getViewTreeObserver().removeOnPreDrawListener(this);
-                imageHeight = shootmapImage.getMeasuredHeight();
-                imageWidth = shootmapImage.getMeasuredWidth();
+        shootMap.initialize(false, () -> {
+            // This triggers onItemSelectedListener
+            Helper.setSpinnerSelection(gameSpinner, gameSpinnerPosition);
+            Helper.setSpinnerSelection(gameModeSpinner, gameModeSpinnerPosition);
+            Helper.setSpinnerSelection(typeSpinner, typeSpinnerPosition);
 
-                // This triggers onItemSelectedListener
-                Helper.setSpinnerSelection(gameSpinner, gameSpinnerPosition);
-                Helper.setSpinnerSelection(gameModeSpinner, gameModeSpinnerPosition);
-                Helper.setSpinnerSelection(typeSpinner, typeSpinnerPosition);
-
-                Season season = AppRes.getInstance().getSelectedSeason();
-                loadStats(season != null ? season.getSeasonId() : null);
-                return true;
-            }
+            Season season = AppRes.getInstance().getSelectedSeason();
+            loadStats(season != null ? season.getSeasonId() : null);
         });
 
         editIcon.setOnClickListener(v1 -> {
@@ -559,22 +544,11 @@ public class PlayerStatsFragment extends Fragment implements DataView {
     }
 
     private void drawShootPoints() {
-        shootmapPointsContainer.removeAllViewsInLayout();
-
         ArrayList<Goal> filteredGoals = getFilteredGameGoals(gameSpinnerPosition);
         filteredGoals = getFilteredGameModeGoals(gameModeSpinnerPosition, filteredGoals);
         filteredGoals = getFilteredTypeGoals(typeSpinnerPosition, filteredGoals);
 
-        for (Goal goal : filteredGoals) {
-            if (goal.getPositionPercentX() != null && goal.getPositionPercentY() != null) {
-                double x = getPositionX(goal.getPositionPercentX());
-                double y = getPositionY(goal.getPositionPercentY());
-                if (y > imageHeight) {
-                    y = imageHeight;
-                }
-                drawShootPoint(x, y);
-            }
-        }
+        shootMap.drawShootPoints(filteredGoals);
     }
 
     private ArrayList<Goal> getFilteredGameGoals(int spinnerPosition) {
@@ -623,39 +597,6 @@ public class PlayerStatsFragment extends Fragment implements DataView {
             }
         }
         return filteredGoals;
-    }
-
-    public void drawShootPoint(double positionX, double positionY) {
-        ImageView shootPoint = new ImageView(AppRes.getActivity());
-        shootPoint.setScaleType(ImageView.ScaleType.FIT_XY);
-        shootPoint.setAdjustViewBounds(true);
-
-        int strokeWidth = Helper.dpToPx(3);
-        GradientDrawable gD = new GradientDrawable();
-        gD.setColor(Color.WHITE);
-        gD.setShape(GradientDrawable.OVAL);
-        gD.setStroke(strokeWidth, Color.BLACK);
-        shootPoint.setBackground(gD);
-
-        int shootPointWidth = Helper.dpToPx(20);
-        int shootPointHeight = Helper.dpToPx(20);
-        double pictureX = positionX - (shootPointWidth / 2.0);
-        double pictureY = positionY - (shootPointHeight / 2.0);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(shootPointWidth, shootPointHeight);
-        params.leftMargin = (int) pictureX;
-        params.topMargin = (int) pictureY;
-        shootPoint.setLayoutParams(params);
-
-        shootmapPointsContainer.addView(shootPoint);
-    }
-
-    private double getPositionX(double positionPercentX) {
-        return imageWidth * positionPercentX;
-    }
-
-    private double getPositionY(double positionPercentY) {
-        return imageHeight * positionPercentY;
     }
 
 }

@@ -5,36 +5,17 @@
     android:background="@color/color_background"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/shootmapContainer"
+    <com.ardeapps.floorballmanager.views.ShootMap
+        android:id="@+id/shootMap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-
-        <ImageView
-            android:id="@+id/shootmapImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/floorball_field_half" />
-
-        <ImageView
-            android:id="@+id/shootPointImage"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/circle"
-            android:contentDescription="@null"
-            android:scaleType="fitXY" />
-    </RelativeLayout>
+        android:layout_centerInParent="true" />
 
     <TextView
         android:id="@+id/awayNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/shootmapContainer"
+        android:layout_above="@+id/shootMap"
         android:layout_centerHorizontal="true"
         android:text="-"
         android:textAllCaps="true"
@@ -46,7 +27,7 @@
         android:id="@+id/homeNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/shootmapContainer"
+        android:layout_below="@+id/shootMap"
         android:layout_centerHorizontal="true"
         android:text="-"
         android:textAllCaps="true"

@@ -1,18 +1,14 @@
 package com.ardeapps.floorballmanager.fragments;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,6 +32,7 @@ import com.ardeapps.floorballmanager.viewObjects.PlayerPointsData;
 import com.ardeapps.floorballmanager.viewObjects.TeamGameData;
 import com.ardeapps.floorballmanager.viewObjects.TeamStatsData;
 import com.ardeapps.floorballmanager.views.IconView;
+import com.ardeapps.floorballmanager.views.ShootMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,19 +78,17 @@ public class TeamStatsFragment extends Fragment {
     TextView longestWinText;
     TextView longestNotLoseText;
 
-    ImageView shootmapImage;
-    RelativeLayout shootmapPointsContainer;
     Spinner gameSpinner;
     Spinner gameModeSpinner;
     Spinner seasonSpinner;
     Spinner goalTypeSpinner;
     LinearLayout trendingContainer;
     LinearLayout trendingContent;
+    ShootMap shootMap;
+
     int gameSpinnerPosition = 0;
     int gameModeSpinnerPosition = 0;
     int goalTypeSpinnerPosition = 0;
-    private double imageWidth;
-    private double imageHeight;
     private ArrayList<Game> filteredGames;
     private ArrayList<Goal.Mode> gameModes;
     private Team team;
@@ -112,8 +107,6 @@ public class TeamStatsFragment extends Fragment {
         editIcon = v.findViewById(R.id.editIcon);
         seasonSpinner = v.findViewById(R.id.seasonSpinner);
         noSeasonsText = v.findViewById(R.id.noSeasonsText);
-        shootmapImage = v.findViewById(R.id.shootmapImage);
-        shootmapPointsContainer = v.findViewById(R.id.shootmapPointsContainer);
         goalTypeSpinner = v.findViewById(R.id.goalTypeSpinner);
         gameSpinner = v.findViewById(R.id.gameSpinner);
         gameModeSpinner = v.findViewById(R.id.gameModeSpinner);
@@ -146,6 +139,7 @@ public class TeamStatsFragment extends Fragment {
         biggestLoseText = v.findViewById(R.id.biggestLoseText);
         longestWinText = v.findViewById(R.id.longestWinText);
         longestNotLoseText = v.findViewById(R.id.longestNotLoseText);
+        shootMap = v.findViewById(R.id.shootMap);
 
         team = AppRes.getInstance().getSelectedTeam();
         // Team Info
@@ -224,21 +218,13 @@ public class TeamStatsFragment extends Fragment {
             }
         });
 
-        ViewTreeObserver vto = shootmapImage.getViewTreeObserver();
-        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            public boolean onPreDraw() {
-                shootmapImage.getViewTreeObserver().removeOnPreDrawListener(this);
-                imageHeight = shootmapImage.getMeasuredHeight();
-                imageWidth = shootmapImage.getMeasuredWidth();
+        shootMap.initialize(false, () -> {
+            // This triggers onItemSelectedListener
+            Helper.setSpinnerSelection(gameSpinner, gameSpinnerPosition);
+            Helper.setSpinnerSelection(gameModeSpinner, gameModeSpinnerPosition);
 
-                // This triggers onItemSelectedListener
-                Helper.setSpinnerSelection(gameSpinner, gameSpinnerPosition);
-                Helper.setSpinnerSelection(gameModeSpinner, gameModeSpinnerPosition);
-
-                Season season = AppRes.getInstance().getSelectedSeason();
-                loadStats(season != null ? season.getSeasonId() : null);
-                return true;
-            }
+            Season season = AppRes.getInstance().getSelectedSeason();
+            loadStats(season != null ? season.getSeasonId() : null);
         });
 
         editIcon.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToEditTeamFragment(team));
@@ -434,22 +420,10 @@ public class TeamStatsFragment extends Fragment {
     }
 
     private void drawShootPoints() {
-        shootmapPointsContainer.removeAllViewsInLayout();
-
         ArrayList<Goal> filteredGoals = getFilteredGameGoals(gameSpinnerPosition);
         filteredGoals = getFilteredGameModeGoals(gameModeSpinnerPosition, filteredGoals);
         filteredGoals = getFilteredGoalTypeGoals(goalTypeSpinnerPosition, filteredGoals);
-
-        for (Goal goal : filteredGoals) {
-            if (goal.getPositionPercentX() != null && goal.getPositionPercentY() != null) {
-                double x = getPositionX(goal.getPositionPercentX());
-                double y = getPositionY(goal.getPositionPercentY());
-                if (y > imageHeight) {
-                    y = imageHeight;
-                }
-                drawShootPoint(x, y);
-            }
-        }
+        shootMap.drawShootPoints(filteredGoals);
     }
 
     private ArrayList<Goal> getFilteredGoalTypeGoals(int spinnerPosition, ArrayList<Goal> goals) {
@@ -500,39 +474,6 @@ public class TeamStatsFragment extends Fragment {
             }
         }
         return filteredGoals;
-    }
-
-    public void drawShootPoint(double positionX, double positionY) {
-        ImageView shootPoint = new ImageView(AppRes.getActivity());
-        shootPoint.setScaleType(ImageView.ScaleType.FIT_XY);
-        shootPoint.setAdjustViewBounds(true);
-
-        int strokeWidth = Helper.dpToPx(3);
-        GradientDrawable gD = new GradientDrawable();
-        gD.setColor(Color.WHITE);
-        gD.setShape(GradientDrawable.OVAL);
-        gD.setStroke(strokeWidth, Color.BLACK);
-        shootPoint.setBackground(gD);
-
-        int shootPointWidth = Helper.dpToPx(20);
-        int shootPointHeight = Helper.dpToPx(20);
-        double pictureX = positionX - (shootPointWidth / 2.0);
-        double pictureY = positionY - (shootPointHeight / 2.0);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(shootPointWidth, shootPointHeight);
-        params.leftMargin = (int) pictureX;
-        params.topMargin = (int) pictureY;
-        shootPoint.setLayoutParams(params);
-
-        shootmapPointsContainer.addView(shootPoint);
-    }
-
-    private double getPositionX(double positionPercentX) {
-        return imageWidth * positionPercentX;
-    }
-
-    private double getPositionY(double positionPercentY) {
-        return imageHeight * positionPercentY;
     }
 
     private class PlayerStatsHolder {
