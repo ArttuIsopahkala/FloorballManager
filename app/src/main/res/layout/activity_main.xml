@@ -48,6 +48,16 @@
             android:text="@string/icon_user"
             app:iconFont="@string/icon_solid"
             app:iconSize="18sp" />
+        <ImageView
+            android:id="@+id/newInvitationMark"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="12dp"
+            android:src="@drawable/circle"
+            android:tint="@color/color_red_light"
+            android:contentDescription="@null"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <FrameLayout

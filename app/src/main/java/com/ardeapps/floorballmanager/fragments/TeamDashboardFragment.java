@@ -15,9 +15,12 @@ import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.UserConnection;
+import com.ardeapps.floorballmanager.objects.UserInvitation;
 import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
+
+import java.util.Map;
 
 
 public class TeamDashboardFragment extends Fragment {
@@ -59,7 +62,10 @@ public class TeamDashboardFragment extends Fragment {
                 break;
             }
         }
-        if(isPendingRequests) {
+        Map<String, UserInvitation> userInvitations = AppRes.getInstance().getUserInvitations();
+        if(!userInvitations.isEmpty()) {
+            infoText.setText(getString(R.string.team_selection_user_invitation_info));
+        } else if(isPendingRequests) {
             infoText.setText(getString(R.string.team_dashboard_info_new_requests));
         } else if (AppRes.getInstance().getSelectedSeason() == null) {
             infoText.setText(getString(R.string.team_dashboard_info_get_started));

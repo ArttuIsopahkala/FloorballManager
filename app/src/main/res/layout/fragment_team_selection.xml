@@ -15,7 +15,7 @@
         android:background="@color/color_menu"
         android:gravity="center"
         android:padding="15dp"
-        android:text="@string/main_selection_desc"
+        android:text="@string/team_selection_desc"
         android:textColor="@color/color_text_light"
         android:textSize="15sp" />
 
@@ -61,28 +61,6 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/userJoinRequestsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
-
-    <TextView
-        android:id="@+id/userInvitationInfoText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="@string/main_selection_user_invitation_info"
-        android:textColor="@color/color_text_light"
-        android:textSize="15sp" />
-
-    <LinearLayout
-        android:id="@+id/userInvitationsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -95,7 +73,7 @@
             android:layout_weight="0.45"
             android:layout_marginEnd="10dp"
             android:background="@drawable/button_background"
-            android:text="@string/main_selection_add_team"
+            android:text="@string/team_selection_add_team"
             android:textColor="@color/color_text_light" />
 
         <Button
@@ -104,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.45"
             android:background="@drawable/button_background"
-            android:text="@string/main_selection_search_team"
+            android:text="@string/team_selection_search_team"
             android:textColor="@color/color_text_light" />
     </LinearLayout>
 

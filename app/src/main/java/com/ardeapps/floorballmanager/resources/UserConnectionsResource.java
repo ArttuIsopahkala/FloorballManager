@@ -1,6 +1,5 @@
 package com.ardeapps.floorballmanager.resources;
 
-import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.handlers.GetUserConnectionsHandler;
 import com.ardeapps.floorballmanager.objects.UserConnection;
 import com.ardeapps.floorballmanager.objects.UserInvitation;
@@ -28,17 +27,17 @@ public class UserConnectionsResource extends FirebaseDatabaseService {
         return instance;
     }
 
-    public void addUserConnection(UserConnection userConnection, final AddDataSuccessListener handler) {
+    public void addUserConnection(String teamId, UserConnection userConnection, final AddDataSuccessListener handler) {
         userConnection.setUserConnectionId(database.push().getKey());
-        addData(database.child(AppRes.getInstance().getSelectedTeam().getTeamId()).child(userConnection.getUserConnectionId()), userConnection, handler);
+        addData(database.child(teamId).child(userConnection.getUserConnectionId()), userConnection, handler);
     }
 
-    public void editUserConnection(UserConnection userConnection, final EditDataSuccessListener handler) {
-        editData(database.child(AppRes.getInstance().getSelectedTeam().getTeamId()).child(userConnection.getUserConnectionId()), userConnection, handler);
+    public void editUserConnection(String teamId, UserConnection userConnection, final EditDataSuccessListener handler) {
+        editData(database.child(teamId).child(userConnection.getUserConnectionId()), userConnection, handler);
     }
 
-    public void removeUserConnection(String userConnectionId, final DeleteDataSuccessListener handler) {
-        deleteData(database.child(AppRes.getInstance().getSelectedTeam().getTeamId()).child(userConnectionId), handler);
+    public void removeUserConnection(String teamId, String userConnectionId, final DeleteDataSuccessListener handler) {
+        deleteData(database.child(teamId).child(userConnectionId), handler);
     }
 
     public void removeUserConnections(String teamId, final DeleteDataSuccessListener handler) {
@@ -87,4 +86,5 @@ public class UserConnectionsResource extends FirebaseDatabaseService {
             }
         });
     }
+
 }

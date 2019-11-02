@@ -254,6 +254,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             }
         }
 
+        String selectedTeamId = AppRes.getInstance().getSelectedTeam().getTeamId();
         // Collect data from view
         if (oldUserConnection != null) {
             final UserConnection userConnectionToSave = oldUserConnection.clone();
@@ -266,7 +267,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             }
             userConnectionToSave.setPlayerId(selectedPlayerId);
 
-            UserConnectionsResource.getInstance().editUserConnection(userConnectionToSave, () -> {
+            UserConnectionsResource.getInstance().editUserConnection(selectedTeamId, userConnectionToSave, () -> {
                 AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
                 UserConnection.Status status1 = UserConnection.Status.fromDatabaseName(userConnectionToSave.getStatus());
                 // Send user invitation again
@@ -283,7 +284,7 @@ public class EditUserConnectionFragment extends Fragment implements DataView {
             userConnectionToSave.setStatus(UserConnection.Status.PENDING.toDatabaseName());
             userConnectionToSave.setPlayerId(selectedPlayerId);
 
-            UserConnectionsResource.getInstance().addUserConnection(userConnectionToSave, id -> {
+            UserConnectionsResource.getInstance().addUserConnection(selectedTeamId, userConnectionToSave, id -> {
                 userConnectionToSave.setUserConnectionId(id);
                 AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
                 sendUserInvitation(userConnectionToSave);

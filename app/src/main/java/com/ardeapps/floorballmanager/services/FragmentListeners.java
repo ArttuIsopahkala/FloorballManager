@@ -1,5 +1,6 @@
 package com.ardeapps.floorballmanager.services;
 
+import com.ardeapps.floorballmanager.handlers.PermissionDenyHandler;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Team;
@@ -21,12 +22,21 @@ public class FragmentListeners {
     private static FragmentListeners instance;
     private PermissionHandledListener permissionHandledListener;
     private FragmentChangeListener fragmentChangeListener;
+    private ApplicationListener applicationListener;
 
     public static FragmentListeners getInstance() {
         if (instance == null) {
             instance = new FragmentListeners();
         }
         return instance;
+    }
+
+    public ApplicationListener getApplicationListener() {
+        return applicationListener;
+    }
+
+    public void setApplicationListener(ApplicationListener applicationListener) {
+        this.applicationListener = applicationListener;
     }
 
     public FragmentChangeListener getFragmentChangeListener() {
@@ -48,13 +58,13 @@ public class FragmentListeners {
     public interface FragmentChangeListener {
         void goToLoginFragment();
 
-        void goToMainSelectionFragment();
+        void goToTeamSelectionFragment();
 
         void goToEditTeamFragment(Team team);
 
         void goToEditPlayerFragment(Player player);
 
-        void goToTeamDashboardFragment(Team team);
+        void goToTeamDashboardFragment(Team team, PermissionDenyHandler handler);
 
         void goToLinesFragment();
 
@@ -83,6 +93,10 @@ public class FragmentListeners {
         void goToTeamSettingsFragment();
 
         void goToInactivePlayersFragment();
+    }
+
+    public interface ApplicationListener {
+        void onUserInvitationHandled();
     }
 
     public interface PermissionHandledListener {

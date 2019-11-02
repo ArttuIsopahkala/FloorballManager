@@ -127,34 +127,31 @@ public class EditTeamFragment extends Fragment implements DataView {
 
             Helper.hideKeyBoard(nameText);
 
-            // Edit or create
-            final Team teamToSave;
-            if (team != null) {
-                teamToSave = team.clone();
-                teamToSave.setName(name);
-                TeamsResource.getInstance().editTeam(teamToSave, () -> {
-                    AppRes.getInstance().setSelectedTeam(teamToSave);
-                    saveTeamToUser(teamToSave);
-                });
-            } else {
-                teamToSave = new Team();
-                TeamsResource.getInstance().getTeamByName(name, team -> {
-                    if(team != null) {
-                        Logger.toast(R.string.add_team_name_exists);
-                        return;
-                    }
+            TeamsResource.getInstance().getTeamByName(name, teamExists -> {
+                if(teamExists != null) {
+                    Logger.toast(R.string.add_team_name_exists);
+                    return;
+                }
 
+                // Edit or create
+                final Team teamToSave;
+                if (team != null) {
+                    teamToSave = team.clone();
+                    teamToSave.setName(name);
+                    TeamsResource.getInstance().editTeam(teamToSave, () -> {
+                        saveTeamToUser(teamToSave);
+                    });
+                } else {
+                    teamToSave = new Team();
                     teamToSave.setName(name);
                     teamToSave.setCreationTime(System.currentTimeMillis());
                     teamToSave.setFounder(AppRes.getInstance().getUser().getUserId());
                     TeamsResource.getInstance().addTeam(teamToSave, id -> {
                         teamToSave.setTeamId(id);
-                        AppRes.getInstance().setSelectedTeam(teamToSave);
-
                         addUserConnection(teamToSave);
                     });
-                });
-            }
+                }
+            });
         });
 
         return v;
@@ -167,7 +164,7 @@ public class EditTeamFragment extends Fragment implements DataView {
         userConnection.setUserId(user.getUserId());
         userConnection.setRole(UserConnection.Role.ADMIN.toDatabaseName());
         userConnection.setStatus(UserConnection.Status.CONNECTED.toDatabaseName());
-        UserConnectionsResource.getInstance().addUserConnection(userConnection, id -> {
+        UserConnectionsResource.getInstance().addUserConnection(teamToSave.getTeamId(), userConnection, id -> {
             userConnection.setUserConnectionId(id);
             AppRes.getInstance().setUserConnection(userConnection.getUserConnectionId(), userConnection);
             saveTeamToUser(teamToSave);

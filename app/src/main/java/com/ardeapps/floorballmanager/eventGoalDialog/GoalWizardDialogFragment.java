@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Penalty;
+import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
 import com.ardeapps.floorballmanager.viewObjects.GoalWizardDialogData;
 
@@ -98,6 +99,7 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
     }
 
     private void handlePreviousClick() {
+        Helper.hideKeyBoard(titleText);
         if (position == 0) {
             dismiss();
         } else {
@@ -114,6 +116,7 @@ public class GoalWizardDialogFragment extends DialogFragment implements DataView
     private void handleNextClick() {
         boolean isValid = goalAdapter.validate(position);
         if (isValid) {
+            Helper.hideKeyBoard(titleText);
             checkNextClickChanges(() -> {
                 int max = goalAdapter.getCount() - 1;
                 if (position == max) {

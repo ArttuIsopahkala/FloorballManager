@@ -35,7 +35,7 @@
             android:id="@+id/roleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_selection_user_request"
+            android:text="@string/team_selection_user_request"
             android:textColor="@color/color_text_light_secondary"
             android:textSize="16sp" />
 

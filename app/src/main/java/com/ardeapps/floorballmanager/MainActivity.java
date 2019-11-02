@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -28,16 +29,17 @@ import com.ardeapps.floorballmanager.fragments.GamesFragment;
 import com.ardeapps.floorballmanager.fragments.InactivePlayersFragment;
 import com.ardeapps.floorballmanager.fragments.LinesFragment;
 import com.ardeapps.floorballmanager.fragments.LoginFragment;
-import com.ardeapps.floorballmanager.fragments.MainSelectionFragment;
 import com.ardeapps.floorballmanager.fragments.PlayerStatsFragment;
 import com.ardeapps.floorballmanager.fragments.PlayersFragment;
 import com.ardeapps.floorballmanager.fragments.SearchTeamFragment;
 import com.ardeapps.floorballmanager.fragments.SettingsFragment;
 import com.ardeapps.floorballmanager.fragments.TeamDashboardFragment;
+import com.ardeapps.floorballmanager.fragments.TeamSelectionFragment;
 import com.ardeapps.floorballmanager.fragments.TeamSettingsFragment;
 import com.ardeapps.floorballmanager.fragments.TeamStatsFragment;
 import com.ardeapps.floorballmanager.handlers.GetGameGoalsHandler;
 import com.ardeapps.floorballmanager.handlers.GetGamePenaltiesHandler;
+import com.ardeapps.floorballmanager.handlers.PermissionDenyHandler;
 import com.ardeapps.floorballmanager.objects.AppData;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Line;
@@ -46,6 +48,7 @@ import com.ardeapps.floorballmanager.objects.Season;
 import com.ardeapps.floorballmanager.objects.Team;
 import com.ardeapps.floorballmanager.objects.User;
 import com.ardeapps.floorballmanager.objects.UserConnection;
+import com.ardeapps.floorballmanager.objects.UserInvitation;
 import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.resources.AppDataResource;
 import com.ardeapps.floorballmanager.resources.GameLinesResource;
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     LoginFragment loginFragment;
     SettingsFragment settingsFragment;
     TeamDashboardFragment teamDashboardFragment;
-    MainSelectionFragment mainSelectionFragment;
+    TeamSelectionFragment teamSelectionFragment;
     EditTeamFragment editTeamFragment;
     EditPlayerFragment editPlayerFragment;
     PlayersFragment playersFragment;
@@ -106,7 +109,9 @@ public class MainActivity extends AppCompatActivity {
     IconView settingsIcon;
     IconView feedbackIcon;
     TextView titleText;
+    ImageView newInvitationMark;
 
+    private boolean isFirstViewAdded = false;
     private boolean isLoginUsed = false;
     private volatile boolean isOnDestroyCalled = false;
 
@@ -123,10 +128,11 @@ public class MainActivity extends AppCompatActivity {
         feedbackIcon = findViewById(R.id.feedbackIcon);
         titleText = findViewById(R.id.titleText);
         menuTop = findViewById(R.id.menuTop);
+        newInvitationMark = findViewById(R.id.newInvitationMark);
 
         loginFragment = new LoginFragment();
         settingsFragment = new SettingsFragment();
-        mainSelectionFragment = new MainSelectionFragment();
+        teamSelectionFragment = new TeamSelectionFragment();
         teamDashboardFragment = new TeamDashboardFragment();
         editTeamFragment = new EditTeamFragment();
         editPlayerFragment = new EditPlayerFragment();
@@ -196,7 +202,12 @@ public class MainActivity extends AppCompatActivity {
                     authUser.delete();
                 }
                 FirebaseAuth.getInstance().signOut();
-                FragmentListeners.getInstance().getFragmentChangeListener().goToLoginFragment();
+                FragmentActivity activity = AppRes.getActivity();
+                Intent i = new Intent(activity, MainActivity.class);
+                activity.finish();
+                activity.overridePendingTransition(0, 0);
+                activity.startActivity(i);
+                activity.overridePendingTransition(0, 0);
                 return;
             }
             // Update lastLoginTime silently
@@ -226,26 +237,33 @@ public class MainActivity extends AppCompatActivity {
                         // Add new teams
                         UsersResource.getInstance().editUser(user, () -> {
                             // Remove accepted user requests
-                            UserRequestsResource.getInstance().removeUserRequests(acceptedUserRequests.keySet(), () -> {
-                                loadTeamsData(user);
-                            });
+                            UserRequestsResource.getInstance().removeUserRequests(acceptedUserRequests.keySet(), this::openFirstView);
                         });
                     } else {
-                        loadTeamsData(user);
+                        openFirstView();
                     }
                 });
             });
         });
     }
 
-    private void loadTeamsData(User user) {
-        if (!user.getTeamIds().isEmpty()) {
-            TeamsResource.getInstance().getTeams(user.getTeamIds(), teams -> {
-                AppRes.getInstance().setTeams(teams);
-                FragmentListeners.getInstance().getFragmentChangeListener().goToMainSelectionFragment();
-            });
+    private void openFirstView() {
+        // Go straight to team dashboard if there is already selected team
+        User user = AppRes.getInstance().getUser();
+        String selectedTeamId = PrefRes.getSelectedTeamId();
+        if(user.getTeamIds().isEmpty() || selectedTeamId == null) {
+            FragmentListeners.getInstance().getFragmentChangeListener().goToTeamSelectionFragment();
         } else {
-            FragmentListeners.getInstance().getFragmentChangeListener().goToMainSelectionFragment();
+            TeamsResource.getInstance().getTeam(selectedTeamId, true, team -> {
+                if(team != null) {
+                    FragmentListeners.getInstance().getFragmentChangeListener().goToTeamDashboardFragment(team, () -> {
+                        FragmentListeners.getInstance().getFragmentChangeListener().goToTeamSelectionFragment();
+                    });
+                } else {
+                    PrefRes.setSelectedTeamId(null);
+                    FragmentListeners.getInstance().getFragmentChangeListener().goToTeamSelectionFragment();
+                }
+            });
         }
     }
 
@@ -253,39 +271,37 @@ public class MainActivity extends AppCompatActivity {
      * SET FRAGMENT LISTENERS
      */
     private void setListeners() {
+        FragmentListeners.getInstance().setApplicationListener(() -> {
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+            formatMenuBar(f);
+        });
+
         FragmentListeners.getInstance().setFragmentChangeListener(new FragmentListeners.FragmentChangeListener() {
             @Override
             public void goToLoginFragment() {
-                // Pop back stack to prevent user navigate back to app
-                FragmentManager fm = getSupportFragmentManager();
-                int count = fm.getBackStackEntryCount();
-                for (int i = 0; i < count; ++i) {
-                    fm.popBackStack();
-                }
-
-                // This or TeamDashboardFragment is added at first
                 isLoginUsed = true;
-                if (loginFragment.isAdded()) {
-                    switchToFragment(loginFragment);
-                } else {
-                    addFragment(loginFragment);
-                }
+                isFirstViewAdded = true;
+                addFragment(loginFragment);
             }
 
             @Override
-            public void goToMainSelectionFragment() {
-                if (mainSelectionFragment.isAdded()) {
-                    switchToFragment(mainSelectionFragment);
-                } else {
-                    addFragment(mainSelectionFragment);
-                }
+            public void goToTeamSelectionFragment() {
+                User user = AppRes.getInstance().getUser();
+                TeamsResource.getInstance().getTeams(user.getTeamIds(), teams -> {
+                    AppRes.getInstance().setTeams(teams);
+                    if (!isFirstViewAdded) {
+                        addFragment(teamSelectionFragment);
+                    } else {
+                        switchToFragment(teamSelectionFragment);
+                    }
+                    isFirstViewAdded = true;
+                });
             }
 
             @Override
-            public void goToTeamDashboardFragment(final Team team) {
-                // Check if team has connection to this user
+            public void goToTeamDashboardFragment(final Team team, PermissionDenyHandler handler) {
                 UserConnectionsResource.getInstance().getUserConnections(team.getTeamId(), userConnections -> {
-                    final User user = AppRes.getInstance().getUser();
+                    User user = AppRes.getInstance().getUser();
                     boolean connectionFound = false;
                     for (UserConnection userConnection : userConnections.values()) {
                         if (user.getUserId().equals(userConnection.getUserId())) {
@@ -298,46 +314,56 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (!connectionFound) {
-                        InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.main_selection_connection_not_found));
+                        InfoDialogFragment dialog = InfoDialogFragment.newInstance(getString(R.string.team_selection_connection_not_found));
                         dialog.show(getSupportFragmentManager(), "Ei oikeuksia joukkueeseen.");
 
+                        if(team.getTeamId().equals(PrefRes.getSelectedTeamId())) {
+                            PrefRes.setSelectedTeamId(null);
+                        }
                         user.getTeamIds().remove(team.getTeamId());
                         AppRes.getInstance().setUser(user);
                         AppRes.getInstance().setTeam(team.getTeamId(), null);
-                        UsersResource.getInstance().editUser(user, () -> mainSelectionFragment.update());
-                        return;
-                    }
+                        UsersResource.getInstance().editUser(user, handler::onPermissionDenied);
+                    } else {
+                        // Empty back stack and open new team
+                        FragmentManager fm = getSupportFragmentManager();
+                        int count = fm.getBackStackEntryCount();
+                        for (int i = 0; i < count; ++i) {
+                            fm.popBackStack();
+                        }
 
-                    // Store selected team and load team data
-                    AppRes.getInstance().setUserConnections(userConnections);
-                    AppRes.getInstance().setSelectedTeam(team);
+                        // Store selected team and load team data
+                        AppRes.getInstance().setUserConnections(userConnections);
+                        AppRes.getInstance().setSelectedTeam(team);
+                        PrefRes.setSelectedTeamId(team.getTeamId());
 
-                    UserRequestsResource.getInstance().getUserRequestsAsTeam(userRequests -> {
-                        AppRes.getInstance().setUserJoinRequests(userRequests);
-                        LinesResource.getInstance().getLines(lines -> {
-                            AppRes.getInstance().setLines(lines);
-                            PlayersResource.getInstance().getPlayers(players -> {
-                                AppRes.getInstance().setPlayers(players);
-                                SeasonsResource.getInstance().getSeasons(seasons -> {
-                                    AppRes.getInstance().setSeasons(seasons);
-                                    // Set selected season from preferences
-                                    String seasonId = PrefRes.getSelectedSeasonId(team.getTeamId());
-                                    if (StringUtils.isEmptyString(seasonId) && !seasons.isEmpty()) {
-                                        seasonId = seasons.values().iterator().next().getSeasonId();
-                                    }
-                                    Season selectedSeason = seasons.get(seasonId);
-                                    AppRes.getInstance().setSelectedSeason(selectedSeason);
+                        UserRequestsResource.getInstance().getUserRequests(team.getTeamId(), userRequests -> {
+                            AppRes.getInstance().setUserJoinRequests(userRequests);
+                            LinesResource.getInstance().getLines(lines -> {
+                                AppRes.getInstance().setLines(lines);
+                                PlayersResource.getInstance().getPlayers(players -> {
+                                    AppRes.getInstance().setPlayers(players);
+                                    SeasonsResource.getInstance().getSeasons(seasons -> {
+                                        AppRes.getInstance().setSeasons(seasons);
+                                        // Set selected season from preferences
+                                        String seasonId = PrefRes.getSelectedSeasonId(team.getTeamId());
+                                        if (StringUtils.isEmptyString(seasonId) && !seasons.isEmpty()) {
+                                            seasonId = seasons.values().iterator().next().getSeasonId();
+                                        }
+                                        Season selectedSeason = seasons.get(seasonId);
+                                        AppRes.getInstance().setSelectedSeason(selectedSeason);
 
-                                    // This or LoginFragment is added at first
-                                    if (teamDashboardFragment.isAdded()) {
-                                        switchToFragment(teamDashboardFragment);
-                                    } else {
-                                        addFragment(teamDashboardFragment);
-                                    }
+                                        if (!isFirstViewAdded) {
+                                            addFragment(teamDashboardFragment);
+                                        } else {
+                                            switchToFragment(teamDashboardFragment);
+                                        }
+                                        isFirstViewAdded = true;
+                                    });
                                 });
                             });
                         });
-                    });
+                    }
                 });
             }
 
@@ -450,7 +476,10 @@ public class MainActivity extends AppCompatActivity {
 
         editTeamFragment.setListener(team -> {
             AppRes.getInstance().setTeam(team.getTeamId(), team);
-            AppRes.getInstance().setSelectedTeam(team);
+            Team currentTeam = AppRes.getInstance().getSelectedTeam();
+            if(currentTeam != null && currentTeam.getTeamId().equals(team.getTeamId())) {
+                AppRes.getInstance().setSelectedTeam(team);
+            }
             // Back pressed to pop back stack
             onBackPressed();
         });
@@ -500,37 +529,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openFragment(Fragment newFrag) {
-        if (!isOnDestroyCalled) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragmentContainer, newFrag)
-                    .commitAllowingStateLoss();
-
-            formatMenuBar(newFrag);
-        }
-    }
-
     public void addFragment(Fragment newFrag) {
         if (!isOnDestroyCalled) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentContainer, newFrag)
                     .commitAllowingStateLoss();
-
             formatMenuBar(newFrag);
         }
     }
 
     public void switchToFragment(Fragment newFrag) {
         if (!isOnDestroyCalled) {
-            // Replace fragmentCotainer with your container id
+            // Replace fragmentContainer with your container id
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
             // Return if the class are the same
-            if (currentFragment.getClass().equals(newFrag.getClass())) return;
+            if (currentFragment != null && currentFragment.getClass().equals(newFrag.getClass())) return;
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, newFrag)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
-
             formatMenuBar(newFrag);
         }
     }
@@ -541,17 +558,25 @@ public class MainActivity extends AppCompatActivity {
         settingsIcon.setVisibility(View.VISIBLE);
         feedbackIcon.setVisibility(View.VISIBLE);
         titleText.setVisibility(View.VISIBLE);
+        Map<String, UserInvitation> userInvitations = AppRes.getInstance().getUserInvitations();
+        if(userInvitations.isEmpty()) {
+            newInvitationMark.setVisibility(View.GONE);
+        } else {
+            newInvitationMark.setVisibility(View.VISIBLE);
+        }
+
         if (f instanceof LoginFragment) {
             menuTop.setVisibility(View.GONE);
         } else if (f instanceof SettingsFragment) {
             titleText.setText(R.string.title_settings);
             settingsIcon.setVisibility(View.GONE);
             feedbackIcon.setVisibility(View.GONE);
+            newInvitationMark.setVisibility(View.GONE);
         } else if (f instanceof TeamDashboardFragment) {
             backIcon.setVisibility(View.GONE);
             titleText.setText(AppRes.getInstance().getSelectedTeam().getName());
-        } else if (f instanceof MainSelectionFragment) {
-            backIcon.setVisibility(View.GONE);
+        } else if (f instanceof TeamSelectionFragment) {
+            backIcon.setVisibility(AppRes.getInstance().getSelectedTeam() != null ? View.VISIBLE : View.GONE);
             titleText.setText(R.string.title_teams);
         } else if (f instanceof EditTeamFragment) {
             titleText.setText(R.string.title_edit_team);

@@ -1,6 +1,5 @@
 package com.ardeapps.floorballmanager.resources;
 
-import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.handlers.GetUserRequestsHandler;
 import com.ardeapps.floorballmanager.objects.UserRequest;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
@@ -63,13 +62,13 @@ public class UserRequestsResource extends FirebaseDatabaseService {
     /**
      * Called by team member
      */
-    public void getUserRequestsAsTeam(final GetUserRequestsHandler handler) {
+    public void getUserRequests(String teamId, final GetUserRequestsHandler handler) {
         getData(database, dataSnapshot -> {
             Map<String, UserRequest> userRequests = new HashMap<>();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                 UserRequest userRequest = snapshot.getValue(UserRequest.class);
                 if (userRequest != null) {
-                    if(userRequest.getTeamId().equals(AppRes.getInstance().getSelectedTeam().getTeamId())) {
+                    if(userRequest.getTeamId().equals(teamId)) {
                         userRequests.put(userRequest.getUserConnectionId(), userRequest);
                     }
                 }

@@ -24,6 +24,7 @@ public class Team {
         clone.name = this.name;
         clone.founder = this.founder;
         clone.creationTime = this.creationTime;
+        clone.logoUploaded = this.logoUploaded;
         return clone;
     }
 

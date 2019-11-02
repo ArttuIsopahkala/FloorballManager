@@ -18,6 +18,7 @@ public class PrefRes {
     // App
     private static final String APP_PREF = "appPref";
     private static final String SEASON_ID = "seasonId";
+    private static final String SELECTED_TEAM_ID = "selectedTeamId";
     private static final String PERIOD_DURATION = "periodDuration";
 
     private static SharedPreferences getSharedPref() {
@@ -70,6 +71,20 @@ public class PrefRes {
 
     public static String getSelectedSeasonId(String teamId) {
         String seasonId = getSharedPref().getString(getSeasonIdKey(teamId), "");
+        if (StringUtils.isEmptyString(seasonId)) {
+            return null;
+        }
+        return seasonId;
+    }
+
+    public static void setSelectedTeamId(String teamId) {
+        SharedPreferences.Editor editor = getSharedPref().edit();
+        editor.putString(SELECTED_TEAM_ID, teamId);
+        editor.apply();
+    }
+
+    public static String getSelectedTeamId() {
+        String seasonId = getSharedPref().getString(SELECTED_TEAM_ID, "");
         if (StringUtils.isEmptyString(seasonId)) {
             return null;
         }

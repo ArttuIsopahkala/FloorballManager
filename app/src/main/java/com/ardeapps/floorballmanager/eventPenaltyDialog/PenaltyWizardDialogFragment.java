@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.fragments.SelectPlayerFragment;
 import com.ardeapps.floorballmanager.objects.Penalty;
+import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
 import com.ardeapps.floorballmanager.viewObjects.PenaltyWizardDialogData;
 
@@ -95,6 +96,7 @@ public class PenaltyWizardDialogFragment extends DialogFragment implements DataV
     }
 
     private void handlePreviousClick() {
+        Helper.hideKeyBoard(titleText);
         if (position == 0) {
             dismiss();
         } else {
@@ -107,6 +109,7 @@ public class PenaltyWizardDialogFragment extends DialogFragment implements DataV
         int max = penaltyAdapter.getCount() - 1;
         boolean isValid = penaltyAdapter.validate(position);
         if (isValid) {
+            Helper.hideKeyBoard(titleText);
             if (position == max) {
                 Penalty penaltyToSave = penaltyAdapter.getPenalty();
                 penaltyToSave.setGameId(data.getGame().getGameId());

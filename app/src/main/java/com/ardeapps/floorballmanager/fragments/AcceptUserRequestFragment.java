@@ -197,7 +197,7 @@ public class AcceptUserRequestFragment extends Fragment implements DataView {
         userConnectionToSave.setStatus(UserConnection.Status.CONNECTED.toDatabaseName());
         userConnectionToSave.setPlayerId(selectedPlayerId);
 
-        UserConnectionsResource.getInstance().editUserConnection(userConnectionToSave, () -> {
+        UserConnectionsResource.getInstance().editUserConnection(AppRes.getInstance().getSelectedTeam().getTeamId(), userConnectionToSave, () -> {
             AppRes.getInstance().setUserConnection(userConnectionToSave.getUserConnectionId(), userConnectionToSave);
 
             UserRequest userRequestToSave = userRequest.clone();

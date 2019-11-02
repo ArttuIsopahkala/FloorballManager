@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.MainActivity;
+import com.ardeapps.floorballmanager.PrefRes;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
@@ -174,7 +175,7 @@ public class TeamSettingsFragment extends Fragment {
                 dialogFragment.show(getChildFragmentManager(), "Poistetaanko linkitys käyttäjään?");
                 dialogFragment.setListener(() -> {
                     final String userConnectionId = userConnection.getUserConnectionId();
-                    UserConnectionsResource.getInstance().removeUserConnection(userConnectionId, () -> {
+                    UserConnectionsResource.getInstance().removeUserConnection(AppRes.getInstance().getSelectedTeam().getTeamId(), userConnectionId, () -> {
                         userConnections.remove(userConnectionId);
                         UserRequestsResource.getInstance().removeUserRequest(userConnectionId, () -> {
                             UserInvitationsResource.getInstance().removeUserInvitation(userConnectionId, this::update);
@@ -247,6 +248,7 @@ public class TeamSettingsFragment extends Fragment {
                                                                                 User user = AppRes.getInstance().getUser();
                                                                                 user.getTeamIds().remove(team.getTeamId());
                                                                                 UsersResource.getInstance().editUser(user, () -> {
+                                                                                    PrefRes.setSelectedTeamId(null);
                                                                                     Logger.toast(R.string.team_settings_remove_team_successful);
                                                                                     FragmentActivity activity = AppRes.getActivity();
                                                                                     Intent i = new Intent(activity, MainActivity.class);
