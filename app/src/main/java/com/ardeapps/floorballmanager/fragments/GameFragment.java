@@ -41,6 +41,7 @@ import com.ardeapps.floorballmanager.viewObjects.GameFragmentData;
 import com.ardeapps.floorballmanager.viewObjects.GameResultDialogData;
 import com.ardeapps.floorballmanager.viewObjects.GameSettingsFragmentData;
 import com.ardeapps.floorballmanager.views.IconView;
+import com.ardeapps.floorballmanager.views.ShootMap;
 import com.ardeapps.floorballmanager.wrappers.GameEventWrapper;
 import com.ardeapps.floorballmanager.wrappers.GoalsResourceWrapper;
 
@@ -74,7 +75,13 @@ public class GameFragment extends Fragment implements DataView {
     IconView homePlusIcon;
     IconView awayPlusIcon;
     RelativeLayout addEventsContainer;
+    ShootMap shootMap;
+    Spinner gameModeSpinner;
+    Spinner goalTypeSpinner;
 
+    int gameModeSpinnerPosition = 0;
+    int goalTypeSpinnerPosition = 0;
+    private ArrayList<Goal.Mode> gameModes;
     private int currentHomeGoals = 0;
     private int currentAwayGoals = 0;
     private int markedHomeGoals = 0;
@@ -187,6 +194,8 @@ public class GameFragment extends Fragment implements DataView {
             result += "X";
         }
         resultText.setText(result);
+
+        drawShootPoints();
     }
 
     @Override
@@ -213,6 +222,39 @@ public class GameFragment extends Fragment implements DataView {
         homePlusIcon = v.findViewById(R.id.homePlusIcon);
         awayPlusIcon = v.findViewById(R.id.awayPlusIcon);
         addEventsContainer = v.findViewById(R.id.addEventsContainer);
+        shootMap = v.findViewById(R.id.shootMap);
+        gameModeSpinner = v.findViewById(R.id.gameModeSpinner);
+        goalTypeSpinner = v.findViewById(R.id.goalTypeSpinner);
+
+        Map<Goal.Mode, String> gameModeMap = new TreeMap<>();
+        gameModeMap.put(Goal.Mode.FULL, getString(R.string.add_event_full));
+        gameModeMap.put(Goal.Mode.AV, getString(R.string.add_event_av));
+        gameModeMap.put(Goal.Mode.YV, getString(R.string.add_event_yv));
+        gameModeMap.put(Goal.Mode.SR, getString(R.string.add_event_sr));
+        gameModeMap.put(Goal.Mode.IM, getString(R.string.add_event_im));
+        gameModeMap.put(Goal.Mode.TM, getString(R.string.add_event_tm));
+        gameModeMap.put(Goal.Mode.OM, getString(R.string.add_event_om));
+        gameModeMap.put(Goal.Mode.RL, getString(R.string.add_event_rl));
+        ArrayList<String> gameModeTitles = new ArrayList<>();
+        gameModeTitles.add(getString(R.string.player_stats_all_game_modes));
+        gameModeTitles.addAll(gameModeMap.values());
+        gameModes = new ArrayList<>();
+        gameModes.add(null);
+        gameModes.addAll(gameModeMap.keySet());
+        Helper.setSpinnerAdapter(gameModeSpinner, gameModeTitles);
+
+        ArrayList<String> goalTypeTitles = new ArrayList<>();
+        goalTypeTitles.add(getString(R.string.team_stats_plus_goals));
+        goalTypeTitles.add(getString(R.string.team_stats_minus_goals));
+        Helper.setSpinnerAdapter(goalTypeSpinner, goalTypeTitles);
+
+        shootMap.initialize(false, () -> {
+            // This triggers onItemSelectedListener
+            Helper.setSpinnerSelection(gameModeSpinner, gameModeSpinnerPosition);
+            Helper.setSpinnerSelection(goalTypeSpinner, goalTypeSpinnerPosition);
+
+            update();
+        });
 
         // Role specific content
         UserConnection.Role role = AppRes.getInstance().getSelectedRole();
@@ -247,8 +289,6 @@ public class GameFragment extends Fragment implements DataView {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-        update();
 
         settingsIcon.setOnClickListener(v13 -> {
             final ActionMenuDialogFragment dialog = ActionMenuDialogFragment.newInstance(null, getString(R.string.remove_game));
@@ -292,7 +332,38 @@ public class GameFragment extends Fragment implements DataView {
 
         awayPlusIcon.setOnClickListener(v1 -> chooseEvent(false));
 
+        gameModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                gameModeSpinnerPosition = position;
+                drawShootPoints();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        goalTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                goalTypeSpinnerPosition = position;
+                drawShootPoints();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         return v;
+    }
+
+    private void drawShootPoints() {
+        ArrayList<Goal> filteredGoals = getFilteredGameModeGoals(gameModeSpinnerPosition, new ArrayList<>(data.getGoals().values()));
+        filteredGoals = getFilteredGoalTypeGoals(goalTypeSpinnerPosition, filteredGoals);
+
+        shootMap.drawShootPoints(filteredGoals);
     }
 
     private void chooseEvent(boolean isHomeEvent) {
@@ -316,6 +387,38 @@ public class GameFragment extends Fragment implements DataView {
                 update();
             });
         });
+    }
+
+    private ArrayList<Goal> getFilteredGoalTypeGoals(int spinnerPosition, ArrayList<Goal> goals) {
+        ArrayList<Goal> filteredGoals = new ArrayList<>();
+        for (Goal goal : goals) {
+            if (spinnerPosition == 0) {
+                if (!goal.isOpponentGoal()) {
+                    filteredGoals.add(goal);
+                }
+            } else {
+                if (goal.isOpponentGoal()) {
+                    filteredGoals.add(goal);
+                }
+            }
+        }
+        return filteredGoals;
+    }
+
+    private ArrayList<Goal> getFilteredGameModeGoals(int spinnerPosition, ArrayList<Goal> goals) {
+        ArrayList<Goal> filteredGoals = new ArrayList<>();
+        Goal.Mode compareMode = gameModes.get(spinnerPosition);
+        if (compareMode == null) {
+            filteredGoals = goals;
+        } else {
+            for (Goal goal : goals) {
+                Goal.Mode mode = Goal.Mode.fromDatabaseName(goal.getGameMode());
+                if (mode == compareMode) {
+                    filteredGoals.add(goal);
+                }
+            }
+        }
+        return filteredGoals;
     }
 
     private void editPenalty(final Penalty penalty, boolean isHomePenalty) {

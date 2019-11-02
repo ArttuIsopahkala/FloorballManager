@@ -320,6 +320,33 @@
             <include
                 android:id="@+id/lineStats4"
                 layout="@layout/container_line_stats" />
+
+            <LinearLayout
+                android:id="@+id/filtersContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/gameModeSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/color_text_light" />
+
+                <Spinner
+                    android:id="@+id/goalTypeSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/color_text_light" />
+            </LinearLayout>
+
+            <com.ardeapps.floorballmanager.views.ShootMap
+                android:id="@+id/shootMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
