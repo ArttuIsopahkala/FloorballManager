@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:focusable="true">
+    <com.ardeapps.floorballmanager.views.DrawingBoard
+        android:id="@+id/drawingBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/floorball_field"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/penIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_pen"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/arrowIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_arrow_long"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/dottedArrowIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_arrow_long"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/crossIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_close"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/circleIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_circle"
+                app:iconFont="@string/icon_light"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/eraserIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_eraser"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/undoIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_undo"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/usersIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_users"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/settingsIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_settings"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <com.ardeapps.floorballmanager.views.IconView
+                android:id="@+id/clearIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:text="@string/icon_remove"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="16sp" />
+            <ImageView
+                android:id="@+id/ballIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/floorball_icon"
+                android:tint="@color/color_text_light"
+                android:background="@drawable/button_background" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

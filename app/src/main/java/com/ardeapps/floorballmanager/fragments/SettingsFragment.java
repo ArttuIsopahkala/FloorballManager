@@ -20,6 +20,7 @@ import com.ardeapps.floorballmanager.BuildConfig;
 import com.ardeapps.floorballmanager.MainActivity;
 import com.ardeapps.floorballmanager.R;
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
+import com.ardeapps.floorballmanager.dialogFragments.FeedbackDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballmanager.objects.AppData;
 import com.ardeapps.floorballmanager.objects.Team;
@@ -49,6 +50,7 @@ public class SettingsFragment extends Fragment {
     Button inviteButton;
     Button changePasswordButton;
     Button logOutButton;
+    Button feedbackButton;
     TextView rateText;
     TextView moreText;
     TextView versionText;
@@ -212,6 +214,7 @@ public class SettingsFragment extends Fragment {
         emailText = v.findViewById(R.id.emailText);
         userRequestsTitle = v.findViewById(R.id.userRequestsTitle);
         userInvitationsTitle = v.findViewById(R.id.userInvitationsTitle);
+        feedbackButton = v.findViewById(R.id.feedbackButton);
 
         emailText.setText(AppRes.getInstance().getUser().getEmail());
         versionText.setText(getString(R.string.settings_version, BuildConfig.VERSION_NAME));
@@ -250,6 +253,11 @@ public class SettingsFragment extends Fragment {
             activity.overridePendingTransition(0, 0);
             activity.startActivity(i);
             activity.overridePendingTransition(0, 0);
+        });
+
+        feedbackButton.setOnClickListener(button -> {
+            FeedbackDialogFragment dialog = new FeedbackDialogFragment();
+            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Anna palautetta");
         });
 
         rateText.setOnClickListener(v13 -> openUrl(AppData.GOOGLE_PLAY_APP_URL));

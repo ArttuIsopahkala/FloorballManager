@@ -93,6 +93,8 @@ public class FragmentListeners {
         void goToTeamSettingsFragment();
 
         void goToInactivePlayersFragment();
+
+        void goToTacticBoardFragment();
     }
 
     public interface ApplicationListener {

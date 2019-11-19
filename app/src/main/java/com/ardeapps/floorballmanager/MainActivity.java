@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.dialogFragments.ConfirmDialogFragment;
-import com.ardeapps.floorballmanager.dialogFragments.FeedbackDialogFragment;
 import com.ardeapps.floorballmanager.dialogFragments.InfoDialogFragment;
 import com.ardeapps.floorballmanager.fragments.AcceptUserRequestFragment;
 import com.ardeapps.floorballmanager.fragments.BluetoothFragment;
@@ -33,6 +32,7 @@ import com.ardeapps.floorballmanager.fragments.PlayerStatsFragment;
 import com.ardeapps.floorballmanager.fragments.PlayersFragment;
 import com.ardeapps.floorballmanager.fragments.SearchTeamFragment;
 import com.ardeapps.floorballmanager.fragments.SettingsFragment;
+import com.ardeapps.floorballmanager.fragments.TacticBoardFragment;
 import com.ardeapps.floorballmanager.fragments.TeamDashboardFragment;
 import com.ardeapps.floorballmanager.fragments.TeamSelectionFragment;
 import com.ardeapps.floorballmanager.fragments.TeamSettingsFragment;
@@ -101,13 +101,14 @@ public class MainActivity extends AppCompatActivity {
     InactivePlayersFragment inactivePlayersFragment;
     SearchTeamFragment searchTeamFragment;
     AcceptUserRequestFragment acceptUserRequestFragment;
+    TacticBoardFragment tacticBoardFragment;
 
     RelativeLayout loader;
     ImageView loaderSpinner;
     RelativeLayout menuTop;
     IconView backIcon;
     IconView settingsIcon;
-    IconView feedbackIcon;
+    ImageView boardIcon;
     TextView titleText;
     ImageView newInvitationMark;
 
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         loaderSpinner = findViewById(R.id.loaderSpinner);
         backIcon = findViewById(R.id.backIcon);
         settingsIcon = findViewById(R.id.settingsIcon);
-        feedbackIcon = findViewById(R.id.feedbackIcon);
+        boardIcon = findViewById(R.id.boardIcon);
         titleText = findViewById(R.id.titleText);
         menuTop = findViewById(R.id.menuTop);
         newInvitationMark = findViewById(R.id.newInvitationMark);
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         inactivePlayersFragment = new InactivePlayersFragment();
         searchTeamFragment = new SearchTeamFragment();
         acceptUserRequestFragment = new AcceptUserRequestFragment();
+        tacticBoardFragment = new TacticBoardFragment();
 
         AppRes.getInstance().setActivity(this);
         Loader.create(loader, loaderSpinner);
@@ -157,12 +159,15 @@ public class MainActivity extends AppCompatActivity {
         formatMenuBar(null);
         setListeners();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        // TODO remove
+        FragmentListeners.getInstance().getFragmentChangeListener().goToTacticBoardFragment();
+
+        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && user.isEmailVerified()) {
             onUserLoggedIn(user.getUid());
         } else {
             FragmentListeners.getInstance().getFragmentChangeListener().goToLoginFragment();
-        }
+        }*/
     }
 
     private void onUserLoggedIn(String userId) {
@@ -465,6 +470,11 @@ public class MainActivity extends AppCompatActivity {
             public void goToInactivePlayersFragment() {
                 switchToFragment(inactivePlayersFragment);
             }
+
+            @Override
+            public void goToTacticBoardFragment() {
+                switchToFragment(tacticBoardFragment);
+            }
         });
 
         editPlayerFragment.setListener(player -> {
@@ -556,7 +566,7 @@ public class MainActivity extends AppCompatActivity {
         menuTop.setVisibility(View.VISIBLE);
         backIcon.setVisibility(View.VISIBLE);
         settingsIcon.setVisibility(View.VISIBLE);
-        feedbackIcon.setVisibility(View.VISIBLE);
+        boardIcon.setVisibility(View.VISIBLE);
         titleText.setVisibility(View.VISIBLE);
         Map<String, UserInvitation> userInvitations = AppRes.getInstance().getUserInvitations();
         if(userInvitations.isEmpty()) {
@@ -570,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (f instanceof SettingsFragment) {
             titleText.setText(R.string.title_settings);
             settingsIcon.setVisibility(View.GONE);
-            feedbackIcon.setVisibility(View.GONE);
+            boardIcon.setVisibility(View.GONE);
             newInvitationMark.setVisibility(View.GONE);
         } else if (f instanceof TeamDashboardFragment) {
             backIcon.setVisibility(View.GONE);
@@ -612,10 +622,7 @@ public class MainActivity extends AppCompatActivity {
 
         backIcon.setOnClickListener(v -> onBackPressed());
         settingsIcon.setOnClickListener(v -> FragmentListeners.getInstance().getFragmentChangeListener().goToSettingsFragment());
-        feedbackIcon.setOnClickListener(v -> {
-            FeedbackDialogFragment dialog = new FeedbackDialogFragment();
-            dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Anna palautetta");
-        });
+        boardIcon.setOnClickListener(v -> FragmentListeners.getInstance().getFragmentChangeListener().goToTacticBoardFragment());
     }
 
     @Override

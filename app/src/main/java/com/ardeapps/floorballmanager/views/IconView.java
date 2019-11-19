@@ -7,6 +7,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
+import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
 
 import static android.view.Gravity.CENTER;
@@ -16,6 +17,8 @@ import static android.view.Gravity.CENTER;
  */
 
 public class IconView extends AppCompatTextView {
+
+    Context context;
 
     public IconView(Context context) {
         super(context);
@@ -28,6 +31,7 @@ public class IconView extends AppCompatTextView {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        this.context = context;
         // Load attributes
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.IconView, 0, 0);
         try {
@@ -38,10 +42,40 @@ public class IconView extends AppCompatTextView {
             setGravity(CENTER);
             setTextColor(colorInAssets);
             setTextSize(TypedValue.COMPLEX_UNIT_PX, sizeInAssets);
+            if(fontInAssets == null) {
+                fontInAssets = context.getResources().getString(R.string.icon_solid);
+            }
             setTypeface(Typefaces.get(context, fontInAssets));
             setClickable(true);
+            //setBackground(ContextCompat.getDrawable(AppRes.getContext(), R.drawable.button_background));
         } finally {
             ta.recycle();
         }
+    }
+
+    public void setFont(String font) {
+        setTypeface(Typefaces.get(context, font));
+    }
+
+    public void setSize(int size) {
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+    }
+
+    public void setColor(int color) {
+        setTextColor(color);
+    }
+
+    boolean isSelected = false;
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+        if(selected) {
+            setBackgroundColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_green_light));
+        } else {
+            setBackground(ContextCompat.getDrawable(AppRes.getContext(), R.drawable.button_background));
+        }
+    }
+
+    public boolean isSelected() {
+        return isSelected;
     }
 }

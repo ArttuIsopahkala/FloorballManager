@@ -38,4 +38,10 @@
     <string name="icon_bars">&#xf0c9;</string>
     <string name="icon_feedback">&#xf0a1;</string>
     <string name="icon_search">&#xf002;</string>
+    <string name="icon_board">&#xf51b;</string>
+    <string name="icon_eraser">&#xf12d;</string>
+    <string name="icon_pen">&#xf303;</string>
+    <string name="icon_arrow_long">&#xf062;</string>
+    <string name="icon_undo">&#xf2ea;</string>
+    <string name="icon_circle">&#xf111;</string>
 </resources>

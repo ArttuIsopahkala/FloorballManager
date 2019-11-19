@@ -161,6 +161,7 @@
     <string name="event_title_goal_edit">Muokkaa maalia</string>
     <string name="event_title_penalty_add">Lisää jäähy</string>
     <string name="event_title_penalty_edit">Muokkaa jäähyä</string>
+
     <string name="add_event_goal">Maali</string>
     <string name="add_event_save">Torjuttu</string>
     <string name="add_event_miss">Ohi maalin</string>
@@ -343,6 +344,7 @@
     <string name="settings_logged_user">Kirjauduttu käyttäjänä</string>
     <string name="settings_requests">Pyynnöt:</string>
     <string name="settings_invitations">Kutsut:</string>
+    <string name="settings_feedback">Anna palautetta!</string>
 
     <string name="player_stats_filter_goals">Maalit</string>
     <string name="player_stats_filter_assists">Maalit, joissa syöttäjänä</string>
