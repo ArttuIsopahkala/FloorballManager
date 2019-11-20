@@ -32,6 +32,7 @@ import com.ardeapps.floorballmanager.viewObjects.PlayerPointsData;
 import com.ardeapps.floorballmanager.viewObjects.TeamGameData;
 import com.ardeapps.floorballmanager.viewObjects.TeamStatsData;
 import com.ardeapps.floorballmanager.views.IconView;
+import com.ardeapps.floorballmanager.views.PlayerCard;
 import com.ardeapps.floorballmanager.views.ShootMap;
 
 import java.util.ArrayList;
@@ -363,8 +364,6 @@ public class TeamStatsFragment extends Fragment {
         longestNotLoseText.setText(getLongestStatsText(stats.longestNotLose));
 
         ArrayList<PlayerPointsData> playerPoints = StatsHelper.getSortedTrendingPlayers(goalsInThreeLastGames);
-        final PlayerStatsHolder holder = new PlayerStatsHolder();
-        LayoutInflater inf = LayoutInflater.from(AppRes.getContext());
         trendingContainer.removeAllViews();
 
         if (!playerPoints.isEmpty()) {
@@ -372,22 +371,15 @@ public class TeamStatsFragment extends Fragment {
             int addedPlayers = 0;
             for (final PlayerPointsData playerPoint : playerPoints) {
                 if (addedPlayers < 3) {
-                    View cv = inf.inflate(R.layout.container_card_player_stats, trendingContainer, false);
-                    holder.pictureImage = cv.findViewById(R.id.pictureImage);
-                    holder.nameText = cv.findViewById(R.id.nameText);
-                    holder.statsText = cv.findViewById(R.id.statsText);
+                    PlayerCard card = new PlayerCard(AppRes.getContext());
 
+                    card.setViewStyle(PlayerCard.ViewStyle.STATS);
                     Player player = AppRes.getInstance().getPlayers().get(playerPoint.playerId);
                     if (player != null) {
-                        if (player.getPicture() != null) {
-                            holder.pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
-                        } else {
-                            holder.pictureImage.setImageResource(R.drawable.default_picture);
-                        }
-                        holder.nameText.setText(player.getName());
-                        holder.statsText.setText(playerPoint.goals + " + " + playerPoint.assists);
-
-                        trendingContainer.addView(cv);
+                        card.setPicture(player.getPicture(), false);
+                        card.setName(player.getName());
+                        card.setStats(playerPoint.goals + " + " + playerPoint.assists);
+                        trendingContainer.addView(card);
                     }
                     addedPlayers++;
                 }

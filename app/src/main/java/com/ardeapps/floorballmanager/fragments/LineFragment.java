@@ -24,11 +24,10 @@ import com.ardeapps.floorballmanager.objects.Connection;
 import com.ardeapps.floorballmanager.objects.Line;
 import com.ardeapps.floorballmanager.objects.Player;
 import com.ardeapps.floorballmanager.objects.Player.Position;
-import com.ardeapps.floorballmanager.utils.ImageUtil;
 import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
 import com.ardeapps.floorballmanager.viewObjects.LineFragmentData;
-import com.ardeapps.floorballmanager.views.IconView;
+import com.ardeapps.floorballmanager.views.PlayerCard;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,11 +46,11 @@ public class LineFragment extends Fragment implements DataView {
     TextView ld_rd_text;
     TextView ld_lw_text;
     TextView rd_rw_text;
-    RelativeLayout card_lw;
-    RelativeLayout card_c;
-    RelativeLayout card_rw;
-    RelativeLayout card_ld;
-    RelativeLayout card_rd;
+    PlayerCard card_lw;
+    PlayerCard card_c;
+    PlayerCard card_rw;
+    PlayerCard card_ld;
+    PlayerCard card_rd;
     RelativeLayout container_lw;
     RelativeLayout container_c;
     RelativeLayout container_rw;
@@ -141,11 +140,11 @@ public class LineFragment extends Fragment implements DataView {
             }
 
             // Set cards
-            setCardView(card_lw, Position.LW);
-            setCardView(card_c, Position.C);
-            setCardView(card_rw, Position.RW);
-            setCardView(card_ld, Position.LD);
-            setCardView(card_rd, Position.RD);
+            setPlayerView(card_lw, Position.LW);
+            setPlayerView(card_c, Position.C);
+            setPlayerView(card_rw, Position.RW);
+            setPlayerView(card_ld, Position.LD);
+            setPlayerView(card_rd, Position.RD);
         });
     }
 
@@ -203,29 +202,18 @@ public class LineFragment extends Fragment implements DataView {
         return v;
     }
 
-    private void setCardView(RelativeLayout card, final Position position) {
+    private void setPlayerView(PlayerCard card, final Position position) {
         final String pos = position.toDatabaseName();
 
-        RelativeLayout pictureContainer = card.findViewById(R.id.pictureContainer);
-        ImageView chemistryBorder = card.findViewById(R.id.chemistryBorder);
-        ImageView pictureImage = card.findViewById(R.id.pictureImage);
-        IconView addIcon = card.findViewById(R.id.addIcon);
-        TextView nameText = card.findViewById(R.id.nameText);
-
         // Default view
-        addIcon.setClickable(false);
-        addIcon.setFocusable(false);
-        addIcon.setVisibility(View.VISIBLE);
-        pictureContainer.setVisibility(View.GONE);
-        nameText.setText(getString(R.string.select));
+        card.setViewStyle(PlayerCard.ViewStyle.LINE);
+        card.setPicture(null, true);
+        card.setName(getString(R.string.select));
 
         Line line = data.getLine();
         if (line != null) {
             String playerId = line.getPlayerIdMap().get(pos);
             if (playerId != null) {
-                addIcon.setVisibility(View.GONE);
-                pictureContainer.setVisibility(View.VISIBLE);
-
                 Player player = AppRes.getInstance().getPlayers().get(playerId);
 
                 int color = R.color.color_background_third; // Default color
@@ -235,26 +223,23 @@ public class LineFragment extends Fragment implements DataView {
                         color = getChemistryColor(percent);
                     }
                 }
-                //NOTE: Drawable must be set as 'background' in xml to this take effect
-                chemistryBorder.setImageResource(R.drawable.circle);
-                chemistryBorder.setColorFilter(color);
-
+                card.setChemistryBorderColor(color);
                 if (player == null) {
                     // Poistettu pelaaja
-                    nameText.setText(getString(R.string.removed_player));
-                    pictureImage.setImageResource(R.drawable.default_picture);
+                    card.setName(getString(R.string.removed_player));
+                    card.setPicture(null, false);
                 } else {
-                    nameText.setText(player.getName());
+                    card.setName(player.getName());
                     if (player.getPicture() != null) {
-                        pictureImage.setImageDrawable(ImageUtil.getRoundedDrawable(player.getPicture()));
+                        card.setPicture(player.getPicture(), false);
                     } else {
-                        pictureImage.setImageResource(R.drawable.default_picture);
+                        card.setPicture(null, false);
                     }
                 }
             }
         }
 
-        card.setOnClickListener(v -> {
+        card.setListener(() -> {
             if (AppRes.getInstance().getActivePlayers(false).isEmpty()) {
                 Logger.toast(R.string.lines_no_players);
                 return;
