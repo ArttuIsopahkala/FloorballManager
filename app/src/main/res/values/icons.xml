@@ -44,4 +44,12 @@
     <string name="icon_arrow_long">&#xf062;</string>
     <string name="icon_undo">&#xf2ea;</string>
     <string name="icon_circle">&#xf111;</string>
+    <string name="icon_play">&#xf04b;</string>
+    <string name="icon_pause">&#xf04c;</string>
+    <string name="icon_stop">&#xf04d;</string>
+    <string name="icon_move">&#xf0b2;</string>
+    <string name="icon_save">&#xf0c7;</string>
+    <string name="icon_download">&#xf019;</string>
+    <string name="icon_share">&#xf1e0;</string>
+    <string name="icon_gallery">&#xf07c;</string>
 </resources>

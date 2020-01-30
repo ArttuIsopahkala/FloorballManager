@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/teamContainer"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:background="@color/color_background_third"
+    android:baselineAligned="false"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="-"
+        android:textColor="@color/color_text_light"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/previewImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_above="@+id/iconsContainer"
+        android:layout_below="@+id/nameText"
+        android:contentDescription="@null"/>
+
+    <RelativeLayout
+        android:id="@+id/iconsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/removeIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="@string/icon_remove"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="25sp" />
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/shareIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/icon_share"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="25sp" />
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/selectIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:text="@string/icon_arrow_right"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="25sp" />
+    </RelativeLayout>
+</RelativeLayout>

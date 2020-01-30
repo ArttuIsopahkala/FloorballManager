@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.dialogFragments;
+package com.ardeapps.floorballmanager.tacticBoard;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -27,12 +27,16 @@ public class TacticSettingsDialogFragment extends DialogFragment {
     Button saveButton;
 
     private ArrayList<ImageView> fields = new ArrayList<>();
-    private Field selectedField;
+    private Field selectedField = null;
 
     public enum Field {
         HALF_LEFT,
         FULL,
         HALF_RIGHT
+    }
+
+    public void setSelectedField(Field selectedField) {
+        this.selectedField = selectedField;
     }
 
     public void setListener(TacticSettingsDialogCloseListener l) {
@@ -55,7 +59,13 @@ public class TacticSettingsDialogFragment extends DialogFragment {
         setField(fieldFullPicture, Field.FULL);
         setField(fieldHalfRightPicture, Field.HALF_RIGHT);
 
-        selectedField = Field.FULL;
+        if(selectedField == Field.FULL) {
+            setFieldSelected(fieldFullPicture);
+        } else if(selectedField == Field.HALF_LEFT) {
+            setFieldSelected(fieldHalfLeftPicture);
+        } else if(selectedField == Field.HALF_RIGHT) {
+            setFieldSelected(fieldHalfRightPicture);
+        }
 
         saveButton.setOnClickListener(v1 -> {
             mListener.onSave(selectedField);
@@ -73,9 +83,13 @@ public class TacticSettingsDialogFragment extends DialogFragment {
                 existsFields.setBackgroundColor(Color.TRANSPARENT);
             }
 
-            fieldImage.setBackgroundColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_red_light));
+            setFieldSelected(fieldImage);
             selectedField = field;
         });
+    }
+
+    private void setFieldSelected(ImageView fieldImage) {
+        fieldImage.setBackgroundColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_red_light));
     }
 
     public interface TacticSettingsDialogCloseListener {

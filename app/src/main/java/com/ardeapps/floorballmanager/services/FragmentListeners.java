@@ -14,8 +14,10 @@ import com.ardeapps.floorballmanager.viewObjects.GameSettingsFragmentData;
 
 public class FragmentListeners {
 
+    public static final int MY_PERMISSION_ACCESS_RECORD_SCREEN = 16;
     public static final int MY_PERMISSION_ACCESS_TAKING_PICTURE = 15;
     public static final int MY_PERMISSION_ACCESS_READ_EXTERNAL_STORAGE = 12;
+    public static final int MY_PERMISSION_ACCESS_WRITE_EXTERNAL_STORAGE = 12;
     public static final int MY_PERMISSION_ACCESS_BLUETOOTH = 11;
     public final static int MY_PERMISSION_ACCESS_COARSE_LOCATION = 10;
 

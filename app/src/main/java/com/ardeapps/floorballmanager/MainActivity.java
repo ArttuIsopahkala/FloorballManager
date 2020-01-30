@@ -32,7 +32,6 @@ import com.ardeapps.floorballmanager.fragments.PlayerStatsFragment;
 import com.ardeapps.floorballmanager.fragments.PlayersFragment;
 import com.ardeapps.floorballmanager.fragments.SearchTeamFragment;
 import com.ardeapps.floorballmanager.fragments.SettingsFragment;
-import com.ardeapps.floorballmanager.fragments.TacticBoardFragment;
 import com.ardeapps.floorballmanager.fragments.TeamDashboardFragment;
 import com.ardeapps.floorballmanager.fragments.TeamSelectionFragment;
 import com.ardeapps.floorballmanager.fragments.TeamSettingsFragment;
@@ -65,6 +64,7 @@ import com.ardeapps.floorballmanager.resources.UsersResource;
 import com.ardeapps.floorballmanager.services.AppInviteService;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
+import com.ardeapps.floorballmanager.tacticBoard.TacticBoardFragment;
 import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.utils.StringUtils;
@@ -616,7 +616,12 @@ public class MainActivity extends AppCompatActivity {
             titleText.setText(R.string.title_search_team);
         } else if (f instanceof AcceptUserRequestFragment) {
             titleText.setText(R.string.title_accept_user_request);
-        } else {
+        } else if (f instanceof TacticBoardFragment) {
+            titleText.setVisibility(View.GONE);
+            settingsIcon.setVisibility(View.GONE);
+            boardIcon.setVisibility(View.GONE);
+            newInvitationMark.setVisibility(View.GONE);
+        }  else {
             menuTop.setVisibility(View.GONE);
         }
 

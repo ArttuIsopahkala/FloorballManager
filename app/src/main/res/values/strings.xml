@@ -13,6 +13,7 @@
     <string name="next">Seuraava</string>
     <string name="previous">Edellinen</string>
     <string name="cancel">Peruuta</string>
+    <string name="close">Sulje</string>
     <string name="save">Tallenna</string>
     <string name="select_picture">Vaihda kuva</string>
     <string name="left">Vasen</string>
@@ -156,6 +157,10 @@
     <string name="search_team_join_request">Lähetetäänkö pyyntö liittyä joukkueen jäseneksi?</string>
 
     <string name="players_no_players">Ei lisättyjä pelaajia.</string>
+
+    <string name="tactic_board_clear_confirmation">Tyhjennetäänkö kenttä?</string>
+    <string name="tactic_board_record_info">Kentällä näkyvä animaatio muunnetaan videotiedostoksi ja tallennetaan puhelimesi tiedostoihin. Aloitetaanko tallennus?</string>
+    <string name="tactic_board_converting">Muunnetaan&#8230;</string>
 
     <string name="event_title_goal_add">Lisää maali</string>
     <string name="event_title_goal_edit">Muokkaa maalia</string>
