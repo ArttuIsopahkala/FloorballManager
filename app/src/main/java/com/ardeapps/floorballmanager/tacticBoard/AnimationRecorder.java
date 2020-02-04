@@ -115,6 +115,7 @@ public class AnimationRecorder {
 
         String file = recordingsPath + fileName + ".mp4";
         mMediaRecorder.setOutputFile(file);
+        Logger.log("Recorder file will be saved to: " + file);
 
         try {
             mMediaRecorder.prepare();

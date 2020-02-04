@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.views.IconView;
 
 import java.io.File;
@@ -31,8 +32,8 @@ public class GalleryGridAdapter extends BaseAdapter {
         mListener = l;
     }
 
-    public void setItems(ArrayList<GalleryItem> teams) {
-        this.items = teams;
+    public void setItems(ArrayList<GalleryItem> items) {
+        this.items = items;
     }
 
     @Override
@@ -57,24 +58,26 @@ public class GalleryGridAdapter extends BaseAdapter {
             v = inflater.inflate(R.layout.grid_item_gallery, null);
         }
 
+        holder.nameText = v.findViewById(R.id.nameText);
         holder.selectIcon = v.findViewById(R.id.selectIcon);
         holder.shareIcon = v.findViewById(R.id.shareIcon);
         holder.removeIcon = v.findViewById(R.id.removeIcon);
-        holder.videoView = v.findViewById(R.id.previewImage);
+        holder.previewImage = v.findViewById(R.id.previewImage);
 
         final GalleryItem item = items.get(position);
-
+        holder.nameText.setText(item.name);
         String videoFilePath = item.file.getAbsolutePath();
+
         Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoFilePath, MediaStore.Images.Thumbnails.MINI_KIND);
-        holder.videoView.setImageBitmap(thumbnail);
+        holder.previewImage.setImageBitmap(thumbnail);
 
         holder.shareIcon.setOnClickListener(v1 -> mListener.onShare());
         holder.selectIcon.setOnClickListener(v1 -> mListener.onSelect());
         holder.removeIcon.setOnClickListener(v1 -> {
             File file = new File(videoFilePath);
             file.delete();
+            mListener.onDelete();
         });
-        //holder.nameText.setText(team.getName());
 
         return v;
     }
@@ -82,11 +85,12 @@ public class GalleryGridAdapter extends BaseAdapter {
     public interface Listener {
         void onShare();
         void onSelect();
+        void onDelete();
     }
 
     public class Holder {
         TextView nameText;
-        ImageView videoView;
+        ImageView previewImage;
         IconView removeIcon;
         IconView shareIcon;
         IconView selectIcon;

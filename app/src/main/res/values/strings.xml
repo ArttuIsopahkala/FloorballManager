@@ -2,6 +2,19 @@
     <string name="app_name_release">Floorball Manager</string>
     <string name="app_name_debug">Floorball DEBUG</string>
 
+    <string name="frameRateLabel">"Frame rate: "</string>
+    <string name="frameRateFormat">"%1$.3f fps (%2$d dropped)"</string>
+    <string name="glesVersionLabel">"GLES version: "</string>
+    <string name="glesVersionValue">"?"</string>
+    <string name="toggleRecordingOn">Start recording</string>
+    <string name="toggleRecordingOff">Stop recording</string>
+    <string name="recDrawTwice">Rec: draw twice</string>
+    <string name="recOffscreen">Rec: FBO blit x2</string>
+    <string name="recFramebuffer">Rec: glBlitFramebuffer [hosed]</string>
+    <string name="useBlitFramebuffer">Use glBlitFramebuffer() when recording</string>
+    <string name="nowRecording">" [RECORDING]"</string>
+    <string name="nowSaving">" [saving]"</string>
+
     <string name="update_new_version">Sovelluksen uusi versio on julkaistu. Nykyinen versiosi on vanhentunut ja se voi aiheuttaa epävakautta tai kaatuilua. Ladataanko uusi versio?</string>
 
     <string name="dd">pp</string>
@@ -161,6 +174,7 @@
     <string name="tactic_board_clear_confirmation">Tyhjennetäänkö kenttä?</string>
     <string name="tactic_board_record_info">Kentällä näkyvä animaatio muunnetaan videotiedostoksi ja tallennetaan puhelimesi tiedostoihin. Aloitetaanko tallennus?</string>
     <string name="tactic_board_converting">Muunnetaan&#8230;</string>
+    <string name="tactic_board_no_savings">Ei tallennuksia.</string>
 
     <string name="event_title_goal_add">Lisää maali</string>
     <string name="event_title_goal_edit">Muokkaa maalia</string>

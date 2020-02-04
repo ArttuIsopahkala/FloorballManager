@@ -79,7 +79,6 @@ public class TacticBoardTools extends LinearLayout {
     LinearLayout moveIcon;
     LinearLayout saveIcon;
     LinearLayout downloadIcon;
-    LinearLayout shareIcon;
     LinearLayout galleryIcon;
 
     LinearLayout framesContainer;
@@ -135,7 +134,6 @@ public class TacticBoardTools extends LinearLayout {
         removeIcon = findViewById(R.id.removeIcon);
         saveIcon = findViewById(R.id.saveIcon);
         downloadIcon = findViewById(R.id.downloadIcon);
-        shareIcon = findViewById(R.id.shareIcon);
         galleryIcon = findViewById(R.id.galleryIcon);
 
         tools = new ArrayList<>();
@@ -187,9 +185,6 @@ public class TacticBoardTools extends LinearLayout {
         });
         saveIcon.setOnClickListener(v1 -> listener.onSaveClick());
         downloadIcon.setOnClickListener(v1 -> {
-
-        });
-        shareIcon.setOnClickListener(v1 -> {
 
         });
 

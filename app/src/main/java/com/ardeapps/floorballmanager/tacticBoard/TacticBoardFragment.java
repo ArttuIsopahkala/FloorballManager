@@ -5,6 +5,11 @@ import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Intent;
+import android.graphics.SurfaceTexture;
+import android.opengl.EGLContext;
+import android.opengl.EGLDisplay;
+import android.opengl.EGLSurface;
+import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +38,7 @@ import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
 import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.views.DrawingBoard;
+import com.ardeapps.floorballmanager.views.IconView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -55,7 +61,14 @@ public class TacticBoardFragment extends Fragment {
     TacticBoardTools.Tool selectedTool;
     LinearLayout notAddedPlayersContainer;
     RelativeLayout fieldViewsContainer;
-    RelativeLayout removePlayersOverlay;
+    RelativeLayout disableToolsOverlay;
+    TextView disableToolsInfoText;
+    IconView disableToolsIcon;
+    private GLSurfaceView gLView;
+    private EGLContext mGlContext;
+    private EGLDisplay mDisplay;
+    private EGLSurface mEncoder;
+    private SurfaceTexture mPreviewSurface;
 
     TacticSettingsDialogFragment.Field selectedField;
     ArrayList<String> notAddedPlayers = new ArrayList<>();
@@ -91,11 +104,12 @@ public class TacticBoardFragment extends Fragment {
                 View.DragShadowBuilder dragView = new View.DragShadowBuilder(v);
                 v.startDrag(dragData, dragView, null, 0);
                 v.setVisibility(View.GONE);
+
+                showDisableToolsOverlay(true);
             }
             return false;
         });
     }
-
     DragEventListener dragEventListener = new DragEventListener();
 
     @Override
@@ -135,7 +149,7 @@ public class TacticBoardFragment extends Fragment {
             Logger.log("Screen Cast Permission Denied");
             return;
         }
-        Logger.log("ACTIVIRY RESULT GIVEN");
+        Logger.log("ACTIVIRY RESULT GIVEN: " + resultCode + " data: " + data);
         AnimationRecorder.getInstance().setPermissionGranted(resultCode, data);
         convertAnimationToVideo();
     }
@@ -146,7 +160,9 @@ public class TacticBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tactic_board, container, false);
 
-        removePlayersOverlay = v.findViewById(R.id.removePlayersOverlay);
+        disableToolsOverlay = v.findViewById(R.id.disableToolsOverlay);
+        disableToolsInfoText = v.findViewById(R.id.disableToolsInfoText);
+        disableToolsIcon = v.findViewById(R.id.disableToolsIcon);
         fieldViewsContainer = v.findViewById(R.id.fieldViewsContainer);
         notAddedPlayersContainer = v.findViewById(R.id.notAddedPlayersContainer);
         drawingBoard = v.findViewById(R.id.drawingBoard);
@@ -471,7 +487,7 @@ public class TacticBoardFragment extends Fragment {
 
                             // Stop recording if converting
                             if(AnimationRecorder.getInstance().isRecording()) {
-                                removePlayersOverlay.setVisibility(View.GONE);
+                                hideDisableToolsOverlay();
                                 AnimationRecorder.getInstance().stopRecording();
                             }
                         }
@@ -485,7 +501,7 @@ public class TacticBoardFragment extends Fragment {
 
     private void convertAnimationToVideo() {
         if(AnimationRecorder.getInstance().isPermissionGiven(intent -> startActivityForResult(intent, RECORD_VIDEO))) {
-            removePlayersOverlay.setVisibility(View.VISIBLE);
+            showDisableToolsOverlay(false);
             tacticBoardTools.setSelectedFrame(0);
             runAnimation();
             // TODO tallenna oikea tiedostonimi
@@ -493,6 +509,21 @@ public class TacticBoardFragment extends Fragment {
             AnimationRecorder.getInstance().prepareRecorder("MOI_" + timeStamp);
             AnimationRecorder.getInstance().startRecording();
         }
+    }
+
+    private void showDisableToolsOverlay(boolean showRemoveIcon) {
+        disableToolsOverlay.setVisibility(View.VISIBLE);
+        if(showRemoveIcon) {
+            disableToolsInfoText.setVisibility(View.GONE);
+            disableToolsIcon.setVisibility(View.VISIBLE);
+        } else {
+            disableToolsInfoText.setVisibility(View.VISIBLE);
+            disableToolsIcon.setVisibility(View.GONE);
+        }
+    }
+
+    private void hideDisableToolsOverlay() {
+        disableToolsOverlay.setVisibility(View.GONE);
     }
 
     private void drawBall(float x, float y) {
@@ -546,7 +577,7 @@ public class TacticBoardFragment extends Fragment {
                     return false;
 
                 case DragEvent.ACTION_DROP:
-                    removePlayersOverlay.setVisibility(View.GONE);
+                    hideDisableToolsOverlay();
 
                     ClipData.Item item = event.getClipData().getItemAt(0);
 

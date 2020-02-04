@@ -19,6 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.ardeapps.floorballmanager.tacticBoard.RecordSurfaceView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,9 +42,11 @@
         android:layout_alignParentBottom="true"/>
 
     <RelativeLayout
-        android:id="@+id/removePlayersOverlay"
+        android:id="@+id/disableToolsOverlay"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_alignParentBottom="true"
         android:visibility="gone">
         <RelativeLayout
@@ -49,8 +54,14 @@
             android:layout_height="match_parent"
             android:background="@color/color_background_second"
             android:alpha="0.8" />
+        <TextView
+            android:id="@+id/disableToolsInfoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/tactic_board_converting"/>
         <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/backIcon"
+            android:id="@+id/disableToolsIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

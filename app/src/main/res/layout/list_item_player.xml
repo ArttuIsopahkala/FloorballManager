@@ -70,7 +70,7 @@
         app:iconSize="25sp" />
 
     <RelativeLayout
-        android:id="@+id/disableOverlay"
+        android:id="@+id/disableToolsOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
