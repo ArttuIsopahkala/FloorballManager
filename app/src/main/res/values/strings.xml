@@ -76,6 +76,10 @@
     <string name="stats_av_abbr">AV</string>
     <string name="stats_rl_abbr">RL</string>
     <string name="stats_goals_abbr">M</string>
+    <string name="stats_games_abbr">O</string>
+    <string name="stats_assists_abbr">S</string>
+    <string name="stats_points_abbr">P</string>
+    <string name="stats_penalties_abbr">JM</string>
 
     <string name="select_picture_load_url">Lataa</string>
     <string name="select_picture_from_gallery">Valitse galleriasta</string>
@@ -114,6 +118,7 @@
     <string name="title_edit_user_connection">Jäsenen tiedot</string>
     <string name="title_search_team">Etsi joukkue</string>
     <string name="title_accept_user_request">Liitä käyttäjä joukkueeseen</string>
+    <string name="title_players_stats">Pelaajatilastot</string>
 
     <string name="login_email">Sähköposti</string>
     <string name="login_password">Salasana</string>
@@ -240,6 +245,7 @@
     <string name="team_dashboard_players">Pelaajat</string>
     <string name="team_dashboard_own_stats">Omat tilastot</string>
     <string name="team_dashboard_lines">Kokoonpano</string>
+    <string name="team_dashboard_player_stats">Pelaajatilastot</string>
     <string name="team_dashboard_team_stats">Joukkuetilastot</string>
     <string name="team_dashboard_settings">Joukkueen hallinta</string>
     <string name="team_dashboard_seasons_info">Aloita luomalla tunniste, jonka alle ottelut luodaan.</string>
@@ -365,6 +371,11 @@
     <string name="player_stats_best_same_line">Paras ketjukaveri</string>
     <string name="player_stats_together_score">maali yhdessä</string>
     <string name="player_stats_together_scores">maalia yhdessä</string>
+
+    <string name="stats_type_points">Pistepörssi</string>
+    <string name="stats_type_goals">Maalipörssi</string>
+    <string name="stats_type_assists">Syöttöpörssi</string>
+    <string name="stats_type_penalties">Jäähypörssi</string>
 
     <string name="team_stats_wins">Voitot</string>
     <string name="team_stats_loses">Tappiot</string>

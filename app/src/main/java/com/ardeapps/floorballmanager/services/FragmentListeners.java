@@ -86,6 +86,8 @@ public class FragmentListeners {
 
         void goToTeamStatsFragment();
 
+        void goToStatsFragment();
+
         void goToEditUserConnectionFragment(UserConnection userConnection);
 
         void goToAcceptUserRequestFragment(UserRequest userRequest);

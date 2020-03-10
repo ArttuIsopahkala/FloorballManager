@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background_third"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_background_second">
+
+        <TextView
+            android:id="@+id/nameHeader"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@string/player"
+            android:textColor="@color/color_text_light_secondary"
+            android:textSize="16sp"
+            android:padding="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/gamesHeader"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="@string/stats_games_abbr"
+                android:textColor="@color/color_text_light_secondary"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/min2Header"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="@color/color_text_light_secondary"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/min5Header"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="5"
+                android:textColor="@color/color_text_light_secondary"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/min10Header"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="10"
+                android:textColor="@color/color_text_light_secondary"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/min20Header"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="20"
+                android:textColor="@color/color_text_light_secondary"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/penaltiesPerGameHeader"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:text="@string/stats_penalties_per_game"
+                android:textColor="@color/color_text_light_secondary"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/penaltiesHeader"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="@string/stats_penalties_abbr"
+                android:textColor="@color/color_text_light"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="5dp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/penaltiesList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="3dp" />
+</LinearLayout>

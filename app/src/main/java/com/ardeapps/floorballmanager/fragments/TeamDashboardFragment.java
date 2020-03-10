@@ -28,6 +28,7 @@ public class TeamDashboardFragment extends Fragment {
     Button ownStatsButton;
     Button linesButton;
     Button playersButton;
+    Button playerStatsButton;
     Button gamesButton;
     Button teamStatsButton;
     Button settingsButton;
@@ -44,6 +45,7 @@ public class TeamDashboardFragment extends Fragment {
         linesButton = v.findViewById(R.id.linesButton);
         teamStatsButton = v.findViewById(R.id.teamStatsButton);
         playersButton = v.findViewById(R.id.playersButton);
+        playerStatsButton = v.findViewById(R.id.playerStatsButton);
         settingsButton = v.findViewById(R.id.settingsButton);
         infoText = v.findViewById(R.id.infoText);
         logoImage = v.findViewById(R.id.logoImage);
@@ -97,6 +99,7 @@ public class TeamDashboardFragment extends Fragment {
         gamesButton.setOnClickListener(v15 -> FragmentListeners.getInstance().getFragmentChangeListener().goToGamesFragment());
         linesButton.setOnClickListener(v14 -> FragmentListeners.getInstance().getFragmentChangeListener().goToLinesFragment());
         playersButton.setOnClickListener(v13 -> FragmentListeners.getInstance().getFragmentChangeListener().goToPlayersFragment());
+        playerStatsButton.setOnClickListener(v11 -> FragmentListeners.getInstance().getFragmentChangeListener().goToStatsFragment());
         teamStatsButton.setOnClickListener(v12 -> FragmentListeners.getInstance().getFragmentChangeListener().goToTeamStatsFragment());
         settingsButton.setOnClickListener(v1 -> FragmentListeners.getInstance().getFragmentChangeListener().goToTeamSettingsFragment());
         return v;

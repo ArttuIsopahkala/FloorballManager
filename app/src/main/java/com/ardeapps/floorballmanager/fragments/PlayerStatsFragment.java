@@ -35,7 +35,8 @@ import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.utils.ImageUtil;
 import com.ardeapps.floorballmanager.utils.StringUtils;
 import com.ardeapps.floorballmanager.viewObjects.DataView;
-import com.ardeapps.floorballmanager.viewObjects.PlayerStatsData;
+import com.ardeapps.floorballmanager.viewObjects.ExtPlayerStatsData;
+import com.ardeapps.floorballmanager.viewObjects.PlayerPenaltiesData;
 import com.ardeapps.floorballmanager.views.IconView;
 import com.ardeapps.floorballmanager.views.ShootMap;
 
@@ -43,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -441,34 +441,35 @@ public class PlayerStatsFragment extends Fragment implements DataView {
             filteredStats.put(game, filteredGoals);
         }
 
-        PlayerStatsData stats = StatsHelper.getPlayerStats(player.getPlayerId(), filteredStats, penalties);
-        gamesText.setText(String.valueOf(stats.gamesCount));
-        pointsText.setText(String.valueOf(stats.points));
-        pointsPerGameText.setText(getPerGameText(stats.pointsPerGame));
-        plusText.setText(String.valueOf(stats.pluses));
-        minusText.setText(String.valueOf(stats.minuses));
-        plusMinusText.setText(String.valueOf(stats.plusMinus));
-        goalsText.setText(String.valueOf(stats.scores));
-        goalsPerGameText.setText(getPerGameText(stats.scoresPerGame));
-        goalsYvText.setText(String.valueOf(stats.yvScores));
-        goalsAvText.setText(String.valueOf(stats.avScores));
-        goalsRlText.setText(String.valueOf(stats.rlScores));
-        assistsText.setText(String.valueOf(stats.assists));
-        assistsPerGameText.setText(getPerGameText(stats.assistsPerGame));
-        assistsYvText.setText(String.valueOf(stats.yvAssists));
-        assistsAvText.setText(String.valueOf(stats.avAssists));
-        bestStatsText.setText(stats.bestStats.first + " + " + stats.bestStats.second);
-        longestStatsText.setText(getLongestStatsText(stats.longestStats));
-        bestPlusMinusText.setText(String.valueOf(stats.bestPlusMinus));
-        bestAssistantText.setText(getBestAssistText(stats.bestAssists));
-        bestScorerText.setText(getBestScorerText(stats.bestScorers));
-        bestSameLineText.setText(getLineMateText(stats.bestLineMates));
-        penaltiesText.setText(stats.penalties + " min");
-        penaltiesPerGameText.setText(getPerGameText(stats.penaltiesPerGame));
-    }
-
-    private String getPerGameText(double value) {
-        return String.format(Locale.ENGLISH, "%.02f", value);
+        ExtPlayerStatsData statsData = StatsHelper.getExtPlayerStats(player.getPlayerId(), filteredStats);
+        ArrayList<Penalty> allPenalties = new ArrayList<>();
+        for(ArrayList<Penalty> penalties : penalties.values()) {
+            allPenalties.addAll(penalties);
+        }
+        PlayerPenaltiesData penaltiesData = StatsHelper.getPlayerPenaltiesData(player.getPlayerId(), sortedGames.size(), allPenalties);
+        gamesText.setText(String.valueOf(statsData.gamesCount));
+        pointsText.setText(String.valueOf(statsData.points));
+        pointsPerGameText.setText(StringUtils.getDecimalText(statsData.pointsPerGame));
+        plusText.setText(String.valueOf(statsData.pluses));
+        minusText.setText(String.valueOf(statsData.minuses));
+        plusMinusText.setText(String.valueOf(statsData.plusMinus));
+        goalsText.setText(String.valueOf(statsData.scores));
+        goalsPerGameText.setText(StringUtils.getDecimalText(statsData.scoresPerGame));
+        goalsYvText.setText(String.valueOf(statsData.yvScores));
+        goalsAvText.setText(String.valueOf(statsData.avScores));
+        goalsRlText.setText(String.valueOf(statsData.rlScores));
+        assistsText.setText(String.valueOf(statsData.assists));
+        assistsPerGameText.setText(StringUtils.getDecimalText(statsData.assistsPerGame));
+        assistsYvText.setText(String.valueOf(statsData.yvAssists));
+        assistsAvText.setText(String.valueOf(statsData.avAssists));
+        bestStatsText.setText(statsData.bestStats.first + " + " + statsData.bestStats.second);
+        longestStatsText.setText(getLongestStatsText(statsData.longestStats));
+        bestPlusMinusText.setText(String.valueOf(statsData.bestPlusMinus));
+        bestAssistantText.setText(getBestAssistText(statsData.bestAssists));
+        bestScorerText.setText(getBestScorerText(statsData.bestScorers));
+        bestSameLineText.setText(getLineMateText(statsData.bestLineMates));
+        penaltiesText.setText(penaltiesData.penalties + " min");
+        penaltiesPerGameText.setText(StringUtils.getDecimalText(penaltiesData.penaltiesPerGame));
     }
 
     private String getLongestStatsText(int statsLength) {

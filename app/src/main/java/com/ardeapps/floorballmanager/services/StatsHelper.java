@@ -6,6 +6,8 @@ import com.ardeapps.floorballmanager.analyzer.AnalyzerService;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Goal;
 import com.ardeapps.floorballmanager.objects.Penalty;
+import com.ardeapps.floorballmanager.viewObjects.ExtPlayerStatsData;
+import com.ardeapps.floorballmanager.viewObjects.PlayerPenaltiesData;
 import com.ardeapps.floorballmanager.viewObjects.PlayerPointsData;
 import com.ardeapps.floorballmanager.viewObjects.PlayerStatsData;
 import com.ardeapps.floorballmanager.viewObjects.TeamGameData;
@@ -19,8 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 public class StatsHelper extends AnalyzerService {
 
-    public static PlayerStatsData getPlayerStats(String playerId, Map<Game, ArrayList<Goal>> stats, Map<String, ArrayList<Penalty>> penalties) {
-        int gamesCount = stats.size();
+    public static PlayerStatsData getPlayerStats(String playerId, int gamesCount, ArrayList<Goal> stats) {
         int points = 0;
 
         int scores = 0;
@@ -34,6 +35,137 @@ public class StatsHelper extends AnalyzerService {
         int pluses = 0;
         int minuses = 0;
         int plusMinus = 0;
+
+        for (Goal goal : stats) {
+            Goal.Mode mode = Goal.Mode.fromDatabaseName(goal.getGameMode());
+            // Points
+            if (playerId.equals(goal.getScorerId()) || playerId.equals(goal.getAssistantId())) {
+                points++;
+            }
+            // Goals
+            if (playerId.equals(goal.getScorerId())) {
+                scores++;
+                if (mode == Goal.Mode.YV) {
+                    yvScores++;
+                }
+                if (mode == Goal.Mode.AV) {
+                    avScores++;
+                }
+                if (mode == Goal.Mode.RL) {
+                    rlScores++;
+                }
+            }
+            // Assists
+            if (playerId.equals(goal.getAssistantId())) {
+                assists++;
+                if (mode == Goal.Mode.YV) {
+                    yvAssists++;
+                }
+                if (mode == Goal.Mode.AV) {
+                    avAssists++;
+                }
+            }
+            int plusMinuses = 0;
+            // Plus minus
+            if (goal.getPlayerIds().contains(playerId)) {
+                // Plus
+                if (!goal.isOpponentGoal() && Goal.Mode.RL != mode) {
+                    pluses++;
+                    plusMinuses++;
+                }
+
+                // Minus
+                if (goal.isOpponentGoal() && Goal.Mode.RL != mode) {
+                    minuses++;
+                    plusMinuses--;
+                }
+            }
+            plusMinus += plusMinuses;
+        }
+
+        double pointsPerGame = 0.0;
+        double scoresPerGame = 0.0;
+        double assistsPerGame = 0.0;
+
+        if (gamesCount > 0) {
+            pointsPerGame = (double) points / gamesCount;
+            scoresPerGame = (double) scores / gamesCount;
+            assistsPerGame = (double) assists / gamesCount;
+        }
+
+        PlayerStatsData result = new PlayerStatsData();
+        result.gamesCount = gamesCount;
+        result.points = points;
+        result.pointsPerGame = pointsPerGame;
+        result.pluses = pluses;
+        result.minuses = minuses;
+        result.plusMinus = plusMinus;
+        result.scores = scores;
+        result.scoresPerGame = scoresPerGame;
+        result.yvScores = yvScores;
+        result.avScores = avScores;
+        result.rlScores = rlScores;
+        result.assists = assists;
+        result.assistsPerGame = assistsPerGame;
+        result.yvAssists = yvAssists;
+        result.avAssists = avAssists;
+        return result;
+    }
+
+    public static PlayerPenaltiesData getPlayerPenaltiesData(String playerId, int gamesCount, ArrayList<Penalty> penalties) {
+
+        // Penalties
+        int penalties2min = 0;
+        int penalties5min = 0;
+        int penalties10min = 0;
+        int penalties20min = 0;
+        int penaltyMinutes = 0;
+        for(Penalty penalty : penalties) {
+            if(playerId.equals(penalty.getPlayerId())) {
+                penaltyMinutes += penalty.getLength();
+                if(penalty.getLength() == 2) {
+                    penalties2min++;
+                } else if(penalty.getLength() == 5) {
+                    penalties5min++;
+                } else if(penalty.getLength() == 10) {
+                    penalties10min++;
+                } else if(penalty.getLength() == 20) {
+                    penalties20min++;
+                }
+            }
+        }
+
+        double penaltiesPerGame = 0.0;
+
+        if (gamesCount > 0) {
+            penaltiesPerGame = (double) penaltyMinutes / gamesCount;
+        }
+
+        PlayerPenaltiesData result = new PlayerPenaltiesData();
+        result.gamesCount = gamesCount;
+        result.penalties2min = penalties2min;
+        result.penalties5min = penalties5min;
+        result.penalties10min = penalties10min;
+        result.penalties20min = penalties20min;
+        result.penalties = penaltyMinutes;
+        result.penaltiesPerGame = penaltiesPerGame;
+        return result;
+    }
+
+    public static ExtPlayerStatsData getExtPlayerStats(String playerId, Map<Game, ArrayList<Goal>> stats) {
+        int gamesCount = stats.size();
+        ArrayList<Goal> allGoals = new ArrayList<>();
+        for (ArrayList<Goal> goals : stats.values()) {
+            allGoals.addAll(goals);
+        }
+        // Best assistants
+        Pair<ArrayList<String>, Integer> bestAssists = getBestAssistants(allGoals, playerId);
+        // Best scorers
+        Pair<ArrayList<String>, Integer> bestScorers = getBestScorers(allGoals, playerId);
+        // Best line mates
+        Pair<ArrayList<String>, Integer> bestLineMates = getBestLineMate(allGoals, playerId);
+
+        PlayerStatsData statsData = getPlayerStats(playerId, gamesCount, allGoals);
 
         Pair<Integer, Integer> bestStats = new Pair<>(0, 0);
         int bestPlusMinus = 0;
@@ -51,50 +183,29 @@ public class StatsHelper extends AnalyzerService {
                 Goal.Mode mode = Goal.Mode.fromDatabaseName(goal.getGameMode());
                 // Points
                 if (playerId.equals(goal.getScorerId()) || playerId.equals(goal.getAssistantId())) {
-                    points++;
                     isStatsInGame = true;
                 }
                 // Goals
                 if (playerId.equals(goal.getScorerId())) {
-                    scores++;
                     scoresInGame++;
-                    if (mode == Goal.Mode.YV) {
-                        yvScores++;
-                    }
-                    if (mode == Goal.Mode.AV) {
-                        avScores++;
-                    }
-                    if (mode == Goal.Mode.RL) {
-                        rlScores++;
-                    }
                 }
                 // Assists
                 if (playerId.equals(goal.getAssistantId())) {
-                    assists++;
                     assistsInGame++;
-                    if (mode == Goal.Mode.YV) {
-                        yvAssists++;
-                    }
-                    if (mode == Goal.Mode.AV) {
-                        avAssists++;
-                    }
                 }
                 int plusMinuses = 0;
                 // Plus minus
                 if (goal.getPlayerIds().contains(playerId)) {
                     // Plus
                     if (!goal.isOpponentGoal() && Goal.Mode.RL != mode) {
-                        pluses++;
                         plusMinuses++;
                     }
 
                     // Minus
                     if (goal.isOpponentGoal() && Goal.Mode.RL != mode) {
-                        minuses++;
                         plusMinuses--;
                     }
                 }
-                plusMinus += plusMinuses;
                 plusMinusInGame += plusMinuses;
             }
 
@@ -123,63 +234,13 @@ public class StatsHelper extends AnalyzerService {
             }
         }
 
-        // Penalties
-        int penaltyMinutes = 0;
-        for(ArrayList<Penalty> penaltiesList : penalties.values()) {
-            for(Penalty penalty : penaltiesList) {
-                if(playerId.equals(penalty.getPlayerId())) {
-                    penaltyMinutes += penalty.getLength();
-                }
-            }
-        }
-
-        double pointsPerGame = 0.0;
-        double scoresPerGame = 0.0;
-        double assistsPerGame = 0.0;
-        double penaltiesPerGame = 0.0;
-
-        if (gamesCount > 0) {
-            pointsPerGame = (double) points / gamesCount;
-            scoresPerGame = (double) scores / gamesCount;
-            assistsPerGame = (double) assists / gamesCount;
-            penaltiesPerGame = (double) penaltyMinutes / gamesCount;
-        }
-
-        ArrayList<Goal> allGoals = new ArrayList<>();
-        for (ArrayList<Goal> goals : stats.values()) {
-            allGoals.addAll(goals);
-        }
-        // Best assistants
-        Pair<ArrayList<String>, Integer> bestAssists = getBestAssistants(allGoals, playerId);
-        // Best scorers
-        Pair<ArrayList<String>, Integer> bestScorers = getBestScorers(allGoals, playerId);
-        // Best line mates
-        Pair<ArrayList<String>, Integer> bestLineMates = getBestLineMate(allGoals, playerId);
-
-        PlayerStatsData result = new PlayerStatsData();
-        result.gamesCount = gamesCount;
-        result.points = points;
-        result.pointsPerGame = pointsPerGame;
-        result.pluses = pluses;
-        result.minuses = minuses;
-        result.plusMinus = plusMinus;
-        result.scores = scores;
-        result.scoresPerGame = scoresPerGame;
-        result.yvScores = yvScores;
-        result.avScores = avScores;
-        result.rlScores = rlScores;
-        result.assists = assists;
-        result.assistsPerGame = assistsPerGame;
-        result.yvAssists = yvAssists;
-        result.avAssists = avAssists;
+        ExtPlayerStatsData result = new ExtPlayerStatsData(statsData);
         result.bestStats = bestStats;
         result.longestStats = longestStats;
         result.bestPlusMinus = bestPlusMinus;
         result.bestAssists = bestAssists;
         result.bestScorers = bestScorers;
         result.bestLineMates = bestLineMates;
-        result.penalties = penaltyMinutes;
-        result.penaltiesPerGame = penaltiesPerGame;
         return result;
     }
 

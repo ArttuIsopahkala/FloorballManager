@@ -2,6 +2,7 @@ package com.ardeapps.floorballmanager.resources;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.handlers.GetGamesHandler;
+import com.ardeapps.floorballmanager.handlers.GetSeasonGamesHandler;
 import com.ardeapps.floorballmanager.objects.Game;
 import com.ardeapps.floorballmanager.objects.Season;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
@@ -85,6 +86,34 @@ public class PlayerGamesResource extends FirebaseDatabaseService {
             }
             handler.onGamesLoaded(games);
         });
+    }
+
+    /**
+     * Get games of season by playerIds
+     */
+    public void getSeasonGames(Set<String> playerIds, String seasonId, final GetSeasonGamesHandler handler) {
+        final Map<String, ArrayList<Game>> result = new HashMap<>();
+        if (!playerIds.isEmpty()) {
+            final ArrayList<String> playerIdsSucceed = new ArrayList<>();
+            for (final String playerId : playerIds) {
+                getData(database.child(playerId).child(seasonId), dataSnapshot -> {
+                    final ArrayList<Game> games = new ArrayList<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        final Game game = snapshot.getValue(Game.class);
+                        if (game != null) {
+                            games.add(game);
+                        }
+                    }
+                    result.put(playerId, games);
+                    playerIdsSucceed.add(playerId);
+                    if (playerIds.size() == playerIdsSucceed.size()) {
+                        handler.onSeasonGamesLoaded(result);
+                    }
+                });
+            }
+        } else {
+            handler.onSeasonGamesLoaded(result);
+        }
     }
 
     /**
