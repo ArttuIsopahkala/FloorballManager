@@ -32,6 +32,10 @@ public class StringUtils {
                 TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
     }
 
+    public static String getDecimalText(double value) {
+        return String.format(Locale.ENGLISH, "%.02f", value);
+    }
+
     public static String getDateText(long milliseconds, boolean showTime) {
         String result = simpleDateFormat.format(new Date(milliseconds));
         Calendar cal = Calendar.getInstance();

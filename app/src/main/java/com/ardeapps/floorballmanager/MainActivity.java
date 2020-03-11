@@ -32,6 +32,7 @@ import com.ardeapps.floorballmanager.fragments.PlayerStatsFragment;
 import com.ardeapps.floorballmanager.fragments.PlayersFragment;
 import com.ardeapps.floorballmanager.fragments.SearchTeamFragment;
 import com.ardeapps.floorballmanager.fragments.SettingsFragment;
+import com.ardeapps.floorballmanager.fragments.StatsFragment;
 import com.ardeapps.floorballmanager.fragments.TeamDashboardFragment;
 import com.ardeapps.floorballmanager.fragments.TeamSelectionFragment;
 import com.ardeapps.floorballmanager.fragments.TeamSettingsFragment;
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     BluetoothFragment bluetoothFragment;
     TeamSettingsFragment teamSettingsFragment;
     PlayerStatsFragment playerStatsFragment;
+    StatsFragment statsFragment;
     EditUserConnectionFragment editUserConnectionFragment;
     TeamStatsFragment teamStatsFragment;
     InactivePlayersFragment inactivePlayersFragment;
@@ -145,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         bluetoothFragment = new BluetoothFragment();
         teamSettingsFragment = new TeamSettingsFragment();
         playerStatsFragment = new PlayerStatsFragment();
+        statsFragment = new StatsFragment();
         editUserConnectionFragment = new EditUserConnectionFragment();
         teamStatsFragment = new TeamStatsFragment();
         inactivePlayersFragment = new InactivePlayersFragment();
@@ -450,6 +453,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void goToStatsFragment() {
+                switchToFragment(statsFragment);
+            }
+
+            @Override
             public void goToEditUserConnectionFragment(UserConnection userConnection) {
                 editUserConnectionFragment.setData(userConnection);
                 switchToFragment(editUserConnectionFragment);
@@ -616,6 +624,8 @@ public class MainActivity extends AppCompatActivity {
             titleText.setText(R.string.title_search_team);
         } else if (f instanceof AcceptUserRequestFragment) {
             titleText.setText(R.string.title_accept_user_request);
+        } else if (f instanceof StatsFragment) {
+            titleText.setText(R.string.title_players_stats);
         } else if (f instanceof TacticBoardFragment) {
             titleText.setVisibility(View.GONE);
             settingsIcon.setVisibility(View.GONE);

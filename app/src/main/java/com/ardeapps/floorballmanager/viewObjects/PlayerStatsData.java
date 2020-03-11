@@ -1,9 +1,5 @@
 package com.ardeapps.floorballmanager.viewObjects;
 
-import android.util.Pair;
-
-import java.util.ArrayList;
-
 public class PlayerStatsData {
 
     public int gamesCount;
@@ -21,14 +17,6 @@ public class PlayerStatsData {
     public double assistsPerGame;
     public int yvAssists;
     public int avAssists;
-    public Pair<Integer, Integer> bestStats;
-    public int longestStats;
-    public int bestPlusMinus;
-    public int penalties;
-    public double penaltiesPerGame;
-    public Pair<ArrayList<String>, Integer> bestAssists;
-    public Pair<ArrayList<String>, Integer> bestScorers;
-    public Pair<ArrayList<String>, Integer> bestLineMates;
 
     public PlayerStatsData() {
     }

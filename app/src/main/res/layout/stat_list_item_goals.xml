@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playerContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_background_third">
+
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textColor="@color/color_text_light"
+        android:textSize="14sp"
+        android:padding="5dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/gamesText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/color_text_light"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/yvText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/color_text_light"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/avText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/color_text_light"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/rlText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/color_text_light"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/goalsPerGameText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/color_text_light"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/goalsText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/color_text_light"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -37,7 +37,6 @@ import com.ardeapps.floorballmanager.views.ShootMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -355,8 +354,8 @@ public class TeamStatsFragment extends Fragment {
         minusGoalsPeriod2Text.setText(stats.minusGoalsPercentPeriod2 + "%");
         minusGoalsPeriod3Text.setText(stats.minusGoalsPercentPeriod3 + "%");
         minusGoalsJAText.setText(stats.minusGoalsPercentPeriodJA + "%");
-        plusGoalsPerGameText.setText(getPerGameText(stats.plusGoalsPerGame));
-        minusGoalsPerGameText.setText(getPerGameText(stats.minusGoalsPerGame));
+        plusGoalsPerGameText.setText(StringUtils.getDecimalText(stats.plusGoalsPerGame));
+        minusGoalsPerGameText.setText(StringUtils.getDecimalText(stats.minusGoalsPerGame));
         biggestWinText.setText(getLongestWinOrLoseText(stats.biggestWin));
         biggestLoseText.setText(getLongestWinOrLoseText(stats.biggestLose));
         longestWinText.setText(getLongestStatsText(stats.longestWin));
@@ -413,10 +412,6 @@ public class TeamStatsFragment extends Fragment {
             result += getString(R.string.player_stats_games);
         }
         return result;
-    }
-
-    private String getPerGameText(double value) {
-        return String.format(Locale.ENGLISH, "%.02f", value);
     }
 
     private void drawShootPoints() {
