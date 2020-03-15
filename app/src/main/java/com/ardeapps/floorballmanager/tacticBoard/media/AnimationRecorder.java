@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.tacticBoard;
+package com.ardeapps.floorballmanager.tacticBoard.media;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -16,9 +16,9 @@ import android.util.DisplayMetrics;
 import android.view.Surface;
 
 import com.ardeapps.floorballmanager.AppRes;
+import com.ardeapps.floorballmanager.tacticBoard.utils.StorageHelper;
 import com.ardeapps.floorballmanager.utils.Logger;
 
-import java.io.File;
 import java.io.IOException;
 
 import static com.ardeapps.floorballmanager.services.FragmentListeners.MY_PERMISSION_ACCESS_RECORD_SCREEN;
@@ -27,25 +27,18 @@ import static com.ardeapps.floorballmanager.services.FragmentListeners.MY_PERMIS
 public class AnimationRecorder {
 
     private static int mScreenDensity;
-    private static final int DISPLAY_WIDTH = 480;
-    private static final int DISPLAY_HEIGHT = 640;
+    private static final int DISPLAY_WIDTH = 720;
+    private static final int DISPLAY_HEIGHT = 1080;
     private MediaProjection mMediaProjection;
     private VirtualDisplay mVirtualDisplay;
     private MediaRecorder mMediaRecorder;
     private Surface surface;
 
-    private static String recordingsPath;
     private static AnimationRecorder instance;
 
     public static AnimationRecorder getInstance() {
         if (instance == null) {
             instance = new AnimationRecorder();
-            if(StorageHelper.isExternalStorageWritable()) {
-                recordingsPath = StorageHelper.getExternalDirectory();
-            } else {
-                recordingsPath = StorageHelper.getInternalDirectory();
-            }
-
             DisplayMetrics metrics = new DisplayMetrics();
             AppRes.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
             mScreenDensity = metrics.densityDpi;
@@ -58,7 +51,7 @@ public class AnimationRecorder {
         void onAskScreenCapturePermission(Intent intent);
     }
 
-    boolean isPermissionGiven(StartCaptureHandler handler) {
+    public boolean isPermissionGiven(StartCaptureHandler handler) {
         if (ContextCompat.checkSelfPermission(AppRes.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 + ContextCompat.checkSelfPermission(AppRes.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -78,7 +71,7 @@ public class AnimationRecorder {
         return true;
     }
 
-    void setPermissionGranted(int resultCode, Intent data) {
+    public void setPermissionGranted(int resultCode, Intent data) {
         MediaProjectionManager mProjectionManager = (MediaProjectionManager) AppRes.getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         if(mProjectionManager != null) {
             mMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
@@ -99,7 +92,7 @@ public class AnimationRecorder {
         }
     }
 
-    void prepareRecorder(String fileName) {
+    public void prepareRecorder(String fileName) {
         mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -108,12 +101,8 @@ public class AnimationRecorder {
         mMediaRecorder.setVideoSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
         mMediaRecorder.setVideoFrameRate(30);
 
-        File dir = new File(recordingsPath);
-        if(!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        String file = recordingsPath + fileName + ".mp4";
+        String storagePath = StorageHelper.getStoragePath();
+        String file = storagePath + fileName + ".mp4";
         mMediaRecorder.setOutputFile(file);
         Logger.log("Recorder file will be saved to: " + file);
 
@@ -127,13 +116,13 @@ public class AnimationRecorder {
         }
     }
 
-    void startRecording() {
+    public void startRecording() {
         Logger.log("startRecording");
         mVirtualDisplay = createVirtualDisplay();
         mMediaRecorder.start();
     }
 
-    void stopRecording() {
+    public void stopRecording() {
         Logger.log("stopRecording");
         if (mMediaProjection != null) {
             mMediaProjection.stop();
@@ -144,7 +133,7 @@ public class AnimationRecorder {
         }
     }
 
-    boolean isRecording() {
+    public boolean isRecording() {
         return mMediaProjection != null;
     }
 

@@ -1,8 +1,11 @@
-package com.ardeapps.floorballmanager.tacticBoard;
+package com.ardeapps.floorballmanager.tacticBoard.utils;
 
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ardeapps.floorballmanager.tacticBoard.objects.MovableView;
 
 public class TacticBoardHelper {
 
@@ -38,6 +41,39 @@ public class TacticBoardHelper {
                 return null;
             }
         }
+    }
+
+    public static int getColorFromProgress(int progress) {
+        int r = 0;
+        int g = 0;
+        int b = 0;
+
+        if (progress < 256) {
+            b = progress;
+        } else if (progress < 256 * 2) {
+            g = progress % 256;
+            b = 256 - progress % 256;
+        } else if (progress < 256 * 3) {
+            g = 255;
+            b = progress % 256;
+        } else if (progress < 256 * 4) {
+            r = progress % 256;
+            g = 256 - progress % 256;
+            b = 256 - progress % 256;
+        } else if (progress < 256 * 5) {
+            r = 255;
+            g = 0;
+            b = progress % 256;
+        } else if (progress < 256 * 6) {
+            r = 255;
+            g = progress % 256;
+            b = 256 - progress % 256;
+        } else if (progress < 256 * 7) {
+            r = 255;
+            g = 255;
+            b = progress % 256;
+        }
+        return Color.argb(255, r, g, b);
     }
 
 }

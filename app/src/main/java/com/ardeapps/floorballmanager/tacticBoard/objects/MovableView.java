@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.tacticBoard;
+package com.ardeapps.floorballmanager.tacticBoard.objects;
 
 import android.content.Context;
 import android.util.AttributeSet;

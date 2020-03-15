@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.views;
+package com.ardeapps.floorballmanager.tacticBoard.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,11 +13,10 @@ import android.graphics.PorterDuffXfermode;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.widget.RelativeLayout;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
-import com.ardeapps.floorballmanager.tacticBoard.TacticBoardTools;
-import com.ardeapps.floorballmanager.tacticBoard.TacticSettingsDialogFragment;
 import com.ardeapps.floorballmanager.utils.Logger;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
  * Created by Arttu on 15.11.2019.
  */
 
-public class DrawingBoard extends android.support.v7.widget.AppCompatImageView {
+public class DrawingBoard extends RelativeLayout {
 
     private Bitmap mBitmap;
     private Canvas finalCanvas;
@@ -35,7 +34,7 @@ public class DrawingBoard extends android.support.v7.widget.AppCompatImageView {
     private Context context;
     private Paint paint;
 
-    private TacticBoardTools.Tool selectedTool;
+    private TacticBoardDraw.Tool selectedTool;
     private int currentColor;
     private int currentSize;
 
@@ -81,21 +80,8 @@ public class DrawingBoard extends android.support.v7.widget.AppCompatImageView {
         createView(context);
     }
 
-    public void setBackgroundField(TacticSettingsDialogFragment.Field field) {
-        if (field == TacticSettingsDialogFragment.Field.FULL) {
-            setImageResource(R.drawable.floorball_field);
-            setRotation(0f);
-        } else if (field == TacticSettingsDialogFragment.Field.HALF_LEFT){
-            setImageResource(R.drawable.floorball_field_rotated);
-            setRotation(0f);
-        } else if (field == TacticSettingsDialogFragment.Field.HALF_RIGHT) {
-            setImageResource(R.drawable.floorball_field_rotated);
-            setRotation(180f);
-        }
-    }
-
     public void setPaintColor(int color) {
-        currentColor = ContextCompat.getColor(AppRes.getContext(), color);
+        currentColor = color;
         paint.setColor(currentColor);
     }
 
@@ -104,7 +90,7 @@ public class DrawingBoard extends android.support.v7.widget.AppCompatImageView {
         paint.setStrokeWidth(currentSize);
     }
 
-    public void setSelectedTool(TacticBoardTools.Tool tool) {
+    public void setSelectedTool(TacticBoardDraw.Tool tool) {
         selectedTool = tool;
     }
 

@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.tacticBoard;
+package com.ardeapps.floorballmanager.tacticBoard.encoder;
 
 import android.content.Context;
 import android.opengl.GLES31;

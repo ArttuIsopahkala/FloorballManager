@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.tacticBoard;
+package com.ardeapps.floorballmanager.tacticBoard.media;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.R;
-import com.ardeapps.floorballmanager.utils.Logger;
+import com.ardeapps.floorballmanager.tacticBoard.objects.GalleryItem;
 import com.ardeapps.floorballmanager.views.IconView;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class GalleryGridAdapter extends BaseAdapter {
         holder.nameText = v.findViewById(R.id.nameText);
         holder.selectIcon = v.findViewById(R.id.selectIcon);
         holder.shareIcon = v.findViewById(R.id.shareIcon);
-        holder.removeIcon = v.findViewById(R.id.removeIcon);
+        holder.removeIcon = v.findViewById(R.id.minusIcon);
         holder.previewImage = v.findViewById(R.id.previewImage);
 
         final GalleryItem item = items.get(position);

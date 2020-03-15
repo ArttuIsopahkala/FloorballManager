@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.tacticBoard;
+package com.ardeapps.floorballmanager.tacticBoard.encoder;
 
 import android.graphics.SurfaceTexture;
 import android.opengl.EGL14;

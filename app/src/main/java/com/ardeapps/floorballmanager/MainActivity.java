@@ -65,7 +65,7 @@ import com.ardeapps.floorballmanager.resources.UsersResource;
 import com.ardeapps.floorballmanager.services.AppInviteService;
 import com.ardeapps.floorballmanager.services.FirebaseDatabaseService;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
-import com.ardeapps.floorballmanager.tacticBoard.TacticBoardFragment;
+import com.ardeapps.floorballmanager.tacticBoard.views.TacticBoardFragment;
 import com.ardeapps.floorballmanager.utils.Helper;
 import com.ardeapps.floorballmanager.utils.Logger;
 import com.ardeapps.floorballmanager.utils.StringUtils;
@@ -627,10 +627,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (f instanceof StatsFragment) {
             titleText.setText(R.string.title_players_stats);
         } else if (f instanceof TacticBoardFragment) {
-            titleText.setVisibility(View.GONE);
-            settingsIcon.setVisibility(View.GONE);
-            boardIcon.setVisibility(View.GONE);
-            newInvitationMark.setVisibility(View.GONE);
+            menuTop.setVisibility(View.GONE);
         }  else {
             menuTop.setVisibility(View.GONE);
         }

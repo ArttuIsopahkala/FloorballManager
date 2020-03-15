@@ -178,8 +178,12 @@
 
     <string name="tactic_board_clear_confirmation">Tyhjennetäänkö kenttä?</string>
     <string name="tactic_board_record_info">Kentällä näkyvä animaatio muunnetaan videotiedostoksi ja tallennetaan puhelimesi tiedostoihin. Aloitetaanko tallennus?</string>
+    <string name="tactic_board_change_mode_confirmation">Kentällä on muutoksia. Tyhjennetäänkö kenttä?</string>
     <string name="tactic_board_converting">Muunnetaan&#8230;</string>
     <string name="tactic_board_no_savings">Ei tallennuksia.</string>
+    <string name="tactic_board_draw_mode">Piirtotila</string>
+    <string name="tactic_board_animation_mode">Animaatiotila</string>
+    <string name="tactic_board_saved">Tallennettu!</string>
 
     <string name="event_title_goal_add">Lisää maali</string>
     <string name="event_title_goal_edit">Muokkaa maalia</string>

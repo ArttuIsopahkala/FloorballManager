@@ -1,4 +1,4 @@
-package com.ardeapps.floorballmanager.tacticBoard;
+package com.ardeapps.floorballmanager.tacticBoard.views;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.tacticBoard.media.GalleryGridAdapter;
+import com.ardeapps.floorballmanager.tacticBoard.objects.GalleryItem;
+import com.ardeapps.floorballmanager.tacticBoard.utils.StorageHelper;
 import com.ardeapps.floorballmanager.utils.Logger;
 
 import java.io.File;
@@ -29,18 +32,9 @@ public class TacticGalleryDialogFragment extends DialogFragment {
 
     public void update() {
         ArrayList<GalleryItem> items = new ArrayList<>();
-        Logger.log("EXTERNAL DIR: " + StorageHelper.isExternalStorageWritable());
-        int idx = 0;
-        if(StorageHelper.isExternalStorageWritable()) {
-            for(File file : StorageHelper.getExternalFiles()) {
-                Logger.log(file.getName());
-                items.add(new GalleryItem(file.getName(), file));
-            }
-        } else {
-            for(File file : StorageHelper.getInternalFiles()) {
-                Logger.log(file.getName());
-                items.add(new GalleryItem("VIDEO NRO " + ++idx, file));
-            }
+        for(File file : StorageHelper.getStorageFiles()) {
+            Logger.log(file.getName());
+            items.add(new GalleryItem(file.getName(), file));
         }
 
         adapter.setItems(items);

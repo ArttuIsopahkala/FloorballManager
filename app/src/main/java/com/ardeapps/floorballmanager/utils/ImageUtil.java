@@ -242,8 +242,7 @@ public class ImageUtil {
     public static String getBitmapAsBase64(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
+        return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
     }
 
     public static Bitmap getBase64AsBitmap(String base64) {

@@ -20,6 +20,7 @@ public class PrefRes {
     private static final String SEASON_ID = "seasonId";
     private static final String SELECTED_TEAM_ID = "selectedTeamId";
     private static final String PERIOD_DURATION = "periodDuration";
+    public static final String DRAW_COLOR_PROGRESS = "drawColorProgress";
 
     private static SharedPreferences getSharedPref() {
         return AppRes.getContext().getSharedPreferences(APP_PREF, 0);

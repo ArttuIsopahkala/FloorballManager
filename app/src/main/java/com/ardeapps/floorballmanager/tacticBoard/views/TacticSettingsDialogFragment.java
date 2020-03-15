@@ -1,7 +1,11 @@
-package com.ardeapps.floorballmanager.tacticBoard;
+package com.ardeapps.floorballmanager.tacticBoard.views;
 
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -12,22 +16,31 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
+import com.ardeapps.floorballmanager.tacticBoard.utils.TacticBoardHelper;
 
 import java.util.ArrayList;
 
 public class TacticSettingsDialogFragment extends DialogFragment {
 
+    public interface TacticSettingsDialogCloseListener {
+        void onSave(Field field, int paintColorProgress);
+    }
+
     TacticSettingsDialogCloseListener mListener = null;
     ImageView fieldHalfLeftPicture;
     ImageView fieldFullPicture;
     ImageView fieldHalfRightPicture;
+    View colorPreview;
+    SeekBar colorPicker;
     Button saveButton;
 
     private ArrayList<ImageView> fields = new ArrayList<>();
     private Field selectedField = null;
+    private int paintColorProgress;
 
     public enum Field {
         HALF_LEFT,
@@ -37,6 +50,10 @@ public class TacticSettingsDialogFragment extends DialogFragment {
 
     public void setSelectedField(Field selectedField) {
         this.selectedField = selectedField;
+    }
+
+    public void setPaintColorProgress(int paintColorProgress) {
+        this.paintColorProgress = paintColorProgress;
     }
 
     public void setListener(TacticSettingsDialogCloseListener l) {
@@ -53,6 +70,8 @@ public class TacticSettingsDialogFragment extends DialogFragment {
         fieldHalfLeftPicture = v.findViewById(R.id.fieldHalfLeftPicture);
         fieldFullPicture = v.findViewById(R.id.fieldFullPicture);
         fieldHalfRightPicture = v.findViewById(R.id.fieldHalfRightPicture);
+        colorPicker = v.findViewById(R.id.colorPicker);
+        colorPreview = v.findViewById(R.id.colorPreview);
         saveButton = v.findViewById(R.id.saveButton);
 
         setField(fieldHalfLeftPicture, Field.HALF_LEFT);
@@ -67,8 +86,44 @@ public class TacticSettingsDialogFragment extends DialogFragment {
             setFieldSelected(fieldHalfRightPicture);
         }
 
+        colorPreview.post(() -> {
+            colorPicker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        paintColorProgress = progress;
+                    }
+                    int selectedColor = TacticBoardHelper.getColorFromProgress(progress);
+                    colorPreview.setBackgroundColor(selectedColor);
+                    colorPreview.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
+            });
+
+            // COLOR OF PEN
+            colorPicker.post(() -> {
+                LinearGradient colorGradient = new LinearGradient(0.f, 0.f, colorPicker.getMeasuredWidth() - colorPicker.getThumb().getIntrinsicWidth(), 0.f,
+                        new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF,
+                                0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF},
+                        null, Shader.TileMode.CLAMP
+                );
+                ShapeDrawable shape = new ShapeDrawable(new RectShape());
+                shape.getPaint().setShader(colorGradient);
+                colorPicker.setProgressDrawable(shape);
+                colorPicker.setMax(256 * 7 - 1);
+                colorPicker.setProgress(paintColorProgress);
+            });
+        });
+
         saveButton.setOnClickListener(v1 -> {
-            mListener.onSave(selectedField);
+            mListener.onSave(selectedField, paintColorProgress);
             dismiss();
         });
 
@@ -90,10 +145,6 @@ public class TacticSettingsDialogFragment extends DialogFragment {
 
     private void setFieldSelected(ImageView fieldImage) {
         fieldImage.setBackgroundColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_red_light));
-    }
-
-    public interface TacticSettingsDialogCloseListener {
-        void onSave(Field field);
     }
 
     // This sets dialog full screen

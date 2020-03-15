@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -55,6 +57,15 @@ public class Helper {
         return (int) (sp / Resources.getSystem().getDisplayMetrics().scaledDensity);
     }
 
+    public static int getStatusBarHeight() {
+        Rect rectangle = new Rect();
+        Window window = AppRes.getActivity().getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        int statusBarHeight = rectangle.top;
+        int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+        return contentViewTop - statusBarHeight;
+    }
+
     public static void showKeyBoard() {
         final InputMethodManager imm = (InputMethodManager) AppRes.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
@@ -64,6 +75,9 @@ public class Helper {
 
     public static void hideKeyBoard(View tokenView) {
         InputMethodManager imm = (InputMethodManager) AppRes.getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (tokenView == null) {
+            tokenView = new View(AppRes.getActivity());
+        }
         if (imm != null) {
             imm.hideSoftInputFromWindow(tokenView.getWindowToken(), 0);
         }
