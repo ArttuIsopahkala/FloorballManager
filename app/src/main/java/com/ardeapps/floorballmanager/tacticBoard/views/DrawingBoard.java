@@ -34,7 +34,7 @@ public class DrawingBoard extends RelativeLayout {
     private Context context;
     private Paint paint;
 
-    private TacticBoardDraw.Tool selectedTool;
+    private TacticBoardMenu.Tool selectedTool;
     private int currentColor;
     private int currentSize;
 
@@ -90,7 +90,7 @@ public class DrawingBoard extends RelativeLayout {
         paint.setStrokeWidth(currentSize);
     }
 
-    public void setSelectedTool(TacticBoardDraw.Tool tool) {
+    public void setSelectedTool(TacticBoardMenu.Tool tool) {
         selectedTool = tool;
     }
 

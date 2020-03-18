@@ -25,7 +25,7 @@ public class PlayerHolder {
 
     public PlayerHolder(View v, boolean showSelectIcon, boolean showPosition) {
         playerContainer = v.findViewById(R.id.playerContainer);
-        disableOverlay = v.findViewById(R.id.disableToolsOverlay);
+        disableOverlay = v.findViewById(R.id.disableOverlay);
         pictureImage = v.findViewById(R.id.pictureImage);
         nameNumberShootsText = v.findViewById(R.id.nameNumberShootsText);
         positionText = v.findViewById(R.id.positionText);

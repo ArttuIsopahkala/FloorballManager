@@ -53,4 +53,5 @@
     <string name="icon_download">&#xf019;</string>
     <string name="icon_share">&#xf1e0;</string>
     <string name="icon_gallery">&#xf07c;</string>
+    <string name="icon_film">&#xf008;</string>
 </resources>

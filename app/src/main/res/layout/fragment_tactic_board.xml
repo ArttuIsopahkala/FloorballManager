@@ -2,88 +2,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true">
-    <RelativeLayout
-        android:id="@+id/tacticMenuTop"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/color_menu">
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/backIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:text="@string/icon_back"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-
-        <Spinner
-            android:id="@+id/modeSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_toStartOf="@+id/settingsIcon"
-            android:minWidth="150dp"
-            android:textColor="@color/color_text_light" />
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/settingsIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_toStartOf="@+id/saveIcon"
-            android:text="@string/icon_settings"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/saveIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_toStartOf="@+id/galleryIcon"
-            android:text="@string/icon_save"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/galleryIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:text="@string/icon_gallery"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-    </RelativeLayout>
-    <TextView
-        android:id="@+id/fieldNameText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tacticMenuTop"
-        android:background="@color/color_menu"
-        android:gravity="center"
-        android:textColor="@color/color_text_light"
-        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/fieldImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/fieldNameText"
-        android:src="@drawable/floorball_field"
+        android:layout_below="@id/tacticBoardMenu"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter"
+        android:src="@drawable/floorball_field" />
 
-    <com.ardeapps.floorballmanager.tacticBoard.views.TacticBoardDraw
-        android:id="@+id/tacticBoardTools"
+    <com.ardeapps.floorballmanager.tacticBoard.views.DrawingBoard
+        android:id="@+id/drawingBoard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fieldNameText"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tacticBoardMenu"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter" />
 
     <com.ardeapps.floorballmanager.tacticBoard.views.TacticBoardAnimation
         android:id="@+id/tacticBoardAnimation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/fieldNameText"
-        android:visibility="gone"/>
+        android:layout_below="@+id/tacticBoardMenu" />
+
+    <com.ardeapps.floorballmanager.tacticBoard.views.TacticBoardMenu
+        android:id="@+id/tacticBoardMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
