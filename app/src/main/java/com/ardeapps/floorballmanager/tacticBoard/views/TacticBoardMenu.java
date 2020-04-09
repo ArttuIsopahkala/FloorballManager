@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
-import com.ardeapps.floorballmanager.tacticBoard.utils.AnimationTool;
 import com.ardeapps.floorballmanager.views.IconView;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class TacticBoardMenu extends RelativeLayout {
 
     public interface MenuListener {
         void onToolChanged(Tool tool);
-        void onActionButtonClick(Tool tool);
+        void onActionButtonClick(ActionTool tool);
     }
 
     public enum Tool {
@@ -32,18 +31,21 @@ public class TacticBoardMenu extends RelativeLayout {
         DOTTED_ARROW,
         CIRCLE,
         CROSS,
-        USERS,
-        BALL,
+        HOME_PLAYERS,
+        AWAY_PLAYERS,
+        BALL
+    }
+
+    public enum ActionTool {
         UNDO,
         CLEAR,
         SETTINGS,
         SAVE,
-        GALLERY
+        GALLERY,
+        HOME_SETTINGS,
+        AWAY_SETTINGS
     }
 
-    RelativeLayout disableToolsOverlay;
-    TextView disableToolsInfoText;
-    IconView disableToolsIcon;
     LinearLayout framesContainer;
     LinearLayout penIcon;
     LinearLayout lineIcon;
@@ -55,23 +57,21 @@ public class TacticBoardMenu extends RelativeLayout {
     LinearLayout undoIcon;
     LinearLayout clearIcon;
     LinearLayout homePlayersIcon;
+    LinearLayout awayPlayersIcon;
     LinearLayout ballIcon;
+    LinearLayout homeSettingsIcon;
+    LinearLayout awaySettingsIcon;
     IconView settingsIcon;
     IconView saveIcon;
     IconView galleryIcon;
     TextView fieldNameText;
-    AnimationTool animationTool;
 
     Tool selectedTool;
-    ArrayList<LinearLayout> paintTools = new ArrayList<>();
+    ArrayList<LinearLayout> stickyTools = new ArrayList<>();
     MenuListener listener;
 
     public void setListener(MenuListener listener) {
         this.listener = listener;
-    }
-
-    public void setAnimationToolListener(AnimationTool.AnimationToolListener listener) {
-        animationTool.setListener(listener);
     }
 
     public TacticBoardMenu(Context context) {
@@ -88,9 +88,6 @@ public class TacticBoardMenu extends RelativeLayout {
     private void createView(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.tactic_board_menu, this);
-        disableToolsOverlay = findViewById(R.id.disableToolsOverlay);
-        disableToolsInfoText = findViewById(R.id.disableToolsInfoText);
-        disableToolsIcon = findViewById(R.id.disableToolsIcon);
         framesContainer = findViewById(R.id.framesContainer);
         penIcon = findViewById(R.id.penIcon);
         lineIcon = findViewById(R.id.lineIcon);
@@ -102,55 +99,57 @@ public class TacticBoardMenu extends RelativeLayout {
         undoIcon = findViewById(R.id.undoIcon);
         clearIcon = findViewById(R.id.clearIcon);
         homePlayersIcon = findViewById(R.id.homePlayersIcon);
+        awayPlayersIcon = findViewById(R.id.awayPlayersIcon);
         ballIcon = findViewById(R.id.ballIcon);
         settingsIcon = findViewById(R.id.settingsIcon);
         saveIcon = findViewById(R.id.saveIcon);
         galleryIcon = findViewById(R.id.galleryIcon);
         fieldNameText = findViewById(R.id.fieldNameText);
-        animationTool = findViewById(R.id.animationTool);
+        homeSettingsIcon = findViewById(R.id.homeSettingsIcon);
+        awaySettingsIcon = findViewById(R.id.awaySettingsIcon);
 
-        paintTools = new ArrayList<>();
+        stickyTools = new ArrayList<>();
 
-        initializePaintTool(penIcon, Tool.PEN);
-        initializePaintTool(lineIcon, Tool.LINE);
-        initializePaintTool(arrowIcon, Tool.ARROW);
-        initializePaintTool(dottedArrowIcon, Tool.DOTTED_ARROW);
-        initializePaintTool(circleIcon, Tool.CIRCLE);
-        initializePaintTool(crossIcon, Tool.CROSS);
-        initializePaintTool(eraserIcon, Tool.ERASER);
-        initializePaintTool(homePlayersIcon, Tool.USERS);
-        initializePaintTool(ballIcon, Tool.BALL);
+        initializeStickyTool(penIcon, Tool.PEN);
+        initializeStickyTool(lineIcon, Tool.LINE);
+        initializeStickyTool(arrowIcon, Tool.ARROW);
+        initializeStickyTool(dottedArrowIcon, Tool.DOTTED_ARROW);
+        initializeStickyTool(circleIcon, Tool.CIRCLE);
+        initializeStickyTool(crossIcon, Tool.CROSS);
+        initializeStickyTool(eraserIcon, Tool.ERASER);
+        initializeStickyTool(homePlayersIcon, Tool.HOME_PLAYERS);
+        initializeStickyTool(awayPlayersIcon, Tool.AWAY_PLAYERS);
+        initializeStickyTool(ballIcon, Tool.BALL);
 
-        settingsIcon.setOnClickListener(v -> listener.onActionButtonClick(Tool.SETTINGS));
-        saveIcon.setOnClickListener(v -> listener.onActionButtonClick(Tool.SAVE));
-        galleryIcon.setOnClickListener(v -> listener.onActionButtonClick(Tool.GALLERY));
-        undoIcon.setOnClickListener(v -> listener.onActionButtonClick(Tool.UNDO));
-        clearIcon.setOnClickListener(v -> listener.onActionButtonClick(Tool.CLEAR));
+        settingsIcon.setOnClickListener(v -> listener.onActionButtonClick(ActionTool.SETTINGS));
+        saveIcon.setOnClickListener(v -> listener.onActionButtonClick(ActionTool.SAVE));
+        galleryIcon.setOnClickListener(v -> listener.onActionButtonClick(ActionTool.GALLERY));
+        undoIcon.setOnClickListener(v -> listener.onActionButtonClick(ActionTool.UNDO));
+        clearIcon.setOnClickListener(v -> listener.onActionButtonClick(ActionTool.CLEAR));
+        homeSettingsIcon.setOnClickListener(v -> listener.onActionButtonClick(ActionTool.HOME_SETTINGS));
+        awaySettingsIcon.setOnClickListener(v -> listener.onActionButtonClick(ActionTool.AWAY_SETTINGS));
 
         // Initialize first frame
         fieldNameText.setVisibility(View.GONE);
     }
 
-    public void showDisableToolsOverlay(boolean showRemoveIcon) {
-        disableToolsOverlay.setVisibility(View.VISIBLE);
-        if(showRemoveIcon) {
-            disableToolsInfoText.setVisibility(View.GONE);
-            disableToolsIcon.setVisibility(View.VISIBLE);
-        } else {
-            disableToolsInfoText.setVisibility(View.VISIBLE);
-            disableToolsIcon.setVisibility(View.GONE);
+    // TODO set real text
+    public void setFieldNameText(String text) {
+        fieldNameText.setText(text);
+    }
+
+    public void resetTools() {
+        selectedTool = null;
+        for (LinearLayout existingTool : stickyTools) {
+            existingTool.setBackground(ContextCompat.getDrawable(AppRes.getContext(), R.drawable.button_background));
         }
     }
 
-    private void hideDisableToolsOverlay() {
-        disableToolsOverlay.setVisibility(View.GONE);
-    }
-
-    private void initializePaintTool(LinearLayout button, Tool tool) {
-        paintTools.add(button);
+    private void initializeStickyTool(LinearLayout button, Tool tool) {
+        stickyTools.add(button);
         button.setOnClickListener(v -> {
             selectedTool = tool;
-            for (LinearLayout existingTool : paintTools) {
+            for (LinearLayout existingTool : stickyTools) {
                 existingTool.setBackground(ContextCompat.getDrawable(AppRes.getContext(), R.drawable.button_background));
             }
             button.setBackgroundColor(ContextCompat.getColor(AppRes.getContext(), R.color.color_green_light));

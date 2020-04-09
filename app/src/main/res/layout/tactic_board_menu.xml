@@ -3,70 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_menu">
-    <RelativeLayout
-        android:id="@+id/tacticMenuTop"
-        android:layout_width="match_parent"
-        android:layout_height="48dp">
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/backIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:text="@string/icon_back"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-
-        <TextView
-            android:id="@+id/fieldNameText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toEndOf="@+id/backIcon"
-            android:layout_toStartOf="@+id/settingsIcon"
-            android:gravity="center"
-            android:textColor="@color/color_text_light"
-            android:textSize="20sp" />
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/shareIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_toStartOf="@+id/settingsIcon"
-            android:text="@string/icon_share"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/settingsIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_toStartOf="@+id/saveIcon"
-            android:text="@string/icon_settings"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/saveIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_toStartOf="@+id/galleryIcon"
-            android:text="@string/icon_save"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/galleryIcon"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:text="@string/icon_gallery"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="18sp" />
-    </RelativeLayout>
     <LinearLayout
-        android:id="@+id/paintTools"
+        android:id="@+id/firstRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tacticMenuTop"
         android:orientation="horizontal">
         <LinearLayout
             android:id="@+id/penIcon"
@@ -152,6 +92,124 @@
                 app:iconSize="15sp"
                 android:clickable="false"/>
         </LinearLayout>
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/shareIcon"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="@string/icon_share"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="18sp" />
+
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/settingsIcon"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="@string/icon_settings"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="18sp" />
+
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/saveIcon"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="@string/icon_save"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="18sp" />
+
+        <com.ardeapps.floorballmanager.views.IconView
+            android:id="@+id/galleryIcon"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="@string/icon_gallery"
+            app:iconFont="@string/icon_solid"
+            app:iconSize="18sp" />
+
+        <TextView
+            android:id="@+id/fieldNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/color_text_light"
+            android:textSize="20sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/animationTools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/firstRow"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/homePlayersIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_background"
+            android:gravity="center">
+            <com.ardeapps.floorballmanager.views.IconView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/icon_users"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="15sp"
+                android:clickable="false"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/homeSettingsIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_background"
+            android:gravity="center">
+            <com.ardeapps.floorballmanager.views.IconView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/icon_settings"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="15sp"
+                android:clickable="false" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/awayPlayersIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:layout_marginStart="10dp">
+            <com.ardeapps.floorballmanager.views.IconView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/icon_users"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="15sp"
+                android:clickable="false"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/awaySettingsIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_background"
+            android:gravity="center">
+            <com.ardeapps.floorballmanager.views.IconView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/icon_settings"
+                app:iconFont="@string/icon_solid"
+                app:iconSize="15sp"
+                android:clickable="false" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ballIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:layout_marginStart="10dp">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/floorball_icon"
+                android:tint="@color/color_text_light"
+                android:clickable="false"
+                android:contentDescription="@null"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -201,175 +259,4 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/animationTools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/paintTools"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:id="@+id/homePlayersIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/button_background"
-            android:gravity="center">
-            <com.ardeapps.floorballmanager.views.IconView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/icon_users"
-                app:iconFont="@string/icon_solid"
-                app:iconSize="15sp"
-                android:clickable="false"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/awayPlayersIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/button_background"
-            android:gravity="center">
-            <com.ardeapps.floorballmanager.views.IconView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/icon_users"
-                app:iconFont="@string/icon_solid"
-                app:iconSize="15sp"
-                android:clickable="false"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/ballIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/button_background"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/floorball_icon"
-                android:tint="@color/color_text_light"
-                android:clickable="false"
-                android:contentDescription="@null"/>
-        </LinearLayout>
-        <com.ardeapps.floorballmanager.tacticBoard.utils.AnimationTool
-            android:id="@+id/animationTool"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-            <LinearLayout
-                android:id="@+id/playIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/button_background"
-                android:gravity="center">
-                <com.ardeapps.floorballmanager.views.IconView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/icon_play"
-                    app:iconFont="@string/icon_solid"
-                    app:iconSize="15sp"
-                    android:clickable="false"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/stopIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_toEndOf="@+id/playIcon"
-                android:background="@drawable/button_background"
-                android:gravity="center">
-                <com.ardeapps.floorballmanager.views.IconView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/icon_stop"
-                    app:iconFont="@string/icon_solid"
-                    app:iconSize="15sp"
-                    android:clickable="false"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/pauseIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_toEndOf="@+id/stopIcon"
-                android:background="@drawable/button_background"
-                android:gravity="center">
-                <com.ardeapps.floorballmanager.views.IconView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/icon_pause"
-                    app:iconFont="@string/icon_solid"
-                    app:iconSize="15sp"
-                    android:clickable="false"/>
-            </LinearLayout>
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_toEndOf="@+id/pauseIcon"
-                android:layout_toStartOf="@+id/plusIcon">
-                <LinearLayout
-                    android:id="@+id/framesContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:orientation="horizontal"/>
-            </HorizontalScrollView>
-            <LinearLayout
-                android:id="@+id/plusIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_toStartOf="@+id/minusIcon"
-                android:background="@drawable/button_background"
-                android:gravity="center">
-                <com.ardeapps.floorballmanager.views.IconView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/icon_plus"
-                    app:iconFont="@string/icon_solid"
-                    app:iconSize="15sp"
-                    android:clickable="false"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/minusIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/button_background"
-                android:gravity="center">
-                <com.ardeapps.floorballmanager.views.IconView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/icon_minus"
-                    app:iconFont="@string/icon_solid"
-                    app:iconSize="15sp"
-                    android:clickable="false"/>
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-    <RelativeLayout
-        android:id="@+id/disableToolsOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_background_second"
-            android:alpha="0.8" />
-        <TextView
-            android:id="@+id/disableToolsInfoText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/tactic_board_converting"/>
-        <com.ardeapps.floorballmanager.views.IconView
-            android:id="@+id/disableToolsIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/icon_remove"
-            app:iconFont="@string/icon_solid"
-            app:iconSize="30sp" />
-    </RelativeLayout>
 </RelativeLayout>

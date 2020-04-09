@@ -1,5 +1,6 @@
 package com.ardeapps.floorballmanager.tacticBoard.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -142,7 +143,7 @@ public class DrawingBoard extends RelativeLayout {
         invalidate();
     }
 
-    public void clear() {
+    public void clearField() {
         finalCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         invalidate();
     }
@@ -232,8 +233,13 @@ public class DrawingBoard extends RelativeLayout {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SCREEN));
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(selectedTool == null) {
+            return true;
+        }
+
         float x = event.getX();
         float y = event.getY();
 
@@ -287,19 +293,38 @@ public class DrawingBoard extends RelativeLayout {
                 }
                 break;
             case CROSS:
-                if(event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     drawCross(x, y);
                     invalidate();
                 }
                 break;
             case CIRCLE:
-                if(event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     drawCircle(x, y);
                     invalidate();
                 }
                 break;
+            case LINE:
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // TODO
+                        //pen_start(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        //pen_move(x, y);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //pen_up();
+                        invalidate();
+                        break;
+                }
+                break;
+            case ERASER:
+                // TODO
+                break;
         }
-
         return true;
     }
 }

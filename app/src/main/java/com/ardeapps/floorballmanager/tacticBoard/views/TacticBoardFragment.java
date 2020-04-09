@@ -14,7 +14,6 @@ import android.widget.ImageView;
 
 import com.ardeapps.floorballmanager.AppRes;
 import com.ardeapps.floorballmanager.R;
-import com.ardeapps.floorballmanager.dialogFragments.EditTagDialogFragment;
 import com.ardeapps.floorballmanager.services.FragmentListeners;
 import com.ardeapps.floorballmanager.tacticBoard.media.AnimationRecorder;
 import com.ardeapps.floorballmanager.tacticBoard.media.ScreenshotRecorder;
@@ -29,6 +28,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -37,19 +37,30 @@ import static com.ardeapps.floorballmanager.services.FragmentListeners.MY_PERMIS
 
 public class TacticBoardFragment extends Fragment {
 
+    public static final int TAKE_SCREENSHOT = 3;
+    public static final int RECORD_VIDEO = 2;
+    public final static int YELLOW = 1650;
+    public final static int RED = 1070;
+    public final static int BLUE = 290;
+
     TacticBoardMenu tacticBoardMenu;
     ImageView fieldImage;
     DrawingBoard drawingBoard;
     TacticBoardAnimation tacticBoardAnimation;
 
     TacticSettingsDialogFragment.Field selectedField;
-
-    public static final int TAKE_SCREENSHOT = 3;
-    public static final int RECORD_VIDEO = 2;
-    private final static int YELLOW = 1650;
-    private final static int RED = 1070;
-    private final static int BLUE = 290;
     private int paintColorProgress;
+    private int homeColorProgress;
+    private int awayColorProgress;
+    private static final ArrayList<TacticBoardMenu.Tool> ANIMATION_TOOLS = new ArrayList<>(Arrays.asList(TacticBoardMenu.Tool.BALL, TacticBoardMenu.Tool.HOME_PLAYERS, TacticBoardMenu.Tool.AWAY_PLAYERS));
+    private static final ArrayList<TacticBoardMenu.Tool> PAINT_TOOLS = new ArrayList<>(Arrays.asList(
+                    TacticBoardMenu.Tool.PEN,
+                    TacticBoardMenu.Tool.LINE,
+                    TacticBoardMenu.Tool.ERASER,
+                    TacticBoardMenu.Tool.ARROW,
+                    TacticBoardMenu.Tool.DOTTED_ARROW,
+                    TacticBoardMenu.Tool.CIRCLE,
+                    TacticBoardMenu.Tool.CROSS));
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,22 +106,64 @@ public class TacticBoardFragment extends Fragment {
         drawingBoard = v.findViewById(R.id.drawingBoard);
         tacticBoardAnimation = v.findViewById(R.id.tacticBoardAnimation);
         tacticBoardMenu = v.findViewById(R.id.tacticBoardMenu);
-
-        /// Set listener
-        tacticBoardMenu.setAnimationToolListener(tacticBoardAnimation.getAnimationToolListener());
+        tacticBoardMenu.post(() -> {
+            int menuHeight = tacticBoardMenu.getHeight();
+            tacticBoardAnimation.setFieldTopY(menuHeight);
+        });
 
         // Defaults
         selectedField = TacticSettingsDialogFragment.Field.FULL;
         paintColorProgress = RED;
+        homeColorProgress = RED;
+        awayColorProgress = BLUE;
+
         int color = TacticBoardHelper.getColorFromProgress(paintColorProgress);
         drawingBoard.setPaintColor(color);
+        int homeColor = TacticBoardHelper.getColorFromProgress(homeColorProgress);
+        tacticBoardAnimation.setHomeColor(homeColor);
+        int awayColor = TacticBoardHelper.getColorFromProgress(awayColorProgress);
+        tacticBoardAnimation.setAwayColor(awayColor);
 
         tacticBoardMenu.setListener(new TacticBoardMenu.MenuListener() {
             @Override
             public void onToolChanged(TacticBoardMenu.Tool tool) {
+                if(PAINT_TOOLS.contains(tool)) {
+                    drawingBoard.setSelectedTool(tool);
+                    tacticBoardAnimation.setHomeSelected(null);
+                    tacticBoardAnimation.hideNotAddedPlayers();
+                }
+
+                if(ANIMATION_TOOLS.contains(tool)) {
+                    tacticBoardAnimation.setSelectedTool(tool);
+                }
+
+                if(tool == TacticBoardMenu.Tool.HOME_PLAYERS) {
+                    if(tacticBoardAnimation.isHomeSelected() == null || !tacticBoardAnimation.isHomeSelected()) {
+                        tacticBoardAnimation.setHomeSelected(true);
+                        tacticBoardAnimation.drawNotAddedPlayerViews();
+                    } else {
+                        tacticBoardAnimation.setHomeSelected(null);
+                        tacticBoardAnimation.hideNotAddedPlayers();
+                        tacticBoardMenu.resetTools();
+                    }
+                } else if(tool == TacticBoardMenu.Tool.AWAY_PLAYERS) {
+                    if(tacticBoardAnimation.isHomeSelected() == null || tacticBoardAnimation.isHomeSelected()) {
+                        tacticBoardAnimation.setHomeSelected(false);
+                        tacticBoardAnimation.drawNotAddedPlayerViews();
+                    } else {
+                        tacticBoardAnimation.setHomeSelected(null);
+                        tacticBoardAnimation.hideNotAddedPlayers();
+                        tacticBoardMenu.resetTools();
+                    }
+                }
+            }
+
+            @Override
+            public void onActionButtonClick(TacticBoardMenu.ActionTool tool) {
                 switch (tool) {
                     case SAVE:
-                        int frameCount = tacticBoardMenu.animationTool.getFrameCount();
+                        // TODO
+                        /*int frameCount = tacticBoardMenu.animationTool.getFrameCount();
                         if (frameCount > 0) {
                             EditTagDialogFragment dialog = new EditTagDialogFragment();
                             dialog.show(getChildFragmentManager(), "Valitse tunniste tallennukselle.");
@@ -118,7 +171,7 @@ public class TacticBoardFragment extends Fragment {
                                 Logger.toast(tag);
                                 saveField(tag);
                             });
-                        }
+                        }*/
                         break;
                     case SETTINGS:
                         TacticSettingsDialogFragment dialog = new TacticSettingsDialogFragment();
@@ -130,7 +183,7 @@ public class TacticBoardFragment extends Fragment {
                                 if (field == TacticSettingsDialogFragment.Field.FULL) {
                                     fieldImage.setImageResource(R.drawable.floorball_field);
                                     fieldImage.setRotation(0f);
-                                } else if (field == TacticSettingsDialogFragment.Field.HALF_LEFT){
+                                } else if (field == TacticSettingsDialogFragment.Field.HALF_LEFT) {
                                     fieldImage.setImageResource(R.drawable.floorball_field_rotated);
                                     fieldImage.setRotation(0f);
                                 } else if (field == TacticSettingsDialogFragment.Field.HALF_RIGHT) {
@@ -145,47 +198,50 @@ public class TacticBoardFragment extends Fragment {
                         });
                         break;
                     case GALLERY:
+                        // TODO
                         ArrayList<ExportField> items2 = JsonDatabase.getSavedFields();
-                        for(ExportField item : items2) {
+                        for (ExportField item : items2) {
                             Logger.log(item.name);
                             Logger.log(item.image);
                         }
                        /* TacticGalleryDialogFragment dialog = new TacticGalleryDialogFragment();
                         dialog.show(AppRes.getActivity().getSupportFragmentManager(), "Galleria");*/
-                       break;
-                    case USERS:
-                        tacticBoardAnimation.setNotAddedPlayersVisible(true);
+                        break;
+                    case UNDO:
+                        // TODO
+                        break;
+                    case CLEAR:
+                        drawingBoard.clearField();
+                        tacticBoardAnimation.clearField();
+                        break;
+                    case HOME_SETTINGS:
+                        TacticTeamSettingsDialogFragment homeDialog = new TacticTeamSettingsDialogFragment();
+                        // TODO add players
+                        homeDialog.setColorProgress(homeColorProgress);
+                        homeDialog.show(AppRes.getActivity().getSupportFragmentManager(), "Kotijoukkueen asetukset");
+                        homeDialog.setListener(() -> {
+                            homeColorProgress = homeDialog.getColorProgress();
+                            int color = TacticBoardHelper.getColorFromProgress(homeColorProgress);
+                            tacticBoardAnimation.setAwayColor(color);
+
+                        });
+                        break;
+                    case AWAY_SETTINGS:
+                        TacticTeamSettingsDialogFragment awayDialog = new TacticTeamSettingsDialogFragment();
+                        // TODO add players
+                        awayDialog.setColorProgress(awayColorProgress);
+                        awayDialog.show(AppRes.getActivity().getSupportFragmentManager(), "Vierasjoukkueen asetukset");
+                        awayDialog.setListener(() -> {
+                            awayColorProgress = awayDialog.getColorProgress();
+                            int color = TacticBoardHelper.getColorFromProgress(awayColorProgress);
+                            tacticBoardAnimation.setAwayColor(color);
+                        });
                         break;
                 }
-            }
-
-            @Override
-            public void onActionButtonClick(TacticBoardMenu.Tool tool) {
-
             }
         });
         return v;
     }
-
-    /*private void changeMode(boolean animationMode) {
-        // Changes view and height of field
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fieldImage.getLayoutParams();
-        if(animationMode) {
-            int newFieldHeight = fieldHeight - tacticBoardAnimation.getToolBarHeight();
-            params.height = newFieldHeight;
-            tacticBoardAnimation.setFieldHeight(newFieldHeight, fieldWidth);
-            tacticBoardDraw.setVisibility(View.GONE);
-            tacticBoardAnimation.setVisibility(View.VISIBLE);
-        } else {
-            int newFieldHeight = fieldHeight - tacticBoardDraw.getToolBarHeight();
-            params.height = newFieldHeight;
-            tacticBoardDraw.setFieldHeight(newFieldHeight, fieldWidth);
-            tacticBoardDraw.setVisibility(View.VISIBLE);
-            tacticBoardAnimation.setVisibility(View.GONE);
-        }
-        fieldImage.setLayoutParams(params);
-    }*/
-
 
     public void saveField(String tag) {
         String base64 = ImageUtil.getBitmapAsBase64(ImageUtil.getDrawableAsBitmap(ContextCompat.getDrawable(AppRes.getContext(), R.drawable.default_logo)));
@@ -240,7 +296,7 @@ public class TacticBoardFragment extends Fragment {
         Logger.log(json);
         ArrayList<ExportItem> items = gson.fromJson(json, new TypeToken<List<ExportItem>>(){}.getType());
         for(ExportItem item : items) {
-            Logger.log(item.id);
+            Logger.log(item.index);
             Logger.log(item.type);
         }
         ExportField exportFile = new ExportField();
@@ -272,8 +328,8 @@ public class TacticBoardFragment extends Fragment {
     private void convertAnimationToVideo() {
         if(AnimationRecorder.getInstance().isPermissionGiven(intent -> startActivityForResult(intent, RECORD_VIDEO))) {
             //tacticBoardAnimation.showDisableToolsOverlay(false);
-            tacticBoardAnimation.setFrame(0);
-            tacticBoardAnimation.runAnimation();
+            /*tacticBoardAnimation.setFrame(0);
+            tacticBoardAnimation.runAnimation();*/
             // TODO tallenna oikea tiedostonimi
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             AnimationRecorder.getInstance().prepareRecorder("MOI_" + timeStamp);

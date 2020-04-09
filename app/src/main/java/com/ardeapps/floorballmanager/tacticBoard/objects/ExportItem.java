@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class ExportItem {
     public int paramSize;
     public MovableView.Type type;
-    public String id;
+    public int index;
     public ArrayList<Position> positions = new ArrayList<>();
 
     public ExportItem(MovableView item) {
         this.paramSize = item.paramSize;
         this.type = item.type;
-        this.id = item.id;
+        this.index = item.index;
         this.positions = item.positions;
     }
 

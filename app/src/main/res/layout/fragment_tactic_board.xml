@@ -24,15 +24,14 @@
         android:contentDescription="@null"
         android:scaleType="fitCenter" />
 
-    <com.ardeapps.floorballmanager.tacticBoard.views.TacticBoardAnimation
-        android:id="@+id/tacticBoardAnimation"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tacticBoardMenu" />
-
     <com.ardeapps.floorballmanager.tacticBoard.views.TacticBoardMenu
         android:id="@+id/tacticBoardMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <com.ardeapps.floorballmanager.tacticBoard.views.TacticBoardAnimation
+        android:id="@+id/tacticBoardAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

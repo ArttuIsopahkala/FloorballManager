@@ -13,12 +13,12 @@ public class TacticBoardHelper {
         return clipData.split("#")[0];
     }
 
-    public static String getId(String clipData) {
-        return clipData.split("#")[1];
+    public static int getIndex(String clipData) {
+        return Integer.valueOf(clipData.split("#")[1]);
     }
 
-    public static String createTag(MovableView.Type type, String id) {
-        return type.toDatabaseName() + "#" + id;
+    public static String createTag(MovableView.Type type, int index) {
+        return type.toDatabaseName() + "#" + index;
     }
 
     public static View findViewAtPosition(View parent, int x, int y) {

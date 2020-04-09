@@ -51,6 +51,8 @@ public class AppRes extends MultiDexApplication {
     private Map<String, ArrayList<Penalty>> penaltiesByGame;
     private Map<String, ArrayList<Goal>> goalsByGame;
     private Map<String, ArrayList<Line>> linesByGame;
+    // Tactic board
+
 
     public static AppRes getInstance() {
         if (instance == null) {

@@ -1,8 +1,0 @@
-<com.ardeapps.floorballmanager.tacticBoard.views.DrawingBoard
-    android:id="@+id/drawingBoard"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:adjustViewBounds="true"
-    android:contentDescription="@null"
-    android:scaleType="fitCenter"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
