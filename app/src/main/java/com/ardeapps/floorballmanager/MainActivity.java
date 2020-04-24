@@ -172,7 +172,12 @@ public class MainActivity extends AppCompatActivity {
         AppRes.getInstance().resetData();
         AppDataResource.getInstance().getAppData(() -> {
             if (BuildConfig.VERSION_CODE < AppData.NEWEST_VERSION_CODE_SUPPORTED) {
-                InfoDialogFragment dialogFragment = InfoDialogFragment.newInstance(getString(R.string.update_new_version_supported_title), getString(R.string.update_new_version_supported_desc));
+                String releaseInfo = "";
+                if(!StringUtils.isEmptyString(AppData.NEWEST_VERSION_CODE_SUPPORTED_TEXT)) {
+                    releaseInfo += "\n\n" + AppData.NEWEST_VERSION_CODE_SUPPORTED_TEXT;
+                }
+                String desc = getString(R.string.update_new_version_supported_desc, releaseInfo);
+                InfoDialogFragment dialogFragment = InfoDialogFragment.newInstance(getString(R.string.update_new_version_supported_title), desc);
                 dialogFragment.show(getSupportFragmentManager(), "Lataa uusin versio");
                 dialogFragment.setCancelable(false);
                 dialogFragment.setListener(() -> {
