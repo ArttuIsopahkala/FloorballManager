@@ -26,6 +26,7 @@ public class AppDataResource extends FirebaseDatabaseService {
             AppData.PRIVACY_POLICY_URL = (String) dataSnapshot.child("PRIVACY_POLICY_URL").getValue();
             AppData.GOOGLE_PLAY_APP_URL = (String) dataSnapshot.child("GOOGLE_PLAY_APP_URL").getValue();
             AppData.NEWEST_VERSION_CODE = (long) dataSnapshot.child("NEWEST_VERSION_CODE").getValue();
+            AppData.NEWEST_VERSION_CODE_SUPPORTED = (long) dataSnapshot.child("NEWEST_VERSION_CODE_SUPPORTED").getValue();
             handler.onAppDataLoaded();
         });
     }

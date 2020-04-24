@@ -3,6 +3,8 @@
     <string name="app_name_debug">Floorball DEBUG</string>
 
     <string name="update_new_version">Sovelluksen uusi versio on julkaistu. Nykyinen versiosi on vanhentunut ja se voi aiheuttaa epävakautta tai kaatuilua. Ladataanko uusi versio?</string>
+    <string name="update_new_version_supported_title">Suuria juttuja julkaistu!</string>
+    <string name="update_new_version_supported_desc">Nykyinen versiosi on vanhentunut. Lataa uusin versio, jotta voit käyttää sovellusta.</string>
 
     <string name="dd">pp</string>
     <string name="mm">kk</string>

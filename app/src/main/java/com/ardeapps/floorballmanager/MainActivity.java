@@ -171,6 +171,19 @@ public class MainActivity extends AppCompatActivity {
     private void onUserLoggedIn(String userId) {
         AppRes.getInstance().resetData();
         AppDataResource.getInstance().getAppData(() -> {
+            if (BuildConfig.VERSION_CODE < AppData.NEWEST_VERSION_CODE_SUPPORTED) {
+                InfoDialogFragment dialogFragment = InfoDialogFragment.newInstance(getString(R.string.update_new_version_supported_title), getString(R.string.update_new_version_supported_desc));
+                dialogFragment.show(getSupportFragmentManager(), "Lataa uusin versio");
+                dialogFragment.setCancelable(false);
+                dialogFragment.setListener(() -> {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(AppData.GOOGLE_PLAY_APP_URL));
+                    startActivity(i);
+                    finish();
+                });
+                return;
+            }
+
             if (BuildConfig.VERSION_CODE < AppData.NEWEST_VERSION_CODE) {
                 ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance(getString(R.string.update_new_version));
                 dialogFragment.show(getSupportFragmentManager(), "Päivitä uusin versio");

@@ -24,11 +24,22 @@ import com.ardeapps.floorballmanager.utils.StringUtils;
  */
 public class InfoDialogFragment extends DialogFragment {
 
+    public interface InfoDialogCloseListener {
+        void onDialogOkButtonClick();
+    }
+
+
     TextView title;
     TextView description;
     Button ok_button;
     String title_text;
     String desc_text;
+
+    InfoDialogCloseListener mListener = null;
+
+    public void setListener(InfoDialogCloseListener l) {
+        mListener = l;
+    }
 
     public static InfoDialogFragment newInstance(String title, String desc) {
         InfoDialogFragment f = new InfoDialogFragment();
@@ -74,7 +85,12 @@ public class InfoDialogFragment extends DialogFragment {
         description.setText(desc_text);
 
         ok_button = v.findViewById(R.id.btn_ok);
-        ok_button.setOnClickListener(v1 -> dismiss());
+        ok_button.setOnClickListener(v1 -> {
+            dismiss();
+            if(mListener != null) {
+                mListener.onDialogOkButtonClick();
+            }
+        });
 
         return v;
     }
